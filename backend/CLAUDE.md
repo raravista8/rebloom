@@ -2,6 +2,8 @@
 
 Area rules for the backend. Root `CLAUDE.md` applies; this adds backend specifics.
 
+> **Read root `CLAUDE.md` §0 (Behavioral principles) FIRST — it governs every task:** think before coding, simplicity first, surgical changes, goal-driven (test, then pass it).
+
 ## Layout
 - `app/api/` — thin FastAPI routers (validation + authz + call service; no domain logic)
 - `app/core/<domain>/` — domain logic. **NEVER import `app/infrastructure/**`** (import-linter enforced). High-risk domains are hexagonal: define `ports.py` (typing.Protocol), keep effects out of core.

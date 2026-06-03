@@ -2,6 +2,8 @@
 
 Area rules for the single web frontend. This web build IS the iOS/Android app (wrapped by Capacitor — see `mobile/`). Root `CLAUDE.md` applies.
 
+> **Read root `CLAUDE.md` §0 (Behavioral principles) FIRST — it governs every task:** think before coding, simplicity first, surgical changes, goal-driven (for UI: `npm run test:visual` ≤ 2%).
+
 ## The one-codebase rule (ADR-0004)
 - ONE web codebase renders web, mobile web, and (wrapped) iOS/Android. **NEVER write per-platform UI** (no Swift/Kotlin/RN screens). `mobile/` is Capacitor config only.
 - UI comes from `@rebloom/canon` (vendored from Claude Design, **web** React + Tailwind) + exported tokens. **NEVER edit `packages/canon/src/*`** — round-trip through Claude Design (OPERATIONS §7).

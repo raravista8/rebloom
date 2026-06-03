@@ -1,5 +1,7 @@
 # Contributing — Передарим (`rebloom`)
 
+> **Before any change, read `CLAUDE.md` §0 (Behavioral principles).** Every task: think before coding (state assumptions, ask when unclear), simplicity first, surgical changes (each diff line traces to the request), goal-driven (write the test, then pass it).
+
 ## Workflow (trunk-based)
 0. **Первая ветка проекта** (скелет, задача T0.1):
    ```bash
