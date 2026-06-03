@@ -134,3 +134,21 @@ class FakeUserRepository:
 
     def get_by_id(self, user_id: str) -> object | None:
         return self._by_id.get(user_id)
+
+
+class FakeConsentRepository:
+    """Implements :class:`app.core.consent.ports.ConsentRepository` in memory."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str, str]] = []
+
+    def record(self, user_id: str, policy_version: str, source_channel: str) -> object:
+        from datetime import UTC, datetime
+
+        from app.core.consent.schemas import ConsentRecord
+
+        self.calls.append((user_id, policy_version, source_channel))
+        return ConsentRecord(
+            id=f"consent-{len(self.calls)}",
+            accepted_at=datetime(2026, 6, 3, tzinfo=UTC),
+        )
