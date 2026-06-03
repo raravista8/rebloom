@@ -1,0 +1,74 @@
+[tool.poetry]
+# Code-name `rebloom` (brand «Передарим»). Modular-monolith backend.
+name = "rebloom-backend"
+version = "0.1.0"
+description = "Передарим (rebloom) — C2C bouquet-resale marketplace backend"
+authors = ["Передарим"]
+license = "Proprietary"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+uvicorn = { extras = ["standard"], version = "^0.32.0" }
+pydantic = "^2.9.0"
+pydantic-settings = "^2.6.0"
+sqlalchemy = "^2.0.36"
+alembic = "^1.14.0"
+psycopg = { extras = ["binary"], version = "^3.2.0" }
+redis = "^5.2.0"
+argon2-cffi = "^23.1.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.0"
+mypy = "^1.13.0"
+pytest = "^8.3.0"
+pytest-asyncio = "^0.24.0"
+pytest-cov = "^6.0.0"
+hypothesis = "^6.119.0"
+httpx = "^0.27.0"
+import-linter = "^2.1"
+bandit = "^1.8.0"
+pip-audit = "^2.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# ── ruff (format + lint) ──────────────────────────────────────────────
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "C4", "SIM", "RUF"]
+# RUF001/002/003: Cyrillic homoglyph warnings — copy is intentionally Russian.
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+# ── mypy (strict) ─────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+plugins = ["pydantic.mypy"]
+exclude = ["alembic/versions/"]
+
+# ── pytest ────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-q --strict-markers"
+markers = [
+    "e2e: end-to-end tests (require running services)",
+    "slow: slow tests (load/perf)",
+    "security: security-focused tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["app/core"]
