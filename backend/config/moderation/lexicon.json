@@ -1,0 +1,19 @@
+{
+  "_comment": "Seed moderation lexicon (MODERATION.md §2). Editable by moderators without a code release; DB-backed editing is post-MVP. Terms are matched after aggressive normalization (see core/moderation/normalize.py), so list base roots only.",
+  "profanity": [
+    "хуй", "пизд", "ебан", "ебат", "еба", "блят", "бляд", "сук", "муд", "залуп", "пидор", "пидар", "гондон", "долбоеб", "выеб", "наху", "похуй"
+  ],
+  "hate_slurs": [
+    "хохол", "хохл", "жид", "чурк", "хач", "негр", "даун"
+  ],
+  "banned_terms": [
+    "авито", "avito", "юла", "youla", "вконтакте", "vkcom", "инстаграм", "instagram", "переведи на карту", "оплата мимо", "без комиссии напрямую"
+  ],
+  "contact_patterns": [
+    "(?:\\+?7|8)[\\s\\-(]*\\d{3}[\\s\\-)]*\\d{3}[\\s\\-]*\\d{2}[\\s\\-]*\\d{2}",
+    "\\d[\\d\\s\\-()]{7,}\\d",
+    "@[a-zа-я0-9_]{3,}",
+    "(t\\.me|telegram|telega|телеграм|телега|whatsapp|wa\\.me|вотсап|ватсап|viber|вайбер)",
+    "(avito|авито|юла|youla|vk\\.com|вконтакте|instagram|инстаграм|https?://)"
+  ]
+}
