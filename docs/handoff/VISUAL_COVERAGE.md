@@ -1,0 +1,31 @@
+# VISUAL_COVERAGE — live tracker (canon-import vs hand-rolled)
+
+> Per-screen / per-component status across viewports. Update on every canon vendoring (`CANON_PACKAGE_TZ.md §9`) and every UI task (CLAUDE.md UI DoD).
+> Сейчас: canon `0.0.0` (нет экспорта) — всё в статусе 🔵 spec-only.
+> Legend: 🔵 spec only · 🟢 canon-import + visual ≤2% · 🟡 hand-rolled (justify) · 🔴 missing/broken
+
+## Screens
+| Screen | Mobile (360) | Mobile (414) | Desktop | Visual baseline | Status |
+|---|---|---|---|---|---|
+| Главная / витрина | 🔵 | 🔵 | 🔵 | — | spec |
+| Карточка букета | 🔵 | 🔵 | 🔵 | — | spec |
+| Продать | 🔵 | 🔵 | 🔵 | — | spec |
+| Вход (OTP) | 🔵 | 🔵 | 🔵 | — | spec |
+| Сделка + чат | 🔵 | 🔵 | 🔵 | — | spec |
+| Отзыв | 🔵 | 🔵 | 🔵 | — | spec |
+| Профиль | 🔵 | 🔵 | 🔵 | — | spec |
+| Админ/модерация | n/a | n/a | 🔵 | — | spec |
+
+## Components (canon)
+| Component | Status | Notes |
+|---|---|---|
+| Button / IconButton | 🔵 | all states required |
+| Input / Textarea / Select / OtpInput | 🔵 | |
+| BouquetCard (+FreshnessBadge,+LikeButton) | 🔵 | hero component |
+| FreshnessIndicator | 🔵 | colour + icon (a11y) |
+| PhotoUploader | 🔵 | 1–5, progress |
+| DealStatusStepper | 🔵 | escrow states |
+| ChatBubble / ChatInput | 🔵 | |
+| RatingStars / ReviewItem / SellerBadge | 🔵 | |
+| BottomNav / TopAppBar / FeedSectionHeader | 🔵 | |
+| Money / Badge / Avatar / Skeleton / Toast / Modal / BottomSheet | 🔵 | |

@@ -1,0 +1,59 @@
+# ── Secrets / env (NEVER commit) ──
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.totp
+secrets/
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.hypothesis/
+
+# ── Node / Next.js / web ──
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+web/test-results/
+web/playwright-report/
+web/tests/visual/**/*-actual.png
+web/tests/visual/**/*-diff.png
+
+# ── Capacitor / mobile ──
+mobile/ios/App/Pods/
+mobile/ios/App/build/
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/**/Podfile.lock
+
+# ── Docker / local data ──
+infra/.data/
+*.local
+
+# ── OS / editor ──
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+!.vscode/extensions.json
