@@ -12,6 +12,8 @@ from logging.config import fileConfig
 
 from alembic import context
 from app.config import get_settings
+from app.infrastructure.postgres import models  # noqa: F401  (register tables)
+from app.infrastructure.postgres.base import Base
 from sqlalchemy import engine_from_config, pool
 
 config = context.config
@@ -20,7 +22,7 @@ if config.config_file_name is not None:
 
 config.set_main_option("sqlalchemy.url", get_settings().db_migrator_url)
 
-target_metadata = None
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
