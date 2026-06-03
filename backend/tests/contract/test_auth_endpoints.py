@@ -27,16 +27,11 @@ def client() -> Iterator[TestClient]:
         yield test_client
 
 
-def test_request_then_verify_flow(client: TestClient) -> None:
+def test_request_returns_sent_envelope(client: TestClient) -> None:
+    # Full request→verify→session flow lives in test_session_flow.py.
     req = client.post("/api/auth/otp/request", json={"phone": PHONE})
     assert req.status_code == 200
     assert req.json() == {"ok": True, "data": {"sent": True, "retry_after_sec": 60}}
-
-    ver = client.post("/api/auth/otp/verify", json={"phone": PHONE, "code": CODE})
-    assert ver.status_code == 200
-    body = ver.json()
-    assert body["ok"] is True and body["data"]["verified"] is True
-    assert "1234" not in body["data"]["phone_masked"]
 
 
 def test_wrong_code_returns_validation_envelope(client: TestClient) -> None:

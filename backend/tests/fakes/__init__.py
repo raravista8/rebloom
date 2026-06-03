@@ -82,3 +82,55 @@ class RecordingSms:
     @property
     def last_code(self) -> str:
         return self.sent[-1][1]
+
+
+class FakeSessionStore:
+    """Implements :class:`app.core.auth.ports.SessionStore` (no TTL simulation)."""
+
+    def __init__(self) -> None:
+        self._data: dict[str, str] = {}
+
+    def save(self, token: str, user_id: str, ttl: int) -> None:
+        self._data[token] = user_id
+
+    def get(self, token: str) -> str | None:
+        return self._data.get(token)
+
+    def delete(self, token: str) -> None:
+        self._data.pop(token, None)
+
+    def refresh(self, token: str, ttl: int) -> None:
+        return None
+
+
+class FakeUserRepository:
+    """Implements :class:`app.core.users.ports.UserRepository` in memory."""
+
+    def __init__(self) -> None:
+        from app.core.users.schemas import UserView
+
+        self._view = UserView
+        self._by_phone: dict[str, object] = {}
+        self._by_id: dict[str, object] = {}
+        self._seq = 0
+
+    def get_or_create_by_phone(self, phone: str) -> object:
+        existing = self._by_phone.get(phone)
+        if existing is not None:
+            return existing
+        self._seq += 1
+        view = self._view(
+            id=f"00000000-0000-0000-0000-{self._seq:012d}",
+            phone=phone,
+            display_name=None,
+            city_id=None,
+            roles=("buyer",),
+            seller_rating=None,
+            status="active",
+        )
+        self._by_phone[phone] = view
+        self._by_id[view.id] = view
+        return view
+
+    def get_by_id(self, user_id: str) -> object | None:
+        return self._by_id.get(user_id)
