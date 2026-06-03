@@ -1,0 +1,23 @@
+# Dependency rule (ADR-0002, ARCHITECTURE §10, SECURITY §7).
+# Enforced in CI via `lint-imports` (Makefile `lint` target).
+
+[importlinter]
+root_package = app
+
+[importlinter:contract:core-independence]
+name = core must not import infrastructure
+type = forbidden
+source_modules =
+    app.core
+forbidden_modules =
+    app.infrastructure
+
+[importlinter:contract:core-no-web-or-bot]
+name = core must not import api/workers/bot (effects flow inward)
+type = forbidden
+source_modules =
+    app.core
+forbidden_modules =
+    app.api
+    app.workers
+    app.bot
