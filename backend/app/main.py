@@ -7,9 +7,11 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api import health
+from app.api import auth, consent, health
 from app.api.envelope import (
+    http_exception_handler,
     unhandled_exception_handler,
     validation_exception_handler,
 )
@@ -30,9 +32,15 @@ def create_app() -> FastAPI:
         RequestValidationError,
         validation_exception_handler,  # type: ignore[arg-type]
     )
+    app.add_exception_handler(
+        StarletteHTTPException,
+        http_exception_handler,  # type: ignore[arg-type]
+    )
     app.add_exception_handler(Exception, unhandled_exception_handler)
 
     app.include_router(health.router)
+    app.include_router(auth.router)
+    app.include_router(consent.router)
 
     return app
 

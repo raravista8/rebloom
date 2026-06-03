@@ -14,6 +14,7 @@ from typing import Any
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.errors import DomainError
 
@@ -72,6 +73,33 @@ async def validation_exception_handler(
     return JSONResponse(
         status_code=422,
         content=fail("validation_error", message="Invalid request", req_id=rid),
+        headers={REQUEST_ID_HEADER: rid},
+    )
+
+
+_STATUS_TO_CODE = {
+    400: "validation_error",
+    401: "unauthorized",
+    403: "forbidden",
+    404: "not_found",
+    409: "conflict",
+    429: "rate_limited",
+}
+
+
+async def http_exception_handler(request: Request, exc: StarletteHTTPException) -> JSONResponse:
+    """Render framework HTTPExceptions (401/403/404/…) through the envelope."""
+    rid = request_id(request)
+    detail = exc.detail if isinstance(exc.detail, str) else ""
+    code = (
+        detail
+        if detail in _STATUS_TO_CODE.values()
+        else _STATUS_TO_CODE.get(exc.status_code, "internal")
+    )
+    message = "" if detail in _STATUS_TO_CODE.values() else detail
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=fail(code, message=message, req_id=rid),
         headers={REQUEST_ID_HEADER: rid},
     )
 
