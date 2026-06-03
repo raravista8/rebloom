@@ -13,11 +13,14 @@ def test_healthz_alive(client: TestClient) -> None:
 
 
 def test_readyz_envelope(client: TestClient) -> None:
+    # 200 when DB+Redis are up, 503 otherwise — both are valid envelopes.
     resp = client.get("/readyz")
-    assert resp.status_code == 200
+    assert resp.status_code in (200, 503)
     body = resp.json()
     assert body["ok"] is True
-    assert body["data"]["ready"] is True
+    assert set(body["data"]) == {"ready", "checks"}
+    assert set(body["data"]["checks"]) == {"db", "redis"}
+    assert isinstance(body["data"]["ready"], bool)
 
 
 def test_version_stamp(client: TestClient) -> None:

@@ -14,6 +14,8 @@ from typing import Any
 from fastapi import APIRouter, Response
 
 from app.api.envelope import ok
+from app.infrastructure.postgres.engine import check_primary
+from app.infrastructure.redis import check_redis
 
 router = APIRouter(tags=["health"])
 
@@ -26,8 +28,11 @@ def healthz() -> dict[str, Any]:
 
 @router.get("/readyz")
 def readyz(response: Response) -> dict[str, Any]:
-    """Readiness — dependency probes are added in T0.4 (DB/Redis/storage)."""
-    checks: dict[str, str] = {}
+    """Readiness — primary DB + Redis must be reachable (distinct from liveness)."""
+    checks = {
+        "db": "ok" if check_primary() else "down",
+        "redis": "ok" if check_redis() else "down",
+    }
     ready = all(v == "ok" for v in checks.values())
     if not ready:
         response.status_code = 503
