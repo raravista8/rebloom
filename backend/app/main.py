@@ -8,7 +8,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 
-from app.api import health
+from app.api import auth, health
 from app.api.envelope import (
     unhandled_exception_handler,
     validation_exception_handler,
@@ -33,6 +33,7 @@ def create_app() -> FastAPI:
     app.add_exception_handler(Exception, unhandled_exception_handler)
 
     app.include_router(health.router)
+    app.include_router(auth.router)
 
     return app
 
