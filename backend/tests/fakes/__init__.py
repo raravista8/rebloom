@@ -152,3 +152,74 @@ class FakeConsentRepository:
             id=f"consent-{len(self.calls)}",
             accepted_at=datetime(2026, 6, 3, tzinfo=UTC),
         )
+
+
+class FakePhotoRepository:
+    """Implements :class:`app.core.listings.ports.PhotoRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._photos: dict[str, tuple[str, str]] = {}  # id -> (owner_id, status)
+        self._seq = 0
+
+    def seed(self, photo_id: str, owner_id: str, status: str = "approved") -> None:
+        self._photos[photo_id] = (owner_id, status)
+
+    def create_pending(self, owner_id: str, content_type: str) -> object:
+        from app.core.listings.schemas import PhotoRef
+
+        self._seq += 1
+        pid = f"photo-{self._seq}"
+        self._photos[pid] = (owner_id, "pending")
+        return PhotoRef(id=pid, moderation_status="pending")
+
+    def get_owned(self, owner_id: str, photo_ids: list[str]) -> list[object]:
+        from app.core.listings.schemas import PhotoRef
+
+        refs: list[object] = []
+        for pid in photo_ids:
+            rec = self._photos.get(pid)
+            if rec is not None and rec[0] == owner_id:
+                refs.append(PhotoRef(id=pid, moderation_status=rec[1]))
+        return refs
+
+
+class FakeListingRepository:
+    """Implements :class:`app.core.listings.ports.ListingRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._store: dict[str, object] = {}
+        self._seq = 0
+
+    def create(
+        self, *, seller_id: str, data: object, status: str, freshness_score: float
+    ) -> object:
+        from datetime import UTC, datetime, timedelta
+
+        from app.core.listings.schemas import ListingView, PhotoRef
+
+        self._seq += 1
+        lid = f"listing-{self._seq}"
+        view = ListingView(
+            id=lid,
+            seller_id=seller_id,
+            seller_display_name=None,
+            seller_rating=None,
+            size=data.size,  # type: ignore[attr-defined]
+            freshness=data.freshness,  # type: ignore[attr-defined]
+            price_kopecks=data.price_kopecks,  # type: ignore[attr-defined]
+            city_id=data.city_id,  # type: ignore[attr-defined]
+            geo_coarse=data.geo,  # type: ignore[attr-defined]
+            status=status,
+            like_count=0,
+            freshness_score=freshness_score,
+            expires_at=datetime(2026, 6, 4, tzinfo=UTC) + timedelta(hours=data.expires_in_h),  # type: ignore[attr-defined]
+            photos=tuple(
+                PhotoRef(id=p, moderation_status="approved")
+                for p in data.photo_ids  # type: ignore[attr-defined]
+            ),
+        )
+        self._store[lid] = view
+        return view
+
+    def get(self, listing_id: str) -> object | None:
+        return self._store.get(listing_id)
