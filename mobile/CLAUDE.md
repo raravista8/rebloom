@@ -2,6 +2,8 @@
 
 Wraps the `web/` build into signed iOS/Android apps. **There is NO UI code here** — the UI is the web build (`@rebloom/canon`). This folder is configuration + plugin wiring.
 
+> **Read root `CLAUDE.md` §0 (Behavioral principles) FIRST — it governs every task:** think before coding, simplicity first, surgical changes, goal-driven.
+
 ## Rules
 - NEVER add screens/components here. NEVER hand-write Swift/Kotlin UI. If you're writing UI, you're in the wrong folder — it goes in `web/`.
 - `capacitor.config.ts` points at the `web/` production build. The generated `ios/` and `android/` projects are build artifacts; don't hand-edit beyond signing/icons/splash/permissions.

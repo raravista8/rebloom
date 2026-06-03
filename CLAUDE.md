@@ -4,11 +4,47 @@ C2C-маркетплейс ресейла подаренных букетов д
 
 `vitrina`-конвенция: бренд «Передарим» в customer-facing copy; `rebloom` — только code-name (repo, packages, env). For area rules, read the nearest nested `CLAUDE.md`: `backend/CLAUDE.md`, `web/CLAUDE.md` (**Next.js + web canon, mobile-first, pixel-perfect**), `mobile/CLAUDE.md` (Capacitor, config-only), `packages/canon/CLAUDE.md`.
 
-## 0. Behavioral principles (read FIRST)
-- **Think before coding.** State assumptions; if multiple interpretations — present, don't pick silently; if unclear — STOP and ask.
-- **Simplicity first.** Minimum code; no speculative abstractions/flexibility; if 200 lines could be 50, rewrite.
-- **Surgical changes.** Touch only what the request needs; match existing style; don't refactor working code; remove only orphans you created.
-- **Goal-driven.** Turn tasks into verifiable goals (write the test, then pass it).
+## 0. Behavioral principles (read FIRST, applies to EVERY task)
+
+These four principles override task-specific instinct. They exist to suppress the most common AI coding failure modes: **silent assumptions, overengineering, scope creep, unverified completion.**
+
+### 0.1 Think before coding
+Don't assume. Don't hide confusion. Surface tradeoffs. Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them — don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, STOP. Name what's confusing. Ask.
+
+### 0.2 Simplicity first
+Minimum code that solves the problem. Nothing speculative.
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Self-check: *"Would a senior engineer say this is overcomplicated?"* If yes, simplify.
+
+### 0.3 Surgical changes
+Touch only what you must. Clean up only your own mess.
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it — don't delete it.
+- **Orphan rule:** remove imports/variables/functions YOUR changes made unused; don't remove pre-existing dead code unless asked.
+
+Test: every changed line traces directly to the user's request.
+
+### 0.4 Goal-driven execution
+Define success criteria. Loop until verified. Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+- "Make UI match design" → "`npm run test:visual` passes with diff ≤ 2%"
+
+For multi-step tasks, state a brief plan — each `step → verify: [check]`.
+
+Working if: fewer unnecessary changes in diffs, fewer rewrites from overcomplication, clarifying questions come BEFORE implementation rather than AFTER mistakes.
 
 ## 1. Stack
 Python 3.12 + FastAPI + SQLAlchemy 2.0 + Postgres 16 (managed) + Redis (RQ). **Next.js (App Router) + Tailwind + `@rebloom/canon`** (web, the verified UI source of truth from Claude Design) + **Capacitor** wrap → iOS/Android (same build). aiogram 3 (bot). ЮKassa (escrow). Яндекс Доставка. Object Storage + CDN. Docker Compose on RF VM behind Caddy.
