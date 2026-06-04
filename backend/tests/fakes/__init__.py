@@ -1003,6 +1003,68 @@ class FakeRealtimeBus:
         self.published.append((channel, message))
 
 
+class FakeAdminUserRepo:
+    """Implements :class:`app.core.admin.users.AdminUserRepo` in memory."""
+
+    def __init__(self) -> None:
+        self._users: dict[str, dict[str, object]] = {}
+
+    def seed(
+        self, user_id: str, *, display_name: str = "Аня", status: str = "active", city: str = "msk"
+    ) -> None:
+        self._users[user_id] = {"display_name": display_name, "status": status, "city": city}
+
+    def _row(self, user_id: str) -> object:
+        from app.core.admin.users import AdminUserRow
+
+        u = self._users[user_id]
+        return AdminUserRow(
+            id=user_id,
+            display_name=str(u["display_name"]),
+            phone_masked="+7•••••",
+            city_id=str(u["city"]),
+            status=str(u["status"]),
+            seller_rating=None,
+            listings_count=0,
+        )
+
+    def search(
+        self, q: str | None, city: str | None, status: str | None, limit: int
+    ) -> list[object]:
+        out = []
+        for uid, u in self._users.items():
+            if q and q.lower() not in str(u["display_name"]).lower() and q != uid:
+                continue
+            if city and u["city"] != city:
+                continue
+            if status and u["status"] != status:
+                continue
+            out.append(self._row(uid))
+        return out[:limit]
+
+    def detail(self, user_id: str) -> object | None:
+        from app.core.admin.users import AdminUserDetail
+
+        if user_id not in self._users:
+            return None
+        return AdminUserDetail(row=self._row(user_id), listings=[], reviews=[], deals=[])  # type: ignore[arg-type]
+
+    def set_status(self, user_id: str, status: str) -> bool:
+        if user_id not in self._users or self._users[user_id]["status"] == "deleted":
+            return False
+        self._users[user_id]["status"] = status
+        return True
+
+    def update(self, user_id: str, display_name: str | None, city_id: str | None) -> bool:
+        if user_id not in self._users:
+            return False
+        if display_name is not None:
+            self._users[user_id]["display_name"] = display_name
+        if city_id is not None:
+            self._users[user_id]["city"] = city_id
+        return True
+
+
 class FakeUsersStatsRepo:
     """Implements :class:`app.core.analytics.overview.UsersStatsRepo` in memory."""
 
