@@ -108,6 +108,22 @@ export interface ProfileResponse {
   active_listings: ListingCard[];
 }
 
+export interface AppNotification {
+  id: string;
+  kind: string;
+  title: string;
+  body: string;
+  payload?: Record<string, unknown>;
+  read: boolean;
+  created_at: string;
+}
+
+export interface NotificationSettings {
+  deals: boolean;
+  messages: boolean;
+  marketing: boolean;
+}
+
 export interface Paginated<T> {
   items: T[];
   next_cursor: string | null;
