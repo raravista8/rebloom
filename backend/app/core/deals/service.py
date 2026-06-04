@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 
+from app.core.audit.ports import AuditLog
 from app.core.deals.ports import DealRepository, DealView, ListingReader
 from app.core.deals.schemas import compute_commission
 from app.core.errors import (
@@ -16,12 +17,16 @@ from app.core.errors import (
     FORBIDDEN,
     LISTING_UNAVAILABLE,
     NOT_FOUND,
+    VALIDATION_ERROR,
     DomainError,
 )
 from app.core.payments.ports import PaymentProvider
 from app.core.result import Err, Ok, Result
 
 logger = logging.getLogger("rebloom.deals")
+
+# Support resolutions for a disputed deal (FLOW-1 step 4).
+_RESOLVE_ACTIONS: frozenset[str] = frozenset({"release", "refund", "partial"})
 
 
 class DealService:
@@ -31,11 +36,26 @@ class DealService:
         listings: ListingReader,
         payments: PaymentProvider,
         commission_bps: int,
+        audit: AuditLog | None = None,
     ) -> None:
         self._deals = deals
         self._listings = listings
         self._payments = payments
         self._bps = commission_bps
+        self._audit = audit
+
+    def _record(
+        self, action: str, deal_id: str, actor_id: str, reason: str | None, request_id: str | None
+    ) -> None:
+        if self._audit is not None:
+            self._audit.record(
+                action=action,
+                target_type="deal",
+                target_id=deal_id,
+                actor_id=actor_id,
+                reason=reason,
+                request_id=request_id,
+            )
 
     def create_deal(
         self, buyer_id: str, listing_id: str, delivery_method: str
@@ -96,7 +116,77 @@ class DealService:
             self._deals.record_payout(deal_id, receipt.yk_payout_id, receipt.fiscal_receipt_id)
         except Exception:
             logger.warning("payout failed for deal %s — released, will retry", deal_id)
+        self._record("deal.released", deal_id, buyer_id, "buyer_confirm", None)
         return Ok(released)
+
+    def open_dispute(
+        self, requester_id: str, deal_id: str, reason: str, request_id: str | None = None
+    ) -> Result[DealView, DomainError]:
+        """Either party freezes funds before release (FR-024). Funds stay held —
+        fail-secure; the only way out is a support resolution."""
+        deal = self._deals.get(deal_id)
+        if deal is None:
+            return Err(DomainError(NOT_FOUND, "deal"))
+        if requester_id not in (deal.buyer_id, deal.seller_id):  # T-06
+            return Err(DomainError(FORBIDDEN, "not_a_party"))
+        if deal.status != "paid_held":
+            return Err(DomainError(CONFLICT, "not_disputable"))
+
+        disputed = self._deals.open_dispute(deal_id)
+        if disputed is None:  # raced past paid_held
+            return Err(DomainError(CONFLICT, "dispute_race"))
+        self._record("deal.dispute_opened", deal_id, requester_id, reason, request_id)
+        return Ok(disputed)
+
+    def resolve_dispute(
+        self,
+        actor_id: str,
+        deal_id: str,
+        *,
+        action: str,
+        reason: str,
+        refund_kopecks: int = 0,
+        request_id: str | None = None,
+    ) -> Result[DealView, DomainError]:
+        """Support/admin closes a dispute: release to seller, full refund, or a
+        partial split. Money settles in the ledger first; provider payout/refund
+        are best-effort retryable side effects. Every outcome is audit-logged."""
+        if action not in _RESOLVE_ACTIONS:
+            return Err(DomainError(VALIDATION_ERROR, "action"))
+        deal = self._deals.get(deal_id)
+        if deal is None:
+            return Err(DomainError(NOT_FOUND, "deal"))
+        if deal.status != "disputed":
+            return Err(DomainError(CONFLICT, "not_disputed"))
+        if action == "partial" and not (0 < refund_kopecks < deal.amount_kopecks):
+            return Err(DomainError(VALIDATION_ERROR, "refund_amount"))
+
+        resolved = self._deals.resolve_dispute(deal_id, action, refund_kopecks)
+        if resolved is None:  # raced / ledger guard
+            return Err(DomainError(CONFLICT, "resolve_race"))
+
+        try:
+            if action == "release":
+                self._payout(deal, deal.payout_kopecks())
+            elif action == "refund":
+                self._payments.refund(deal_id, deal.amount_kopecks, f"{deal_id}:refund")
+            else:  # partial
+                self._payments.refund(deal_id, refund_kopecks, f"{deal_id}:refund")
+                self._payout(deal, deal.amount_kopecks - refund_kopecks)
+        except Exception:
+            logger.warning(
+                "dispute %s side-effect failed for %s — settled in ledger, will retry",
+                action,
+                deal_id,
+            )
+        self._record(f"deal.dispute_resolved.{action}", deal_id, actor_id, reason, request_id)
+        return Ok(resolved)
+
+    def _payout(self, deal: DealView, amount_kopecks: int) -> None:
+        receipt = self._payments.payout(
+            deal.id, deal.seller_id, amount_kopecks, f"{deal.id}:payout"
+        )
+        self._deals.record_payout(deal.id, receipt.yk_payout_id, receipt.fiscal_receipt_id)
 
     def get(self, deal_id: str, requester_id: str) -> Result[DealView, DomainError]:
         deal = self._deals.get(deal_id)

@@ -16,6 +16,8 @@ from sqlalchemy import select
 from app.core.deals.ledger import (
     LedgerEntry,
     LedgerKind,
+    build_partial_entries,
+    build_refund_entries,
     build_release_entries,
     can_apply,
 )
@@ -158,6 +160,63 @@ class PostgresDealRepository:
             listing = session.get(Listing, deal.listing_id)
             if listing is not None:
                 listing.status = "sold"
+            return _to_view(deal)
+
+    def open_dispute(self, deal_id: str) -> DealView | None:
+        with writer_session() as session:
+            deal = session.execute(
+                select(Deal).where(Deal.id == uuid.UUID(deal_id)).with_for_update()
+            ).scalar_one_or_none()
+            if deal is None or deal.status != "paid_held":
+                return None  # only a held deal can be disputed; funds stay held
+            deal.status = "disputed"
+            return _to_view(deal)
+
+    def resolve_dispute(
+        self, deal_id: str, action: str, refund_kopecks: int = 0
+    ) -> DealView | None:
+        with writer_session() as session:
+            deal = session.execute(
+                select(Deal).where(Deal.id == uuid.UUID(deal_id)).with_for_update()
+            ).scalar_one_or_none()
+            if deal is None or deal.status != "disputed":
+                return None  # exactly-once resolution
+
+            if action == "release":
+                new = build_release_entries(
+                    str(deal.id), deal.amount_kopecks, deal.commission_kopecks
+                )
+                deal_status, listing_status = "released", "sold"
+            elif action == "refund":
+                new = build_refund_entries(str(deal.id), deal.amount_kopecks)
+                deal_status, listing_status = "refunded", "archived"
+            elif action == "partial":
+                if not (0 < refund_kopecks < deal.amount_kopecks):
+                    return None
+                new = build_partial_entries(
+                    str(deal.id), refund_kopecks, deal.amount_kopecks - refund_kopecks
+                )
+                deal_status, listing_status = "refunded", "sold"
+            else:
+                return None
+
+            existing = [
+                LedgerEntry(str(deal.id), cast(LedgerKind, row.kind), row.amount_kopecks)
+                for row in session.scalars(
+                    select(LedgerRow).where(LedgerRow.deal_id == deal.id)
+                ).all()
+            ]
+            if not can_apply(existing, new):
+                return None  # ledger invariant guard
+            for entry in new:
+                session.add(
+                    LedgerRow(deal_id=deal.id, kind=entry.kind, amount_kopecks=entry.amount_kopecks)
+                )
+            deal.status = deal_status
+            deal.released_at = datetime.now(UTC)
+            listing = session.get(Listing, deal.listing_id)
+            if listing is not None:
+                listing.status = listing_status
             return _to_view(deal)
 
     def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:

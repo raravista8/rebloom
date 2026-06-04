@@ -407,6 +407,7 @@ class FakePaymentProvider:
 
     def __init__(self) -> None:
         self.payouts: list[tuple[str, str, int]] = []
+        self.refunds: list[tuple[str, int]] = []
         self.status = "succeeded"  # re-fetched status (settable for fail-secure tests)
 
     def create_payment(self, deal_id: str, amount_kopecks: int, idempotency_key: str) -> object:
@@ -423,6 +424,12 @@ class FakePaymentProvider:
 
         self.payouts.append((deal_id, seller_id, amount_kopecks))
         return PayoutReceipt(yk_payout_id=f"po_{deal_id}", fiscal_receipt_id=f"r_{deal_id}")
+
+    def refund(self, deal_id: str, amount_kopecks: int, idempotency_key: str) -> object:
+        from app.core.payments.ports import RefundReceipt
+
+        self.refunds.append((deal_id, amount_kopecks))
+        return RefundReceipt(yk_refund_id=f"ref_{deal_id}", fiscal_receipt_id=f"rr_{deal_id}")
 
     def get_payment_status(self, yk_payment_id: str) -> str:
         return self.status
@@ -504,6 +511,37 @@ class FakeDealRepository:
         d["ledger"].append(("commission", commission))  # type: ignore[union-attr]
         d["ledger"].append(("payout", amount - commission))  # type: ignore[union-attr]
         d["status"] = "released"
+        d["released_at"] = _now_iso()
+        return self._view(deal_id)
+
+    def open_dispute(self, deal_id: str) -> object | None:
+        d = self._deals.get(deal_id)
+        if d is None or d["status"] != "paid_held":
+            return None
+        d["status"] = "disputed"  # funds stay held — no ledger change
+        return self._view(deal_id)
+
+    def resolve_dispute(self, deal_id: str, action: str, refund_kopecks: int = 0) -> object | None:
+        d = self._deals.get(deal_id)
+        if d is None or d["status"] != "disputed":
+            return None
+        amount, commission = int(d["amount"]), int(d["commission"])  # type: ignore[arg-type]
+        ledger = d["ledger"]
+        if action == "release":
+            ledger.append(("commission", commission))  # type: ignore[union-attr]
+            ledger.append(("payout", amount - commission))  # type: ignore[union-attr]
+            d["status"] = "released"
+        elif action == "refund":
+            ledger.append(("refund", amount))  # type: ignore[union-attr]
+            d["status"] = "refunded"
+        elif action == "partial":
+            if not (0 < refund_kopecks < amount):
+                return None
+            ledger.append(("refund", refund_kopecks))  # type: ignore[union-attr]
+            ledger.append(("payout", amount - refund_kopecks))  # type: ignore[union-attr]
+            d["status"] = "refunded"
+        else:
+            return None
         d["released_at"] = _now_iso()
         return self._view(deal_id)
 
