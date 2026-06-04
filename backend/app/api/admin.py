@@ -18,6 +18,7 @@ from app.api.deps import (
     get_metrics_service,
 )
 from app.api.envelope import domain_error_response, fail, ok, request_id
+from app.api.reports import ReportServiceDep
 from app.core.admin.moderation import ModerationQueueService
 from app.core.admin.users import AdminUserService
 from app.core.analytics.finance import FinanceService
@@ -244,6 +245,12 @@ def admin_edit_user(
     if isinstance(result, Ok):
         return ok({"status": result.value})
     return domain_error_response(request, result.error)
+
+
+@router.get("/api/admin/reports", response_model=None)
+def admin_reports(_admin: RequireAdmin2FADep, service: ReportServiceDep) -> dict[str, Any]:
+    """Open user abuse reports awaiting a moderator (FR-064)."""
+    return ok({"items": [r.to_api() for r in service.queue()], "next_cursor": None})
 
 
 @router.get("/api/admin/finance", response_model=None)

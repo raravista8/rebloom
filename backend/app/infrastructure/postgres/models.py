@@ -329,6 +329,27 @@ class ListingMessage(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     body: Mapped[str] = mapped_column(String(2000), nullable=False)
 
 
+class UserReport(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """A user's abuse report against a listing or another user (FR-064). Queued
+    for moderators; resolution is audit-logged."""
+
+    __tablename__ = "user_reports"
+    __table_args__ = (
+        CheckConstraint("target_type IN ('listing','user')", name="report_target_valid"),
+        CheckConstraint("status IN ('open','reviewed')", name="report_status_valid"),
+    )
+
+    reporter_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    target_type: Mapped[str] = mapped_column(String(8), nullable=False)
+    target_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    reason: Mapped[str] = mapped_column(String(2000), nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(8), nullable=False, server_default=text("'open'"), index=True
+    )
+
+
 class Notification(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     """Transactional outbox row (NOTIFICATIONS.md §6). One per (event, channel,
     user) — the unique key makes enqueue idempotent (dedup by event+channel)."""
