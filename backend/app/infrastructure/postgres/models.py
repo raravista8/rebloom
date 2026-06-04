@@ -140,6 +140,7 @@ class Photo(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     moderation_status: Mapped[str] = mapped_column(
         String(16), nullable=False, server_default=text("'pending'")
     )
+    phash: Mapped[str | None] = mapped_column(String(16), index=True)  # dHash, T-09
 
     listing: Mapped[Listing | None] = relationship(back_populates="photos")
 

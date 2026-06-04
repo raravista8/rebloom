@@ -270,11 +270,17 @@ class FakePhotoRepository:
 
     def __init__(self) -> None:
         self._photos: dict[str, tuple[str, str]] = {}  # id -> (owner_id, status)
+        self._phashes: dict[str, tuple[str, str]] = {}  # id -> (owner_id, phash)
         self._seq = 0
         self.processed: dict[str, dict[str, str]] = {}
 
     def seed(self, photo_id: str, owner_id: str, status: str = "approved") -> None:
         self._photos[photo_id] = (owner_id, status)
+
+    def seed_phash(self, photo_id: str, owner_id: str, phash: str) -> None:
+        """Test helper: an existing processed photo with a known perceptual hash."""
+        self._photos[photo_id] = (owner_id, "approved")
+        self._phashes[photo_id] = (owner_id, phash)
 
     def create_pending(self, owner_id: str, content_type: str) -> object:
         from app.core.listings.schemas import PhotoRef
@@ -302,11 +308,19 @@ class FakePhotoRepository:
             return None
         return PhotoRef(id=photo_id, moderation_status=rec[1])
 
-    def mark_processed(self, photo_id: str, variants: dict[str, str]) -> None:
+    def mark_processed(
+        self, photo_id: str, variants: dict[str, str], phash: str, approved: bool
+    ) -> None:
         rec = self._photos.get(photo_id)
         if rec is not None:
-            self._photos[photo_id] = (rec[0], "approved")
+            self._photos[photo_id] = (rec[0], "approved" if approved else "pending")
+            self._phashes[photo_id] = (rec[0], phash)
         self.processed[photo_id] = variants
+
+    def other_owner_phashes(self, owner_id: str, limit: int) -> list[tuple[str, str]]:
+        return [(pid, phash) for pid, (owner, phash) in self._phashes.items() if owner != owner_id][
+            :limit
+        ]
 
 
 class FakeObjectStorage:

@@ -9,3 +9,4 @@ from dataclasses import dataclass
 class ProcessedImage:
     variants: dict[str, bytes]  # variant name → encoded (WebP) bytes, EXIF-free
     content_type: str
+    phash: str  # 16-char hex (64-bit) perceptual hash for duplicate detection
