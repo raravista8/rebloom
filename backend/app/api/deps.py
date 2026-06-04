@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 from fastapi import Depends, HTTPException, Request
 
 from app.core.auth.session import SessionService
+
+if TYPE_CHECKING:
+    from app.core.analytics.metrics import MetricsService
 from app.core.users.ports import UserRepository
 from app.core.users.schemas import UserView
 from app.infrastructure.auth.session_store import RedisSessionStore
@@ -22,6 +25,13 @@ def get_session_service() -> SessionService:
 
 def get_user_repo() -> UserRepository:
     return PostgresUserRepository()
+
+
+def get_metrics_service() -> MetricsService:
+    from app.core.analytics.metrics import MetricsService
+    from app.infrastructure.analytics import RedisMetrics
+
+    return MetricsService(RedisMetrics())
 
 
 SessionServiceDep = Annotated[SessionService, Depends(get_session_service)]

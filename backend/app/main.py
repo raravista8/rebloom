@@ -25,6 +25,7 @@ from app.api import (
     reviews,
     ws,
 )
+from app.api.analytics_middleware import AnalyticsMiddleware
 from app.api.envelope import (
     http_exception_handler,
     unhandled_exception_handler,
@@ -54,6 +55,8 @@ def create_app() -> FastAPI:
         http_exception_handler,  # type: ignore[arg-type]
     )
     app.add_exception_handler(Exception, unhandled_exception_handler)
+
+    app.add_middleware(AnalyticsMiddleware)
 
     app.include_router(health.router)
     app.include_router(auth.router)

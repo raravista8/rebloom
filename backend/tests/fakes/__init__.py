@@ -970,6 +970,29 @@ class FakeRateLimiter:
         return self._counts[key] <= cap
 
 
+class FakeMetricsRecorder:
+    """Implements :class:`app.core.analytics.metrics.MetricsRecorder` in memory."""
+
+    def __init__(self) -> None:
+        self.heartbeats: dict[str, float] = {}
+        self.active: list[tuple[str, str, str]] = []  # (user, day, platform)
+
+    def heartbeat(self, user_id: str, now_ts: float) -> None:
+        self.heartbeats[user_id] = now_ts
+
+    def online_count(self, now_ts: float, window_sec: int) -> int:
+        return sum(1 for ts in self.heartbeats.values() if ts >= now_ts - window_sec)
+
+    def mark_active(self, user_id: str, day: str, platform: str) -> None:
+        self.active.append((user_id, day, platform))
+
+    def active_count(self, days: list[str]) -> int:
+        return len({u for u, d, _p in self.active if d in days})
+
+    def active_count_by_platform(self, days: list[str], platform: str) -> int:
+        return len({u for u, d, p in self.active if d in days and p == platform})
+
+
 class FakeRealtimeBus:
     """Implements :class:`app.core.realtime.ports.RealtimeBus`; records publishes."""
 
