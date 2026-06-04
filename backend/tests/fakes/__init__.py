@@ -3,6 +3,12 @@
 from __future__ import annotations
 
 
+def _now_iso() -> str:
+    from datetime import UTC, datetime
+
+    return datetime.now(UTC).isoformat()
+
+
 class FakeClock:
     def __init__(self) -> None:
         self.t = 0.0
@@ -468,11 +474,77 @@ class FakeDealRepository:
         d["ledger"].append(("commission", commission))  # type: ignore[union-attr]
         d["ledger"].append(("payout", amount - commission))  # type: ignore[union-attr]
         d["status"] = "released"
-        d["released_at"] = "2026-06-04T00:00:00+00:00"
+        d["released_at"] = _now_iso()
         return self._view(deal_id)
 
     def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:
         self._deals[deal_id]["payout"] = (yk_payout_id, fiscal_receipt_id)
+
+    def seed_released(self, buyer_id: str, seller_id: str, amount: int = 100000) -> str:
+        """Test helper: a released deal (released just now, within the review window)."""
+        self._seq += 1
+        did = f"deal-{self._seq}"
+        self._deals[did] = {
+            "status": "released",
+            "buyer_id": buyer_id,
+            "seller_id": seller_id,
+            "listing_id": "L",
+            "amount": amount,
+            "commission": amount // 10,
+            "delivery": "self_pickup",
+            "released_at": _now_iso(),
+            "ledger": [
+                ("hold", amount),
+                ("commission", amount // 10),
+                ("payout", amount - amount // 10),
+            ],
+        }
+        return did
+
+
+class FakeReviewRepository:
+    """Implements :class:`app.core.reviews.ports.ReviewRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._reviews: list[object] = []
+        self._keys: set[tuple[str, str]] = set()
+        self._seq = 0
+
+    def create(
+        self,
+        *,
+        deal_id: str,
+        author_id: str,
+        target_id: str,
+        score: int,
+        text: str,
+        moderation_status: str,
+    ) -> object | None:
+        from app.core.reviews.schemas import ReviewView
+
+        key = (deal_id, author_id)
+        if key in self._keys:
+            return None
+        self._keys.add(key)
+        self._seq += 1
+        view = ReviewView(
+            id=f"review-{self._seq}",
+            deal_id=deal_id,
+            author_id=author_id,
+            target_id=target_id,
+            score=score,
+            text=text,
+            moderation_status=moderation_status,
+        )
+        self._reviews.append(view)
+        return view
+
+    def list_for_user(self, target_id: str) -> list[object]:
+        return [
+            r
+            for r in self._reviews
+            if r.target_id == target_id and r.moderation_status == "visible"  # type: ignore[attr-defined]
+        ]
 
 
 class FakeAuditLog:
