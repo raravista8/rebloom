@@ -292,3 +292,46 @@ class FakeLikeRepository:
             return None
         self._likes[listing_id].discard(user_id)
         return len(self._likes[listing_id])
+
+
+def make_listing_view(listing_id: str = "l1", city_id: str = "msk") -> object:
+    """Build a minimal ListingView for feed/search tests."""
+    from datetime import UTC, datetime
+
+    from app.core.listings.schemas import ListingView
+
+    return ListingView(
+        id=listing_id,
+        seller_id="s1",
+        seller_display_name=None,
+        seller_rating=None,
+        size="M",
+        freshness="today",
+        price_kopecks=100000,
+        city_id=city_id,
+        geo_coarse=None,
+        status="active",
+        like_count=0,
+        freshness_score=1.0,
+        expires_at=datetime(2026, 6, 4, tzinfo=UTC),
+        photos=(),
+    )
+
+
+class FakeFeedRepository:
+    """Implements :class:`app.core.feed.schemas.FeedRepository` in memory."""
+
+    def __init__(self, items: object = ()) -> None:
+        self._items = list(items)  # type: ignore[call-overload]
+
+    def feed(
+        self, city_id: str, section: str, offset: int, limit: int
+    ) -> tuple[list[object], bool]:
+        page = self._items[offset : offset + limit]
+        return page, (offset + limit) < len(self._items)
+
+    def search(
+        self, city_id: str, filters: object, offset: int, limit: int
+    ) -> tuple[list[object], bool]:
+        page = self._items[offset : offset + limit]
+        return page, (offset + limit) < len(self._items)
