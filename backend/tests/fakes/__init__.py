@@ -801,6 +801,115 @@ class FakeModerationQueueRepo:
         return True
 
 
+class _FakeRow:
+    __slots__ = ("attempts", "body", "channel", "id", "kind", "title", "user_id")
+
+    def __init__(self, data: dict[str, object]) -> None:
+        self.id = str(data["id"])
+        self.user_id = str(data["user_id"])
+        self.channel = str(data["channel"])
+        self.kind = str(data["kind"])
+        self.title = str(data["title"])
+        self.body = str(data["body"])
+        self.attempts = int(data["attempts"])  # type: ignore[arg-type]
+
+
+class FakeNotificationOutbox:
+    """Implements :class:`app.core.notifications.ports.NotificationOutbox`."""
+
+    def __init__(self) -> None:
+        self._rows: dict[str, dict[str, object]] = {}
+        self._keys: set[tuple[str, str, str]] = set()  # (event_id, channel, user)
+        self._seq = 0
+
+    def enqueue(self, draft: object) -> int:
+        created = 0
+        for channel in draft.channels:  # type: ignore[attr-defined]
+            key = (draft.event_id, channel, draft.user_id)  # type: ignore[attr-defined]
+            if key in self._keys:
+                continue
+            self._keys.add(key)
+            self._seq += 1
+            rid = f"notif-{self._seq}"
+            self._rows[rid] = {
+                "id": rid,
+                "event_id": draft.event_id,  # type: ignore[attr-defined]
+                "user_id": draft.user_id,  # type: ignore[attr-defined]
+                "channel": channel,
+                "kind": draft.kind,  # type: ignore[attr-defined]
+                "title": draft.title,  # type: ignore[attr-defined]
+                "body": draft.body,  # type: ignore[attr-defined]
+                "payload": draft.payload,  # type: ignore[attr-defined]
+                "status": "pending",
+                "attempts": 0,
+                "read": False,
+                "ts": _now_iso(),
+            }
+            created += 1
+        return created
+
+    def list_pending(self, limit: int) -> list[object]:
+        return [_FakeRow(r) for r in self._rows.values() if r["status"] == "pending"][:limit]
+
+    def mark_sent(self, row_id: str) -> None:
+        if row_id in self._rows:
+            self._rows[row_id]["status"] = "sent"
+
+    def mark_attempt_failed(self, row_id: str, max_attempts: int) -> None:
+        r = self._rows.get(row_id)
+        if r is None:
+            return
+        r["attempts"] = int(r["attempts"]) + 1  # type: ignore[arg-type]
+        if int(r["attempts"]) >= max_attempts:  # type: ignore[arg-type]
+            r["status"] = "failed"
+
+    def list_inapp(
+        self, user_id: str, cursor: str | None, limit: int
+    ) -> tuple[list[object], str | None]:
+        from app.core.notifications.schemas import NotificationView
+
+        views = [
+            NotificationView(
+                id=str(r["id"]),
+                kind=str(r["kind"]),
+                title=str(r["title"]),
+                body=str(r["body"]),
+                payload=r["payload"] or {},  # type: ignore[arg-type]
+                read=bool(r["read"]),
+                created_at=str(r["ts"]),
+            )
+            for r in self._rows.values()
+            if r["user_id"] == user_id and r["channel"] == "inapp"
+        ]
+        return views[:limit], None
+
+
+class FakePushProvider:
+    """Implements PushProvider; records sends, optionally fails."""
+
+    def __init__(self, fail: bool = False) -> None:
+        self.sent: list[tuple[str, str]] = []
+        self._fail = fail
+
+    def send(self, user_id: str, title: str, body: str) -> None:
+        if self._fail:
+            raise RuntimeError("push down")
+        self.sent.append((user_id, title))
+
+
+class FakeEmailProvider:
+    """Implements EmailProvider; records sends, optionally fails."""
+
+    def __init__(self, fail: bool = False) -> None:
+        self.sent: list[tuple[str, str]] = []
+        self._fail = fail
+
+    def send(self, user_id: str, subject: str, body: str) -> None:
+        if self._fail:
+            raise RuntimeError("smtp down")
+        self.sent.append((user_id, subject))
+
+
 class FakeAuditLog:
     """Implements :class:`app.core.audit.ports.AuditLog` in memory."""
 

@@ -302,3 +302,30 @@ class Message(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         String(16), nullable=False, server_default=text("'visible'")
     )
     body: Mapped[str] = mapped_column(String(2000), nullable=False)
+
+
+class Notification(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Transactional outbox row (NOTIFICATIONS.md §6). One per (event, channel,
+    user) — the unique key makes enqueue idempotent (dedup by event+channel)."""
+
+    __tablename__ = "notifications"
+    __table_args__ = (
+        UniqueConstraint("event_id", "channel", "user_id", name="notif_event_channel_user"),
+        CheckConstraint("channel IN ('inapp','push','email')", name="notif_channel_valid"),
+        CheckConstraint("status IN ('pending','sent','failed')", name="notif_status_valid"),
+    )
+
+    event_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    channel: Mapped[str] = mapped_column(String(8), nullable=False)
+    kind: Mapped[str] = mapped_column(String(32), nullable=False)
+    title: Mapped[str] = mapped_column(String(128), nullable=False)
+    body: Mapped[str] = mapped_column(String(512), nullable=False)
+    payload: Mapped[dict[str, str] | None] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(
+        String(8), nullable=False, server_default=text("'pending'"), index=True
+    )
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
+    read: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
