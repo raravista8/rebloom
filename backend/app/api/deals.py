@@ -98,6 +98,21 @@ def confirm_receipt(
     return domain_error_response(request, result.error)
 
 
+@router.get("/api/deals", response_model=None)
+def list_deals(
+    request: Request,
+    user: RequireUserDep,
+    service: DealServiceDep,
+    role: Literal["buyer", "seller"] | None = None,
+    status: str | None = None,
+    limit: int = 20,
+) -> dict[str, Any]:
+    """The signed-in user's own deals (as buyer or seller). Read-only list."""
+    views = service.list_for_user(user.id, role=role, status=status, limit=limit)
+    items = [v.to_api(role="buyer" if v.buyer_id == user.id else "seller") for v in views]
+    return ok({"items": items, "next_cursor": None})
+
+
 @router.get("/api/deals/{deal_id}", response_model=None)
 def get_deal(
     deal_id: str, request: Request, user: RequireUserDep, service: DealServiceDep

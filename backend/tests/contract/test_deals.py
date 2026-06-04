@@ -109,3 +109,31 @@ def test_get_deal_is_party_only(
 
     stranger, _sid = _login(app, "+79165556677")
     assert stranger.get(f"/api/deals/{deal_id}").status_code == 403  # IDOR blocked
+
+
+def test_list_my_deals(
+    ctx: tuple[FastAPI, FakeDealRepository, FakeListingReader],
+) -> None:
+    app, _deals, listings = ctx
+    client, _uid = _login(app, "+79161112233")
+    listings.seed("L", "seller-x", price=150_000, status="active")
+    client.post("/api/deals", json={"listing_id": "L", "delivery_method": "self_pickup"})
+
+    resp = client.get("/api/deals")
+    assert resp.status_code == 200
+    items = resp.json()["data"]["items"]
+    assert len(items) == 1
+    d = items[0]
+    assert d["role"] == "buyer"
+    assert d["counterparty"]["id"] == "seller-x"
+    assert d["listing"]["id"] == "L"
+    assert "created_at" in d
+    # role filter: this user has no deals as a seller
+    assert client.get("/api/deals?role=seller").json()["data"]["items"] == []
+
+
+def test_list_my_deals_requires_auth(
+    ctx: tuple[FastAPI, FakeDealRepository, FakeListingReader],
+) -> None:
+    app, _deals, _listings = ctx
+    assert TestClient(app).get("/api/deals").status_code == 401

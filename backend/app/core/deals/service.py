@@ -232,3 +232,9 @@ class DealService:
         if requester_id not in (deal.buyer_id, deal.seller_id):  # IDOR guard, T-06
             return Err(DomainError(FORBIDDEN, "not_a_party"))
         return Ok(deal)
+
+    def list_for_user(
+        self, user_id: str, *, role: str | None = None, status: str | None = None, limit: int = 20
+    ) -> list[DealView]:
+        """The user's own deals (as buyer or seller). Read-only; no money mutation."""
+        return self._deals.list_for_user(user_id, role=role, status=status, limit=limit)

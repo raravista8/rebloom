@@ -23,15 +23,24 @@ const STATUS_LABEL: Record<DealStatus, string> = {
 };
 
 function DealMini({ deal }: { deal: DealView }) {
+  const cp = deal.counterparty;
+  const meta = [
+    `${deal.role === 'buyer' ? 'Продавец' : 'Покупатель'}${cp.display_name ? ` ${cp.display_name}` : ''}`,
+    cp.seller_rating != null ? `${cp.seller_rating.toFixed(1)} ★` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '12px 16px', borderBottom: '1px solid var(--pd-border)', background: 'var(--pd-surface)' }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={deal.listing.photo_thumb_url} alt="" style={{ width: 48, height: 48, borderRadius: 12, objectFit: 'cover' }} />
+      {deal.listing.photo_thumb_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={deal.listing.photo_thumb_url} alt="" style={{ width: 48, height: 48, borderRadius: 12, objectFit: 'cover' }} />
+      ) : (
+        <div style={{ width: 48, height: 48, borderRadius: 12, background: 'var(--pd-surface-2)', flex: 'none' }} />
+      )}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontWeight: 700, fontSize: 14 }}>Букет</div>
-        <div style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 2 }}>
-          {deal.role === 'buyer' ? 'Продавец' : 'Покупатель'} {deal.counterparty.display_name} · {deal.counterparty.seller_rating.toFixed(1)} ★
-        </div>
+        <div style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 2 }}>{meta}</div>
       </div>
       <div style={{ textAlign: 'right' }}>
         <div className="pd-price" style={{ fontSize: 16 }}>{formatPriceKopecks(deal.amount_kopecks)}</div>
@@ -135,6 +144,7 @@ export default function DealScreen({ id }: { id: string }) {
   const { status } = deal;
   const isBuyer = deal.role === 'buyer';
   const sellerAmount = deal.amount_kopecks - deal.commission_kopecks;
+  const cpName = deal.counterparty.display_name ?? (isBuyer ? 'Продавец' : 'Покупатель');
 
   let footer: React.ReactNode = null;
   if (status === 'paid_held' && isBuyer) {
@@ -185,7 +195,7 @@ export default function DealScreen({ id }: { id: string }) {
       <div style={{ padding: '14px 16px' }}>
         {status === 'paid_held' && (
           <PdNotice kind="ok" icon={IconShield}>
-            <b>Деньги в безопасности.</b> {deal.counterparty.display_name} получит {formatPriceKopecks(sellerAmount)} после того, как
+            <b>Деньги в безопасности.</b> {cpName} получит {formatPriceKopecks(sellerAmount)} после того, как
             покупатель подтвердит получение. Комиссия площадки {formatPriceKopecks(deal.commission_kopecks)}.
           </PdNotice>
         )}
@@ -196,7 +206,7 @@ export default function DealScreen({ id }: { id: string }) {
         )}
         {status === 'released' && (
           <PdNotice kind="ok" icon={IconCheck}>
-            <b>Готово!</b> Получение подтверждено. {formatPriceKopecks(sellerAmount)} отправлены {deal.counterparty.display_name}, чек придёт на e-mail.
+            <b>Готово!</b> Получение подтверждено. {formatPriceKopecks(sellerAmount)} отправлены {cpName}, чек придёт на e-mail.
           </PdNotice>
         )}
         {status === 'refunded' && <PdNotice kind="info" icon={IconInfo}><b>Возврат оформлен.</b> Деньги вернутся на вашу карту в срок банка.</PdNotice>}

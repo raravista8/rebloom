@@ -67,14 +67,16 @@ export interface Deal {
 export interface DealView {
   id: string;
   status: DealStatus;
-  listing: { id: string; photo_thumb_url: string; price_kopecks: number };
+  // listing/counterparty display fields are enriched server-side over time; treat
+  // photo/price/name/rating as optional and fall back gracefully.
+  listing: { id: string; photo_thumb_url?: string; price_kopecks?: number };
   role: 'buyer' | 'seller';
-  counterparty: { id: string; display_name: string; seller_rating: number };
+  counterparty: { id: string; display_name?: string; seller_rating?: number };
   amount_kopecks: number;
   commission_kopecks: number;
   delivery_method: DeliveryMethod;
   delivery?: { tracking_status?: string };
-  created_at: string;
+  created_at?: string;
   released_at?: string;
 }
 
