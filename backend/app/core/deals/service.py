@@ -68,6 +68,13 @@ class DealService:
         """Idempotent: created → paid_held + hold ledger (driven by the webhook)."""
         return self._deals.mark_paid(yk_payment_id)
 
+    def process_payment_notification(self, yk_payment_id: str) -> DealView | None:
+        """Webhook entry: re-fetch the authoritative status and only then move the
+        deal — never flip on the body alone or an ambiguous status (T-02, A10)."""
+        if self._payments.get_payment_status(yk_payment_id) != "succeeded":
+            return None
+        return self._deals.mark_paid(yk_payment_id)
+
     def confirm_receipt(self, buyer_id: str, deal_id: str) -> Result[DealView, DomainError]:
         deal = self._deals.get(deal_id)
         if deal is None:

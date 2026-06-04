@@ -29,3 +29,8 @@ class PaymentProvider(Protocol):
     def payout(
         self, deal_id: str, seller_id: str, amount_kopecks: int, idempotency_key: str
     ) -> PayoutReceipt: ...
+
+    def get_payment_status(self, yk_payment_id: str) -> str:
+        """Re-fetch authoritative status — webhooks are never trusted by body
+        alone (SECURITY T-02). Returns e.g. ``succeeded`` / ``pending``."""
+        ...
