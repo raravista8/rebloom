@@ -757,6 +757,35 @@ class FakeChatRepository:
         return visible[:limit], None
 
 
+class FakeReportRepo:
+    """Implements :class:`app.core.moderation.reports.ReportRepo` in memory."""
+
+    def __init__(self) -> None:
+        self._reports: list[object] = []
+        self._seq = 0
+
+    def create(self, reporter_id: str, target_type: str, target_id: str, reason: str) -> str:
+        from app.core.moderation.reports import ReportView
+
+        self._seq += 1
+        rid = f"report-{self._seq}"
+        self._reports.append(
+            ReportView(
+                id=rid,
+                reporter_id=reporter_id,
+                target_type=target_type,
+                target_id=target_id,
+                reason=reason,
+                status="open",
+                created_at=_now_iso(),
+            )
+        )
+        return rid
+
+    def list_open(self, limit: int) -> list[object]:
+        return [r for r in self._reports if r.status == "open"][:limit]  # type: ignore[attr-defined]
+
+
 class FakeModerationQueueRepo:
     """Implements :class:`app.core.admin.ports.ModerationQueueRepo` in memory."""
 

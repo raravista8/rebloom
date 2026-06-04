@@ -22,6 +22,7 @@ from app.api import (
     listings,
     me,
     notifications,
+    reports,
     reviews,
     ws,
 )
@@ -70,6 +71,7 @@ def create_app() -> FastAPI:
     app.include_router(reviews.router)
     app.include_router(me.router)
     app.include_router(notifications.router)
+    app.include_router(reports.router)
     app.include_router(admin.router)
     app.include_router(ws.router)
     app.include_router(yookassa_webhook.router)
