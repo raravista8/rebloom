@@ -49,6 +49,7 @@ Errors: `validation_error`, `moderation_pending` (FR-012), `forbidden` (not your
 | Method | Path | Auth | Request | Response `data` | FR |
 |---|---|---|---|---|---|
 | POST | `/api/deals` | session(buyer) | `{listing_id, delivery_method}` | `{deal, payment:{confirmation_url\|token}}` | FR-020/021 |
+| GET | `/api/deals` | session | `?role=buyer\|seller&status&limit` | `{items: deal[], next_cursor}` — caller's own deals | — |
 | GET | `/api/deals/{id}` | party only | — | `deal` | T-06 |
 | POST | `/api/deals/{id}/confirm-receipt` | buyer | — | `deal` (released) | FR-023 |
 | POST | `/api/deals/{id}/dispute` | party | `{reason, photo_ids[]}` | `deal` (disputed) | FR-024 |

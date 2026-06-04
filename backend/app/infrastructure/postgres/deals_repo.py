@@ -11,7 +11,7 @@ import uuid
 from datetime import UTC, datetime
 from typing import cast
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 
 from app.core.deals.ledger import (
     LedgerEntry,
@@ -38,6 +38,7 @@ def _to_view(deal: Deal) -> DealView:
         commission_kopecks=deal.commission_kopecks,
         delivery_method=deal.delivery_method,
         released_at=deal.released_at.isoformat() if deal.released_at else None,
+        created_at=deal.created_at.isoformat() if deal.created_at else None,
     )
 
 
@@ -113,6 +114,26 @@ class PostgresDealRepository:
         with writer_session() as session:
             deal = session.get(Deal, did)
             return _to_view(deal) if deal is not None else None
+
+    def list_for_user(
+        self, user_id: str, *, role: str | None = None, status: str | None = None, limit: int = 20
+    ) -> list[DealView]:
+        try:
+            uid = uuid.UUID(user_id)
+        except ValueError:
+            return []
+        stmt = select(Deal)
+        if role == "buyer":
+            stmt = stmt.where(Deal.buyer_id == uid)
+        elif role == "seller":
+            stmt = stmt.where(Deal.seller_id == uid)
+        else:
+            stmt = stmt.where(or_(Deal.buyer_id == uid, Deal.seller_id == uid))
+        if status:
+            stmt = stmt.where(Deal.status == status)
+        stmt = stmt.order_by(Deal.created_at.desc()).limit(min(max(limit, 1), 100))
+        with reader_session() as session:
+            return [_to_view(d) for d in session.scalars(stmt).all()]
 
     def parties(self, deal_id: str) -> tuple[str, str] | None:
         """Narrow authz read for chat (DealPartyReader): (buyer_id, seller_id)."""

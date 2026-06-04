@@ -40,7 +40,7 @@ export default function ReviewForm({ id }: { id: string }) {
       .get<DealView>(`/deals/${id}`)
       .then((d) => {
         if (!alive) return;
-        setCounterparty(d.counterparty.display_name);
+        setCounterparty(d.counterparty.display_name ?? '');
         setRole(d.role);
       })
       .catch(() => {});

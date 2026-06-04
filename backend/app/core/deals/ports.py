@@ -17,19 +17,25 @@ class DealView:
     commission_kopecks: int
     delivery_method: str
     released_at: str | None
+    created_at: str | None = None
 
     def payout_kopecks(self) -> int:
         return self.amount_kopecks - self.commission_kopecks
 
     def to_api(self, *, role: str) -> dict[str, Any]:
+        # Nested listing/counterparty match API_CONTRACT §4. Display enrichment
+        # (photo_thumb_url/price, counterparty name+rating) is a follow-up join.
+        counterparty_id = self.seller_id if role == "buyer" else self.buyer_id
         return {
             "id": self.id,
             "status": self.status,
             "role": role,
-            "listing_id": self.listing_id,
+            "listing": {"id": self.listing_id},
+            "counterparty": {"id": counterparty_id},
             "amount_kopecks": self.amount_kopecks,
             "commission_kopecks": self.commission_kopecks,
             "delivery_method": self.delivery_method,
+            "created_at": self.created_at,
             "released_at": self.released_at,
         }
 
@@ -63,6 +69,9 @@ class DealRepository(Protocol):
 
     def attach_payment(self, deal_id: str, yk_payment_id: str, idempotency_key: str) -> None: ...
     def get(self, deal_id: str) -> DealView | None: ...
+    def list_for_user(
+        self, user_id: str, *, role: str | None = None, status: str | None = None, limit: int = 20
+    ) -> list[DealView]: ...
     def mark_paid(self, yk_payment_id: str) -> DealView | None: ...
     def release(self, deal_id: str) -> DealView | None: ...
     def open_dispute(self, deal_id: str) -> DealView | None: ...

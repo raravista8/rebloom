@@ -572,6 +572,7 @@ class FakeDealRepository:
             "commission": commission_kopecks,
             "delivery": delivery_method,
             "released_at": None,
+            "created": self._seq,
             "ledger": [],
         }
         return self._view(did)
@@ -581,6 +582,23 @@ class FakeDealRepository:
 
     def get(self, deal_id: str) -> object | None:
         return self._view(deal_id) if deal_id in self._deals else None
+
+    def list_for_user(
+        self, user_id: str, *, role: str | None = None, status: str | None = None, limit: int = 20
+    ) -> list[object]:
+        rows: list[tuple[int, str]] = []
+        for did, d in self._deals.items():
+            if role == "buyer" and str(d["buyer_id"]) != user_id:
+                continue
+            if role == "seller" and str(d["seller_id"]) != user_id:
+                continue
+            if role is None and user_id not in (str(d["buyer_id"]), str(d["seller_id"])):
+                continue
+            if status is not None and d["status"] != status:
+                continue
+            rows.append((int(d["created"]), did))  # type: ignore[arg-type]
+        rows.sort(reverse=True)
+        return [self._view(did) for _, did in rows[:limit]]
 
     def parties(self, deal_id: str) -> tuple[str, str] | None:
         d = self._deals.get(deal_id)
