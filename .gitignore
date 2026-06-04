@@ -59,3 +59,7 @@ Thumbs.db
 .idea/
 .vscode/
 !.vscode/extensions.json
+packages/canon/node_modules/
+
+# Canon dist IS committed (CANON_PACKAGE_TZ.md §6)
+!packages/canon/dist/

@@ -1,0 +1,64 @@
+/* @rebloom/canon · tokens/theme.css
+ * Semantic design tokens as CSS custom properties — the single place to retheme.
+ * Direction «Воздух» (A): light minimal · Golos Text · terracotta.
+ * Components reference ONLY these semantic vars (never raw hex). See CANON_PACKAGE_TZ.md §5.
+ *
+ * Scoped to the canon roots so the package can coexist with a host app's globals.
+ * `web/` may also lift these to :root if it owns the whole document.
+ */
+:root,
+.pd-root,
+.pda-app,
+.pdam {
+  /* ── surfaces ─────────────────────────────────────────── */
+  --pd-bg:#FAF8F4;
+  --pd-surface:#FFFFFF;
+  --pd-surface-2:#F2ECE3;
+  --pd-surface-3:#EFE7DB;
+  --pd-border:#EAE2D7;
+  --pd-border-strong:#DCD2C4;
+
+  /* ── text ─────────────────────────────────────────────── */
+  --pd-text:#23201B;
+  --pd-muted:#8B8378;
+  --pd-faint:#B3A99C;
+
+  /* ── brand / primary (terracotta) ────────────────────── */
+  --pd-primary:#CF5638;
+  --pd-primary-press:#B8482D;
+  --pd-primary-soft:#FBEDE8;
+  --pd-on-primary:#FFFFFF;
+
+  /* ── freshness scale (domain) ────────────────────────── */
+  --pd-fresh:#5B8C68;   /* «сегодня» */
+  --pd-aging:#D29A33;   /* «1–2 дня» */
+  --pd-old:#B3A99C;     /* «3+ дня»  */
+
+  /* ── status ───────────────────────────────────────────── */
+  --pd-like:#E0476A;
+  --pd-success:#4E8B62;
+  --pd-warn:#C9892F;
+  --pd-danger:#C24631;
+  --pd-fresh-soft:#E9F1EA;
+  --pd-warn-soft:#FBF1DF;
+  --pd-danger-soft:#FAE9E5;
+
+  /* ── typography ──────────────────────────────────────── */
+  --pd-font:'Golos Text', system-ui, -apple-system, sans-serif;
+
+  /* ── radii ────────────────────────────────────────────── */
+  --pd-radius:16px;
+  --r-sm:11px;
+  --r-lg:22px;
+  --r-pill:999px;
+
+  /* ── motion (see tokens/motion.ts + MOTION.md) ───────── */
+  --pd-dur-fast:160ms;
+  --pd-dur-base:240ms;
+  --pd-dur-slow:320ms;
+  --pd-ease-standard:cubic-bezier(.2,.7,.3,1);
+  --pd-ease-decelerate:cubic-bezier(0,0,.2,1);
+  --pd-ease-accelerate:cubic-bezier(.4,0,1,1);
+  --pd-press-scale:.97;
+  --pd-card-hover-lift:-3px;
+}
