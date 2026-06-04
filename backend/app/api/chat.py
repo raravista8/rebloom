@@ -12,10 +12,12 @@ from app.api.deps import RequireUserDep
 from app.api.envelope import domain_error_response, ok
 from app.core.deals.chat import ChatService
 from app.core.moderation.service import ModerationService
+from app.core.notifications.service import NotificationService
 from app.core.result import Ok
 from app.infrastructure.moderation import load_lexicon
 from app.infrastructure.postgres.chat_repo import PostgresChatRepository
 from app.infrastructure.postgres.deals_repo import PostgresDealRepository
+from app.infrastructure.postgres.notifications_repo import PostgresNotificationOutbox
 
 router = APIRouter(tags=["chat"])
 
@@ -30,6 +32,7 @@ def get_chat_service() -> ChatService:
         PostgresDealRepository(),
         PostgresChatRepository(),
         ModerationService(load_lexicon()),
+        notifier=NotificationService(PostgresNotificationOutbox()),
     )
 
 

@@ -8,6 +8,12 @@ from typing import Protocol
 from app.core.notifications.schemas import Channel, NotificationDraft, NotificationView
 
 
+class Notifier(Protocol):
+    """The narrow capability domain services depend on to raise a notification."""
+
+    def notify(self, draft: NotificationDraft) -> int: ...
+
+
 class OutboxRow(Protocol):
     id: str
     user_id: str
