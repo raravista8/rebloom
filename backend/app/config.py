@@ -52,6 +52,9 @@ class Settings(BaseSettings):
     platform_commission_bps: int = Field(default=1000, ge=0, le=10000)
     commission_who_pays: Literal["seller", "buyer", "split"] = "seller"
 
+    # ── Deals ──
+    reservation_ttl_minutes: int = Field(default=30, ge=1)  # FR-022 payment timeout
+
     # ── ЮKassa webhook verification (SECURITY T-02) ──
     yookassa_webhook_secret: str = ""
     yookassa_webhook_ip_allowlist: str = ""  # comma-separated; empty = allow (dev)
