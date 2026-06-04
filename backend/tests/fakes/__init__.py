@@ -249,3 +249,89 @@ class FakeListingRepository:
 
     def get(self, listing_id: str) -> object | None:
         return self._store.get(listing_id)
+
+
+class FakeCityRepository:
+    """Implements :class:`app.core.geo.schemas.CityRepository` in memory."""
+
+    _KNOWN = frozenset({"msk", "spb", "nsk", "ekb", "kzn", "krsk", "nnv", "chel", "ufa", "smr"})
+
+    def __init__(self, enabled: tuple[str, ...] = ("msk", "spb")) -> None:
+        self._enabled = set(enabled)
+
+    def get(self, city_id: str) -> object | None:
+        from app.core.geo.schemas import CityView
+
+        if city_id not in self._KNOWN:
+            return None
+        return CityView(id=city_id, name=city_id, enabled=city_id in self._enabled)
+
+    def list_enabled(self) -> list[object]:
+        from app.core.geo.schemas import CityView
+
+        return [CityView(id=c, name=c, enabled=True) for c in sorted(self._enabled)]
+
+
+class FakeLikeRepository:
+    """Implements :class:`app.core.likes.ports.LikeRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._likes: dict[str, set[str]] = {}
+
+    def seed_listing(self, listing_id: str) -> None:
+        self._likes.setdefault(listing_id, set())
+
+    def like(self, user_id: str, listing_id: str) -> int | None:
+        if listing_id not in self._likes:
+            return None
+        self._likes[listing_id].add(user_id)
+        return len(self._likes[listing_id])
+
+    def unlike(self, user_id: str, listing_id: str) -> int | None:
+        if listing_id not in self._likes:
+            return None
+        self._likes[listing_id].discard(user_id)
+        return len(self._likes[listing_id])
+
+
+def make_listing_view(listing_id: str = "l1", city_id: str = "msk") -> object:
+    """Build a minimal ListingView for feed/search tests."""
+    from datetime import UTC, datetime
+
+    from app.core.listings.schemas import ListingView
+
+    return ListingView(
+        id=listing_id,
+        seller_id="s1",
+        seller_display_name=None,
+        seller_rating=None,
+        size="M",
+        freshness="today",
+        price_kopecks=100000,
+        city_id=city_id,
+        geo_coarse=None,
+        status="active",
+        like_count=0,
+        freshness_score=1.0,
+        expires_at=datetime(2026, 6, 4, tzinfo=UTC),
+        photos=(),
+    )
+
+
+class FakeFeedRepository:
+    """Implements :class:`app.core.feed.schemas.FeedRepository` in memory."""
+
+    def __init__(self, items: object = ()) -> None:
+        self._items = list(items)  # type: ignore[call-overload]
+
+    def feed(
+        self, city_id: str, section: str, offset: int, limit: int
+    ) -> tuple[list[object], bool]:
+        page = self._items[offset : offset + limit]
+        return page, (offset + limit) < len(self._items)
+
+    def search(
+        self, city_id: str, filters: object, offset: int, limit: int
+    ) -> tuple[list[object], bool]:
+        page = self._items[offset : offset + limit]
+        return page, (offset + limit) < len(self._items)

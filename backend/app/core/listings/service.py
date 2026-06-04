@@ -8,6 +8,7 @@ from app.core.errors import (
     VALIDATION_ERROR,
     DomainError,
 )
+from app.core.geo.schemas import CityRepository
 from app.core.listings.freshness import freshness_score
 from app.core.listings.ports import ListingRepository, PhotoRepository
 from app.core.listings.schemas import ListingCreateIn, ListingView
@@ -16,11 +17,21 @@ from app.core.result import Err, Ok, Result
 
 
 class ListingService:
-    def __init__(self, listings: ListingRepository, photos: PhotoRepository) -> None:
+    def __init__(
+        self,
+        listings: ListingRepository,
+        photos: PhotoRepository,
+        cities: CityRepository,
+    ) -> None:
         self._listings = listings
         self._photos = photos
+        self._cities = cities
 
     def create(self, seller_id: str, data: ListingCreateIn) -> Result[ListingView, DomainError]:
+        city = self._cities.get(data.city_id)
+        if city is None or not city.enabled:
+            return Err(DomainError(VALIDATION_ERROR, "invalid_city"))
+
         refs = self._photos.get_owned(seller_id, data.photo_ids)
         if len(refs) != len(set(data.photo_ids)):
             return Err(DomainError(VALIDATION_ERROR, "invalid_photos"))

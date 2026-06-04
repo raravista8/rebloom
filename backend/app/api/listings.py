@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from app.api.deps import RequireUserDep
 from app.api.envelope import domain_error_response, ok
 from app.config import get_settings
+from app.core.likes.service import LikeService
 from app.core.listings.ports import PhotoRepository
 from app.core.listings.schemas import ListingCreateIn, PhotoCreateIn
 from app.core.listings.service import ListingService
@@ -18,6 +19,8 @@ from app.core.photos.service import PhotoUploadService
 from app.core.result import Ok
 from app.infrastructure.images import PillowImageProcessor
 from app.infrastructure.object_storage import LocalFsStorage
+from app.infrastructure.postgres.cities_repo import PostgresCityRepository
+from app.infrastructure.postgres.likes_repo import PostgresLikeRepository
 from app.infrastructure.postgres.listings_repo import PostgresListingRepository
 from app.infrastructure.postgres.photos_repo import PostgresPhotoRepository
 
@@ -29,7 +32,11 @@ def get_photo_repo() -> PhotoRepository:
 
 
 def get_listing_service() -> ListingService:
-    return ListingService(PostgresListingRepository(), PostgresPhotoRepository())
+    return ListingService(
+        PostgresListingRepository(),
+        PostgresPhotoRepository(),
+        PostgresCityRepository(),
+    )
 
 
 def get_photo_upload_service() -> PhotoUploadService:
@@ -38,9 +45,14 @@ def get_photo_upload_service() -> PhotoUploadService:
     return PhotoUploadService(PostgresPhotoRepository(), PillowImageProcessor(), storage)
 
 
+def get_like_service() -> LikeService:
+    return LikeService(PostgresLikeRepository())
+
+
 PhotoRepoDep = Annotated[PhotoRepository, Depends(get_photo_repo)]
 ListingServiceDep = Annotated[ListingService, Depends(get_listing_service)]
 PhotoUploadServiceDep = Annotated[PhotoUploadService, Depends(get_photo_upload_service)]
+LikeServiceDep = Annotated[LikeService, Depends(get_like_service)]
 
 
 @router.post("/api/photos", response_model=None)
@@ -86,4 +98,26 @@ def get_listing(
     result = service.get(listing_id)
     if isinstance(result, Ok):
         return ok(result.value.to_detail())
+    return domain_error_response(request, result.error)
+
+
+@router.post("/api/listings/{listing_id}/like", response_model=None)
+def like_listing(
+    listing_id: str, request: Request, user: RequireUserDep, service: LikeServiceDep
+) -> dict[str, Any] | JSONResponse:
+    result = service.like(user.id, listing_id)
+    if isinstance(result, Ok):
+        count, liked = result.value
+        return ok({"like_count": count, "liked": liked})
+    return domain_error_response(request, result.error)
+
+
+@router.delete("/api/listings/{listing_id}/like", response_model=None)
+def unlike_listing(
+    listing_id: str, request: Request, user: RequireUserDep, service: LikeServiceDep
+) -> dict[str, Any] | JSONResponse:
+    result = service.unlike(user.id, listing_id)
+    if isinstance(result, Ok):
+        count, liked = result.value
+        return ok({"like_count": count, "liked": liked})
     return domain_error_response(request, result.error)

@@ -65,6 +65,19 @@ class Consent(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     user: Mapped[User] = relationship(back_populates="consents")
 
 
+class City(TimestampMixin, Base):
+    """Launch city (PRD §9). Geo is scoped by ``city_id`` (slug) from day one;
+    rollout is gated per-city by ``enabled``."""
+
+    __tablename__ = "cities"
+
+    id: Mapped[str] = mapped_column(String(8), primary_key=True)  # slug, e.g. "msk"
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
+    population: Mapped[int] = mapped_column(Integer, nullable=False)
+    wave: Mapped[int] = mapped_column(Integer, nullable=False)
+    enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
+
+
 class Listing(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __tablename__ = "listings"
     __table_args__ = (
