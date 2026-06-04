@@ -1003,6 +1003,29 @@ class FakeRealtimeBus:
         self.published.append((channel, message))
 
 
+class FakeUsersStatsRepo:
+    """Implements :class:`app.core.analytics.overview.UsersStatsRepo` in memory."""
+
+    def __init__(
+        self,
+        total: int = 0,
+        by_city: dict[str, int] | None = None,
+        growth: dict[str, int] | None = None,
+    ) -> None:
+        self._total = total
+        self._by_city = by_city or {}
+        self._growth = growth or {}
+
+    def total(self) -> int:
+        return self._total
+
+    def by_city(self) -> dict[str, int]:
+        return dict(self._by_city)
+
+    def registrations_since(self, since_iso: str) -> dict[str, int]:
+        return dict(self._growth)
+
+
 class FakeFinanceRepo:
     """Implements :class:`app.core.analytics.finance.FinanceRepo` in memory."""
 
