@@ -1,0 +1,8 @@
+# Capacitor: deps + the generated native projects are build artifacts —
+# regenerated with `npx cap add ios|android`. Signing/icons/splash/permissions are
+# configured in those projects on the build machine (see store-submission.md).
+/node_modules
+/ios
+/android
+package-lock.json
+*.log
