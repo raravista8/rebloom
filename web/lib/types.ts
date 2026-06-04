@@ -124,6 +124,32 @@ export interface NotificationSettings {
   marketing: boolean;
 }
 
+// Admin (ADMIN_BACKEND_TZ). Loosely typed — operator-facing, fields may extend.
+export interface AdminOverview {
+  online: number;
+  dau: number;
+  mau: number;
+  users_total: number;
+  users_by_city?: Record<string, number>;
+  users_by_platform?: Record<string, number>;
+  gmv_kopecks: number;
+  commission_kopecks: number;
+  deals_by_status?: Record<string, number>;
+  growth_series?: unknown;
+}
+export interface ModerationQueueItem {
+  id: string;
+  type: 'listing' | 'review';
+  created_at: string | null;
+  text?: string;
+  size?: string;
+  freshness?: string;
+  price_kopecks?: number;
+  city_id?: string;
+  score?: number;
+  [k: string]: unknown;
+}
+
 export interface Paginated<T> {
   items: T[];
   next_cursor: string | null;
