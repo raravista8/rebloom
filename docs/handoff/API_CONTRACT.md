@@ -69,7 +69,7 @@ Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail
 > Полный админ-API (overview/users/listings/deals/finance/stats/fraud/reports) — в `ADMIN_BACKEND_TZ.md §API`.
 | Method | Path | Auth | Request | Response `data` | FR |
 |---|---|---|---|---|---|
-| GET | `/api/notifications` | session | `?cursor` | `{items[], next_cursor}` | FR-050 |
+| GET | `/api/notifications` | session | `?cursor` | `{items:[{id,kind,title,body,payload,read,created_at}], next_cursor}` (in-app channel) | FR-050 |
 | POST | `/api/reports` | session | `{target_type:"listing"\|"user", target_id, reason}` | `{report_id}` | FR-064 |
 | GET/PATCH | `/api/me/notifications` | session | toggles `{deals,messages,marketing}` | `{settings}` | FR-090 |
 | POST | `/api/me/export` | session | — | `{export:{profile,consents,listings,deals,reviews,messages}}` (MVP inline; async job + signed URL post-MVP) | FR-091 |
