@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Point the canon font token at the self-hosted next/font face. Same selectors +
+ * specificity as tokens/theme.css but imported AFTER it, so this wins — canon
+ * components (rendered under .pd-root/.pda-app/.pdam) pick up Golos Text without
+ * an external request. */
+:root,
+.pd-root,
+.pda-app,
+.pdam {
+  --pd-font: var(--font-golos), system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--pd-bg);
+  color: var(--pd-text);
+  font-family: var(--pd-font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Full-height app shell for the mobile-first viewport. */
+html,
+body {
+  min-height: 100%;
+}

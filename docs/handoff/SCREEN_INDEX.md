@@ -3,7 +3,7 @@
 > Map of screens authored in Claude Design and consumed via `@rebloom/canon`. Source of truth for the design handoff. Parent specs: `DESIGN_BRIEF.md`, `CANON_PACKAGE_TZ.md`.
 > Полная логика состояний — `INTERACTION_STATES.md §5`. **Пошаговые ветвящиеся флоу (спор, возврат, отмена, сбой оплаты, апелляция модерации, доставка, удаление аккаунта, жалоба) — `FLOWS.md`.**
 > Status: 🔵 spec only · 🟢 canon-import (live) · 🟡 hand-rolled (temp) · 🔴 missing
-> Canon version: `0.1.0` (no export yet)
+> Canon version: `0.1.0` (vendored in `packages/canon`, rendering live in `web/`; screens being data-wired)
 
 | # | Screen | Route (web) | Primary action | Key states | Status | Notes |
 |---|---|---|---|---|---|---|
