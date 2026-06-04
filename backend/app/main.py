@@ -17,6 +17,7 @@ from app.api.envelope import (
 )
 from app.api.webhooks import yookassa as yookassa_webhook
 from app.config import get_settings
+from app.infrastructure.logging import configure_logging
 
 
 def create_app() -> FastAPI:
@@ -51,4 +52,6 @@ def create_app() -> FastAPI:
     return app
 
 
+_settings = get_settings()
+configure_logging(_settings.log_level)
 app = create_app()
