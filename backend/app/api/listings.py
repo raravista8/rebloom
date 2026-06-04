@@ -18,6 +18,7 @@ from app.core.photos.service import PhotoUploadService
 from app.core.result import Ok
 from app.infrastructure.images import PillowImageProcessor
 from app.infrastructure.object_storage import LocalFsStorage
+from app.infrastructure.postgres.cities_repo import PostgresCityRepository
 from app.infrastructure.postgres.listings_repo import PostgresListingRepository
 from app.infrastructure.postgres.photos_repo import PostgresPhotoRepository
 
@@ -29,7 +30,11 @@ def get_photo_repo() -> PhotoRepository:
 
 
 def get_listing_service() -> ListingService:
-    return ListingService(PostgresListingRepository(), PostgresPhotoRepository())
+    return ListingService(
+        PostgresListingRepository(),
+        PostgresPhotoRepository(),
+        PostgresCityRepository(),
+    )
 
 
 def get_photo_upload_service() -> PhotoUploadService:

@@ -249,3 +249,24 @@ class FakeListingRepository:
 
     def get(self, listing_id: str) -> object | None:
         return self._store.get(listing_id)
+
+
+class FakeCityRepository:
+    """Implements :class:`app.core.geo.schemas.CityRepository` in memory."""
+
+    _KNOWN = frozenset({"msk", "spb", "nsk", "ekb", "kzn", "krsk", "nnv", "chel", "ufa", "smr"})
+
+    def __init__(self, enabled: tuple[str, ...] = ("msk", "spb")) -> None:
+        self._enabled = set(enabled)
+
+    def get(self, city_id: str) -> object | None:
+        from app.core.geo.schemas import CityView
+
+        if city_id not in self._KNOWN:
+            return None
+        return CityView(id=city_id, name=city_id, enabled=city_id in self._enabled)
+
+    def list_enabled(self) -> list[object]:
+        from app.core.geo.schemas import CityView
+
+        return [CityView(id=c, name=c, enabled=True) for c in sorted(self._enabled)]

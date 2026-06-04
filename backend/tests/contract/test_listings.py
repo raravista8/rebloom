@@ -17,6 +17,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from tests.fakes import (
+    FakeCityRepository,
     FakeClock,
     FakeListingRepository,
     FakeOtpStore,
@@ -52,7 +53,9 @@ def ctx() -> Iterator[tuple[FastAPI, FakePhotoRepository]]:
     app.dependency_overrides[get_session_service] = lambda: sessions
     app.dependency_overrides[get_user_repo] = lambda: users
     app.dependency_overrides[get_photo_repo] = lambda: photos
-    app.dependency_overrides[get_listing_service] = lambda: ListingService(listings, photos)
+    app.dependency_overrides[get_listing_service] = lambda: ListingService(
+        listings, photos, FakeCityRepository()
+    )
     yield app, photos
 
 
@@ -102,6 +105,23 @@ def test_validation_when_photo_not_owned(ctx: tuple[FastAPI, FakePhotoRepository
     resp = client.post("/api/listings", json=_payload(["unknown"]))
     assert resp.status_code == 422
     assert resp.json()["error"] == "validation_error"
+
+
+def test_disabled_city_rejected(ctx: tuple[FastAPI, FakePhotoRepository]) -> None:
+    app, photos = ctx
+    client, uid = _login(app)
+    photos.seed("p1", uid, "approved")
+    resp = client.post("/api/listings", json=_payload(["p1"]) | {"city_id": "nsk"})
+    assert resp.status_code == 422
+    assert resp.json()["error"] == "validation_error"
+
+
+def test_unknown_city_rejected(ctx: tuple[FastAPI, FakePhotoRepository]) -> None:
+    app, photos = ctx
+    client, uid = _login(app)
+    photos.seed("p1", uid, "approved")
+    resp = client.post("/api/listings", json=_payload(["p1"]) | {"city_id": "zzz"})
+    assert resp.status_code == 422
 
 
 def test_create_then_get(ctx: tuple[FastAPI, FakePhotoRepository]) -> None:
