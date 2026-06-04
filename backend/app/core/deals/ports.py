@@ -18,20 +18,33 @@ class DealView:
     delivery_method: str
     released_at: str | None
     created_at: str | None = None
+    # Display enrichment (None when not loaded — money logic never reads these).
+    listing_thumb_url: str | None = None
+    listing_price_kopecks: int | None = None
+    buyer_name: str | None = None
+    buyer_rating: float | None = None
+    seller_name: str | None = None
+    seller_rating: float | None = None
 
     def payout_kopecks(self) -> int:
         return self.amount_kopecks - self.commission_kopecks
 
     def to_api(self, *, role: str) -> dict[str, Any]:
-        # Nested listing/counterparty match API_CONTRACT §4. Display enrichment
-        # (photo_thumb_url/price, counterparty name+rating) is a follow-up join.
-        counterparty_id = self.seller_id if role == "buyer" else self.buyer_id
+        # Nested listing/counterparty per API_CONTRACT §4.
+        if role == "buyer":
+            cp_id, cp_name, cp_rating = self.seller_id, self.seller_name, self.seller_rating
+        else:
+            cp_id, cp_name, cp_rating = self.buyer_id, self.buyer_name, self.buyer_rating
         return {
             "id": self.id,
             "status": self.status,
             "role": role,
-            "listing": {"id": self.listing_id},
-            "counterparty": {"id": counterparty_id},
+            "listing": {
+                "id": self.listing_id,
+                "photo_thumb_url": self.listing_thumb_url,
+                "price_kopecks": self.listing_price_kopecks,
+            },
+            "counterparty": {"id": cp_id, "display_name": cp_name, "seller_rating": cp_rating},
             "amount_kopecks": self.amount_kopecks,
             "commission_kopecks": self.commission_kopecks,
             "delivery_method": self.delivery_method,

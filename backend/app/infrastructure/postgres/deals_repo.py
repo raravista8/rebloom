@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 from typing import cast
 
 from sqlalchemy import or_, select
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.deals.ledger import (
     LedgerEntry,
@@ -23,7 +24,7 @@ from app.core.deals.ledger import (
 )
 from app.core.deals.ports import DealView, ListingSummary
 from app.infrastructure.postgres.engine import reader_session, writer_session
-from app.infrastructure.postgres.models import Deal, Listing, Payment, Payout
+from app.infrastructure.postgres.models import Deal, Listing, Payment, Payout, User
 from app.infrastructure.postgres.models import LedgerEntry as LedgerRow
 
 
@@ -40,6 +41,56 @@ def _to_view(deal: Deal) -> DealView:
         released_at=deal.released_at.isoformat() if deal.released_at else None,
         created_at=deal.created_at.isoformat() if deal.created_at else None,
     )
+
+
+def _rating(user: User | None) -> float | None:
+    if user is None or user.seller_rating is None:
+        return None
+    return float(user.seller_rating)
+
+
+def _enrich(session: Session, deals: list[Deal]) -> list[DealView]:
+    """Add display fields (listing cover/price, party names/ratings) to deal views in
+    a fixed 2 extra batched queries (no N+1). Money logic never reads these fields."""
+    if not deals:
+        return []
+    listing_ids = {d.listing_id for d in deals}
+    user_ids = {d.buyer_id for d in deals} | {d.seller_id for d in deals}
+    listings = {
+        lst.id: lst
+        for lst in session.scalars(
+            select(Listing).options(selectinload(Listing.photos)).where(Listing.id.in_(listing_ids))
+        ).all()
+    }
+    users = {u.id: u for u in session.scalars(select(User).where(User.id.in_(user_ids))).all()}
+    out: list[DealView] = []
+    for d in deals:
+        lst = listings.get(d.listing_id)
+        thumb = None
+        if lst is not None and lst.photos:
+            thumb = (lst.photos[0].variants or {}).get("thumb")
+        buyer, seller = users.get(d.buyer_id), users.get(d.seller_id)
+        out.append(
+            DealView(
+                id=str(d.id),
+                status=d.status,
+                listing_id=str(d.listing_id),
+                buyer_id=str(d.buyer_id),
+                seller_id=str(d.seller_id),
+                amount_kopecks=d.amount_kopecks,
+                commission_kopecks=d.commission_kopecks,
+                delivery_method=d.delivery_method,
+                released_at=d.released_at.isoformat() if d.released_at else None,
+                created_at=d.created_at.isoformat() if d.created_at else None,
+                listing_thumb_url=thumb,
+                listing_price_kopecks=lst.price_kopecks if lst is not None else None,
+                buyer_name=buyer.display_name if buyer is not None else None,
+                buyer_rating=_rating(buyer),
+                seller_name=seller.display_name if seller is not None else None,
+                seller_rating=_rating(seller),
+            )
+        )
+    return out
 
 
 class PostgresListingReader:
@@ -113,7 +164,7 @@ class PostgresDealRepository:
             return None
         with writer_session() as session:
             deal = session.get(Deal, did)
-            return _to_view(deal) if deal is not None else None
+            return _enrich(session, [deal])[0] if deal is not None else None
 
     def list_for_user(
         self, user_id: str, *, role: str | None = None, status: str | None = None, limit: int = 20
@@ -133,7 +184,7 @@ class PostgresDealRepository:
             stmt = stmt.where(Deal.status == status)
         stmt = stmt.order_by(Deal.created_at.desc()).limit(min(max(limit, 1), 100))
         with reader_session() as session:
-            return [_to_view(d) for d in session.scalars(stmt).all()]
+            return _enrich(session, list(session.scalars(stmt).all()))
 
     def list_all(self, *, status: str | None = None, limit: int = 50) -> list[DealView]:
         """Admin view — every deal (optionally filtered by status). Read-only."""
@@ -142,7 +193,7 @@ class PostgresDealRepository:
             stmt = stmt.where(Deal.status == status)
         stmt = stmt.order_by(Deal.created_at.desc()).limit(min(max(limit, 1), 200))
         with reader_session() as session:
-            return [_to_view(d) for d in session.scalars(stmt).all()]
+            return _enrich(session, list(session.scalars(stmt).all()))
 
     def parties(self, deal_id: str) -> tuple[str, str] | None:
         """Narrow authz read for chat (DealPartyReader): (buyer_id, seller_id)."""
