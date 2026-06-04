@@ -35,3 +35,10 @@ class SessionService:
 
     def revoke(self, token: str) -> None:
         self._store.delete(token)
+
+    def mark_2fa(self, token: str) -> None:
+        """Flag this session as admin-2FA-verified (same TTL as the session)."""
+        self._store.mark_2fa(token, self._ttl)
+
+    def is_2fa(self, token: str) -> bool:
+        return self._store.is_2fa(token)

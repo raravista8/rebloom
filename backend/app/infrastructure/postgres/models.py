@@ -45,6 +45,7 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     seller_rating: Mapped[float | None] = mapped_column(Numeric(3, 2))
     status: Mapped[str] = mapped_column(String(16), nullable=False, server_default=text("'active'"))
+    totp_secret: Mapped[str | None] = mapped_column(String(64))  # 🔒 admin 2FA seed
 
     consents: Mapped[list[Consent]] = relationship(
         back_populates="user", cascade="all, delete-orphan"

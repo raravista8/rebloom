@@ -54,3 +54,26 @@ def require_user(user: CurrentUserDep) -> UserView:
 
 
 RequireUserDep = Annotated[UserView, Depends(require_user)]
+
+
+def require_admin(user: RequireUserDep) -> UserView:
+    """RBAC: admin role required (SECURITY §5)."""
+    if "admin" not in user.roles:
+        raise HTTPException(status_code=403, detail="forbidden")
+    return user
+
+
+RequireAdminDep = Annotated[UserView, Depends(require_admin)]
+
+
+def require_admin_2fa(
+    request: Request, user: RequireAdminDep, session_service: SessionServiceDep
+) -> UserView:
+    """Admin route guard: admin role AND a 2FA-verified session (OPERATIONS §6)."""
+    token = request.cookies.get(SESSION_COOKIE)
+    if not token or not session_service.is_2fa(token):
+        raise HTTPException(status_code=403, detail="forbidden")
+    return user
+
+
+RequireAdmin2FADep = Annotated[UserView, Depends(require_admin_2fa)]
