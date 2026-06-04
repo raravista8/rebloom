@@ -335,3 +335,137 @@ class FakeFeedRepository:
     ) -> tuple[list[object], bool]:
         page = self._items[offset : offset + limit]
         return page, (offset + limit) < len(self._items)
+
+
+class FakeListingReader:
+    """Implements :class:`app.core.deals.ports.ListingReader` in memory."""
+
+    def __init__(self) -> None:
+        self._listings: dict[str, dict[str, object]] = {}
+
+    def seed(
+        self, listing_id: str, seller_id: str, price: int = 100000, status: str = "active"
+    ) -> None:
+        self._listings[listing_id] = {
+            "seller_id": seller_id,
+            "price": price,
+            "status": status,
+        }
+
+    def get_summary(self, listing_id: str) -> object | None:
+        from app.core.deals.ports import ListingSummary
+
+        row = self._listings.get(listing_id)
+        if row is None:
+            return None
+        return ListingSummary(
+            id=listing_id,
+            status=str(row["status"]),
+            price_kopecks=int(row["price"]),  # type: ignore[arg-type]
+            seller_id=str(row["seller_id"]),
+        )
+
+
+class FakePaymentProvider:
+    """Implements :class:`app.core.payments.ports.PaymentProvider` in memory."""
+
+    def __init__(self) -> None:
+        self.payouts: list[tuple[str, str, int]] = []
+
+    def create_payment(self, deal_id: str, amount_kopecks: int, idempotency_key: str) -> object:
+        from app.core.payments.ports import PaymentIntent
+
+        return PaymentIntent(
+            yk_payment_id=f"yk_{deal_id}", confirmation_url=f"https://pay.test/{deal_id}"
+        )
+
+    def payout(
+        self, deal_id: str, seller_id: str, amount_kopecks: int, idempotency_key: str
+    ) -> object:
+        from app.core.payments.ports import PayoutReceipt
+
+        self.payouts.append((deal_id, seller_id, amount_kopecks))
+        return PayoutReceipt(yk_payout_id=f"po_{deal_id}", fiscal_receipt_id=f"r_{deal_id}")
+
+
+class FakeDealRepository:
+    """Implements :class:`app.core.deals.ports.DealRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._deals: dict[str, dict[str, object]] = {}
+        self._by_payment: dict[str, str] = {}
+        self._seq = 0
+
+    def _view(self, deal_id: str) -> object:
+        from app.core.deals.ports import DealView
+
+        d = self._deals[deal_id]
+        return DealView(
+            id=deal_id,
+            status=str(d["status"]),
+            listing_id=str(d["listing_id"]),
+            buyer_id=str(d["buyer_id"]),
+            seller_id=str(d["seller_id"]),
+            amount_kopecks=int(d["amount"]),  # type: ignore[arg-type]
+            commission_kopecks=int(d["commission"]),  # type: ignore[arg-type]
+            delivery_method=str(d["delivery"]),
+            released_at=d["released_at"],  # type: ignore[arg-type]
+        )
+
+    def ledger(self, deal_id: str) -> list[tuple[str, int]]:
+        return self._deals[deal_id]["ledger"]  # type: ignore[return-value]
+
+    def create_and_reserve(
+        self,
+        *,
+        buyer_id: str,
+        listing_id: str,
+        seller_id: str,
+        amount_kopecks: int,
+        commission_kopecks: int,
+        delivery_method: str,
+    ) -> object | None:
+        self._seq += 1
+        did = f"deal-{self._seq}"
+        self._deals[did] = {
+            "status": "created",
+            "buyer_id": buyer_id,
+            "seller_id": seller_id,
+            "listing_id": listing_id,
+            "amount": amount_kopecks,
+            "commission": commission_kopecks,
+            "delivery": delivery_method,
+            "released_at": None,
+            "ledger": [],
+        }
+        return self._view(did)
+
+    def attach_payment(self, deal_id: str, yk_payment_id: str, idempotency_key: str) -> None:
+        self._by_payment[yk_payment_id] = deal_id
+
+    def get(self, deal_id: str) -> object | None:
+        return self._view(deal_id) if deal_id in self._deals else None
+
+    def mark_paid(self, yk_payment_id: str) -> object | None:
+        did = self._by_payment.get(yk_payment_id)
+        if did is None:
+            return None
+        d = self._deals[did]
+        if d["status"] == "created":
+            d["status"] = "paid_held"
+            d["ledger"].append(("hold", int(d["amount"])))  # type: ignore[union-attr,arg-type]
+        return self._view(did)
+
+    def release(self, deal_id: str) -> object | None:
+        d = self._deals.get(deal_id)
+        if d is None or d["status"] not in ("paid_held", "disputed"):
+            return None
+        amount, commission = int(d["amount"]), int(d["commission"])  # type: ignore[arg-type]
+        d["ledger"].append(("commission", commission))  # type: ignore[union-attr]
+        d["ledger"].append(("payout", amount - commission))  # type: ignore[union-attr]
+        d["status"] = "released"
+        d["released_at"] = "2026-06-04T00:00:00+00:00"
+        return self._view(deal_id)
+
+    def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:
+        self._deals[deal_id]["payout"] = (yk_payout_id, fiscal_receipt_id)
