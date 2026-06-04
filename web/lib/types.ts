@@ -87,6 +87,27 @@ export interface ChatMessage {
   created_at: string;
 }
 
+// GET /api/users/{id} (API_CONTRACT §5)
+export interface PublicUser {
+  id: string;
+  display_name: string;
+  city_id?: string;
+  seller_rating: number;
+  deals_count: number;
+}
+export interface ReviewItem {
+  id: string;
+  author_id: string;
+  score: number;
+  text: string;
+  created_at: string;
+}
+export interface ProfileResponse {
+  user: PublicUser;
+  reviews: ReviewItem[];
+  active_listings: ListingCard[];
+}
+
 export interface Paginated<T> {
   items: T[];
   next_cursor: string | null;

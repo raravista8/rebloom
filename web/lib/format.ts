@@ -43,4 +43,13 @@ export function formatTime(iso: string): string {
   }
 }
 
+/** ISO timestamp → "4 июня" (MSK). */
+export function formatDate(iso: string): string {
+  try {
+    return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', timeZone: 'Europe/Moscow' }).format(new Date(iso));
+  } catch {
+    return '';
+  }
+}
+
 export const POLICY_VERSION = '1.0';
