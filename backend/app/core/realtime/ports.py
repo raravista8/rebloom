@@ -17,5 +17,6 @@ def deal_channel(deal_id: str) -> str:
     return f"deal:{deal_id}"
 
 
-def listing_channel(listing_id: str) -> str:
-    return f"listing:{listing_id}"
+def listing_thread_channel(listing_id: str, buyer_id: str) -> str:
+    """Pre-purchase thread between the listing's seller and one prospective buyer."""
+    return f"listing:{listing_id}:{buyer_id}"

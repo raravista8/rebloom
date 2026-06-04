@@ -18,6 +18,7 @@ from app.api import (
     deals,
     feed,
     health,
+    listing_chat,
     listings,
     me,
     notifications,
@@ -62,6 +63,7 @@ def create_app() -> FastAPI:
     app.include_router(feed.router)
     app.include_router(deals.router)
     app.include_router(chat.router)
+    app.include_router(listing_chat.router)
     app.include_router(reviews.router)
     app.include_router(me.router)
     app.include_router(notifications.router)
