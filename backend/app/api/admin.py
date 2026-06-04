@@ -15,15 +15,18 @@ from app.api.deps import (
     RequireAdminDep,
     SessionServiceDep,
     UserRepoDep,
+    get_metrics_service,
 )
 from app.api.envelope import domain_error_response, fail, ok, request_id
 from app.core.admin.moderation import ModerationQueueService
 from app.core.analytics.finance import FinanceService
+from app.core.analytics.overview import OverviewService
 from app.core.auth.totp import verify_totp
 from app.core.result import Ok
 from app.infrastructure.postgres.audit_repo import PostgresAuditLog
 from app.infrastructure.postgres.finance_repo import PostgresFinanceRepo
 from app.infrastructure.postgres.moderation_repo import PostgresModerationQueueRepo
+from app.infrastructure.postgres.users_stats_repo import PostgresUsersStatsRepo
 
 router = APIRouter(tags=["admin"])
 
@@ -40,6 +43,17 @@ def get_finance_service() -> FinanceService:
 
 
 FinanceServiceDep = Annotated[FinanceService, Depends(get_finance_service)]
+
+
+def get_overview_service() -> OverviewService:
+    return OverviewService(
+        get_metrics_service(),
+        FinanceService(PostgresFinanceRepo()),
+        PostgresUsersStatsRepo(),
+    )
+
+
+OverviewServiceDep = Annotated[OverviewService, Depends(get_overview_service)]
 
 
 class Admin2FAIn(BaseModel):
@@ -118,6 +132,20 @@ def moderation_queue(
     items = service.queue(type)
     # MVP: a single capped page — end-of-list signalled by next_cursor=null.
     return ok({"items": [i.to_api() for i in items], "next_cursor": None})
+
+
+@router.get("/api/admin/overview", response_model=None)
+def admin_overview(
+    _admin: RequireAdmin2FADep,
+    service: OverviewServiceDep,
+    since: str | None = Query(None),
+    until: str | None = Query(None),
+) -> dict[str, Any]:
+    """KPI bundle: online/DAU/MAU/platform + GMV/commission + users by city +
+    growth (FR-070). Read-only, ledger-derived finance (T-17)."""
+    from datetime import UTC, datetime
+
+    return ok(service.overview(datetime.now(UTC), since, until))
 
 
 @router.get("/api/admin/finance", response_model=None)
