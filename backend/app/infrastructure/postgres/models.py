@@ -59,6 +59,7 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     notif_marketing: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )
+    risk_score: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
 
     consents: Mapped[list[Consent]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
@@ -374,6 +375,27 @@ class SupportTicket(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         String(8), nullable=False, server_default=text("'open'"), index=True
     )
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class FraudSignal(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """A rule-triggered risk signal on a user/deal (FR-073, ADMIN_BACKEND_TZ
+    §Fraud). Aggregated into ``User.risk_score``; reviewed from the admin queue."""
+
+    __tablename__ = "fraud_signals"
+    __table_args__ = (
+        CheckConstraint("status IN ('open','reviewed')", name="fraud_status_valid"),
+        UniqueConstraint("user_id", "type", name="fraud_user_type"),  # idempotent re-scan
+    )
+
+    user_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    type: Mapped[str] = mapped_column(String(32), nullable=False)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    evidence: Mapped[dict[str, str] | None] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(
+        String(8), nullable=False, server_default=text("'open'"), index=True
+    )
 
 
 class Notification(UUIDPrimaryKeyMixin, TimestampMixin, Base):
