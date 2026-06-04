@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-// Scaffold smoke: proves the whole pipeline renders in a real browser —
-// canon ESM transpile, 'use client' hydration, framer-motion, CSS-var tokens,
-// Golos Text. Per-screen pixel-diff baselines are added in T2.2 as screens land.
-test('home renders the canon витрина', async ({ page }) => {
+// Home shell renders in every fetch state (TopBar + BottomNav are always present,
+// independent of the /api/feed result — which has no backend in CI). Data-state
+// coverage (loaded/empty/offline) lives in feed.spec.ts via route stubbing.
+test('home shell renders (brand + bottom nav)', async ({ page }) => {
   await page.goto('/');
-  // canon scopes its theme to .pd-root[data-pd-theme]
-  await expect(page.locator('.pd-root').first()).toBeVisible();
-  // top feed section header from the canon screen
-  await expect(page.getByText('Самые свежие').first()).toBeVisible();
+  await expect(page.locator('.pd-root')).toBeVisible();
+  await expect(page.getByText('Передарим')).toBeVisible();
+  await expect(page.locator('.pd-bottomnav')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Продать' })).toBeVisible();
 });

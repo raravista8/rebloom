@@ -1,7 +1,8 @@
-import CanonProof from '@/components/dev/CanonProof';
+import HomeFeed from '@/components/feed/HomeFeed';
+import { DEFAULT_CITY } from '@/lib/cities';
 
-// Temporary home: proves canon renders in Next.js. Replaced by the data-wired
-// витрина (feed from /api/feed) in the feed task.
+// Главная / витрина. City selection persists later (cookie/context); MVP defaults
+// to Москва (wave-1 launch city).
 export default function HomePage() {
-  return <CanonProof />;
+  return <HomeFeed cityId={DEFAULT_CITY} />;
 }
