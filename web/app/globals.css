@@ -30,18 +30,20 @@ body {
   min-height: 100%;
 }
 
-/* Mobile-first: the consumer UI is a phone layout (also the Capacitor app). On wider
- * screens, centre it in a phone-width column over a neutral surround instead of
- * stretching edge-to-edge. The admin (.pda-app) is desktop-first and unaffected. */
-@media (min-width: 760px) {
+/* Responsive desktop. The home renders a real wide desktop layout (.pd-web —
+ * top nav + multi-column grid). Single-column detail/flow screens (listing, deal,
+ * sell, profile, login…) use .pd-root; on desktop we centre them in a comfortable
+ * column over a neutral surround (a normal web detail-page pattern), NOT a cramped
+ * phone. The admin (.pda-app) and the desktop home (.pd-web) are full-width. */
+@media (min-width: 1024px) {
   body {
     background: var(--pd-surface-3);
   }
-  .pd-root {
-    max-width: 460px;
+  .pd-root:not(.pd-web) {
+    max-width: 720px;
     margin-inline: auto;
     min-height: 100vh;
     background: var(--pd-bg);
-    box-shadow: 0 0 48px rgba(35, 32, 27, 0.08);
+    box-shadow: 0 0 48px rgba(35, 32, 27, 0.07);
   }
 }

@@ -1,27 +1,39 @@
 'use client';
-// Главная / витрина — two city-scoped top sections («Самые свежие» rail + «Самые
-// залайканные» grid) from /api/feed (FR-016). Mirrors canon's PdFeed layout with
-// live data + the full collection lifecycle (INTERACTION_STATES §4): loading
-// skeleton / loaded / empty / error / offline. (no-results belongs to search, not
-// the home feed.)
+// Главная / витрина — two city-scoped sections («Самые свежие» + «Самые залайканные»)
+// from /api/feed (FR-016). RESPONSIVE: on ≥lg a real desktop layout (canon .pd-web —
+// top nav + wide multi-column grid); on phones the mobile screen (.pd-root + bottom
+// nav). One fetch feeds both; CSS (Tailwind lg:) toggles which is visible. Full
+// collection lifecycle (INTERACTION_STATES §4).
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PdSkelCard, PdEmpty, PdBtn } from '@/components/canon';
+import { IconPin, IconChev, IconSearch, IconBell, IconDeals, IconPlus, IconUser } from '@/components/icons';
 import TopBar from '@/components/shell/TopBar';
 import BottomNav from '@/components/shell/BottomNav';
 import BouquetCard from '@/components/feed/BouquetCard';
 import { api, ApiError } from '@/lib/api';
-import { cityPrepositional } from '@/lib/cities';
+import { cityName, cityPrepositional } from '@/lib/cities';
 import type { ListingCard, Paginated } from '@/lib/types';
 
 type Status = 'loading' | 'loaded' | 'empty' | 'error' | 'offline';
 
-function feedUrl(cityId: string, section: 'fresh' | 'liked') {
-  return `/feed?city_id=${encodeURIComponent(cityId)}&section=${section}&limit=12`;
+// ≥1024px → desktop layout. SSR/first paint renders mobile (no viewport on the
+// server); the client corrects on mount. One tree in the DOM at a time.
+function useIsDesktop() {
+  const [desktop, setDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const sync = () => setDesktop(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+  return desktop;
 }
 
-// Local section header mirroring canon's .pd-sechead — canon's PdSectionHead forces
-// `action` into a <button> with no handler, so we compose it to use a real Link.
+const feedUrl = (cityId: string, section: 'fresh' | 'liked') =>
+  `/feed?city_id=${encodeURIComponent(cityId)}&section=${section}&limit=12`;
+
 function SectionHead({ title, sub, href }: { title: string; sub?: string; href?: string }) {
   return (
     <div className="pd-sechead">
@@ -29,19 +41,26 @@ function SectionHead({ title, sub, href }: { title: string; sub?: string; href?:
         <h2 className="pd-sectitle">{title}</h2>
         {sub && <p className="pd-secsub">{sub}</p>}
       </div>
-      {href && (
-        <Link href={href} className="pd-link">
-          Все
-        </Link>
-      )}
+      {href && <Link href={href} className="pd-link">Все</Link>}
     </div>
   );
 }
 
-function SkeletonRail({ variant }: { variant: 'rail' | 'grid' }) {
-  const n = variant === 'rail' ? 4 : 6;
+function Grid({ items, cls }: { items: ListingCard[]; cls: string }) {
   return (
-    <div className={variant === 'rail' ? 'pd-rail' : 'pd-grid'}>
+    <div className={cls}>
+      {items.map((l) => (
+        <div className="pd-rise" key={l.id}>
+          <BouquetCard listing={l} variant="grid" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Skeletons({ n, cls }: { n: number; cls: string }) {
+  return (
+    <div className={cls}>
       {Array.from({ length: n }, (_, i) => (
         <PdSkelCard key={i} />
       ))}
@@ -49,7 +68,27 @@ function SkeletonRail({ variant }: { variant: 'rail' | 'grid' }) {
   );
 }
 
+function EmptyState({ cityId }: { cityId: string }) {
+  return (
+    <PdEmpty title="Здесь пока пусто" text={`В ${cityPrepositional(cityId)} ещё нет букетов. Будьте первым — опубликуйте свой.`}>
+      <Link href="/sell"><PdBtn variant="primary">Опубликовать букет</PdBtn></Link>
+    </PdEmpty>
+  );
+}
+
+function ErrorState({ status, reload }: { status: Status; reload: () => void }) {
+  return (
+    <PdEmpty
+      title={status === 'offline' ? 'Нет соединения' : 'Что-то пошло не так'}
+      text={status === 'offline' ? 'Проверьте интернет и попробуйте снова.' : 'Не удалось загрузить ленту.'}
+    >
+      <PdBtn variant="primary" onClick={reload}>Повторить</PdBtn>
+    </PdEmpty>
+  );
+}
+
 export default function HomeFeed({ cityId }: { cityId: string }) {
+  const isDesktop = useIsDesktop();
   const [status, setStatus] = useState<Status>('loading');
   const [fresh, setFresh] = useState<ListingCard[]>([]);
   const [liked, setLiked] = useState<ListingCard[]>([]);
@@ -73,93 +112,120 @@ export default function HomeFeed({ cityId }: { cityId: string }) {
     void load();
   }, [load]);
 
+  const prep = cityPrepositional(cityId);
+
   return (
-    <div className="pd-root" data-pd-theme="a">
-      <TopBar cityId={cityId} />
-      <main className="pd-scroll">
-        {status === 'loading' && (
-          <>
-            <section className="pd-section">
-              <SectionHead title="Самые свежие" sub="Куплены сегодня, рядом с вами" />
-              <SkeletonRail variant="rail" />
-            </section>
-            <section className="pd-section">
-              <SectionHead title="Самые залайканные" sub={`Любимцы недели в ${cityPrepositional(cityId)}`} />
-              <SkeletonRail variant="grid" />
-            </section>
-          </>
-        )}
-
-        {(status === 'error' || status === 'offline') && (
-          <div className="pd-state" style={{ padding: '48px 20px' }}>
-            <PdEmpty
-              title={status === 'offline' ? 'Нет соединения' : 'Что-то пошло не так'}
-              text={
-                status === 'offline'
-                  ? 'Проверьте интернет и попробуйте снова.'
-                  : 'Не удалось загрузить ленту. Попробуйте ещё раз.'
-              }
-            >
-              <PdBtn variant="primary" onClick={load}>
-                Повторить
-              </PdBtn>
-            </PdEmpty>
-          </div>
-        )}
-
-        {status === 'empty' && (
-          <div className="pd-state" style={{ padding: '48px 20px' }}>
-            <PdEmpty
-              title="Здесь пока пусто"
-              text={`В ${cityPrepositional(cityId)} ещё нет букетов. Будьте первым — опубликуйте свой.`}
-            >
-              <Link href="/sell">
-                <PdBtn variant="primary">Опубликовать букет</PdBtn>
+    <>
+      {/* ─────────── DESKTOP (≥1024px) ─────────── */}
+      {isDesktop && (
+      <div className="pd-root pd-web" data-pd-theme="a">
+        <header className="pdw-nav">
+          <div className="pdw-nav-in">
+            <Link href="/" className="pd-brand pdw-brand" style={{ textDecoration: 'none' }}>Передарим</Link>
+            <div className="pdw-navmid">
+              <Link href="/city" className="pd-city pdw-city" style={{ textDecoration: 'none' }}>
+                <IconPin className="pd-i16" />
+                {cityName(cityId)}
+                <IconChev className="pd-i14" />
               </Link>
-            </PdEmpty>
+              <Link href="/search" className="pd-search pdw-search" style={{ textDecoration: 'none' }}>
+                <IconSearch className="pd-i18" />
+                <span className="pd-search-ph">Поиск свежих букетов в {prep}</span>
+              </Link>
+            </div>
+            <nav className="pdw-navright">
+              <Link href="/notifications" className="pdw-iconbtn" aria-label="Уведомления"><IconBell className="pd-i20" /></Link>
+              <Link href="/deals" className="pdw-iconbtn" aria-label="Сделки"><IconDeals className="pd-i20" /></Link>
+              <Link href="/me" className="pdw-avatar" aria-label="Профиль" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconUser className="pd-i18" /></Link>
+              <Link href="/sell" className="pdw-cta" style={{ textDecoration: 'none' }}><IconPlus className="pd-i18" />Продать букет</Link>
+            </nav>
           </div>
-        )}
+        </header>
 
-        {status === 'loaded' && (
-          <>
-            {fresh.length > 0 && (
-              <section className="pd-section">
-                <SectionHead title="Самые свежие" sub="Куплены сегодня, рядом с вами" href="/search?section=fresh" />
-                <div className="pd-rail">
-                  {fresh.map((l) => (
-                    <div className="pd-rise" key={l.id}>
-                      <BouquetCard listing={l} variant="rail" />
-                    </div>
-                  ))}
-                  <div className="pd-rail-end">
-                    <span>
-                      Листайте
-                      <br />
-                      дальше →
-                    </span>
-                  </div>
-                </div>
-              </section>
+        <main className="pd-scroll pdw-scroll">
+          <div className="pdw-wrap">
+            {status === 'loading' && (
+              <>
+                <section className="pdw-section">
+                  <SectionHead title="Самые свежие" sub={`Куплены сегодня, рядом с вами в ${prep}`} />
+                  <Skeletons n={5} cls="pdw-grid" />
+                </section>
+                <section className="pdw-section">
+                  <SectionHead title="Самые залайканные" sub="Любимцы недели" />
+                  <Skeletons n={5} cls="pdw-grid" />
+                </section>
+              </>
             )}
+            {status === 'empty' && <div style={{ padding: '40px 0' }}><EmptyState cityId={cityId} /></div>}
+            {(status === 'error' || status === 'offline') && <div style={{ padding: '40px 0' }}><ErrorState status={status} reload={load} /></div>}
+            {status === 'loaded' && (
+              <>
+                {fresh.length > 0 && (
+                  <section className="pdw-section">
+                    <SectionHead title="Самые свежие" sub={`Куплены сегодня, рядом с вами в ${prep}`} href="/search?section=fresh" />
+                    <Grid items={fresh} cls="pdw-grid" />
+                  </section>
+                )}
+                {liked.length > 0 && (
+                  <section className="pdw-section">
+                    <SectionHead title="Самые залайканные" sub="Любимцы недели, больше всего ♥ за 7 дней" href="/search?section=liked" />
+                    <Grid items={liked} cls="pdw-grid" />
+                    <div className="pd-feed-end">Вы посмотрели свежие букеты. Смените город, чтобы увидеть больше</div>
+                  </section>
+                )}
+              </>
+            )}
+          </div>
+        </main>
+      </div>
+      )}
 
-            {liked.length > 0 && (
-              <section className="pd-section">
-                <SectionHead title="Самые залайканные" sub={`Любимцы недели в ${cityPrepositional(cityId)}`} href="/search?section=liked" />
-                <div className="pd-grid">
-                  {liked.map((l) => (
-                    <div className="pd-rise" key={l.id}>
-                      <BouquetCard listing={l} variant="grid" />
-                    </div>
-                  ))}
-                </div>
-                <div className="pd-feed-end">Вы посмотрели свежие букеты</div>
-              </section>
+      {/* ─────────── MOBILE (<1024px) ─────────── */}
+      {!isDesktop && (
+        <div className="pd-root" data-pd-theme="a">
+          <TopBar cityId={cityId} />
+          <main className="pd-scroll">
+            {status === 'loading' && (
+              <>
+                <section className="pd-section">
+                  <SectionHead title="Самые свежие" sub="Куплены сегодня, рядом с вами" />
+                  <Skeletons n={4} cls="pd-rail" />
+                </section>
+                <section className="pd-section">
+                  <SectionHead title="Самые залайканные" sub={`Любимцы недели в ${prep}`} />
+                  <Skeletons n={6} cls="pd-grid" />
+                </section>
+              </>
             )}
-            <div style={{ height: 18 }} />
-          </>
-        )}
-      </main>
-      <BottomNav />
-    </div>
+            {status === 'empty' && <div className="pd-state" style={{ padding: '48px 20px' }}><EmptyState cityId={cityId} /></div>}
+            {(status === 'error' || status === 'offline') && <div className="pd-state" style={{ padding: '48px 20px' }}><ErrorState status={status} reload={load} /></div>}
+            {status === 'loaded' && (
+              <>
+                {fresh.length > 0 && (
+                  <section className="pd-section">
+                    <SectionHead title="Самые свежие" sub="Куплены сегодня, рядом с вами" href="/search?section=fresh" />
+                    <div className="pd-rail">
+                      {fresh.map((l) => (
+                        <div className="pd-rise" key={l.id}><BouquetCard listing={l} variant="rail" /></div>
+                      ))}
+                      <div className="pd-rail-end"><span>Листайте<br />дальше →</span></div>
+                    </div>
+                  </section>
+                )}
+                {liked.length > 0 && (
+                  <section className="pd-section">
+                    <SectionHead title="Самые залайканные" sub={`Любимцы недели в ${prep}`} href="/search?section=liked" />
+                    <Grid items={liked} cls="pd-grid" />
+                    <div className="pd-feed-end">Вы посмотрели свежие букеты</div>
+                  </section>
+                )}
+                <div style={{ height: 18 }} />
+              </>
+            )}
+          </main>
+          <BottomNav />
+        </div>
+      )}
+    </>
   );
 }
