@@ -95,6 +95,7 @@ class FakeSessionStore:
 
     def __init__(self) -> None:
         self._data: dict[str, str] = {}
+        self._2fa: set[str] = set()
 
     def save(self, token: str, user_id: str, ttl: int) -> None:
         self._data[token] = user_id
@@ -104,9 +105,16 @@ class FakeSessionStore:
 
     def delete(self, token: str) -> None:
         self._data.pop(token, None)
+        self._2fa.discard(token)
 
     def refresh(self, token: str, ttl: int) -> None:
         return None
+
+    def mark_2fa(self, token: str, ttl: int) -> None:
+        self._2fa.add(token)
+
+    def is_2fa(self, token: str) -> bool:
+        return token in self._2fa
 
 
 class FakeUserRepository:
@@ -118,7 +126,29 @@ class FakeUserRepository:
         self._view = UserView
         self._by_phone: dict[str, object] = {}
         self._by_id: dict[str, object] = {}
+        self._secrets: dict[str, str] = {}
         self._seq = 0
+
+    def get_totp_secret(self, user_id: str) -> str | None:
+        return self._secrets.get(user_id)
+
+    def make_admin(self, user_id: str, secret: str) -> None:
+        """Test helper: promote a user to admin + set their TOTP secret."""
+        view = self._by_id.get(user_id)
+        if view is None:
+            return
+        admin = self._view(
+            id=view.id,  # type: ignore[attr-defined]
+            phone=view.phone,  # type: ignore[attr-defined]
+            display_name=view.display_name,  # type: ignore[attr-defined]
+            city_id=view.city_id,  # type: ignore[attr-defined]
+            roles=("buyer", "admin"),
+            seller_rating=view.seller_rating,  # type: ignore[attr-defined]
+            status=view.status,  # type: ignore[attr-defined]
+        )
+        self._by_id[user_id] = admin
+        self._by_phone[admin.phone] = admin
+        self._secrets[user_id] = secret
 
     def get_or_create_by_phone(self, phone: str) -> object:
         existing = self._by_phone.get(phone)

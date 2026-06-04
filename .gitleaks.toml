@@ -14,3 +14,10 @@ self-reference. Real secrets live only in the VM .env / secret-store.
 paths = [
   '''\.secrets\.baseline''',
 ]
+# The base32 string below is the public RFC 6238 TOTP test vector (base32 of
+# "12345678901234567890") used by the admin-2FA tests — not a real secret.
+# Allowlisted by value so it's ignored across all history (inline gitleaks:allow
+# only covers the line at HEAD, not the commit that introduced it).
+regexes = [
+  '''GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ''',
+]

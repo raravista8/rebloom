@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api import auth, cities, consent, deals, feed, health, listings, reviews
+from app.api import admin, auth, cities, consent, deals, feed, health, listings, reviews
 from app.api.envelope import (
     http_exception_handler,
     unhandled_exception_handler,
@@ -48,6 +48,7 @@ def create_app() -> FastAPI:
     app.include_router(feed.router)
     app.include_router(deals.router)
     app.include_router(reviews.router)
+    app.include_router(admin.router)
     app.include_router(yookassa_webhook.router)
 
     return app

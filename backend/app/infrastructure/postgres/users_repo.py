@@ -48,3 +48,12 @@ class PostgresUserRepository:
         with writer_session() as session:
             user = session.get(User, pk)
             return _to_view(user) if user is not None else None
+
+    def get_totp_secret(self, user_id: str) -> str | None:
+        try:
+            pk = uuid.UUID(user_id)
+        except ValueError:
+            return None
+        with writer_session() as session:
+            user = session.get(User, pk)
+            return user.totp_secret if user is not None else None

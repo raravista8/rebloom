@@ -28,3 +28,13 @@ class RedisSessionStore:
 
     def refresh(self, token: str, ttl: int) -> None:
         self._r.expire(self._key(token), ttl)
+
+    @staticmethod
+    def _key_2fa(token: str) -> str:
+        return f"session:2fa:{token}"
+
+    def mark_2fa(self, token: str, ttl: int) -> None:
+        self._r.set(self._key_2fa(token), "1", ex=ttl)
+
+    def is_2fa(self, token: str) -> bool:
+        return bool(cast(int, self._r.exists(self._key_2fa(token))))
