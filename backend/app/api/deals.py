@@ -1,0 +1,82 @@
+"""Deal endpoints (API_CONTRACT §4). Party-only access (T-06)."""
+
+from __future__ import annotations
+
+from typing import Annotated, Any, Literal
+
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, ConfigDict
+
+from app.api.deps import RequireUserDep
+from app.api.envelope import domain_error_response, ok
+from app.config import get_settings
+from app.core.deals.service import DealService
+from app.core.result import Ok
+from app.infrastructure.postgres.deals_repo import (
+    PostgresDealRepository,
+    PostgresListingReader,
+)
+from app.infrastructure.yookassa import SandboxYooKassa
+
+router = APIRouter(tags=["deals"])
+
+
+class DealCreateIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    listing_id: str
+    delivery_method: Literal["self_pickup", "courier"] = "self_pickup"
+
+
+def get_deal_service() -> DealService:
+    settings = get_settings()
+    return DealService(
+        PostgresDealRepository(),
+        PostgresListingReader(),
+        SandboxYooKassa(),
+        settings.platform_commission_bps,
+    )
+
+
+DealServiceDep = Annotated[DealService, Depends(get_deal_service)]
+
+
+@router.post("/api/deals", response_model=None)
+def create_deal(
+    payload: DealCreateIn,
+    request: Request,
+    user: RequireUserDep,
+    service: DealServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    result = service.create_deal(user.id, payload.listing_id, payload.delivery_method)
+    if isinstance(result, Ok):
+        deal, confirmation_url = result.value
+        return ok(
+            {
+                "deal": deal.to_api(role="buyer"),
+                "payment": {"confirmation_url": confirmation_url},
+            }
+        )
+    return domain_error_response(request, result.error)
+
+
+@router.post("/api/deals/{deal_id}/confirm-receipt", response_model=None)
+def confirm_receipt(
+    deal_id: str, request: Request, user: RequireUserDep, service: DealServiceDep
+) -> dict[str, Any] | JSONResponse:
+    result = service.confirm_receipt(user.id, deal_id)
+    if isinstance(result, Ok):
+        return ok({"deal": result.value.to_api(role="buyer")})
+    return domain_error_response(request, result.error)
+
+
+@router.get("/api/deals/{deal_id}", response_model=None)
+def get_deal(
+    deal_id: str, request: Request, user: RequireUserDep, service: DealServiceDep
+) -> dict[str, Any] | JSONResponse:
+    result = service.get(deal_id, user.id)
+    if isinstance(result, Ok):
+        deal = result.value
+        role = "buyer" if deal.buyer_id == user.id else "seller"
+        return ok({"deal": deal.to_api(role=role)})
+    return domain_error_response(request, result.error)
