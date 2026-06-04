@@ -150,3 +150,86 @@ class Like(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     listing: Mapped[Listing] = relationship(back_populates="likes")
+
+
+class Deal(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Escrow deal (ARCHITECTURE §6). Money in kopecks; the ledger is the source
+    of truth — these columns are denormalized convenience."""
+
+    __tablename__ = "deals"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('created','paid_held','released','refunded','disputed','cancelled')",
+            name="status_valid",
+        ),
+        CheckConstraint(
+            "delivery_method IN ('self_pickup','courier')", name="delivery_method_valid"
+        ),
+        CheckConstraint("amount_kopecks > 0", name="amount_positive"),
+    )
+
+    listing_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("listings.id", ondelete="RESTRICT"), nullable=False, index=True
+    )
+    buyer_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="RESTRICT"), nullable=False, index=True
+    )
+    seller_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="RESTRICT"), nullable=False, index=True
+    )
+    amount_kopecks: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    commission_kopecks: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(16), nullable=False, server_default=text("'created'"), index=True
+    )
+    delivery_method: Mapped[str] = mapped_column(String(16), nullable=False)
+    released_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    ledger_entries: Mapped[list[LedgerEntry]] = relationship(back_populates="deal")
+
+
+class Payment(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """ЮKassa payment ref — NO card data, only provider id + status (T-07)."""
+
+    __tablename__ = "payments"
+    __table_args__ = (UniqueConstraint("idempotency_key", name="idempotency_key"),)
+
+    deal_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("deals.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    yk_payment_id: Mapped[str | None] = mapped_column(String(64), unique=True)
+    idempotency_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(String(24), nullable=False)
+    captured_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class Payout(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    __tablename__ = "payouts"
+
+    deal_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("deals.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    yk_payout_id: Mapped[str | None] = mapped_column(String(64), unique=True)
+    payout_target_masked: Mapped[str | None] = mapped_column(String(32))  # 🔒 masked
+    status: Mapped[str] = mapped_column(String(24), nullable=False)
+    fiscal_receipt_id: Mapped[str | None] = mapped_column(String(64))
+
+
+class LedgerEntry(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Append-only escrow ledger — never UPDATEd/DELETEd (SECURITY T-03/T-17)."""
+
+    __tablename__ = "ledger_entries"
+    __table_args__ = (
+        CheckConstraint(
+            "kind IN ('hold','commission','payout','refund')", name="kind_valid"
+        ),
+        CheckConstraint("amount_kopecks > 0", name="amount_positive"),
+    )
+
+    deal_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("deals.id", ondelete="RESTRICT"), nullable=False, index=True
+    )
+    kind: Mapped[str] = mapped_column(String(16), nullable=False)
+    amount_kopecks: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+    deal: Mapped[Deal] = relationship(back_populates="ledger_entries")
