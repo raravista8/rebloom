@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from app.core.auth.totp import TOTP_STEP, generate_totp, verify_totp
 
-# Base32 of "12345678901234567890" — RFC 6238 SHA1 test vector seed.
-SECRET = "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"
+# Base32 of "12345678901234567890" — public RFC 6238 SHA1 test vector seed.
+SECRET = "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"  # gitleaks:allow (not a real secret)
 
 
 def test_generate_is_six_digits() -> None:

@@ -27,8 +27,8 @@ from tests.fakes import (
 
 PHONE = "+79161234567"
 CODE = "123456"
-# Base32 admin TOTP seed.
-SECRET = "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"
+# Base32 admin TOTP seed — public RFC 6238 test vector, not a real secret.
+SECRET = "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"  # gitleaks:allow
 
 
 @pytest.fixture
