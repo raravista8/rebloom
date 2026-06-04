@@ -231,3 +231,20 @@ class LedgerEntry(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     amount_kopecks: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
     deal: Mapped[Deal] = relationship(back_populates="ledger_entries")
+
+
+class AuditLog(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Immutable audit trail (SECURITY §8, T-11/T-16). Append-only — a DB trigger
+    (migration 0006) blocks UPDATE/DELETE. Records auth/payout/refund/release/
+    moderation/admin actions with actor, target, reason, request_id."""
+
+    __tablename__ = "audit_logs"
+
+    actor_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), index=True
+    )  # null = system
+    action: Mapped[str] = mapped_column(String(48), nullable=False, index=True)
+    target_type: Mapped[str] = mapped_column(String(24), nullable=False)
+    target_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    reason: Mapped[str | None] = mapped_column(String(256))
+    request_id: Mapped[str | None] = mapped_column(String(64))
