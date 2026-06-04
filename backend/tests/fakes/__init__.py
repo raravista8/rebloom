@@ -757,6 +757,58 @@ class FakeChatRepository:
         return visible[:limit], None
 
 
+class FakeSupportRepo:
+    """Implements :class:`app.core.support.service.SupportRepo` in memory."""
+
+    def __init__(self) -> None:
+        self._tickets: dict[str, dict[str, str]] = {}
+        self._seq = 0
+
+    def create(self, user_id: str, category: str, body: str) -> str:
+        self._seq += 1
+        tid = f"ticket-{self._seq}"
+        self._tickets[tid] = {
+            "user_id": user_id,
+            "category": category,
+            "body": body,
+            "status": "open",
+            "created_at": _now_iso(),
+        }
+        return tid
+
+    def seed(self, ticket_id: str, *, created_at: str, category: str = "deal") -> None:
+        self._tickets[ticket_id] = {
+            "user_id": "u",
+            "category": category,
+            "body": "x",
+            "status": "open",
+            "created_at": created_at,
+        }
+
+    def list_open(self, limit: int) -> list[object]:
+        from app.core.support.service import TicketView
+
+        return [
+            TicketView(
+                id=tid,
+                user_id=t["user_id"],
+                category=t["category"],
+                body=t["body"],
+                status=t["status"],
+                created_at=t["created_at"],
+            )
+            for tid, t in self._tickets.items()
+            if t["status"] == "open"
+        ][:limit]
+
+    def resolve(self, ticket_id: str, resolved_at: str) -> bool:
+        t = self._tickets.get(ticket_id)
+        if t is None or t["status"] != "open":
+            return False
+        t["status"] = "resolved"
+        return True
+
+
 class FakeNotifSettingsRepo:
     """Implements :class:`app.core.notifications.settings.NotifSettingsRepo`."""
 
