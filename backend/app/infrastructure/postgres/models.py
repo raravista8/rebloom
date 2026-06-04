@@ -200,6 +200,9 @@ class Deal(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     delivery_method: Mapped[str] = mapped_column(String(16), nullable=False)
     released_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # 🔒 Exact self-pickup address, AES-256-GCM at rest (ADR-0012). Revealed to the
+    # counterparty only after paid_held (T-13, FR-030).
+    pickup_address_enc: Mapped[str | None] = mapped_column(String(512))
 
     ledger_entries: Mapped[list[LedgerEntry]] = relationship(back_populates="deal")
 

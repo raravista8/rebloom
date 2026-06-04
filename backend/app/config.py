@@ -59,6 +59,10 @@ class Settings(BaseSettings):
     yookassa_webhook_secret: str = ""
     yookassa_webhook_ip_allowlist: str = ""  # comma-separated; empty = allow (dev)
 
+    # ── PII field encryption (ADR-0012, SECURITY T-10). base64 of 32 bytes.
+    # Empty in dev → a deterministic dev key is used; MUST be set in prod.
+    pii_enc_key: str = ""
+
     @property
     def is_prod(self) -> bool:
         return self.app_env == "prod"
