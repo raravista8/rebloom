@@ -14,7 +14,13 @@ import {
   PdBtn as PdBtnRaw,
   PdField as PdFieldRaw,
   PdNotice as PdNoticeRaw,
+  PdFreshness as PdFreshnessRaw,
+  PdAvatar as PdAvatarRaw,
+  PdHeart as PdHeartRaw,
+  PdSkelCard as PdSkelCardRaw,
+  PdEmpty as PdEmptyRaw,
 } from '@rebloom/canon';
+import type { Freshness } from '@/lib/types';
 
 type IconFn = (p: { className?: string; fill?: string; stroke?: string }) => ReactNode;
 
@@ -42,6 +48,16 @@ export type PdNoticeProps = {
   children?: ReactNode;
 };
 
+export type PdFreshnessProps = { kind: Freshness };
+export type PdAvatarProps = { seller: { n: string; av?: string; r?: number }; size?: number };
+export type PdHeartProps = { filled?: boolean; className?: string };
+export type PdEmptyProps = { glyph?: ReactNode; title?: ReactNode; text?: ReactNode; children?: ReactNode };
+
 export const PdBtn = PdBtnRaw as unknown as FC<PdBtnProps>;
 export const PdField = PdFieldRaw as unknown as FC<PdFieldProps>;
 export const PdNotice = PdNoticeRaw as unknown as FC<PdNoticeProps>;
+export const PdFreshness = PdFreshnessRaw as unknown as FC<PdFreshnessProps>;
+export const PdAvatar = PdAvatarRaw as unknown as FC<PdAvatarProps>;
+export const PdHeart = PdHeartRaw as unknown as FC<PdHeartProps>;
+export const PdSkelCard = PdSkelCardRaw as unknown as FC;
+export const PdEmpty = PdEmptyRaw as unknown as FC<PdEmptyProps>;
