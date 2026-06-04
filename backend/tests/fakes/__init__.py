@@ -640,6 +640,17 @@ class FakeDealRepository:
         d["released_at"] = _now_iso()
         return self._view(deal_id)
 
+    def set_pickup_address(self, deal_id: str, address_enc: str) -> bool:
+        d = self._deals.get(deal_id)
+        if d is None:
+            return False
+        d["pickup_address_enc"] = address_enc
+        return True
+
+    def get_pickup_address_enc(self, deal_id: str) -> str | None:
+        d = self._deals.get(deal_id)
+        return d.get("pickup_address_enc") if d is not None else None  # type: ignore[return-value]
+
     def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:
         self._deals[deal_id]["payout"] = (yk_payout_id, fiscal_receipt_id)
 

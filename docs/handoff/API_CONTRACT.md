@@ -54,7 +54,8 @@ Errors: `validation_error`, `moderation_pending` (FR-012), `forbidden` (not your
 | POST | `/api/deals/{id}/dispute` | party | `{reason, photo_ids[]}` | `deal` (disputed) | FR-024 |
 | GET | `/api/deals/{id}/messages` | party | `?cursor` | `{messages[], next_cursor}` | FR-030 |
 | POST | `/api/deals/{id}/messages` | party | `{body}` | `message` (or held if contacts) | FR-030/ T-05 |
-| POST | `/api/deals/{id}/delivery` | party | `{address?, contact?}` | `{tracking_status, claim_id?}` | FR-031 |
+| POST | `/api/deals/{id}/delivery` | seller | `{address}` | `{ok}` — pickup address, AES-256-GCM at rest (ADR-0012) | FR-030 |
+| GET | `/api/deals/{id}/delivery` | party | — | `{revealed, address}` — exact address only after `paid_held` (T-13) | FR-030 |
 | POST | `/api/webhooks/yookassa` | **provider signature** | provider payload | `200` (idempotent) | FR-025, T-02/03 |
 
 `deal`: `{id, status, listing:{id,photo_thumb_url,price_kopecks}, role:"buyer"\|"seller", counterparty:{id,display_name,seller_rating}, amount_kopecks, commission_kopecks, delivery_method, delivery:{tracking_status?}, created_at, released_at?}`

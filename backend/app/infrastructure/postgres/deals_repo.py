@@ -231,6 +231,27 @@ class PostgresDealRepository:
                 listing.status = listing_status
             return _to_view(deal)
 
+    def set_pickup_address(self, deal_id: str, address_enc: str) -> bool:
+        try:
+            did = uuid.UUID(deal_id)
+        except ValueError:
+            return False
+        with writer_session() as session:
+            deal = session.get(Deal, did)
+            if deal is None:
+                return False
+            deal.pickup_address_enc = address_enc
+            return True
+
+    def get_pickup_address_enc(self, deal_id: str) -> str | None:
+        try:
+            did = uuid.UUID(deal_id)
+        except ValueError:
+            return None
+        with reader_session() as session:
+            deal = session.get(Deal, did)
+            return deal.pickup_address_enc if deal is not None else None
+
     def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:
         with writer_session() as session:
             session.add(
