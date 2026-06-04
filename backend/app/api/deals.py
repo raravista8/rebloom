@@ -20,6 +20,7 @@ from app.infrastructure.postgres.deals_repo import (
     PostgresListingReader,
 )
 from app.infrastructure.postgres.notifications_repo import PostgresNotificationOutbox
+from app.infrastructure.realtime import RedisRealtimeBus
 from app.infrastructure.yookassa import SandboxYooKassa
 
 router = APIRouter(tags=["deals"])
@@ -46,6 +47,7 @@ def get_deal_service() -> DealService:
         settings.platform_commission_bps,
         audit=PostgresAuditLog(),
         notifier=NotificationService(PostgresNotificationOutbox()),
+        bus=RedisRealtimeBus(),
     )
 
 

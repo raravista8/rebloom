@@ -24,6 +24,7 @@ from app.core.notifications import events
 from app.core.notifications.ports import Notifier
 from app.core.notifications.schemas import NotificationDraft
 from app.core.payments.ports import PaymentProvider
+from app.core.realtime.ports import RealtimeBus, deal_channel
 from app.core.result import Err, Ok, Result
 
 logger = logging.getLogger("rebloom.deals")
@@ -41,6 +42,7 @@ class DealService:
         commission_bps: int,
         audit: AuditLog | None = None,
         notifier: Notifier | None = None,
+        bus: RealtimeBus | None = None,
     ) -> None:
         self._deals = deals
         self._listings = listings
@@ -48,6 +50,14 @@ class DealService:
         self._bps = commission_bps
         self._audit = audit
         self._notifier = notifier
+        self._bus = bus
+
+    def _publish_status(self, deal_id: str, status: str) -> None:
+        """Broadcast a deal status change to live WS subscribers (best-effort)."""
+        if self._bus is not None:
+            self._bus.publish(
+                deal_channel(deal_id), {"type": "status", "deal_id": deal_id, "status": status}
+            )
 
     def _notify(self, draft: NotificationDraft) -> None:
         """Best-effort: a notification failure must never affect the money path."""
@@ -103,6 +113,7 @@ class DealService:
         deal = self._deals.mark_paid(yk_payment_id)
         if deal is not None and deal.status == "paid_held":
             self._notify(events.deal_paid(deal.id, deal.seller_id))  # dedup by event_id
+            self._publish_status(deal.id, "paid_held")
         return deal
 
     def process_payment_notification(self, yk_payment_id: str) -> DealView | None:
@@ -136,6 +147,7 @@ class DealService:
         self._record("deal.released", deal_id, buyer_id, "buyer_confirm", None)
         self._notify(events.deal_released(deal_id, deal.buyer_id, is_seller=False))
         self._notify(events.deal_released(deal_id, deal.seller_id, is_seller=True))
+        self._publish_status(deal_id, "released")
         return Ok(released)
 
     def open_dispute(
@@ -157,6 +169,7 @@ class DealService:
         self._record("deal.dispute_opened", deal_id, requester_id, reason, request_id)
         counterparty = deal.seller_id if requester_id == deal.buyer_id else deal.buyer_id
         self._notify(events.dispute_opened(deal_id, counterparty))
+        self._publish_status(deal_id, "disputed")
         return Ok(disputed)
 
     def resolve_dispute(
@@ -203,6 +216,7 @@ class DealService:
         self._record(f"deal.dispute_resolved.{action}", deal_id, actor_id, reason, request_id)
         self._notify(events.dispute_resolved(deal_id, deal.buyer_id, action))
         self._notify(events.dispute_resolved(deal_id, deal.seller_id, action))
+        self._publish_status(deal_id, resolved.status)
         return Ok(resolved)
 
     def _payout(self, deal: DealView, amount_kopecks: int) -> None:

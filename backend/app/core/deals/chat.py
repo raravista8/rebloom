@@ -17,6 +17,7 @@ from app.core.moderation.service import ModerationService
 from app.core.notifications import events
 from app.core.notifications.ports import Notifier
 from app.core.notifications.schemas import NotificationDraft
+from app.core.realtime.ports import RealtimeBus, deal_channel
 from app.core.result import Err, Ok, Result
 
 logger = logging.getLogger("rebloom.chat")
@@ -67,11 +68,13 @@ class ChatService:
         chat: ChatRepository,
         moderation: ModerationService,
         notifier: Notifier | None = None,
+        bus: RealtimeBus | None = None,
     ) -> None:
         self._deals = deals
         self._chat = chat
         self._moderation = moderation
         self._notifier = notifier
+        self._bus = bus
 
     def _authorize(self, requester_id: str, deal_id: str) -> tuple[str, str] | DomainError:
         parties = self._deals.parties(deal_id)
@@ -96,9 +99,24 @@ class ChatService:
         verdict = self._moderation.check_text(text)
         status = "held" if verdict.is_blocked else "visible"
         message = self._chat.add(deal_id, sender_id, text, status)
-        if status == "visible":  # held messages aren't delivered → no notify
+        if status == "visible":  # held messages aren't delivered → no notify/broadcast
             recipient = auth[1] if sender_id == auth[0] else auth[0]
             self._notify(events.new_message(message.id, deal_id, recipient))
+            if self._bus is not None:
+                self._bus.publish(
+                    deal_channel(deal_id),
+                    {
+                        "type": "message",
+                        "deal_id": deal_id,
+                        "message": {
+                            "id": message.id,
+                            "sender_id": message.sender_id,
+                            "body": message.body,
+                            "status": message.status,
+                            "created_at": message.created_at,
+                        },
+                    },
+                )
         return Ok(message)
 
     def _notify(self, draft: NotificationDraft) -> None:
