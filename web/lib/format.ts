@@ -30,4 +30,17 @@ export function phoneE164(digits: string): string {
   return '+7' + phoneDigits(digits);
 }
 
+/** ISO timestamp → "HH:MM" in MSK (UI is always MSK — CLAUDE.md §4). */
+export function formatTime(iso: string): string {
+  try {
+    return new Intl.DateTimeFormat('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Moscow',
+    }).format(new Date(iso));
+  } catch {
+    return '';
+  }
+}
+
 export const POLICY_VERSION = '1.0';
