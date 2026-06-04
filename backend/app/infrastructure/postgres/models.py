@@ -277,3 +277,22 @@ class Review(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     # NB: keep `text` (column) last — it shadows sqlalchemy's `text()` below it.
     text: Mapped[str] = mapped_column(String(2000), nullable=False)
+
+
+class Message(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """🔒 Deal-scoped chat message (FR-030). Held (not delivered to the
+    counterparty) when the text trips contact-leak detection (SECURITY T-05)."""
+
+    __tablename__ = "messages"
+    __table_args__ = (CheckConstraint("status IN ('visible','held')", name="message_status_valid"),)
+
+    deal_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("deals.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    sender_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    status: Mapped[str] = mapped_column(
+        String(16), nullable=False, server_default=text("'visible'")
+    )
+    body: Mapped[str] = mapped_column(String(2000), nullable=False)

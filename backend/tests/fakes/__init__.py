@@ -493,6 +493,12 @@ class FakeDealRepository:
     def get(self, deal_id: str) -> object | None:
         return self._view(deal_id) if deal_id in self._deals else None
 
+    def parties(self, deal_id: str) -> tuple[str, str] | None:
+        d = self._deals.get(deal_id)
+        if d is None:
+            return None
+        return str(d["buyer_id"]), str(d["seller_id"])
+
     def mark_paid(self, yk_payment_id: str) -> object | None:
         did = self._by_payment.get(yk_payment_id)
         if did is None:
@@ -613,6 +619,53 @@ class FakeReviewRepository:
             for r in self._reviews
             if r.target_id == target_id and r.moderation_status == "visible"  # type: ignore[attr-defined]
         ]
+
+
+class FakeDealPartyReader:
+    """Implements :class:`app.core.deals.chat.DealPartyReader` in memory."""
+
+    def __init__(self) -> None:
+        self._parties: dict[str, tuple[str, str]] = {}
+
+    def seed(self, deal_id: str, buyer_id: str, seller_id: str) -> None:
+        self._parties[deal_id] = (buyer_id, seller_id)
+
+    def parties(self, deal_id: str) -> tuple[str, str] | None:
+        return self._parties.get(deal_id)
+
+
+class FakeChatRepository:
+    """Implements :class:`app.core.deals.chat.ChatRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._messages: list[object] = []
+        self._seq = 0
+
+    def add(self, deal_id: str, sender_id: str, body: str, status: str) -> object:
+        from app.core.deals.chat import MessageView
+
+        self._seq += 1
+        view = MessageView(
+            id=f"msg-{self._seq}",
+            deal_id=deal_id,
+            sender_id=sender_id,
+            body=body,
+            status=status,
+            created_at=_now_iso(),
+        )
+        self._messages.append(view)
+        return view
+
+    def list_visible_to(
+        self, deal_id: str, viewer_id: str, cursor: str | None, limit: int
+    ) -> tuple[list[object], str | None]:
+        visible = [
+            m
+            for m in self._messages
+            if m.deal_id == deal_id  # type: ignore[attr-defined]
+            and (m.status == "visible" or m.sender_id == viewer_id)  # type: ignore[attr-defined]
+        ]
+        return visible[:limit], None
 
 
 class FakeModerationQueueRepo:
