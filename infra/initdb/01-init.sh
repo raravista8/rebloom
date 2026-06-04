@@ -8,8 +8,9 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-S
     CREATE ROLE replicator WITH REPLICATION LOGIN PASSWORD 'replicator_pw';
 
     -- Migrator owns the schema so Alembic (run out-of-band, OPERATIONS §2) can
-    -- create/alter tables; the app role keeps narrower rights.
-    CREATE ROLE rebloom_migrator WITH LOGIN PASSWORD 'rebloom';
+    -- create/alter tables; the app role keeps narrower rights. Shares
+    -- POSTGRES_PASSWORD (one secret on the single box; dev default = 'rebloom').
+    CREATE ROLE rebloom_migrator WITH LOGIN PASSWORD '${POSTGRES_PASSWORD}';
     GRANT ALL PRIVILEGES ON DATABASE rebloom TO rebloom_migrator;
     GRANT ALL ON SCHEMA public TO rebloom_migrator;
     ALTER DEFAULT PRIVILEGES FOR ROLE rebloom_migrator IN SCHEMA public

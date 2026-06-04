@@ -1,0 +1,130 @@
+# Single-box production stack (docs/runbooks/deploy-single-box.md).
+#
+# Everything on ONE VPS for the MVP launch: caddy (TLS edge) + api + scheduler
+# (periodic jobs) + Postgres + Redis. Photos live on a local volume served by
+# Caddy. Only Caddy is exposed to the internet (80/443); db/redis/api are on the
+# internal compose network.
+#
+#   docker compose --env-file .env -f infra/docker-compose.prod.yml up -d
+#
+# ⚠️ Money lives on this box (escrow ledger). HA is given up for MVP (accepted),
+# but OFF-BOX encrypted Postgres backups are mandatory — see infra/scripts/backup.sh
+# and the runbook. Scale-out path (managed PG → managed Redis → api replicas) is
+# config-only thanks to the ports/adapters design.
+name: rebloom
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    command: ["postgres", "-c", "max_connections=100"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rebloom_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-rebloom}
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rebloom_app} -d ${POSTGRES_DB:-rebloom}"]
+      interval: 10s
+      timeout: 3s
+      retries: 15
+    # No host port — only reachable on the internal network.
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    # Persist (sessions + counters survive a restart): RDB snapshot + AOF.
+    command: ["redis-server", "--save", "900", "1", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 15
+
+  api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+      args:
+        BUILD_VERSION: ${BUILD_VERSION:-dev}
+        BUILD_TIME: ${BUILD_TIME:-unknown}
+    restart: unless-stopped
+    env_file: [../.env]
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-rebloom_app}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-rebloom}
+      DATABASE_REPLICA_URL: "" # single box → reads fall back to the writer
+      DB_MIGRATOR_URL: postgresql+psycopg://${POSTGRES_MIGRATOR_USER:-rebloom_migrator}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-rebloom}
+      REDIS_URL: redis://redis:6379/0
+      PHOTO_STORAGE_DIR: /data/photos
+      CDN_BASE_URL: https://${PUBLIC_DOMAIN}/media
+    volumes:
+      - photos:/data/photos
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/healthz || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 10
+
+  scheduler:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    env_file: [../.env]
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-rebloom_app}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-rebloom}
+      DATABASE_REPLICA_URL: ""
+      REDIS_URL: redis://redis:6379/0
+      PHOTO_STORAGE_DIR: /data/photos
+    volumes:
+      - photos:/data/photos
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    command: ["python", "-m", "app.workers.scheduler"]
+
+  # One-shot DB migration (Hard Rule: never on app boot). Run on each deploy:
+  #   docker compose -f infra/docker-compose.prod.yml --profile migrate run --rm migrate
+  migrate:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    profiles: ["migrate"]
+    env_file: [../.env]
+    environment:
+      DB_MIGRATOR_URL: postgresql+psycopg://${POSTGRES_MIGRATOR_USER:-rebloom_migrator}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-rebloom}
+    depends_on:
+      db: {condition: service_healthy}
+    command: ["alembic", "upgrade", "head"]
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN:?set PUBLIC_DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - photos:/srv/media:ro # serve uploaded photos read-only
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on:
+      - api
+
+volumes:
+  dbdata:
+  redisdata:
+  photos:
+  caddydata:
+  caddyconfig:

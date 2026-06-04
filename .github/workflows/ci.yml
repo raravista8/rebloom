@@ -147,5 +147,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate compose
+      - name: Validate dev compose
         run: docker compose -f infra/docker-compose.yml config -q
+      - name: Validate single-box prod compose
+        env:
+          PUBLIC_DOMAIN: example.com
+          POSTGRES_PASSWORD: ci-validate
+        run: docker compose -f infra/docker-compose.prod.yml config -q

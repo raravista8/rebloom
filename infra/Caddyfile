@@ -1,0 +1,41 @@
+# Caddy edge for the single-box deploy (docs/runbooks/deploy-single-box.md).
+# Auto-TLS via Let's Encrypt for {$PUBLIC_DOMAIN}. Serves uploaded photos from a
+# read-only volume; everything else proxies to the api. Security headers per
+# SECURITY A02.
+
+{$PUBLIC_DOMAIN} {
+	encode zstd gzip
+
+	# Uploaded photos (EXIF-stripped WebP) — served straight from disk.
+	# /media/photos/<id>/<variant>.webp → /srv/media/photos/<id>/<variant>.webp
+	handle /media/* {
+		root * /srv
+		file_server
+		header Cache-Control "public, max-age=86400, immutable"
+		header X-Content-Type-Options "nosniff"
+		header Content-Disposition "inline"
+	}
+
+	# Everything else (REST + WebSocket) → api. Caddy proxies WS transparently.
+	handle {
+		reverse_proxy api:8000
+	}
+
+	# Security headers (SECURITY A02). HSTS is safe behind auto-HTTPS.
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(self), camera=(self), microphone=()"
+		-Server
+	}
+
+	# Tighten the per-IP request rate at the OS/edge with fail2ban or the
+	# caddy-ratelimit plugin in front of high-cost routes (post-MVP); app-level
+	# rate-limits already guard OTP (T-01) and listing chat (T-08).
+
+	log {
+		output stdout
+		format json
+	}
+}
