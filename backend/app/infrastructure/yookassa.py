@@ -7,7 +7,7 @@ port (OPERATIONS §4). Card data never touches this module (SECURITY §1).
 
 from __future__ import annotations
 
-from app.core.payments.ports import PaymentIntent, PayoutReceipt
+from app.core.payments.ports import PaymentIntent, PayoutReceipt, RefundReceipt
 
 
 class SandboxYooKassa:
@@ -28,6 +28,11 @@ class SandboxYooKassa:
         self, deal_id: str, seller_id: str, amount_kopecks: int, idempotency_key: str
     ) -> PayoutReceipt:
         return PayoutReceipt(yk_payout_id=f"yk_pout_{deal_id}", fiscal_receipt_id=f"rcpt_{deal_id}")
+
+    def refund(self, deal_id: str, amount_kopecks: int, idempotency_key: str) -> RefundReceipt:
+        return RefundReceipt(
+            yk_refund_id=f"yk_ref_{deal_id}", fiscal_receipt_id=f"rcpt_ref_{deal_id}"
+        )
 
     def get_payment_status(self, yk_payment_id: str) -> str:
         return "succeeded"

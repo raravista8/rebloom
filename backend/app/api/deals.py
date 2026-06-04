@@ -6,13 +6,14 @@ from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import RequireUserDep
-from app.api.envelope import domain_error_response, ok
+from app.api.envelope import domain_error_response, ok, request_id
 from app.config import get_settings
 from app.core.deals.service import DealService
 from app.core.result import Ok
+from app.infrastructure.postgres.audit_repo import PostgresAuditLog
 from app.infrastructure.postgres.deals_repo import (
     PostgresDealRepository,
     PostgresListingReader,
@@ -28,6 +29,12 @@ class DealCreateIn(BaseModel):
     delivery_method: Literal["self_pickup", "courier"] = "self_pickup"
 
 
+class DisputeOpenIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    reason: str = Field(min_length=1, max_length=2000)
+    photo_ids: list[str] = Field(default_factory=list, max_length=5)
+
+
 def get_deal_service() -> DealService:
     settings = get_settings()
     return DealService(
@@ -35,6 +42,7 @@ def get_deal_service() -> DealService:
         PostgresListingReader(),
         SandboxYooKassa(),
         settings.platform_commission_bps,
+        audit=PostgresAuditLog(),
     )
 
 
@@ -75,6 +83,23 @@ def get_deal(
     deal_id: str, request: Request, user: RequireUserDep, service: DealServiceDep
 ) -> dict[str, Any] | JSONResponse:
     result = service.get(deal_id, user.id)
+    if isinstance(result, Ok):
+        deal = result.value
+        role = "buyer" if deal.buyer_id == user.id else "seller"
+        return ok({"deal": deal.to_api(role=role)})
+    return domain_error_response(request, result.error)
+
+
+@router.post("/api/deals/{deal_id}/dispute", response_model=None)
+def open_dispute(
+    deal_id: str,
+    payload: DisputeOpenIn,
+    request: Request,
+    user: RequireUserDep,
+    service: DealServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    """Either party freezes funds before release (FR-024, FLOW-1)."""
+    result = service.open_dispute(user.id, deal_id, payload.reason, request_id=request_id(request))
     if isinstance(result, Ok):
         deal = result.value
         role = "buyer" if deal.buyer_id == user.id else "seller"

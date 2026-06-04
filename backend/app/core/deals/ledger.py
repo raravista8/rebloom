@@ -59,3 +59,15 @@ def build_release_entries(
 
 def build_refund_entries(deal_id: str, amount_kopecks: int) -> list[LedgerEntry]:
     return [LedgerEntry(deal_id, "refund", amount_kopecks)]
+
+
+def build_partial_entries(
+    deal_id: str, refund_kopecks: int, payout_kopecks: int
+) -> list[LedgerEntry]:
+    """A disputed-deal split: part refunded to the buyer, the rest paid to the
+    seller. Commission is waived on disputed partials — the two legs must sum to
+    the held amount so escrow still settles to 0 (caller enforces the bounds)."""
+    return [
+        LedgerEntry(deal_id, "refund", refund_kopecks),
+        LedgerEntry(deal_id, "payout", payout_kopecks),
+    ]
