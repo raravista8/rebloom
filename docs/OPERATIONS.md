@@ -11,16 +11,20 @@
 
 ## 1. Prod coordinates `[fill on first deploy]`
 
-| Thing | Value |
+> **MVP launch is SINGLE-BOX** (everything on one VPS) — see **`docs/runbooks/deploy-single-box.md`**, the source of truth for the launch deploy. The managed-PG/Redis topology below is the **scale-out target** (OPERATIONS §8 / runbook §8), config-only to switch to. The single-box stack is `infra/docker-compose.prod.yml` (caddy + api + scheduler + db + redis), photos on a local volume served by Caddy.
+
+| Thing | Value (MVP single-box) |
 |---|---|
 | Public domain | **peredarim.ru** |
 | App VM (SSH) | `ssh deploy@<ip>` |
 | Repo on VM | `/opt/rebloom` (deploy = `git pull` + `docker compose` there) |
-| Compose invocation | `docker compose --env-file .env -f infra/docker-compose.yml -f infra/docker-compose.prod.yml` |
-| Services | `caddy`, `api ×2`, `workers`, `bot` (Redis + Postgres are **managed**, not in compose on prod) |
-| Managed Postgres | RF region, HA primary + read-replica; app user `rebloom_app`, migrator `rebloom_migrator` |
-| Object Storage | bucket `rebloom-prod-photos` (+ CDN) |
+| Compose invocation | `docker compose --env-file .env -f infra/docker-compose.prod.yml` |
+| Services | `caddy`, `api`, `scheduler`, `db` (Postgres), `redis` — all on ONE box; `bot` deferred (Phase 2) |
+| Postgres | in-compose `db` (single box); **off-box encrypted backups mandatory** — `infra/scripts/backup.sh` |
+| Photos | local `photos` volume, served by Caddy at `/media` (S3+CDN is the scale-out step) |
 | Build stamp | `GET /version` → `{git_sha, built_at}` |
+
+> **Scale-out (when load grows):** Postgres → managed (HA + PITR) → Redis → managed → api replicas → photos → S3/CDN. Each step is an env change, no `core/**` rewrite (runbook §8).
 
 Secrets live ONLY in `/opt/rebloom/.env` on the VM (or secret-store) — never in git.
 
