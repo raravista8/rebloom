@@ -11,9 +11,8 @@ import time
 from collections.abc import Iterator
 
 import pytest
-from sqlalchemy import text
-
 from app.infrastructure.postgres.engine import writer_engine
+from sqlalchemy import text
 
 
 @pytest.fixture(scope="session", autouse=True)

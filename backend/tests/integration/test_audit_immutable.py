@@ -24,16 +24,14 @@ def test_audit_log_is_append_only() -> None:
         assert row is not None and row.action == "deal.released"
         row_id = str(row.id)
 
-    with pytest.raises(Exception, match="append-only"):
-        with writer_session() as session:
-            session.execute(
-                text("UPDATE audit_logs SET reason = 'tampered' WHERE id = :id"),
-                {"id": row_id},
-            )
+    with pytest.raises(Exception, match="append-only"), writer_session() as session:
+        session.execute(
+            text("UPDATE audit_logs SET reason = 'tampered' WHERE id = :id"),
+            {"id": row_id},
+        )
 
-    with pytest.raises(Exception, match="append-only"):
-        with writer_session() as session:
-            session.execute(text("DELETE FROM audit_logs WHERE id = :id"), {"id": row_id})
+    with pytest.raises(Exception, match="append-only"), writer_session() as session:
+        session.execute(text("DELETE FROM audit_logs WHERE id = :id"), {"id": row_id})
 
     with writer_session() as session:
         row = session.get(AuditRow, uuid.UUID(row_id))
