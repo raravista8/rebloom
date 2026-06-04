@@ -248,3 +248,31 @@ class AuditLog(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     target_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     reason: Mapped[str | None] = mapped_column(String(256))
     request_id: Mapped[str | None] = mapped_column(String(64))
+
+
+class Review(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Mutual post-deal review (FR-040/041). One per (deal, author); held for
+    moderation if the text trips contacts/slurs (FR-042)."""
+
+    __tablename__ = "reviews"
+    __table_args__ = (
+        UniqueConstraint("deal_id", "author_id", name="deal_author"),
+        CheckConstraint("score BETWEEN 1 AND 5", name="score_range"),
+        CheckConstraint("moderation_status IN ('visible','held')", name="moderation_status_valid"),
+    )
+
+    deal_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("deals.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    author_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    target_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    moderation_status: Mapped[str] = mapped_column(
+        String(16), nullable=False, server_default=text("'visible'")
+    )
+    # NB: keep `text` (column) last — it shadows sqlalchemy's `text()` below it.
+    text: Mapped[str] = mapped_column(String(2000), nullable=False)
