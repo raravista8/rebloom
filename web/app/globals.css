@@ -29,3 +29,19 @@ html,
 body {
   min-height: 100%;
 }
+
+/* Mobile-first: the consumer UI is a phone layout (also the Capacitor app). On wider
+ * screens, centre it in a phone-width column over a neutral surround instead of
+ * stretching edge-to-edge. The admin (.pda-app) is desktop-first and unaffected. */
+@media (min-width: 760px) {
+  body {
+    background: var(--pd-surface-3);
+  }
+  .pd-root {
+    max-width: 460px;
+    margin-inline: auto;
+    min-height: 100vh;
+    background: var(--pd-bg);
+    box-shadow: 0 0 48px rgba(35, 32, 27, 0.08);
+  }
+}
