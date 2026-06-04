@@ -22,7 +22,7 @@ from app.core.deals.ledger import (
     can_apply,
 )
 from app.core.deals.ports import DealView, ListingSummary
-from app.infrastructure.postgres.engine import writer_session
+from app.infrastructure.postgres.engine import reader_session, writer_session
 from app.infrastructure.postgres.models import Deal, Listing, Payment, Payout
 from app.infrastructure.postgres.models import LedgerEntry as LedgerRow
 
@@ -113,6 +113,18 @@ class PostgresDealRepository:
         with writer_session() as session:
             deal = session.get(Deal, did)
             return _to_view(deal) if deal is not None else None
+
+    def parties(self, deal_id: str) -> tuple[str, str] | None:
+        """Narrow authz read for chat (DealPartyReader): (buyer_id, seller_id)."""
+        try:
+            did = uuid.UUID(deal_id)
+        except ValueError:
+            return None
+        with reader_session() as session:
+            deal = session.get(Deal, did)
+            if deal is None:
+                return None
+            return str(deal.buyer_id), str(deal.seller_id)
 
     def mark_paid(self, yk_payment_id: str) -> DealView | None:
         with writer_session() as session:
