@@ -358,6 +358,24 @@ class UserReport(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
 
+class SupportTicket(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """A support request (FR-092, SUPPORT.md). Queued with an SLA target; resolved
+    by support/admin with an audited reason."""
+
+    __tablename__ = "support_tickets"
+    __table_args__ = (CheckConstraint("status IN ('open','resolved')", name="ticket_status_valid"),)
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    category: Mapped[str] = mapped_column(String(16), nullable=False)
+    body: Mapped[str] = mapped_column(String(4000), nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(8), nullable=False, server_default=text("'open'"), index=True
+    )
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Notification(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     """Transactional outbox row (NOTIFICATIONS.md §6). One per (event, channel,
     user) — the unique key makes enqueue idempotent (dedup by event+channel)."""

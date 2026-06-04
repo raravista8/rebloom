@@ -24,6 +24,7 @@ from app.api import (
     notifications,
     reports,
     reviews,
+    support,
     ws,
 )
 from app.api.analytics_middleware import AnalyticsMiddleware
@@ -72,6 +73,7 @@ def create_app() -> FastAPI:
     app.include_router(me.router)
     app.include_router(notifications.router)
     app.include_router(reports.router)
+    app.include_router(support.router)
     app.include_router(admin.router)
     app.include_router(ws.router)
     app.include_router(yookassa_webhook.router)

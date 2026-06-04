@@ -19,6 +19,7 @@ from app.api.deps import (
 )
 from app.api.envelope import domain_error_response, fail, ok, request_id
 from app.api.reports import ReportServiceDep
+from app.api.support import SupportServiceDep
 from app.core.admin.moderation import ModerationQueueService
 from app.core.admin.users import AdminUserService
 from app.core.analytics.finance import FinanceService
@@ -82,6 +83,11 @@ class ModerationDecisionIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
     type: Literal["listing", "review"]
     action: Literal["approve", "reject"]
+    reason: str = Field(min_length=1, max_length=2000)
+
+
+class ResolveTicketIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     reason: str = Field(min_length=1, max_length=2000)
 
 
@@ -251,6 +257,37 @@ def admin_edit_user(
 def admin_reports(_admin: RequireAdmin2FADep, service: ReportServiceDep) -> dict[str, Any]:
     """Open user abuse reports awaiting a moderator (FR-064)."""
     return ok({"items": [r.to_api() for r in service.queue()], "next_cursor": None})
+
+
+@router.get("/api/admin/support/tickets", response_model=None)
+def admin_support_queue(_admin: RequireAdmin2FADep, service: SupportServiceDep) -> dict[str, Any]:
+    """Open support tickets, oldest first, with SLA-overdue flags (FR-092)."""
+    from datetime import UTC, datetime
+
+    now = datetime.now(UTC)
+    return ok({"items": [t.to_api(now=now) for t in service.queue()], "next_cursor": None})
+
+
+@router.post("/api/admin/support/tickets/{ticket_id}/resolve", response_model=None)
+def admin_resolve_ticket(
+    ticket_id: str,
+    payload: ResolveTicketIn,
+    request: Request,
+    admin: RequireAdmin2FADep,
+    service: SupportServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    from datetime import UTC, datetime
+
+    result = service.resolve(
+        admin.id,
+        ticket_id,
+        payload.reason,
+        datetime.now(UTC).isoformat(),
+        request_id=request_id(request),
+    )
+    if isinstance(result, Ok):
+        return ok({"status": result.value})
+    return domain_error_response(request, result.error)
 
 
 @router.get("/api/admin/finance", response_model=None)
