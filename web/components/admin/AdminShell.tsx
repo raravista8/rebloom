@@ -7,6 +7,10 @@ import { usePathname } from 'next/navigation';
 const NAV: { href: string; label: string }[] = [
   { href: '/admin', label: 'Обзор' },
   { href: '/admin/moderation', label: 'Модерация' },
+  { href: '/admin/users', label: 'Пользователи' },
+  { href: '/admin/finance', label: 'Финансы' },
+  { href: '/admin/fraud', label: 'Антифрод' },
+  { href: '/admin/reports', label: 'Жалобы' },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
