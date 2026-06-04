@@ -238,3 +238,7 @@ class DealService:
     ) -> list[DealView]:
         """The user's own deals (as buyer or seller). Read-only; no money mutation."""
         return self._deals.list_for_user(user_id, role=role, status=status, limit=limit)
+
+    def list_all_deals(self, *, status: str | None = None, limit: int = 50) -> list[DealView]:
+        """Admin: every deal (optionally by status). Caller must enforce admin authz."""
+        return self._deals.list_all(status=status, limit=limit)

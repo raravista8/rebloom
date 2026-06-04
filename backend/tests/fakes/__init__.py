@@ -600,6 +600,15 @@ class FakeDealRepository:
         rows.sort(reverse=True)
         return [self._view(did) for _, did in rows[:limit]]
 
+    def list_all(self, *, status: str | None = None, limit: int = 50) -> list[object]:
+        rows = [
+            (int(d["created"]), did)  # type: ignore[arg-type]
+            for did, d in self._deals.items()
+            if status is None or d["status"] == status
+        ]
+        rows.sort(reverse=True)
+        return [self._view(did) for _, did in rows[:limit]]
+
     def parties(self, deal_id: str) -> tuple[str, str] | None:
         d = self._deals.get(deal_id)
         if d is None:

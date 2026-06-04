@@ -83,6 +83,7 @@ Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail
 | GET | `/api/admin/moderation/queue` | admin/moderator(2FA) | `?type=listing\|review` | `{items[], next_cursor}` | FR-060 |
 | POST | `/api/admin/moderation/{id}` | admin/moderator(2FA) | `{type:"listing"\|"review", action:"approve"\|"reject", reason}` | `{status}` (audit-logged) | FR-061 |
 | POST | `/api/admin/2fa/verify` | admin (session) | `{code}` (TOTP) | `{verified_2fa:true}` — unlocks 2FA session | — |
+| GET | `/api/admin/deals` | admin(2FA) | `?status&limit` | `{items: deal[], next_cursor}` — all deals | FR-072 |
 | POST | `/api/admin/deals/{id}/resolve` | admin(2FA) | `{action:"release"\|"refund"\|"partial", refund_kopecks?, reason}` | `deal` (released/refunded) — ledger-settled, audit-logged, **4-eyes > threshold** | FR-024, FLOW-1 |
 | GET | `/api/admin/finance` | admin(2FA) | `?since&until` (ISO) | `{gmv_kopecks, commission_kopecks, payout_kopecks, refund_kopecks, held_kopecks, deals_by_status}` — derived from append-only ledger | FR-070 |
 
