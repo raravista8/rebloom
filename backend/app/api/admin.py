@@ -25,10 +25,12 @@ from app.core.admin.users import AdminUserService
 from app.core.analytics.finance import FinanceService
 from app.core.analytics.overview import OverviewService
 from app.core.auth.totp import verify_totp
+from app.core.fraud.service import FraudService
 from app.core.result import Ok
 from app.infrastructure.postgres.admin_users_repo import PostgresAdminUserRepo
 from app.infrastructure.postgres.audit_repo import PostgresAuditLog
 from app.infrastructure.postgres.finance_repo import PostgresFinanceRepo
+from app.infrastructure.postgres.fraud_repo import PostgresFraudRepo
 from app.infrastructure.postgres.moderation_repo import PostgresModerationQueueRepo
 from app.infrastructure.postgres.users_stats_repo import PostgresUsersStatsRepo
 
@@ -65,6 +67,13 @@ def get_admin_user_service() -> AdminUserService:
 
 
 AdminUserServiceDep = Annotated[AdminUserService, Depends(get_admin_user_service)]
+
+
+def get_fraud_service() -> FraudService:
+    return FraudService(PostgresFraudRepo())
+
+
+FraudServiceDep = Annotated[FraudService, Depends(get_fraud_service)]
 
 
 class Admin2FAIn(BaseModel):
@@ -257,6 +266,12 @@ def admin_edit_user(
 def admin_reports(_admin: RequireAdmin2FADep, service: ReportServiceDep) -> dict[str, Any]:
     """Open user abuse reports awaiting a moderator (FR-064)."""
     return ok({"items": [r.to_api() for r in service.queue()], "next_cursor": None})
+
+
+@router.get("/api/admin/fraud", response_model=None)
+def admin_fraud(_admin: RequireAdmin2FADep, service: FraudServiceDep) -> dict[str, Any]:
+    """Open fraud signals, highest-score first (FR-073)."""
+    return ok({"items": [s.to_api() for s in service.queue()], "next_cursor": None})
 
 
 @router.get("/api/admin/support/tickets", response_model=None)

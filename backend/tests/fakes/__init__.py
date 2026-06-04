@@ -757,6 +757,42 @@ class FakeChatRepository:
         return visible[:limit], None
 
 
+class FakeFraudRepo:
+    """Implements :class:`app.core.fraud.service.FraudRepo` in memory."""
+
+    def __init__(self) -> None:
+        self._signals: dict[tuple[str, str], dict[str, object]] = {}  # (user, type) -> data
+        self._seq = 0
+
+    def record(
+        self, user_id: str, signal_type: str, score: int, evidence: dict[str, object]
+    ) -> None:
+        key = (user_id, signal_type)
+        if key not in self._signals:
+            self._seq += 1
+            self._signals[key] = {"id": f"signal-{self._seq}"}
+        self._signals[key].update(
+            {"user_id": user_id, "type": signal_type, "score": score, "evidence": evidence}
+        )
+
+    def list_open(self, limit: int) -> list[object]:
+        from app.core.fraud.service import FraudSignalView
+
+        views = [
+            FraudSignalView(
+                id=str(s["id"]),
+                user_id=str(s["user_id"]),
+                type=str(s["type"]),
+                score=int(s["score"]),  # type: ignore[arg-type]
+                evidence=s["evidence"],  # type: ignore[arg-type]
+                status="open",
+                created_at=None,
+            )
+            for s in self._signals.values()
+        ]
+        return sorted(views, key=lambda v: v.score, reverse=True)[:limit]
+
+
 class FakeSupportRepo:
     """Implements :class:`app.core.support.service.SupportRepo` in memory."""
 
