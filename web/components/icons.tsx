@@ -110,6 +110,38 @@ export function IconCamera({ className = 'pd-i24', ...p }: IconProps) {
     p,
   );
 }
+export function IconBell({ className = 'pd-i20', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" />
+      <path d="M10 19a2 2 0 0 0 4 0" />
+    </>,
+    p,
+  );
+}
+export function IconHeartLine({ className = 'pd-i20', ...p }: IconProps) {
+  return svg(className, <path d="M12 20s-7-4.6-9.2-9C1.3 8 2.6 4.6 5.9 4.6c2 0 3.3 1.2 4.1 2.4.8-1.2 2.1-2.4 4.1-2.4 3.3 0 4.6 3.4 3.1 6.4C19 15.4 12 20 12 20Z" />, p);
+}
+export function IconLogout({ className = 'pd-i20', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <path d="M14 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4" />
+      <path d="M10 12h9M16 9l3 3-3 3" />
+    </>,
+    p,
+  );
+}
+export function IconTrash({ className = 'pd-i20', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13" />
+    </>,
+    p,
+  );
+}
 export function IconFwd({ className = 'pd-i18', ...p }: IconProps) {
   return svg(className, <path d="m9 5 7 7-7 7" />, p);
 }

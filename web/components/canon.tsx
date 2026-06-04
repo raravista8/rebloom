@@ -54,7 +54,7 @@ export type PdNoticeProps = {
 export type PdFreshnessProps = { kind: Freshness };
 export type PdAvatarProps = { seller: { n: string; av?: string; r?: number }; size?: number };
 export type PdHeartProps = { filled?: boolean; className?: string };
-export type PdEmptyProps = { glyph?: ReactNode; title?: ReactNode; text?: ReactNode; children?: ReactNode };
+export type PdEmptyProps = { glyph?: IconFn; title?: ReactNode; text?: ReactNode; children?: ReactNode };
 
 export const PdBtn = PdBtnRaw as unknown as FC<PdBtnProps>;
 export const PdField = PdFieldRaw as unknown as FC<PdFieldProps>;
