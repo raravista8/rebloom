@@ -19,6 +19,8 @@ psycopg = { extras = ["binary"], version = "^3.2.0" }
 redis = "^5.2.0"
 argon2-cffi = "^23.1.0"
 starlette = ">=1.0.1"
+pillow = "^12.2.0"
+python-multipart = "^0.0.30"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.0"

@@ -160,6 +160,7 @@ class FakePhotoRepository:
     def __init__(self) -> None:
         self._photos: dict[str, tuple[str, str]] = {}  # id -> (owner_id, status)
         self._seq = 0
+        self.processed: dict[str, dict[str, str]] = {}
 
     def seed(self, photo_id: str, owner_id: str, status: str = "approved") -> None:
         self._photos[photo_id] = (owner_id, status)
@@ -181,6 +182,31 @@ class FakePhotoRepository:
             if rec is not None and rec[0] == owner_id:
                 refs.append(PhotoRef(id=pid, moderation_status=rec[1]))
         return refs
+
+    def get_one(self, owner_id: str, photo_id: str) -> object | None:
+        from app.core.listings.schemas import PhotoRef
+
+        rec = self._photos.get(photo_id)
+        if rec is None or rec[0] != owner_id:
+            return None
+        return PhotoRef(id=photo_id, moderation_status=rec[1])
+
+    def mark_processed(self, photo_id: str, variants: dict[str, str]) -> None:
+        rec = self._photos.get(photo_id)
+        if rec is not None:
+            self._photos[photo_id] = (rec[0], "approved")
+        self.processed[photo_id] = variants
+
+
+class FakeObjectStorage:
+    """Implements :class:`app.core.photos.ports.ObjectStorage` in memory."""
+
+    def __init__(self) -> None:
+        self.blobs: dict[str, bytes] = {}
+
+    def put(self, key: str, data: bytes, content_type: str) -> str:
+        self.blobs[key] = data
+        return f"https://cdn.test/{key}"
 
 
 class FakeListingRepository:
