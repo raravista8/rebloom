@@ -12,12 +12,14 @@ from app.api.deps import RequireUserDep
 from app.api.envelope import domain_error_response, ok, request_id
 from app.config import get_settings
 from app.core.deals.service import DealService
+from app.core.notifications.service import NotificationService
 from app.core.result import Ok
 from app.infrastructure.postgres.audit_repo import PostgresAuditLog
 from app.infrastructure.postgres.deals_repo import (
     PostgresDealRepository,
     PostgresListingReader,
 )
+from app.infrastructure.postgres.notifications_repo import PostgresNotificationOutbox
 from app.infrastructure.yookassa import SandboxYooKassa
 
 router = APIRouter(tags=["deals"])
@@ -43,6 +45,7 @@ def get_deal_service() -> DealService:
         SandboxYooKassa(),
         settings.platform_commission_bps,
         audit=PostgresAuditLog(),
+        notifier=NotificationService(PostgresNotificationOutbox()),
     )
 
 

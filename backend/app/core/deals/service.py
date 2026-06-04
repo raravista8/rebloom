@@ -20,6 +20,9 @@ from app.core.errors import (
     VALIDATION_ERROR,
     DomainError,
 )
+from app.core.notifications import events
+from app.core.notifications.ports import Notifier
+from app.core.notifications.schemas import NotificationDraft
 from app.core.payments.ports import PaymentProvider
 from app.core.result import Err, Ok, Result
 
@@ -37,12 +40,23 @@ class DealService:
         payments: PaymentProvider,
         commission_bps: int,
         audit: AuditLog | None = None,
+        notifier: Notifier | None = None,
     ) -> None:
         self._deals = deals
         self._listings = listings
         self._payments = payments
         self._bps = commission_bps
         self._audit = audit
+        self._notifier = notifier
+
+    def _notify(self, draft: NotificationDraft) -> None:
+        """Best-effort: a notification failure must never affect the money path."""
+        if self._notifier is None:
+            return
+        try:
+            self._notifier.notify(draft)
+        except Exception:
+            logger.warning("notify failed for %s", draft.event_id)
 
     def _record(
         self, action: str, deal_id: str, actor_id: str, reason: str | None, request_id: str | None
@@ -86,7 +100,10 @@ class DealService:
 
     def mark_paid(self, yk_payment_id: str) -> DealView | None:
         """Idempotent: created → paid_held + hold ledger (driven by the webhook)."""
-        return self._deals.mark_paid(yk_payment_id)
+        deal = self._deals.mark_paid(yk_payment_id)
+        if deal is not None and deal.status == "paid_held":
+            self._notify(events.deal_paid(deal.id, deal.seller_id))  # dedup by event_id
+        return deal
 
     def process_payment_notification(self, yk_payment_id: str) -> DealView | None:
         """Webhook entry: re-fetch the authoritative status and only then move the
@@ -117,6 +134,8 @@ class DealService:
         except Exception:
             logger.warning("payout failed for deal %s — released, will retry", deal_id)
         self._record("deal.released", deal_id, buyer_id, "buyer_confirm", None)
+        self._notify(events.deal_released(deal_id, deal.buyer_id, is_seller=False))
+        self._notify(events.deal_released(deal_id, deal.seller_id, is_seller=True))
         return Ok(released)
 
     def open_dispute(
@@ -136,6 +155,8 @@ class DealService:
         if disputed is None:  # raced past paid_held
             return Err(DomainError(CONFLICT, "dispute_race"))
         self._record("deal.dispute_opened", deal_id, requester_id, reason, request_id)
+        counterparty = deal.seller_id if requester_id == deal.buyer_id else deal.buyer_id
+        self._notify(events.dispute_opened(deal_id, counterparty))
         return Ok(disputed)
 
     def resolve_dispute(
@@ -180,6 +201,8 @@ class DealService:
                 deal_id,
             )
         self._record(f"deal.dispute_resolved.{action}", deal_id, actor_id, reason, request_id)
+        self._notify(events.dispute_resolved(deal_id, deal.buyer_id, action))
+        self._notify(events.dispute_resolved(deal_id, deal.seller_id, action))
         return Ok(resolved)
 
     def _payout(self, deal: DealView, amount_kopecks: int) -> None:

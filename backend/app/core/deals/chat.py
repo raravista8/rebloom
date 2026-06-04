@@ -8,12 +8,18 @@ escrow). Held messages are visible only to their own sender, flagged.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any, Protocol
 
 from app.core.errors import FORBIDDEN, NOT_FOUND, VALIDATION_ERROR, DomainError
 from app.core.moderation.service import ModerationService
+from app.core.notifications import events
+from app.core.notifications.ports import Notifier
+from app.core.notifications.schemas import NotificationDraft
 from app.core.result import Err, Ok, Result
+
+logger = logging.getLogger("rebloom.chat")
 
 
 @dataclass(frozen=True, slots=True)
@@ -56,11 +62,16 @@ MESSAGE_PAGE = 50
 
 class ChatService:
     def __init__(
-        self, deals: DealPartyReader, chat: ChatRepository, moderation: ModerationService
+        self,
+        deals: DealPartyReader,
+        chat: ChatRepository,
+        moderation: ModerationService,
+        notifier: Notifier | None = None,
     ) -> None:
         self._deals = deals
         self._chat = chat
         self._moderation = moderation
+        self._notifier = notifier
 
     def _authorize(self, requester_id: str, deal_id: str) -> tuple[str, str] | DomainError:
         parties = self._deals.parties(deal_id)
@@ -84,7 +95,20 @@ class ChatService:
         # delivered to the counterparty (MODERATION.md §1, SECURITY T-05).
         verdict = self._moderation.check_text(text)
         status = "held" if verdict.is_blocked else "visible"
-        return Ok(self._chat.add(deal_id, sender_id, text, status))
+        message = self._chat.add(deal_id, sender_id, text, status)
+        if status == "visible":  # held messages aren't delivered → no notify
+            recipient = auth[1] if sender_id == auth[0] else auth[0]
+            self._notify(events.new_message(message.id, deal_id, recipient))
+        return Ok(message)
+
+    def _notify(self, draft: NotificationDraft) -> None:
+        """Best-effort — a notification failure must not fail the message send."""
+        if self._notifier is None:
+            return
+        try:
+            self._notifier.notify(draft)
+        except Exception:
+            logger.warning("chat notify failed")
 
     def list_messages(
         self, requester_id: str, deal_id: str, cursor: str | None = None
