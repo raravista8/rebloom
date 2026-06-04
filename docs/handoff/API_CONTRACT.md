@@ -38,6 +38,8 @@ Errors: `validation_error`, `otp_locked` (FR-003), `rate_limited`.
 | GET | `/api/search` | optional | `?city_id&q&size?&freshness?&price_min?&price_max?&cursor&limit` | `{items: listing_card[], next_cursor, applied:{q, city_id, filters}, suggestions?:[{type,label,href}]}` | FR-016 |
 | POST | `/api/listings/{id}/like` | session | — | `{like_count, liked:true}` | FR-015 |
 | DELETE | `/api/listings/{id}/like` | session | — | `{like_count, liked:false}` | FR-015 |
+| GET | `/api/listings/{id}/messages` | session | `?buyer_id&cursor` | `{messages[], next_cursor}` — pre-purchase thread (seller passes `buyer_id`; buyer omits it) | FR-030 |
+| POST | `/api/listings/{id}/messages` | session | `{body, buyer_id?}` | `message` (or held if contacts) — rate-limited (T-08) | FR-030/ T-05 |
 
 `listing_card`: `{id, photo_thumb_url, size, freshness, price_kopecks, city_id, like_count, liked, seller:{id,display_name,seller_rating}}`
 `listing` (detail) adds: `{photos:[{card_url,full_url}], status, freshness_score, expires_at, geo_coarse}`
@@ -89,6 +91,7 @@ UI maps each to a user-facing RU message + a design state. **State ↔ backend b
 
 ## 8. Realtime (optional MVP)
 - `WS /api/ws/deals/{id}` — статусы сделки + сообщения чата (Redis pub/sub). Деградация — polling `GET /api/deals/{id}`.
+- `WS /api/ws/listings/{id}/threads/{buyer_id}` — pre-purchase чат по объявлению (seller-or-buyer only). Деградация — polling `GET /api/listings/{id}/messages`.
 
 ## 9. How the two sides stay in sync
 - Бэкенд — источник схем (Pydantic → `/openapi.json`). При изменении контракта: обновить этот файл + bump в `CHANGELOG`, фронт регенерирует типы из OpenAPI.

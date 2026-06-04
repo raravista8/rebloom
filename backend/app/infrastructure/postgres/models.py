@@ -304,6 +304,31 @@ class Message(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     body: Mapped[str] = mapped_column(String(2000), nullable=False)
 
 
+class ListingMessage(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """🔒 Pre-purchase chat: a thread per (listing, prospective buyer) between the
+    listing's seller and that buyer, BEFORE any deal (FR-030, T6.3). Same contact-
+    leak hold as deal chat — the main anti-escrow-bypass surface (SECURITY T-05)."""
+
+    __tablename__ = "listing_messages"
+    __table_args__ = (
+        CheckConstraint("status IN ('visible','held')", name="lmessage_status_valid"),
+    )
+
+    listing_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("listings.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    buyer_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    sender_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    status: Mapped[str] = mapped_column(
+        String(16), nullable=False, server_default=text("'visible'")
+    )
+    body: Mapped[str] = mapped_column(String(2000), nullable=False)
+
+
 class Notification(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     """Transactional outbox row (NOTIFICATIONS.md §6). One per (event, channel,
     user) — the unique key makes enqueue idempotent (dedup by event+channel)."""

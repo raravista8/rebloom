@@ -910,6 +910,66 @@ class FakeEmailProvider:
         self.sent.append((user_id, subject))
 
 
+class FakeListingSellerReader:
+    """Implements :class:`app.core.listings.chat.ListingSellerReader` in memory."""
+
+    def __init__(self) -> None:
+        self._sellers: dict[str, str] = {}
+
+    def seed(self, listing_id: str, seller_id: str) -> None:
+        self._sellers[listing_id] = seller_id
+
+    def seller_of(self, listing_id: str) -> str | None:
+        return self._sellers.get(listing_id)
+
+
+class FakeListingChatRepo:
+    """Implements :class:`app.core.listings.chat.ListingChatRepo` in memory."""
+
+    def __init__(self) -> None:
+        self._messages: list[object] = []
+        self._seq = 0
+
+    def add(self, listing_id: str, buyer_id: str, sender_id: str, body: str, status: str) -> object:
+        from app.core.listings.chat import ListingMessageView
+
+        self._seq += 1
+        view = ListingMessageView(
+            id=f"lmsg-{self._seq}",
+            listing_id=listing_id,
+            buyer_id=buyer_id,
+            sender_id=sender_id,
+            body=body,
+            status=status,
+            created_at=_now_iso(),
+        )
+        self._messages.append(view)
+        return view
+
+    def list_thread(
+        self, listing_id: str, buyer_id: str, cursor: str | None, limit: int
+    ) -> tuple[list[object], str | None]:
+        thread = [
+            m
+            for m in self._messages
+            if m.listing_id == listing_id and m.buyer_id == buyer_id  # type: ignore[attr-defined]
+        ]
+        return thread[:limit], None
+
+
+class FakeRateLimiter:
+    """Implements :class:`app.core.listings.chat.RateLimiter`; counts per key."""
+
+    def __init__(self, hard_limit: int | None = None) -> None:
+        self._counts: dict[str, int] = {}
+        self._hard_limit = hard_limit  # override to force RATE_LIMITED in tests
+
+    def allow(self, key: str, limit: int, window_sec: int) -> bool:
+        self._counts[key] = self._counts.get(key, 0) + 1
+        cap = self._hard_limit if self._hard_limit is not None else limit
+        return self._counts[key] <= cap
+
+
 class FakeRealtimeBus:
     """Implements :class:`app.core.realtime.ports.RealtimeBus`; records publishes."""
 
