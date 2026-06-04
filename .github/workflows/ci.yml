@@ -138,6 +138,9 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run test
       - run: npm audit --audit-level=high
+      - run: npm run build
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
       - name: Visual regression (pixel-diff vs canon baselines ≤ 2%)
         run: npm run test:visual
 
