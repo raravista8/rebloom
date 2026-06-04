@@ -97,6 +97,19 @@ export function IconPin({ className = 'pd-i16', ...p }: IconProps) {
 export function IconChev({ className = 'pd-i14', ...p }: IconProps) {
   return svg(className, <path d="m6 9 6 6 6-6" />, p);
 }
+export function IconX({ className = 'pd-i14', ...p }: IconProps) {
+  return svg(className, <path d="M6 6l12 12M18 6 6 18" />, p);
+}
+export function IconCamera({ className = 'pd-i24', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <path d="M3 8h3l1.5-2.5h9L18 8h3v12H3z" />
+      <circle cx="12" cy="13.5" r="3.6" />
+    </>,
+    p,
+  );
+}
 export function IconFwd({ className = 'pd-i18', ...p }: IconProps) {
   return svg(className, <path d="m9 5 7 7-7 7" />, p);
 }
