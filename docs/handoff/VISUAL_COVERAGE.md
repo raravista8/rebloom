@@ -1,7 +1,7 @@
 # VISUAL_COVERAGE — live tracker (canon-import vs hand-rolled)
 
 > Per-screen / per-component status across viewports. Update on every canon vendoring (`CANON_PACKAGE_TZ.md §9`) and every UI task (CLAUDE.md UI DoD).
-> Сейчас: canon `0.0.0` (нет экспорта) — всё в статусе 🔵 spec-only.
+> Сейчас: canon `0.1.0` (нет экспорта) — всё в статусе 🔵 spec-only.
 > Legend: 🔵 spec only · 🟢 canon-import + visual ≤2% · 🟡 hand-rolled (justify) · 🔴 missing/broken
 
 ## Screens
