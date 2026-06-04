@@ -135,6 +135,15 @@ class PostgresDealRepository:
         with reader_session() as session:
             return [_to_view(d) for d in session.scalars(stmt).all()]
 
+    def list_all(self, *, status: str | None = None, limit: int = 50) -> list[DealView]:
+        """Admin view — every deal (optionally filtered by status). Read-only."""
+        stmt = select(Deal)
+        if status:
+            stmt = stmt.where(Deal.status == status)
+        stmt = stmt.order_by(Deal.created_at.desc()).limit(min(max(limit, 1), 200))
+        with reader_session() as session:
+            return [_to_view(d) for d in session.scalars(stmt).all()]
+
     def parties(self, deal_id: str) -> tuple[str, str] | None:
         """Narrow authz read for chat (DealPartyReader): (buyer_id, seller_id)."""
         try:

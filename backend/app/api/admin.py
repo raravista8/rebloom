@@ -136,6 +136,19 @@ def admin_whoami(user: RequireAdmin2FADep) -> dict[str, Any]:
     return ok({"user": user.to_public(), "admin": True})
 
 
+@router.get("/api/admin/deals", response_model=None)
+def admin_list_deals(
+    admin: RequireAdmin2FADep,
+    service: DealServiceDep,
+    status: str | None = None,
+    limit: int = 50,
+) -> dict[str, Any]:
+    """Every deal (optionally by status) for the admin console — read-only."""
+    _ = admin
+    views = service.list_all_deals(status=status, limit=limit)
+    return ok({"items": [v.to_api(role="seller") for v in views], "next_cursor": None})
+
+
 @router.post("/api/admin/deals/{deal_id}/resolve", response_model=None)
 def resolve_dispute(
     deal_id: str,

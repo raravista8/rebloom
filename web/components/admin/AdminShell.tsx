@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 const NAV: { href: string; label: string }[] = [
   { href: '/admin', label: 'Обзор' },
   { href: '/admin/moderation', label: 'Модерация' },
+  { href: '/admin/deals', label: 'Сделки' },
   { href: '/admin/users', label: 'Пользователи' },
   { href: '/admin/finance', label: 'Финансы' },
   { href: '/admin/fraud', label: 'Антифрод' },

@@ -115,6 +115,20 @@ def test_admin_resolves_release(ctx) -> None:  # type: ignore[no-untyped-def]
     assert any(e["action"] == "deal.dispute_resolved.release" for e in audit.entries)
 
 
+def test_admin_lists_deals(ctx) -> None:  # type: ignore[no-untyped-def]
+    app, deals, listings, users, _audit = ctx
+    _client, deal_id = _held_deal(app, deals, listings)
+    admin = _admin_client(app, users)
+
+    items = admin.get("/api/admin/deals").json()["data"]["items"]
+    assert any(i["id"] == deal_id for i in items)
+    # status filter
+    assert admin.get("/api/admin/deals?status=paid_held").json()["data"]["items"]
+    assert admin.get("/api/admin/deals?status=released").json()["data"]["items"] == []
+    # non-2FA blocked
+    assert TestClient(app).get("/api/admin/deals").status_code in (401, 403)
+
+
 def test_admin_resolves_partial(ctx) -> None:  # type: ignore[no-untyped-def]
     app, deals, listings, users, _audit = ctx
     client, deal_id = _held_deal(app, deals, listings)
