@@ -52,6 +52,10 @@ class Settings(BaseSettings):
     platform_commission_bps: int = Field(default=1000, ge=0, le=10000)
     commission_who_pays: Literal["seller", "buyer", "split"] = "seller"
 
+    # ── ЮKassa webhook verification (SECURITY T-02) ──
+    yookassa_webhook_secret: str = ""
+    yookassa_webhook_ip_allowlist: str = ""  # comma-separated; empty = allow (dev)
+
     @property
     def is_prod(self) -> bool:
         return self.app_env == "prod"

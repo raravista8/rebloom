@@ -371,6 +371,7 @@ class FakePaymentProvider:
 
     def __init__(self) -> None:
         self.payouts: list[tuple[str, str, int]] = []
+        self.status = "succeeded"  # re-fetched status (settable for fail-secure tests)
 
     def create_payment(self, deal_id: str, amount_kopecks: int, idempotency_key: str) -> object:
         from app.core.payments.ports import PaymentIntent
@@ -386,6 +387,9 @@ class FakePaymentProvider:
 
         self.payouts.append((deal_id, seller_id, amount_kopecks))
         return PayoutReceipt(yk_payout_id=f"po_{deal_id}", fiscal_receipt_id=f"r_{deal_id}")
+
+    def get_payment_status(self, yk_payment_id: str) -> str:
+        return self.status
 
 
 class FakeDealRepository:

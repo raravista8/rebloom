@@ -28,3 +28,6 @@ class SandboxYooKassa:
         self, deal_id: str, seller_id: str, amount_kopecks: int, idempotency_key: str
     ) -> PayoutReceipt:
         return PayoutReceipt(yk_payout_id=f"yk_pout_{deal_id}", fiscal_receipt_id=f"rcpt_{deal_id}")
+
+    def get_payment_status(self, yk_payment_id: str) -> str:
+        return "succeeded"

@@ -15,6 +15,7 @@ from app.api.envelope import (
     unhandled_exception_handler,
     validation_exception_handler,
 )
+from app.api.webhooks import yookassa as yookassa_webhook
 from app.config import get_settings
 
 
@@ -45,6 +46,7 @@ def create_app() -> FastAPI:
     app.include_router(cities.router)
     app.include_router(feed.router)
     app.include_router(deals.router)
+    app.include_router(yookassa_webhook.router)
 
     return app
 
