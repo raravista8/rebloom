@@ -270,3 +270,25 @@ class FakeCityRepository:
         from app.core.geo.schemas import CityView
 
         return [CityView(id=c, name=c, enabled=True) for c in sorted(self._enabled)]
+
+
+class FakeLikeRepository:
+    """Implements :class:`app.core.likes.ports.LikeRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._likes: dict[str, set[str]] = {}
+
+    def seed_listing(self, listing_id: str) -> None:
+        self._likes.setdefault(listing_id, set())
+
+    def like(self, user_id: str, listing_id: str) -> int | None:
+        if listing_id not in self._likes:
+            return None
+        self._likes[listing_id].add(user_id)
+        return len(self._likes[listing_id])
+
+    def unlike(self, user_id: str, listing_id: str) -> int | None:
+        if listing_id not in self._likes:
+            return None
+        self._likes[listing_id].discard(user_id)
+        return len(self._likes[listing_id])
