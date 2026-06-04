@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     # ── Redis (queue + sessions + counters + pub/sub) ──
     redis_url: str = "redis://localhost:6379/0"
 
+    # ── Photo storage (local FS in dev; S3 + CDN in prod, OPERATIONS §4) ──
+    photo_storage_dir: str = ".data/photos"
+    cdn_base_url: str = "http://localhost:8000/media"
+
     # ── Commission (ADR-0010) ──
     platform_commission_bps: int = Field(default=1000, ge=0, le=10000)
     commission_who_pays: Literal["seller", "buyer", "split"] = "seller"

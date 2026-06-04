@@ -49,3 +49,22 @@ class PostgresPhotoRepository:
                 select(Photo).where(Photo.owner_id == oid, Photo.id.in_(pids))
             ).all()
             return [_to_ref(p) for p in rows]
+
+    def get_one(self, owner_id: str, photo_id: str) -> PhotoRef | None:
+        try:
+            oid = uuid.UUID(owner_id)
+            pid = uuid.UUID(photo_id)
+        except ValueError:
+            return None
+        with writer_session() as session:
+            photo = session.scalar(select(Photo).where(Photo.id == pid, Photo.owner_id == oid))
+            return _to_ref(photo) if photo is not None else None
+
+    def mark_processed(self, photo_id: str, variants: dict[str, str]) -> None:
+        with writer_session() as session:
+            photo = session.get(Photo, uuid.UUID(photo_id))
+            if photo is None:
+                return
+            photo.variants = variants
+            photo.exif_stripped = True
+            photo.moderation_status = "approved"  # technical pass (AR-3 for content)

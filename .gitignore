@@ -48,6 +48,8 @@ mobile/**/Podfile.lock
 
 # ── Docker / local data ──
 infra/.data/
+.data/
+backend/.data/
 *.local
 
 # ── OS / editor ──
