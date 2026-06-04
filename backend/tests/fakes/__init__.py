@@ -473,3 +473,30 @@ class FakeDealRepository:
 
     def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:
         self._deals[deal_id]["payout"] = (yk_payout_id, fiscal_receipt_id)
+
+
+class FakeAuditLog:
+    """Implements :class:`app.core.audit.ports.AuditLog` in memory."""
+
+    def __init__(self) -> None:
+        self.entries: list[dict[str, object]] = []
+
+    def record(
+        self,
+        *,
+        action: str,
+        target_type: str,
+        target_id: str,
+        actor_id: str | None = None,
+        reason: str | None = None,
+        request_id: str | None = None,
+    ) -> None:
+        self.entries.append(
+            {
+                "action": action,
+                "target_type": target_type,
+                "target_id": target_id,
+                "actor_id": actor_id,
+                "reason": reason,
+            }
+        )
