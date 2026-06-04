@@ -80,6 +80,7 @@ Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail
 | POST | `/api/admin/moderation/{id}` | admin/moderator(2FA) | `{type:"listing"\|"review", action:"approve"\|"reject", reason}` | `{status}` (audit-logged) | FR-061 |
 | POST | `/api/admin/2fa/verify` | admin (session) | `{code}` (TOTP) | `{verified_2fa:true}` — unlocks 2FA session | — |
 | POST | `/api/admin/deals/{id}/resolve` | admin(2FA) | `{action:"release"\|"refund"\|"partial", refund_kopecks?, reason}` | `deal` (released/refunded) — ledger-settled, audit-logged, **4-eyes > threshold** | FR-024, FLOW-1 |
+| GET | `/api/admin/finance` | admin(2FA) | `?since&until` (ISO) | `{gmv_kopecks, commission_kopecks, payout_kopecks, refund_kopecks, held_kopecks, deals_by_status}` — derived from append-only ledger | FR-070 |
 
 ## 7. Error code catalogue (stable `error` values)
 `validation_error`, `unauthorized`, `forbidden`, `not_found`, `rate_limited`, `otp_locked`, `moderation_pending`, `content_blocked`, `listing_unavailable`, `payment_failed`, `conflict`, `internal`.
