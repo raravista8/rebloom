@@ -36,6 +36,33 @@ export interface ListingCard {
   seller: ListingCardSeller;
 }
 
+export interface ListingPhoto {
+  card_url: string;
+  full_url: string;
+}
+
+// GET /api/listings/{id} (detail) — listing_card fields + these.
+export interface ListingDetail {
+  id: string;
+  photos: ListingPhoto[];
+  size: Size;
+  freshness: Freshness;
+  price_kopecks: number;
+  city_id: string;
+  status: ListingStatus;
+  like_count: number;
+  liked: boolean;
+  freshness_score?: number;
+  expires_at?: string;
+  geo_coarse?: unknown;
+  seller: ListingCardSeller & { deals_count?: number };
+}
+
+export interface Deal {
+  id: string;
+  status: DealStatus;
+}
+
 export interface Paginated<T> {
   items: T[];
   next_cursor: string | null;

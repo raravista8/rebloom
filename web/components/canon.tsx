@@ -19,6 +19,7 @@ import {
   PdHeart as PdHeartRaw,
   PdSkelCard as PdSkelCardRaw,
   PdEmpty as PdEmptyRaw,
+  PdStars as PdStarsRaw,
 } from '@rebloom/canon';
 import type { Freshness } from '@/lib/types';
 
@@ -61,3 +62,5 @@ export const PdAvatar = PdAvatarRaw as unknown as FC<PdAvatarProps>;
 export const PdHeart = PdHeartRaw as unknown as FC<PdHeartProps>;
 export const PdSkelCard = PdSkelCardRaw as unknown as FC;
 export const PdEmpty = PdEmptyRaw as unknown as FC<PdEmptyProps>;
+export type PdStarsProps = { value?: number; input?: boolean };
+export const PdStars = PdStarsRaw as unknown as FC<PdStarsProps>;
