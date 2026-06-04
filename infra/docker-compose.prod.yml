@@ -106,6 +106,18 @@ services:
       db: {condition: service_healthy}
     command: ["alembic", "upgrade", "head"]
 
+  # Web frontend (Next.js). Same build serves web + (wrapped) iOS/Android. Calls the
+  # API same-origin (/api/*) — Caddy routes it; no inter-container API URL needed.
+  web:
+    build:
+      context: ..
+      dockerfile: web/Dockerfile
+    restart: unless-stopped
+    expose:
+      - "3000"
+    depends_on:
+      - api
+
   caddy:
     image: caddy:2
     restart: unless-stopped
@@ -121,6 +133,7 @@ services:
       - caddyconfig:/config
     depends_on:
       - api
+      - web
 
 volumes:
   dbdata:

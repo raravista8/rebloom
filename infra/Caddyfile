@@ -1,7 +1,8 @@
 # Caddy edge for the single-box deploy (docs/runbooks/deploy-single-box.md).
-# Auto-TLS via Let's Encrypt for {$PUBLIC_DOMAIN}. Serves uploaded photos from a
-# read-only volume; everything else proxies to the api. Security headers per
-# SECURITY A02.
+# Auto-TLS via Let's Encrypt for {$PUBLIC_DOMAIN}. Routes:
+#   /media/*        → uploaded photos on disk (read-only volume)
+#   /api/* + health → api (FastAPI; WebSocket proxied transparently)
+#   everything else → web (Next.js). Security headers per SECURITY A02.
 
 {$PUBLIC_DOMAIN} {
 	encode zstd gzip
@@ -16,9 +17,16 @@
 		header Content-Disposition "inline"
 	}
 
-	# Everything else (REST + WebSocket) → api. Caddy proxies WS transparently.
-	handle {
+	# API surface: /api/* (REST + WebSocket) plus the root-level health/build/OpenAPI
+	# routes the backend owns. Caddy proxies WS upgrades transparently.
+	@api path /api/* /healthz /readyz /version /openapi.json /docs /redoc
+	handle @api {
 		reverse_proxy api:8000
+	}
+
+	# Everything else → the Next.js web app (pages, assets, _next/*).
+	handle {
+		reverse_proxy web:3000
 	}
 
 	# Security headers (SECURITY A02). HSTS is safe behind auto-HTTPS.
@@ -29,10 +37,6 @@
 		Permissions-Policy "geolocation=(self), camera=(self), microphone=()"
 		-Server
 	}
-
-	# Tighten the per-IP request rate at the OS/edge with fail2ban or the
-	# caddy-ratelimit plugin in front of high-cost routes (post-MVP); app-level
-	# rate-limits already guard OTP (T-01) and listing chat (T-08).
 
 	log {
 		output stdout
