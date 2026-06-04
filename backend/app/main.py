@@ -19,6 +19,7 @@ from app.api import (
     feed,
     health,
     listings,
+    me,
     reviews,
 )
 from app.api.envelope import (
@@ -60,6 +61,7 @@ def create_app() -> FastAPI:
     app.include_router(deals.router)
     app.include_router(chat.router)
     app.include_router(reviews.router)
+    app.include_router(me.router)
     app.include_router(admin.router)
     app.include_router(yookassa_webhook.router)
 
