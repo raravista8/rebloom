@@ -4,12 +4,25 @@ from __future__ import annotations
 
 import uuid
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
 from app.core.reviews.schemas import ReviewView
 from app.infrastructure.postgres.engine import reader_session, writer_session
-from app.infrastructure.postgres.models import Review
+from app.infrastructure.postgres.models import Review, User
+
+
+def _recompute_seller_rating(session: Session, target_id: uuid.UUID) -> None:
+    """Seller rating = average of visible review scores (FR-041)."""
+    avg = session.scalar(
+        select(func.avg(Review.score)).where(
+            Review.target_id == target_id, Review.moderation_status == "visible"
+        )
+    )
+    user = session.get(User, target_id)
+    if user is not None:
+        user.seller_rating = round(float(avg), 2) if avg is not None else None
 
 
 def _to_view(review: Review) -> ReviewView:
@@ -52,6 +65,8 @@ class PostgresReviewRepository:
             except IntegrityError:
                 session.rollback()  # unique(deal, author) — already reviewed
                 return None
+            if moderation_status == "visible":
+                _recompute_seller_rating(session, uuid.UUID(target_id))
             return _to_view(review)
 
     def list_for_user(self, target_id: str) -> list[ReviewView]:
