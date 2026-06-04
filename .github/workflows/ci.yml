@@ -56,12 +56,55 @@ jobs:
         run: poetry run lint-imports
       - name: Mypy (strict)
         run: poetry run mypy --strict app
-      - name: Pytest (unit + integration + contract + security subset)
-        run: poetry run pytest -m "not e2e and not slow"
+      - name: Pytest (unit + contract + security subset)
+        run: poetry run pytest -m "not e2e and not slow and not integration"
       - name: Bandit (SAST)
         run: poetry run bandit -q -r app
       - name: pip-audit (SCA)
         run: poetry run pip-audit
+
+  # Integration tests against a real Postgres + Redis (money race, etc.).
+  integration:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: rebloom
+          POSTGRES_PASSWORD: rebloom
+          POSTGRES_DB: rebloom
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U rebloom" --health-interval 5s
+          --health-timeout 3s --health-retries 15
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s
+          --health-timeout 3s --health-retries 15
+    env:
+      DATABASE_URL: postgresql+psycopg://rebloom:rebloom@localhost:5432/rebloom
+      DB_MIGRATOR_URL: postgresql+psycopg://rebloom:rebloom@localhost:5432/rebloom
+      REDIS_URL: redis://localhost:6379/0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Poetry
+        run: pipx install poetry==1.8.3
+      - name: Configure in-project venv
+        run: poetry config virtualenvs.in-project true
+      - name: Install deps
+        run: poetry install --no-interaction
+      - name: Migrate
+        run: poetry run alembic upgrade head
+      - name: Pytest (integration)
+        run: poetry run pytest -m integration
 
   secrets:
     runs-on: ubuntu-latest

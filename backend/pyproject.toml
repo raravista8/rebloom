@@ -72,6 +72,7 @@ markers = [
     "e2e: end-to-end tests (require running services)",
     "slow: slow tests (load/perf)",
     "security: security-focused tests",
+    "integration: tests requiring a real Postgres/Redis",
 ]
 
 [tool.coverage.run]

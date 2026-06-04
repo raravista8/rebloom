@@ -16,7 +16,7 @@ dev:
 	docker compose --env-file .env -f infra/docker-compose.yml up
 
 test:
-	cd backend && poetry run pytest -m "not e2e and not slow"
+	cd backend && poetry run pytest -m "not e2e and not slow and not integration"
 ifeq ($(WEB_READY),yes)
 	cd web && npm run test
 else
