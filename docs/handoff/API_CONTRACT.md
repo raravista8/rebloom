@@ -72,8 +72,9 @@ Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail
 | GET | `/api/notifications` | session | `?cursor` | `{items[], next_cursor}` | FR-050 |
 | POST | `/api/reports` | session | `{target_type:"listing"\|"user", target_id, reason}` | `{report_id}` | FR-064 |
 | GET/PATCH | `/api/me/notifications` | session | toggles `{deals,messages,marketing}` | `{settings}` | FR-090 |
-| POST | `/api/me/export` | session | — | `{export_job_id}` | FR-091 |
-| POST | `/api/me/delete` | session | `{confirm}` | `{scheduled_at}` | FR-091 |
+| POST | `/api/me/export` | session | — | `{export:{profile,consents,listings,deals,reviews,messages}}` (MVP inline; async job + signed URL post-MVP) | FR-091 |
+| POST | `/api/me/delete` | session | `{confirm:true}` | `{scheduled_at}` — soft-disable now (status→`deleted`), anonymize after retention grace | FR-091 |
+| PATCH | `/api/me` | session | `{display_name?, city_id?}` | `{user}` — self-correction (DSR) | FR-091 |
 | POST | `/api/support/tickets` | session | `{category, body}` | `{ticket_id}` | FR-092 |
 | GET | `/api/admin/moderation/queue` | admin/moderator(2FA) | `?type=listing\|review` | `{items[], next_cursor}` | FR-060 |
 | POST | `/api/admin/moderation/{id}` | admin/moderator(2FA) | `{type:"listing"\|"review", action:"approve"\|"reject", reason}` | `{status}` (audit-logged) | FR-061 |

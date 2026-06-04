@@ -171,6 +171,81 @@ class FakeUserRepository:
     def get_by_id(self, user_id: str) -> object | None:
         return self._by_id.get(user_id)
 
+    def set_status(self, user_id: str, status: str) -> None:
+        """Test helper: flip a user's status (e.g. to 'deleted'/'blocked')."""
+        view = self._by_id.get(user_id)
+        if view is None:
+            return
+        updated = self._view(
+            id=view.id,  # type: ignore[attr-defined]
+            phone=view.phone,  # type: ignore[attr-defined]
+            display_name=view.display_name,  # type: ignore[attr-defined]
+            city_id=view.city_id,  # type: ignore[attr-defined]
+            roles=view.roles,  # type: ignore[attr-defined]
+            seller_rating=view.seller_rating,  # type: ignore[attr-defined]
+            status=status,
+        )
+        self._by_id[user_id] = updated
+        self._by_phone[updated.phone] = updated
+
+
+class FakePrivacyRepository:
+    """Implements :class:`app.core.privacy.ports.PrivacyRepository` in memory."""
+
+    def __init__(self) -> None:
+        self._users: dict[str, dict[str, object]] = {}
+        self.deleted: dict[str, str] = {}
+
+    def seed(self, user_id: str, *, display_name: str | None = "Аня", city_id: str = "msk") -> None:
+        self._users[user_id] = {
+            "phone": "+79161234567",
+            "display_name": display_name,
+            "city_id": city_id,
+            "status": "active",
+        }
+
+    def gather_export(self, user_id: str) -> dict[str, object] | None:
+        u = self._users.get(user_id)
+        if u is None:
+            return None
+        return {
+            "profile": {"id": user_id, **u},
+            "consents": [],
+            "listings": [],
+            "deals": [],
+            "reviews": [],
+            "messages": [],
+        }
+
+    def soft_delete(self, user_id: str, requested_at: str) -> bool:
+        if user_id not in self._users:
+            return False
+        self._users[user_id]["status"] = "deleted"
+        self.deleted[user_id] = requested_at
+        return True
+
+    def update_profile(
+        self, user_id: str, *, display_name: str | None, city_id: str | None
+    ) -> object | None:
+        from app.core.users.schemas import UserView
+
+        u = self._users.get(user_id)
+        if u is None:
+            return None
+        if display_name is not None:
+            u["display_name"] = display_name
+        if city_id is not None:
+            u["city_id"] = city_id
+        return UserView(
+            id=user_id,
+            phone=str(u["phone"]),
+            display_name=u["display_name"],  # type: ignore[arg-type]
+            city_id=u["city_id"],  # type: ignore[arg-type]
+            roles=("buyer",),
+            seller_rating=None,
+            status=str(u["status"]),
+        )
+
 
 class FakeConsentRepository:
     """Implements :class:`app.core.consent.ports.ConsentRepository` in memory."""

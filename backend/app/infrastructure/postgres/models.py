@@ -28,13 +28,15 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.infrastructure.postgres.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
-USER_STATUSES = ("active", "limited", "blocked")
+USER_STATUSES = ("active", "limited", "blocked", "deleted")
 
 
 class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __tablename__ = "users"
     __table_args__ = (
-        CheckConstraint("status IN ('active', 'limited', 'blocked')", name="status_valid"),
+        CheckConstraint(
+            "status IN ('active', 'limited', 'blocked', 'deleted')", name="status_valid"
+        ),
     )
 
     phone: Mapped[str] = mapped_column(String(16), unique=True, nullable=False)  # 🔒
@@ -46,6 +48,9 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     seller_rating: Mapped[float | None] = mapped_column(Numeric(3, 2))
     status: Mapped[str] = mapped_column(String(16), nullable=False, server_default=text("'active'"))
     totp_secret: Mapped[str | None] = mapped_column(String(64))  # 🔒 admin 2FA seed
+    # DSR: set when the subject requests deletion (ФЗ-152); the retention job
+    # anonymizes PII after the grace period (PRIVACY_152FZ.md §2-3).
+    deletion_requested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     consents: Mapped[list[Consent]] = relationship(
         back_populates="user", cascade="all, delete-orphan"

@@ -47,9 +47,12 @@ CurrentUserDep = Annotated[UserView | None, Depends(current_user)]
 
 
 def require_user(user: CurrentUserDep) -> UserView:
-    """Default-deny: 401 unless a valid session resolves to a user."""
+    """Default-deny: 401 unless a valid session resolves to a user. A blocked or
+    self-deleted (DSR) account is rejected with 403 (FLOW-8, FLOW-9)."""
     if user is None:
         raise HTTPException(status_code=401, detail="unauthorized")
+    if user.status in ("blocked", "deleted"):
+        raise HTTPException(status_code=403, detail="forbidden")
     return user
 
 
