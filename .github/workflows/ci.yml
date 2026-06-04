@@ -153,4 +153,7 @@ jobs:
         env:
           PUBLIC_DOMAIN: example.com
           POSTGRES_PASSWORD: ci-validate
-        run: docker compose -f infra/docker-compose.prod.yml config -q
+        run: |
+          touch .env  # env_file is required at deploy; create an empty one to validate
+          docker compose -f infra/docker-compose.prod.yml config -q
+          rm -f .env
