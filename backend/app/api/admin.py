@@ -19,10 +19,12 @@ from app.api.deps import (
 )
 from app.api.envelope import domain_error_response, fail, ok, request_id
 from app.core.admin.moderation import ModerationQueueService
+from app.core.admin.users import AdminUserService
 from app.core.analytics.finance import FinanceService
 from app.core.analytics.overview import OverviewService
 from app.core.auth.totp import verify_totp
 from app.core.result import Ok
+from app.infrastructure.postgres.admin_users_repo import PostgresAdminUserRepo
 from app.infrastructure.postgres.audit_repo import PostgresAuditLog
 from app.infrastructure.postgres.finance_repo import PostgresFinanceRepo
 from app.infrastructure.postgres.moderation_repo import PostgresModerationQueueRepo
@@ -56,6 +58,13 @@ def get_overview_service() -> OverviewService:
 OverviewServiceDep = Annotated[OverviewService, Depends(get_overview_service)]
 
 
+def get_admin_user_service() -> AdminUserService:
+    return AdminUserService(PostgresAdminUserRepo(), PostgresAuditLog())
+
+
+AdminUserServiceDep = Annotated[AdminUserService, Depends(get_admin_user_service)]
+
+
 class Admin2FAIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
     code: str = Field(min_length=6, max_length=8)
@@ -73,6 +82,18 @@ class ModerationDecisionIn(BaseModel):
     type: Literal["listing", "review"]
     action: Literal["approve", "reject"]
     reason: str = Field(min_length=1, max_length=2000)
+
+
+class UserStatusIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    reason: str = Field(min_length=1, max_length=2000)
+
+
+class UserEditIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    reason: str = Field(min_length=1, max_length=2000)
+    display_name: str | None = Field(default=None, min_length=1, max_length=64)
+    city_id: str | None = Field(default=None, min_length=1, max_length=8)
 
 
 @router.post("/api/admin/2fa/verify", response_model=None)
@@ -146,6 +167,83 @@ def admin_overview(
     from datetime import UTC, datetime
 
     return ok(service.overview(datetime.now(UTC), since, until))
+
+
+@router.get("/api/admin/users", response_model=None)
+def admin_users(
+    _admin: RequireAdmin2FADep,
+    service: AdminUserServiceDep,
+    q: str | None = Query(None),
+    city: str | None = Query(None),
+    status: str | None = Query(None),
+) -> dict[str, Any]:
+    """Search users by name/phone/id + city/status filters (FR-071)."""
+    return ok({"items": [u.to_api() for u in service.search(q, city, status)]})
+
+
+@router.get("/api/admin/users/{user_id}", response_model=None)
+def admin_user_detail(
+    user_id: str, request: Request, admin: RequireAdmin2FADep, service: AdminUserServiceDep
+) -> dict[str, Any] | JSONResponse:
+    """User drill-down — PII access is itself audited (ФЗ-152, T-16)."""
+    result = service.detail(admin.id, user_id, request_id=request_id(request))
+    if isinstance(result, Ok):
+        return ok(result.value.to_api())
+    return domain_error_response(request, result.error)
+
+
+@router.post("/api/admin/users/{user_id}/block", response_model=None)
+def admin_block_user(
+    user_id: str,
+    payload: UserStatusIn,
+    request: Request,
+    admin: RequireAdmin2FADep,
+    service: AdminUserServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    result = service.set_status(
+        admin.id, user_id, "blocked", payload.reason, request_id=request_id(request)
+    )
+    if isinstance(result, Ok):
+        return ok({"status": result.value})
+    return domain_error_response(request, result.error)
+
+
+@router.post("/api/admin/users/{user_id}/unblock", response_model=None)
+def admin_unblock_user(
+    user_id: str,
+    payload: UserStatusIn,
+    request: Request,
+    admin: RequireAdmin2FADep,
+    service: AdminUserServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    result = service.set_status(
+        admin.id, user_id, "active", payload.reason, request_id=request_id(request)
+    )
+    if isinstance(result, Ok):
+        return ok({"status": result.value})
+    return domain_error_response(request, result.error)
+
+
+@router.patch("/api/admin/users/{user_id}", response_model=None)
+def admin_edit_user(
+    user_id: str,
+    payload: UserEditIn,
+    request: Request,
+    admin: RequireAdmin2FADep,
+    service: AdminUserServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    """Admin edit of user data — reason mandatory, audited (T-16)."""
+    result = service.edit(
+        admin.id,
+        user_id,
+        display_name=payload.display_name,
+        city_id=payload.city_id,
+        reason=payload.reason,
+        request_id=request_id(request),
+    )
+    if isinstance(result, Ok):
+        return ok({"status": result.value})
+    return domain_error_response(request, result.error)
 
 
 @router.get("/api/admin/finance", response_model=None)
