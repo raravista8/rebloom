@@ -42,4 +42,19 @@ class PillowImageProcessor:
             buffer = io.BytesIO()
             variant.save(buffer, format="WEBP", quality=82)  # fresh encode → no EXIF
             variants[name] = buffer.getvalue()
-        return ProcessedImage(variants=variants, content_type="image/webp")
+        return ProcessedImage(variants=variants, content_type="image/webp", phash=_dhash(base))
+
+
+def _dhash(image: Image.Image) -> str:
+    """64-bit difference hash → 16-char hex (SECURITY T-09). Robust to re-encode
+    and resize: downscale to 9×8 grayscale, then compare horizontally-adjacent
+    pixels (8 bits × 8 rows)."""
+    small = image.convert("L").resize((9, 8), Image.Resampling.LANCZOS)
+    pixels = list(small.getdata())
+    bits = 0
+    for row in range(8):
+        for col in range(8):
+            left = pixels[row * 9 + col]
+            right = pixels[row * 9 + col + 1]
+            bits = (bits << 1) | (1 if left > right else 0)
+    return f"{bits:016x}"

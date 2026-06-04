@@ -60,11 +60,29 @@ class PostgresPhotoRepository:
             photo = session.scalar(select(Photo).where(Photo.id == pid, Photo.owner_id == oid))
             return _to_ref(photo) if photo is not None else None
 
-    def mark_processed(self, photo_id: str, variants: dict[str, str]) -> None:
+    def mark_processed(
+        self, photo_id: str, variants: dict[str, str], phash: str, approved: bool
+    ) -> None:
         with writer_session() as session:
             photo = session.get(Photo, uuid.UUID(photo_id))
             if photo is None:
                 return
             photo.variants = variants
             photo.exif_stripped = True
-            photo.moderation_status = "approved"  # technical pass (AR-3 for content)
+            photo.phash = phash
+            # Technical pass approves; a flagged duplicate (T-09) is held pending.
+            photo.moderation_status = "approved" if approved else "pending"
+
+    def other_owner_phashes(self, owner_id: str, limit: int) -> list[tuple[str, str]]:
+        try:
+            oid = uuid.UUID(owner_id)
+        except ValueError:
+            return []
+        with writer_session() as session:
+            rows = session.execute(
+                select(Photo.id, Photo.phash)
+                .where(Photo.owner_id != oid, Photo.phash.is_not(None))
+                .order_by(Photo.created_at.desc())
+                .limit(limit)
+            ).all()
+            return [(str(pid), phash) for pid, phash in rows]
