@@ -757,6 +757,34 @@ class FakeChatRepository:
         return visible[:limit], None
 
 
+class FakeNotifSettingsRepo:
+    """Implements :class:`app.core.notifications.settings.NotifSettingsRepo`."""
+
+    def __init__(self) -> None:
+        self._users: dict[str, dict[str, bool]] = {}
+
+    def seed(self, user_id: str, messages: bool = True, marketing: bool = False) -> None:
+        self._users[user_id] = {"messages": messages, "marketing": marketing}
+
+    def get(self, user_id: str) -> object | None:
+        from app.core.notifications.settings import NotifSettings
+
+        u = self._users.get(user_id)
+        return NotifSettings(messages=u["messages"], marketing=u["marketing"]) if u else None
+
+    def update(self, user_id: str, messages: bool | None, marketing: bool | None) -> object | None:
+        from app.core.notifications.settings import NotifSettings
+
+        u = self._users.get(user_id)
+        if u is None:
+            return None
+        if messages is not None:
+            u["messages"] = messages
+        if marketing is not None:
+            u["marketing"] = marketing
+        return NotifSettings(messages=u["messages"], marketing=u["marketing"])
+
+
 class FakeReportRepo:
     """Implements :class:`app.core.moderation.reports.ReportRepo` in memory."""
 

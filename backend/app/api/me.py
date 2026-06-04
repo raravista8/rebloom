@@ -10,9 +10,11 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import RequireUserDep
 from app.api.envelope import domain_error_response, ok, request_id
+from app.core.notifications.settings import NotifSettingsService
 from app.core.privacy.service import PrivacyService
 from app.core.result import Ok
 from app.infrastructure.postgres.audit_repo import PostgresAuditLog
+from app.infrastructure.postgres.notif_settings_repo import PostgresNotifSettingsRepo
 from app.infrastructure.postgres.privacy_repo import PostgresPrivacyRepository
 
 router = APIRouter(tags=["me"])
@@ -29,11 +31,22 @@ class DeleteIn(BaseModel):
     confirm: bool = False
 
 
+class NotifSettingsIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    messages: bool | None = None
+    marketing: bool | None = None
+
+
 def get_privacy_service() -> PrivacyService:
     return PrivacyService(PostgresPrivacyRepository(), PostgresAuditLog())
 
 
+def get_notif_settings_service() -> NotifSettingsService:
+    return NotifSettingsService(PostgresNotifSettingsRepo())
+
+
 PrivacyServiceDep = Annotated[PrivacyService, Depends(get_privacy_service)]
+NotifSettingsServiceDep = Annotated[NotifSettingsService, Depends(get_notif_settings_service)]
 
 
 @router.post("/api/me/export", response_model=None)
@@ -57,6 +70,30 @@ def delete_account(
     result = service.request_deletion(user.id, payload.confirm, request_id=request_id(request))
     if isinstance(result, Ok):
         return ok({"scheduled_at": result.value})
+    return domain_error_response(request, result.error)
+
+
+@router.get("/api/me/notifications", response_model=None)
+def get_notif_settings(
+    request: Request, user: RequireUserDep, service: NotifSettingsServiceDep
+) -> dict[str, Any] | JSONResponse:
+    result = service.get(user.id)
+    if isinstance(result, Ok):
+        return ok({"settings": result.value.to_api()})
+    return domain_error_response(request, result.error)
+
+
+@router.patch("/api/me/notifications", response_model=None)
+def update_notif_settings(
+    payload: NotifSettingsIn,
+    request: Request,
+    user: RequireUserDep,
+    service: NotifSettingsServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    """Per-category toggles (FR-090). 'deals' is critical and not toggleable."""
+    result = service.update(user.id, payload.messages, payload.marketing)
+    if isinstance(result, Ok):
+        return ok({"settings": result.value.to_api()})
     return domain_error_response(request, result.error)
 
 

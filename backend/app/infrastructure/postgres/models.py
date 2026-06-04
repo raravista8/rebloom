@@ -51,6 +51,14 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     # DSR: set when the subject requests deletion (ФЗ-152); the retention job
     # anonymizes PII after the grace period (PRIVACY_152FZ.md §2-3).
     deletion_requested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Notification prefs (NOTIFICATIONS.md §4). "deals" is always on (critical);
+    # "messages" defaults on; "marketing" is opt-in only.
+    notif_messages: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true")
+    )
+    notif_marketing: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
 
     consents: Mapped[list[Consent]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
