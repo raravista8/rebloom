@@ -97,6 +97,68 @@ export function IconPin({ className = 'pd-i16', ...p }: IconProps) {
 export function IconChev({ className = 'pd-i14', ...p }: IconProps) {
   return svg(className, <path d="m6 9 6 6 6-6" />, p);
 }
+export function IconFwd({ className = 'pd-i18', ...p }: IconProps) {
+  return svg(className, <path d="m9 5 7 7-7 7" />, p);
+}
+export function IconSend({ className = 'pd-i20', ...p }: IconProps) {
+  return svg(className, <path d="M4 12 20 5l-6 15-3-6-7-2Z" />, p);
+}
+export function IconFlag({ className = 'pd-i20', ...p }: IconProps) {
+  return svg(className, <path d="M5 21V4m0 1h12l-2.5 4L17 13H5" />, p);
+}
+export function IconShield({ className = 'pd-i18', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <path d="M12 3 5 6v6c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6l-7-3Z" />
+      <path d="m9 12 2 2 4-4" />
+    </>,
+    p,
+  );
+}
+export function IconInfo({ className = 'pd-i18', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5M12 8v.5" />
+    </>,
+    p,
+  );
+}
+export function IconCart({ className = 'pd-i18', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <path d="M3 4h2l2.2 11h10L20 7H6.5" />
+      <circle cx="9" cy="19" r="1.6" />
+      <circle cx="17" cy="19" r="1.6" />
+    </>,
+    p,
+  );
+}
+export function IconWalk({ className = 'pd-i16', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <circle cx="12" cy="4.5" r="2" />
+      <path d="M12 8v6m0 0-3 6m3-6 3 6M8 11h8" />
+    </>,
+    p,
+  );
+}
+export function IconTruck({ className = 'pd-i16', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <path d="M2 7h11v8H2zM13 10h4l3 3v2h-7z" />
+      <circle cx="6.5" cy="17.5" r="1.8" />
+      <circle cx="16.5" cy="17.5" r="1.8" />
+    </>,
+    p,
+  );
+}
+
 // Star is FILLED (color comes from .pd-star), unlike the stroke icons above.
 export function IconStar({ className = 'pd-i13 pd-star', ...p }: IconProps) {
   return (
