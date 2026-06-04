@@ -20,6 +20,8 @@ import {
   PdSkelCard as PdSkelCardRaw,
   PdEmpty as PdEmptyRaw,
   PdStars as PdStarsRaw,
+  PdStepper as PdStepperRaw,
+  PdBubble as PdBubbleRaw,
 } from '@rebloom/canon';
 import type { Freshness } from '@/lib/types';
 
@@ -64,3 +66,7 @@ export const PdSkelCard = PdSkelCardRaw as unknown as FC;
 export const PdEmpty = PdEmptyRaw as unknown as FC<PdEmptyProps>;
 export type PdStarsProps = { value?: number; input?: boolean };
 export const PdStars = PdStarsRaw as unknown as FC<PdStarsProps>;
+export type PdStepperProps = { status: string };
+export const PdStepper = PdStepperRaw as unknown as FC<PdStepperProps>;
+export type PdBubbleProps = { kind?: 'in' | 'out' | 'sys'; time?: string; children?: ReactNode };
+export const PdBubble = PdBubbleRaw as unknown as FC<PdBubbleProps>;

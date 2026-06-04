@@ -63,6 +63,30 @@ export interface Deal {
   status: DealStatus;
 }
 
+// GET /api/deals/{id} (API_CONTRACT §4)
+export interface DealView {
+  id: string;
+  status: DealStatus;
+  listing: { id: string; photo_thumb_url: string; price_kopecks: number };
+  role: 'buyer' | 'seller';
+  counterparty: { id: string; display_name: string; seller_rating: number };
+  amount_kopecks: number;
+  commission_kopecks: number;
+  delivery_method: DeliveryMethod;
+  delivery?: { tracking_status?: string };
+  created_at: string;
+  released_at?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  sender_id: string;
+  body: string;
+  held: boolean;
+  mine: boolean;
+  created_at: string;
+}
+
 export interface Paginated<T> {
   items: T[];
   next_cursor: string | null;
