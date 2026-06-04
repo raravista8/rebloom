@@ -220,9 +220,7 @@ class LedgerEntry(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     __tablename__ = "ledger_entries"
     __table_args__ = (
-        CheckConstraint(
-            "kind IN ('hold','commission','payout','refund')", name="kind_valid"
-        ),
+        CheckConstraint("kind IN ('hold','commission','payout','refund')", name="kind_valid"),
         CheckConstraint("amount_kopecks > 0", name="amount_positive"),
     )
 

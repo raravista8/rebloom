@@ -32,7 +32,7 @@ else
 endif
 
 lint:
-	cd backend && poetry run ruff check . && poetry run lint-imports
+	cd backend && poetry run ruff check . && poetry run ruff format --check . && poetry run lint-imports
 ifeq ($(WEB_READY),yes)
 	cd web && npm run lint
 else
