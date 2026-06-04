@@ -910,6 +910,16 @@ class FakeEmailProvider:
         self.sent.append((user_id, subject))
 
 
+class FakeRealtimeBus:
+    """Implements :class:`app.core.realtime.ports.RealtimeBus`; records publishes."""
+
+    def __init__(self) -> None:
+        self.published: list[tuple[str, dict[str, object]]] = []
+
+    def publish(self, channel: str, message: dict[str, object]) -> None:
+        self.published.append((channel, message))
+
+
 class FakeFinanceRepo:
     """Implements :class:`app.core.analytics.finance.FinanceRepo` in memory."""
 

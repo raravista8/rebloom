@@ -22,6 +22,7 @@ from app.api import (
     me,
     notifications,
     reviews,
+    ws,
 )
 from app.api.envelope import (
     http_exception_handler,
@@ -65,6 +66,7 @@ def create_app() -> FastAPI:
     app.include_router(me.router)
     app.include_router(notifications.router)
     app.include_router(admin.router)
+    app.include_router(ws.router)
     app.include_router(yookassa_webhook.router)
 
     return app

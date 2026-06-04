@@ -18,6 +18,7 @@ from app.infrastructure.moderation import load_lexicon
 from app.infrastructure.postgres.chat_repo import PostgresChatRepository
 from app.infrastructure.postgres.deals_repo import PostgresDealRepository
 from app.infrastructure.postgres.notifications_repo import PostgresNotificationOutbox
+from app.infrastructure.realtime import RedisRealtimeBus
 
 router = APIRouter(tags=["chat"])
 
@@ -33,6 +34,7 @@ def get_chat_service() -> ChatService:
         PostgresChatRepository(),
         ModerationService(load_lexicon()),
         notifier=NotificationService(PostgresNotificationOutbox()),
+        bus=RedisRealtimeBus(),
     )
 
 
