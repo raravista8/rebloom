@@ -910,6 +910,24 @@ class FakeEmailProvider:
         self.sent.append((user_id, subject))
 
 
+class FakeFinanceRepo:
+    """Implements :class:`app.core.analytics.finance.FinanceRepo` in memory."""
+
+    def __init__(
+        self,
+        totals: dict[str, int] | None = None,
+        deals: dict[str, int] | None = None,
+    ) -> None:
+        self._totals = totals or {}
+        self._deals = deals or {}
+
+    def ledger_totals(self, since: str | None, until: str | None) -> dict[str, int]:
+        return dict(self._totals)
+
+    def deals_by_status(self, since: str | None, until: str | None) -> dict[str, int]:
+        return dict(self._deals)
+
+
 class FakeAuditLog:
     """Implements :class:`app.core.audit.ports.AuditLog` in memory."""
 

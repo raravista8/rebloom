@@ -18,9 +18,11 @@ from app.api.deps import (
 )
 from app.api.envelope import domain_error_response, fail, ok, request_id
 from app.core.admin.moderation import ModerationQueueService
+from app.core.analytics.finance import FinanceService
 from app.core.auth.totp import verify_totp
 from app.core.result import Ok
 from app.infrastructure.postgres.audit_repo import PostgresAuditLog
+from app.infrastructure.postgres.finance_repo import PostgresFinanceRepo
 from app.infrastructure.postgres.moderation_repo import PostgresModerationQueueRepo
 
 router = APIRouter(tags=["admin"])
@@ -31,6 +33,13 @@ def get_moderation_service() -> ModerationQueueService:
 
 
 ModerationServiceDep = Annotated[ModerationQueueService, Depends(get_moderation_service)]
+
+
+def get_finance_service() -> FinanceService:
+    return FinanceService(PostgresFinanceRepo())
+
+
+FinanceServiceDep = Annotated[FinanceService, Depends(get_finance_service)]
 
 
 class Admin2FAIn(BaseModel):
@@ -109,6 +118,18 @@ def moderation_queue(
     items = service.queue(type)
     # MVP: a single capped page — end-of-list signalled by next_cursor=null.
     return ok({"items": [i.to_api() for i in items], "next_cursor": None})
+
+
+@router.get("/api/admin/finance", response_model=None)
+def admin_finance(
+    _admin: RequireAdmin2FADep,
+    service: FinanceServiceDep,
+    since: str | None = Query(None),
+    until: str | None = Query(None),
+) -> dict[str, Any]:
+    """Turnover / commission / payouts / refunds + held balance from the ledger,
+    over an optional [since, until) window (FR-070, ADMIN_BACKEND_TZ)."""
+    return ok(service.summary(since, until).to_api())
 
 
 @router.post("/api/admin/moderation/{item_id}", response_model=None)
