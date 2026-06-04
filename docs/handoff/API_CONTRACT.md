@@ -76,7 +76,7 @@ Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail
 | POST | `/api/me/delete` | session | `{confirm}` | `{scheduled_at}` | FR-091 |
 | POST | `/api/support/tickets` | session | `{category, body}` | `{ticket_id}` | FR-092 |
 | GET | `/api/admin/moderation/queue` | admin/moderator(2FA) | `?type=listing\|review` | `{items[], next_cursor}` | FR-060 |
-| POST | `/api/admin/moderation/{id}` | admin/moderator | `{action:"approve"\|"reject", reason}` | `{status}` (audit-logged) | FR-061 |
+| POST | `/api/admin/moderation/{id}` | admin/moderator(2FA) | `{type:"listing"\|"review", action:"approve"\|"reject", reason}` | `{status}` (audit-logged) | FR-061 |
 | POST | `/api/admin/2fa/verify` | admin (session) | `{code}` (TOTP) | `{verified_2fa:true}` — unlocks 2FA session | — |
 | POST | `/api/admin/deals/{id}/resolve` | admin(2FA) | `{action:"release"\|"refund"\|"partial", refund_kopecks?, reason}` | `deal` (released/refunded) — ledger-settled, audit-logged, **4-eyes > threshold** | FR-024, FLOW-1 |
 

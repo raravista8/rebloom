@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -17,10 +17,20 @@ from app.api.deps import (
     UserRepoDep,
 )
 from app.api.envelope import domain_error_response, fail, ok, request_id
+from app.core.admin.moderation import ModerationQueueService
 from app.core.auth.totp import verify_totp
 from app.core.result import Ok
+from app.infrastructure.postgres.audit_repo import PostgresAuditLog
+from app.infrastructure.postgres.moderation_repo import PostgresModerationQueueRepo
 
 router = APIRouter(tags=["admin"])
+
+
+def get_moderation_service() -> ModerationQueueService:
+    return ModerationQueueService(PostgresModerationQueueRepo(), PostgresAuditLog())
+
+
+ModerationServiceDep = Annotated[ModerationQueueService, Depends(get_moderation_service)]
 
 
 class Admin2FAIn(BaseModel):
@@ -33,6 +43,13 @@ class DisputeResolveIn(BaseModel):
     action: Literal["release", "refund", "partial"]
     reason: str = Field(min_length=1, max_length=2000)
     refund_kopecks: int = Field(default=0, ge=0)
+
+
+class ModerationDecisionIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    type: Literal["listing", "review"]
+    action: Literal["approve", "reject"]
+    reason: str = Field(min_length=1, max_length=2000)
 
 
 @router.post("/api/admin/2fa/verify", response_model=None)
@@ -79,4 +96,38 @@ def resolve_dispute(
     )
     if isinstance(result, Ok):
         return ok({"deal": result.value.to_api(role="seller")})
+    return domain_error_response(request, result.error)
+
+
+@router.get("/api/admin/moderation/queue", response_model=None)
+def moderation_queue(
+    _admin: RequireAdmin2FADep,
+    service: ModerationServiceDep,
+    type: Literal["listing", "review"] = Query("listing"),
+) -> dict[str, Any]:
+    """Pending listings or held reviews awaiting a moderator (FR-060)."""
+    items = service.queue(type)
+    # MVP: a single capped page — end-of-list signalled by next_cursor=null.
+    return ok({"items": [i.to_api() for i in items], "next_cursor": None})
+
+
+@router.post("/api/admin/moderation/{item_id}", response_model=None)
+def moderation_decide(
+    item_id: str,
+    payload: ModerationDecisionIn,
+    request: Request,
+    admin: RequireAdmin2FADep,
+    service: ModerationServiceDep,
+) -> dict[str, Any] | JSONResponse:
+    """Approve/reject a queued item with a mandatory reason (FR-061, audit-logged)."""
+    result = service.decide(
+        actor_id=admin.id,
+        item_type=payload.type,
+        item_id=item_id,
+        action=payload.action,
+        reason=payload.reason,
+        request_id=request_id(request),
+    )
+    if isinstance(result, Ok):
+        return ok({"status": result.value})
     return domain_error_response(request, result.error)

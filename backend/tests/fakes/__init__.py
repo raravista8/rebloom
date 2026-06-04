@@ -615,6 +615,50 @@ class FakeReviewRepository:
         ]
 
 
+class FakeModerationQueueRepo:
+    """Implements :class:`app.core.admin.ports.ModerationQueueRepo` in memory."""
+
+    def __init__(self) -> None:
+        self._listings: dict[str, str] = {}  # id -> status
+        self._reviews: dict[str, str] = {}  # id -> moderation_status
+
+    def seed_listing(self, listing_id: str, status: str = "pending_review") -> None:
+        self._listings[listing_id] = status
+
+    def seed_review(self, review_id: str, status: str = "held") -> None:
+        self._reviews[review_id] = status
+
+    def list_pending_listings(self, limit: int) -> list[object]:
+        from app.core.admin.ports import ModerationItem
+
+        return [
+            ModerationItem(id=i, type="listing", created_at=None, summary={})
+            for i, s in self._listings.items()
+            if s == "pending_review"
+        ][:limit]
+
+    def list_held_reviews(self, limit: int) -> list[object]:
+        from app.core.admin.ports import ModerationItem
+
+        return [
+            ModerationItem(id=i, type="review", created_at=None, summary={})
+            for i, s in self._reviews.items()
+            if s == "held"
+        ][:limit]
+
+    def decide_listing(self, listing_id: str, approve: bool) -> bool:
+        if self._listings.get(listing_id) != "pending_review":
+            return False
+        self._listings[listing_id] = "active" if approve else "archived"
+        return True
+
+    def decide_review(self, review_id: str, approve: bool) -> bool:
+        if self._reviews.get(review_id) != "held":
+            return False
+        self._reviews[review_id] = "visible" if approve else "hidden"
+        return True
+
+
 class FakeAuditLog:
     """Implements :class:`app.core.audit.ports.AuditLog` in memory."""
 
