@@ -1,7 +1,7 @@
 export { AuthBlocked, AuthChooser, AuthDesktopBlocked, AuthDesktopChooser, AuthDesktopError, AuthDesktopLink, AuthDesktopOAuth, AuthDesktopOtp, AuthDesktopPhone, AuthDesktopRegister, AuthDesktopWelcome, AuthError, AuthLink, AuthOAuthSheet, AuthOtp, AuthPhone, AuthRegister, AuthWelcome, OAuthBtn, OauthList } from './auth.js';
 export { P as PdBtn, m as PdBubble, a as PdChip, c as PdEmpty, d as PdField, b as PdGallery, e as PdInput, f as PdNotice, g as PdOtp, n as PdScreen, h as PdSeg, i as PdSizeSel, j as PdSkelCard, k as PdStars, o as PdStepper, l as PdToast } from './kit-C5AXmT7a.js';
 export { P as PD_FRESH, a as PD_LIKED, b as PD_THEMES, A as PdAvatar, B as PdBottomNav, C as PdCard, c as PdFeed, F as PdFreshness, H as PdHeart, I as PdIc, L as PdLikeBtn, S as PdSectionHead, T as PdTopBar, p as pdMoney } from './feed-BbcjECCH.js';
-export { PdSwitch, SettingsDelete, SettingsDesktop, SettingsHub, SettingsLogins, SettingsNotifications, SettingsPayments, SettingsPrivacy, SettingsProfile, SettingsSecurity, SettingsSelfEmployed } from './settings.js';
+export { PdSwitch, SettingsDelete, SettingsDesktop, SettingsHub, SettingsLogins, SettingsNotifications, SettingsPrivacy, SettingsProfile, SettingsSecurity } from './settings.js';
 export { PdFeedDesktop } from './feed.js';
 export { L as Listing, a as ListingSold, P as Profile, S as SearchNoResults, V as VitrinaEmpty, b as VitrinaLoading } from './discovery-Daf9f7-t.js';
 export { PD_GEO_CITIES, PdBlogArticle, PdBlogIndex, PdGeoPage, PdLanding, PdLandingFooter, PdLandingNav, PdSafeDeal, PdSeoMeta, nbsp } from './marketing.js';

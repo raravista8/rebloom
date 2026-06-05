@@ -60,7 +60,7 @@ function AdminDashboard() {
   const kpis=[
     {lab:'Онлайн сейчас',val:'342',d:'+5%',up:true,sp:'0,28 14,24 28,26 42,18 56,20 70,12 84,14 100,8'},
     {lab:'DAU / MAU',val:'4 870',sub:'/ 51 200',d:'+8%',up:true,sp:'0,30 16,26 32,22 48,24 64,16 80,14 100,9'},
-    {lab:'Оборот сделок',val:'3,24 млн ₽',d:'+14%',up:true,sp:'0,32 16,28 32,24 48,20 64,17 80,11 100,7'},
+    {lab:'Оборот сделок',val:'3,24 млн ₽',note:'оценка по завершённым',d:'+14%',up:true,sp:'0,32 16,28 32,24 48,20 64,17 80,11 100,7'},
     {lab:'Сделок за месяц',val:'1 142',d:'+12%',up:true,sp:'0,31 16,27 32,25 48,19 64,16 80,12 100,8'},
   ];
   const months=['Янв','Фев','Мар','Апр','Май','Июн'];
@@ -88,6 +88,7 @@ function AdminDashboard() {
               <div className="pda-kpi" key={i}>
                 <div className="lab">{k.lab}</div>
                 <div className="val">{k.val}{k.sub&&<span style={{fontSize:15,color:'var(--pd-muted)',fontWeight:600}}> {k.sub}</span>}</div>
+                {k.note&&<div style={{fontSize:11,color:'var(--pd-faint)',marginTop:2}}>{k.note}</div>}
                 {k.d&&<div className={`delta ${k.up?'up':'down'}`}>↑ {k.d} к прошлому периоду</div>}
                 <Spark pts={k.sp} color={i>=2?'#5B8C68':'var(--pd-primary)'}/>
               </div>

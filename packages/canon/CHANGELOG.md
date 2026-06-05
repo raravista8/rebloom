@@ -2,6 +2,37 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.6.0] — 2026-06-05 — C2C-forward landing hero + settings без денег + copy pass
+
+**Source of truth synced:** all changes were authored in the design prototypes; `reference/prototypes/*`
+(and the new hero asset `reference/prototypes/img/hero-lacybird.png`) are byte-current. `src/*` and
+`dist/canon.css` are re-converted from them — rebuild `dist/*.js` via `npm run build` (§9 step 4).
+
+### Changed — settings (`./settings`)
+- **«Способы оплаты» (payments) and «Самозанятость» (self-employment) removed entirely** — hub rows, mobile screens, desktop two-pane nav + panes, and module exports (`SettingsPayments`, `SettingsSelfEmployed` no longer exported). Rationale: in the current model the platform handles **no money** (pay-on-meeting, peer-to-peer), so a payouts/receipts surface was dangling. Hub group «Аккаунт» is now **Профиль · Способы входа** only. `web/` must drop the `/settings/payments` and `/settings/self-employed` routes.
+
+### Changed — marketing landing (`./marketing` · `PdLanding`)
+- **Hero re-led on the C2C story** (the platform under-communicated that real people resell their own gifted bouquets). Eyebrow → «Люди передаривают свои букеты»; **H1 «Свежие букеты _напрямую от людей_, в 2–3 раза дешевле магазина»** (accent on «напрямую от людей»); lede rewritten to spell out the mechanic («Букет подарили, он порадовал и уже не нужен. Вместо мусорки свежие цветы за полцены находят нового хозяина…»).
+- **Hero composition fixed:** `text-wrap:balance` on `.pdl-h1`, desktop H1 `60→50px`, text column `1.08fr→1.16fr`, hero image top-aligned (`align-self:start`), and «2–3» kept on one line (`white-space:nowrap`) — kills the one-word-per-line ragging.
+- **New hero asset + price proof:** `hero-lacybird.png` (premium studio bouquet); price tag `17 200 ₽ → от 4 500 ₽`, badge `−74%`; live-count «128 букетов от людей рядом».
+- An interim seller-avatar trust row was added then **removed** per review (kept the headline carrying the message).
+
+### Changed — SEO geo page (`./marketing` · `PdGeoPage`, `PdSeoMeta`)
+- Geo hero **H1/intro mirror the landing**, city substituted: «Свежие букеты _напрямую от людей_ в {городе}, в 2–3 раза дешевле магазина» + «…находят нового хозяина в {городе}…». Visible `PdSeoMeta` **H1** synced; **Title/Description left as the keyword snippet** (Title ≠ H1 is intentional). «2–3» nowrap applied.
+
+### Changed — admin (`./admin`)
+- Жалоба resolution action **«Решить» → «Разобрать»** (desktop reports table + mobile complaint card).
+- **Finance** plashka reworded: «Платежи **идут** между пользователями напрямую, площадка их не обрабатывает…» (de-em-dashed).
+- **Overview KPI «Оборот сделок»** gains an «оценка по завершённым» caption — consistency with the Finance plashka (the platform can't see payments, so turnover is an estimate).
+
+### Copy
+- Interface text de-em-dashed across client app + admin (clause-connector «—» → comma/colon) per the reviewed copy revision; city normalized to Москва. SEO **H1/Title keep dashes** (snippet format — intentional). Sources: `glavnaya-seo-redacted.md`, prior `copy1-redacted.md`.
+
+### Notes for the consumer
+- `dist/canon.css` updated (landing hero block: balance/size/column/align + nowrap). `src/styles/canon.css` mirrors it.
+- `src/marketing/seo.jsx` had pre-existing copy drift vs the prototypes in a few safe-deal/rules sentences — **`reference/prototypes/pd-seo.jsx` is authoritative** for this revision; reconcile on vendoring.
+- New asset `hero-lacybird.png` lives under `reference/prototypes/img/`; wire the real CDN asset in `web/`.
+
 ## [0.5.0] — 2026-06-05 — Без онлайн-оплаты: модель «оплата при встрече» (убран эскроу)
 - Сделка больше не проводит платежи: статусы `agreed → meeting → done` (+ `problem`, `cancelled`); эскроу/выплаты/комиссия/возвраты/чарджбэки удалены.
 - Расчёт между пользователями напрямую при встрече (наличные/перевод). Споры → жалобы в поддержку/модерацию.

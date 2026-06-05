@@ -160,7 +160,7 @@ function GeoCatalog({ cityNom = 'Москва', cityLoc = 'Москве', distri
         <Chip on={fresh === 'd1_2'} onClick={() => setFresh(fresh === 'd1_2' ? 'any' : 'd1_2')}>1–2 дня</Chip>
       </div>
       {shown.length === 0
-        ? <p className="pds-catnote">По этим фильтрам сейчас ничего нет — смягчите цену или свежесть.</p>
+        ? <p className="pds-catnote">По этим фильтрам сейчас ничего нет, смягчите цену или свежесть.</p>
         : <div className="pds-grid">{shown.map((d) => <div className="pd-rise" key={d._id}><Card d={d} variant="grid" /></div>)}</div>}
       <div className="pds-catall"><a href={CAT}>Весь каталог букетов в {cityLoc}<Arrow style={{ width: 18, height: 18 }} /></a></div>
     </div>
@@ -179,8 +179,8 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <p className="pds-crumbs"><a href={LAND}>Главная</a> · {city}</p>
           <p className="pds-eyebrow"><Leaf />{`Свежие букеты · ${city} · самовывоз`}</p>
-          <h1 className="pds-h1">{`Дешёвые свежие букеты в\u00A0${cityLoc}\u00A0— `}<em>самовывоз рядом</em></h1>
-          <p className="pds-intro">Те же свежие цветы, что и в магазине, только <b>в 2–3 раза дешевле</b>. {`Кому-то в\u00A0${cityLoc} подарили букет`} — он ещё живой, и человек отдаёт его за полцены вместо мусорки. Вы находите подходящий рядом с домом{nearMetro} и забираете сами. Без доставки и наценок — самовывоз в своём районе.</p>
+          <h1 className="pds-h1">{`Свежие букеты `}<em>напрямую от людей</em>{` в\u00A0${cityLoc}, `}<span style={{whiteSpace:'nowrap'}}>в 2–3 раза</span>{` дешевле магазина`}</h1>
+          <p className="pds-intro"><b>Букет подарили, он порадовал и уже не нужен.</b> {`Вместо мусорки свежие цветы за полцены находят нового хозяина в\u00A0${cityLoc}. Выставьте свой за минуту или заберите чужой.`}</p>
           <div className="pds-trust">
             <span className="t"><Tag style={{ color: 'var(--pd-primary)' }} />В 2–3 раза дешевле</span>
             <span className="t"><Shield />Оплата при встрече</span>
@@ -192,7 +192,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
       <section className="pds-sec">
         <div className="pds-in">
           <div className="pds-sechead">
-            <h2 className="pds-h2">Свежие букеты рядом — прямо сейчас</h2>
+            <h2 className="pds-h2">Свежие букеты рядом, прямо сейчас</h2>
             <p className="pds-h2-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы.</p>
           </div>
           <GeoCatalog cityNom={city} cityLoc={cityLoc} districts={districts} />
@@ -203,7 +203,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Букеты по районам {cityGen}</h2>
-            <p className="pds-h2-sub">Заберите букет в своём районе — рядом с домом{nearMetro}, без поездок через весь город.</p>
+            <p className="pds-h2-sub">Заберите букет в своём районе, рядом с домом{nearMetro}, без поездок через весь город.</p>
           </div>
           <div className="pds-links">
             {districts.map(([n, c]) => (
@@ -217,7 +217,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Недорогие букеты под повод</h2>
-            <p className="pds-h2-sub">К свиданию, на день рождения или просто себе — подберите свежий букет за полцены.</p>
+            <p className="pds-h2-sub">К свиданию, на день рождения или просто себе, подберите свежий букет за полцены.</p>
           </div>
           <div className="pds-chips">
             {OCCASIONS.map((o) => <a className="pds-chip" key={o} href="#" onClick={(e) => e.preventDefault()}>{o}</a>)}
@@ -232,8 +232,8 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
           </div>
           <div className="pds-faq">
             <div className="pds-faqitem"><h3 className="pds-faqq">Почему свежие букеты стоят в 2–3 раза дешевле?</h3><p className="pds-faqa">Это не магазин. Букет уже кому-то подарили, он постоял день и теперь не нужен хозяину. Человек отдаёт его за полцены, лишь бы цветы не выбросили. Вы платите за свежие цветы, а не за витрину и аренду.</p></div>
-            <div className="pds-faqitem"><h3 className="pds-faqq">Цветы точно свежие?</h3><p className="pds-faqa">У каждого букета есть дата и метка свежести, а на фото видно состояние. Берите то, что куплено сегодня или вчера — и платите соответственно.</p></div>
-            <div className="pds-faqitem"><h3 className="pds-faqq">Как забрать букет в {cityLoc}?</h3><p className="pds-faqa">Только самовывоз. Когда договоритесь в чате сделки, продавец пришлёт район и точку встречи — обычно двор{metro ? ' или станция метро' : ' или район'} рядом с продавцом. Доставки нет, поэтому и цена честная.</p></div>
+            <div className="pds-faqitem"><h3 className="pds-faqq">Цветы точно свежие?</h3><p className="pds-faqa">У каждого букета есть дата и метка свежести, а на фото видно состояние. Берите то, что куплено сегодня или вчера, и платите соответственно.</p></div>
+            <div className="pds-faqitem"><h3 className="pds-faqq">Как забрать букет в {cityLoc}?</h3><p className="pds-faqa">Только самовывоз. Когда договоритесь в чате сделки, продавец пришлёт район и точку встречи: обычно двор{metro ? ' или станция метро' : ' или район'} рядом с продавцом. Доставки нет, поэтому и цена честная.</p></div>
             <div className="pds-faqitem"><h3 className="pds-faqq">А если продавец обманет?</h3><p className="pds-faqa">Вы ничего не платите вперёд: оплата только при встрече, когда увидели букет. Надёжных продавцов показывают рейтинг и отзывы, а на нарушителей можно пожаловаться.</p></div>
           </div>
         </div>
@@ -243,7 +243,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Свежие букеты в других городах</h2>
-            <p className="pds-h2-sub">«Передарим» работает в 10 крупнейших городах России — выберите свой.</p>
+            <p className="pds-h2-sub">«Передарим» работает в 10 крупнейших городах России, выберите свой.</p>
           </div>
           <div className="pds-links">
             {CITIES_FULL.map((c) => (
@@ -274,11 +274,11 @@ function PdSafeDeal({ platform = 'desktop' }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Как проходит сделка</h2>
-            <p className="pds-h2-sub">Три шага — без предоплаты и посредников.</p>
+            <p className="pds-h2-sub">Три шага, без предоплаты и посредников.</p>
           </div>
           <div className="pds-flow">
             <div className="pds-step"><span className="en">1</span><h4>Написали продавцу</h4><p>В карточке нажмите «Написать продавцу» и договоритесь о времени и месте встречи прямо в чате сделки.</p></div>
-            <div className="pds-step"><span className="en">2</span><h4>Встретились и проверили</h4><p>Самовывоз рядом — у дома или метро. Смотрите букет вживую: свежесть, размер, состояние.</p></div>
+            <div className="pds-step"><span className="en">2</span><h4>Встретились и проверили</h4><p>Самовывоз рядом, у дома или метро. Смотрите букет вживую: свежесть, размер, состояние.</p></div>
             <div className="pds-step"><span className="en">3</span><h4>Платите при встрече</h4><p>Понравился букет — отдаёте деньги продавцу на месте, наличными или переводом. Никаких списаний заранее.</p></div>
           </div>
           <div className="pds-safe">
@@ -292,8 +292,8 @@ function PdSafeDeal({ platform = 'desktop' }) {
         <div className="pds-in">
           <div className="pds-prose">
             <h2 className="pds-h2" style={{ marginBottom: 16 }}>Почему так безопаснее</h2>
-            <p>Когда платишь при встрече, обман почти невозможен: продавец получает деньги только в обмен на букет, а вы видите цветы до оплаты. Это привычная и понятная схема — как на любой доске объявлений.</p>
-            <p>Чтобы выбрать надёжного продавца, смотрите на рейтинг и отзывы — их оставляют реальные покупатели после встреч. Профили с историей сделок и хорошими оценками безопаснее новых.</p>
+            <p>Когда платишь при встрече, обман почти невозможен: продавец получает деньги только в обмен на букет, а вы видите цветы до оплаты. Это привычная и понятная схема, как на любой доске объявлений.</p>
+            <p>Чтобы выбрать надёжного продавца, смотрите на рейтинг и отзывы: их оставляют реальные покупатели после встреч. Профили с историей сделок и хорошими оценками безопаснее новых.</p>
             <h3>Когда деньги уходят продавцу</h3>
             <ul>
               <li>Вы забрали букет и нажали «Подтвердить получение» в сделке.</li>
@@ -335,7 +335,7 @@ function PdSafeDeal({ platform = 'desktop' }) {
 
 // ── 3. БЛОГ ───────────────────────────────────────────────────────
 const ARTICLES = [
-  { id: 'kuda-det-buket', tag: 'Продавцу', img: '1567418938902-aa650a3eb346', title: 'Куда деть подаренный букет вместо мусорки', excerpt: 'Подарили цветы, а дома ставить некуда? Пять способов дать букету вторую жизнь — и вернуть часть денег.', read: '4 мин' },
+  { id: 'kuda-det-buket', tag: 'Продавцу', img: '1567418938902-aa650a3eb346', title: 'Куда деть подаренный букет вместо мусорки', excerpt: 'Подарили цветы, а дома ставить некуда? Пять способов дать букету вторую жизнь и вернуть часть денег.', read: '4 мин' },
   { id: 'cvety-posle-prazdnika', tag: 'Уход', img: '1581938165093-050aeb5ef218', title: 'Что делать с цветами после праздника', excerpt: 'Большой букет отжил своё на столе, но цветы ещё свежие. Как не выбросить красивое и кому оно нужно.', read: '5 мин' },
   { id: 'prodlit-zhizn-buketu', tag: 'Уход', img: '1561181286-d3fee7d55364', title: 'Как продлить жизнь срезанному букету', excerpt: 'Простые приёмы, от подрезки стеблей до воды и места: чтобы букет простоял на несколько дней дольше.', read: '6 мин' },
 ];
@@ -414,11 +414,11 @@ function PdBlogArticle({ platform = 'desktop', article = ARTICLES[0] }) {
               <li>Разберите большой букет на пару маленьких — так цветам просторнее.</li>
             </ul>
             <h3>3. Отдать тому, кому приятно</h3>
-            <p>Соседка, коллега, пункт у дома — букет легко подарить дальше. Но если хочется вернуть часть денег и не искать самому, кому он нужен, проще выставить его в сервисе: покупатель найдётся сам и заберёт рядом.</p>
+            <p>Соседка, коллега, пункт у дома: букет легко подарить дальше. Но если хочется вернуть часть денег и не искать самому, кому он нужен, проще выставить его в сервисе: покупатель найдётся сам и заберёт рядом.</p>
             <p><b>Главное — не в мусорку.</b> Живой букет может порадовать ещё одного человека. На «Передариме» это занимает минуту.</p>
           </div>
           <div className="pds-cta" style={{ marginTop: 34 }}>
-            <div className="tx"><h3>Подарите букету вторую жизнь</h3><p>Выставьте за минуту с телефона. Самовывоз рядом — покупатель заберёт сам.</p></div>
+            <div className="tx"><h3>Подарите букету вторую жизнь</h3><p>Выставьте за минуту с телефона. Самовывоз рядом, покупатель заберёт сам.</p></div>
             <Btn variant="primary" lg icon={Plus}>Опубликовать букет</Btn>
           </div>
         </div>

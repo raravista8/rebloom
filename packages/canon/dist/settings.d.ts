@@ -13,9 +13,6 @@ declare function SettingsProfile({ plat, state }: {
 declare function SettingsLogins({ plat }: {
     plat?: string | undefined;
 }): React.JSX.Element;
-declare function SettingsPayments({ plat }: {
-    plat?: string | undefined;
-}): React.JSX.Element;
 declare function SettingsNotifications({ plat }: {
     plat?: string | undefined;
 }): React.JSX.Element;
@@ -23,9 +20,6 @@ declare function SettingsPrivacy({ plat }: {
     plat?: string | undefined;
 }): React.JSX.Element;
 declare function SettingsSecurity({ plat }: {
-    plat?: string | undefined;
-}): React.JSX.Element;
-declare function SettingsSelfEmployed({ plat }: {
     plat?: string | undefined;
 }): React.JSX.Element;
 declare function SettingsDelete({ plat, state }: {
@@ -36,4 +30,4 @@ declare function SettingsDesktop({ screen }: {
     screen?: string | undefined;
 }): React.JSX.Element;
 
-export { Switch as PdSwitch, SettingsDelete, SettingsDesktop, SettingsHub, SettingsLogins, SettingsNotifications, SettingsPayments, SettingsPrivacy, SettingsProfile, SettingsSecurity, SettingsSelfEmployed };
+export { Switch as PdSwitch, SettingsDelete, SettingsDesktop, SettingsHub, SettingsLogins, SettingsNotifications, SettingsPrivacy, SettingsProfile, SettingsSecurity };

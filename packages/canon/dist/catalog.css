@@ -3593,7 +3593,7 @@
 .pdl--desk .pdl-hero-in {
   padding: 62px 56px 60px;
   display: grid;
-  grid-template-columns: 1.08fr 1fr;
+  grid-template-columns: 1.16fr 1fr;
   gap: 54px;
   align-items: center;
   max-width: 1180px;
@@ -3603,15 +3603,16 @@
   margin: 16px 0 0;
   font-weight: 800;
   letter-spacing: -.03em;
-  line-height: 1.02;
+  line-height: 1.12;
   font-size: 38px;
+  text-wrap: balance;
 }
 .pdl-h1 em {
   font-style: normal;
   color: var(--pd-primary,#CF5638);
 }
 .pdl--desk .pdl-h1 {
-  font-size: 60px;
+  font-size: 50px;
 }
 .pdl-lead {
   margin: 18px 0 0;
@@ -3661,6 +3662,7 @@
 }
 .pdl--desk .pdl-herovis {
   margin-top: 0;
+  align-self: start;
 }
 .pdl-herophoto {
   position: relative;
@@ -4572,20 +4574,21 @@
   .pdl-hero-in {
     padding: 62px 56px 60px;
     display: grid;
-    grid-template-columns: 1.08fr 1fr;
+    grid-template-columns: 1.16fr 1fr;
     gap: 54px;
     align-items: center;
     max-width: 1180px;
     margin: 0 auto;
   }
   .pdl-h1 {
-    font-size: 60px;
+    font-size: 50px;
   }
   .pdl-lead {
     font-size: 19px;
   }
   .pdl-herovis {
     margin-top: 0;
+    align-self: start;
   }
   .pdl-sec {
     padding: 72px 0;

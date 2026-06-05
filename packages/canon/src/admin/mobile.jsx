@@ -150,7 +150,7 @@ function DealsList() {
         <div className="mid"><div className="t1">#10478 · Соня → Юля</div><div className="t2">Букет не соответствует фото · SLA 24 ч</div></div>
         <span className="amt">{pdMoney(850)}</span>
       </div>
-      <div className="pdam-modact" style={{display:'flex',gap:8,padding:'11px 15px',borderTop:'1px solid var(--pd-border)'}}><PdBtn variant="secondary" block>Детали жалобы</PdBtn><PdBtn variant="primary" block>Решить</PdBtn></div>
+      <div className="pdam-modact" style={{display:'flex',gap:8,padding:'11px 15px',borderTop:'1px solid var(--pd-border)'}}><PdBtn variant="secondary" block>Детали жалобы</PdBtn><PdBtn variant="primary" block>Разобрать</PdBtn></div>
     </div>
     <div className="pdam-sec">
       <div className="sh">Последние сделки</div>

@@ -77,7 +77,7 @@ function ListingBody({ sold }) {
 
       {sold
         ? <PdNotice kind="info" icon={PdI.info}>Этот букет уже купили. Посмотрите другие свежие букеты рядом, их добавляют каждый день.</PdNotice>
-        : <PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом — платите, когда увидели цветы.</PdNotice>}
+        : <PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом. Платите, когда увидели цветы.</PdNotice>}
 
       {/* seller */}
       <div style={{display:'flex',alignItems:'center',gap:11,padding:'14px 0',marginTop:6,borderTop:'1px solid var(--pd-border)',borderBottom:'1px solid var(--pd-border)'}}>
@@ -98,7 +98,7 @@ function ListingBody({ sold }) {
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--pd-primary)',flex:'none'}}><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:14}}>Самовывоз рядом</div>
-            <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца — обычно двор или метро поблизости</div>
+            <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца, обычно двор или метро поблизости</div>
           </div>
         </div>
         <p style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:8}}>Точный адрес появится в чате, когда договоритесь о встрече. Двор или станцию выбирает продавец.</p>
