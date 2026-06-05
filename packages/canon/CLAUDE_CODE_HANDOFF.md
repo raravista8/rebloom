@@ -1,4 +1,4 @@
-# CLAUDE_CODE_HANDOFF — canon 0.2.0 → `web/`
+# CLAUDE_CODE_HANDOFF — canon 0.2.0 / 0.4.0 → `web/`
 
 What Claude Design shipped in **0.2.0** and **the exact logic Claude Code must write** in `web/`
 to make it production-ready. The canon package is the **single source of truth** for markup, classes
@@ -257,5 +257,57 @@ terracotta — don't let it fall back to text color.
 - Don't filter/paginate the full catalog on the client; URL → server query → cursor page.
 - Don't wrap `.pdl`/`.pdc` in a shrink-to-fit container — container queries need a real width.
 - Don't trust client OTP attempt counters or lock timers; enforce server-side.
+- Don't compute Russian city declensions algorithmically — use the data table (§8).
+- Don't ship the design-time DOM typographer to prod — use `nbsp()` at SSR/build (§8).
+
+---
+
+## 8. Marketing / SEO pages (canon 0.4.0 · `./marketing`)
+
+New public surface from `@rebloom/canon/marketing`: `PdGeoPage`, `PdSafeDeal`, `PdBlogIndex`, `PdBlogArticle`,
+`PdSeoMeta`, plus `PD_GEO_CITIES` and `nbsp`. Strategy + full spec: `SEO_MARKETING_CANON_TZ.md` (folded here);
+semantic core: `reference/peredarim-seo-yadro.md`.
+
+### 8.1 Routes (Next.js App Router)
+| Route | Render | Notes |
+|---|---|---|
+| `/[city]` | **SSG** `generateStaticParams` over 10 slugs | white-list city slugs (must not shadow `/sell`,`/login`,`/deal`,`/u`,`/l`,`/settings`,`/admin`,`/search`); `notFound()` for unknown |
+| `/bezopasnaya-sdelka` | SSG | static |
+| `/blog` · `/blog/[slug]` | SSG | `generateStaticParams` over articles |
+
+`<PdGeoPage data={city} platform={desktopOrWeb} />` — `platform` from viewport/UA (or render desktop + let
+container CSS adapt). Catalog inside is a **teaser with working sample filters**; wire it to the real city
+catalog query like §2/§3 (URL state → server filter → keyset pagination).
+
+### 8.2 City data — declensions are DATA
+`PD_GEO_CITIES` is a **placeholder**. Replace with the production table; never compute case forms:
+```ts
+type CityData = { id:string; nom:string; loc:string; gen:string; count:number; metro:boolean;
+  districts:{name:string;count:number}[] };
+```
+`metro:false` (Челябинск/Красноярск/Уфа) auto-drops «у метро» copy. Counts must be live.
+
+### 8.3 Meta contract (`generateMetadata` per page)
+| Page | Title | Description / H1 |
+|---|---|---|
+| `/` | `Свежие букеты в 2–3 раза дешевле магазина \| Передарим` | H1: «Свежие букеты в 2–3 раза дешевле цветочного магазина» |
+| `/[city]` | `Дешёвые свежие букеты в {loc} — самовывоз рядом \| Передарим` | H1: «Дешёвые свежие букеты в {loc} — самовывоз рядом» |
+| `/bezopasnaya-sdelka` | `Безопасная сделка и эскроу — как защищены деньги \| Передарим` | H1: «Деньги придут продавцу только после того, как вы забрали букет» |
+| `/blog` | `Блог «Передарима» — что делать с подаренным букетом \| Передарим` | H1: «Что делать с букетом, который уже подарили» |
+| `/blog/[slug]` | `{Заголовок} \| Передарим` | H1 = заголовок |
+| `/l/[id]` | `{Цветы} за {цена} ₽ рядом, {район} — самовывоз \| Передарим` | `alt`: «свежий букет {цветы} недорого, {район}» |
+
+Also: JSON-LD (`ItemList`+`BreadcrumbList` on geo, `Product`/`Offer` on card, `FAQPage`/`Article` on safe-deal/blog);
+`sitemap.xml` (10 geo + safe-deal + blog); `canonical` per page; city in Title/H1 **only** — Директ via geo-targeting.
+
+### 8.4 Typography — `nbsp()` at SSR/build
+Apply `nbsp(text)` to headings/ledes/sub-headings on the **server** (pure string→string), not via a client
+DOM walker — crawler-visible, no layout shift. It glues short prepositions/conjunctions + numbers and keeps
+dashes/middots off line-start. Spacing tokens `--pds-gap-*` and intrinsic grid `--pds-card-min` are in
+`tokens/theme.css`; keep `.pds-grid > * { min-width:0 }` (prevents mobile overflow).
+
+### 8.5 Pickup-only
+Front always sends `delivery_method=self_pickup`; keep courier code behind `delivery.courier=off`. Buy/deal
+screens already show the static «Самовывоз рядом» row (canon) instead of `DeliveryToggle`.
 
 — end —

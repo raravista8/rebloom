@@ -4,7 +4,7 @@ export { P as PD_FRESH, a as PD_LIKED, b as PD_THEMES, A as PdAvatar, B as PdBot
 export { PdSwitch, SettingsDelete, SettingsDesktop, SettingsHub, SettingsLogins, SettingsNotifications, SettingsPayments, SettingsPrivacy, SettingsProfile, SettingsSecurity, SettingsSelfEmployed } from './settings.cjs';
 export { PdFeedDesktop } from './feed.cjs';
 export { L as Listing, a as ListingSold, P as Profile, S as SearchNoResults, V as VitrinaEmpty, b as VitrinaLoading } from './discovery-Daf9f7-t.cjs';
-export { PdLanding, PdLandingNav } from './marketing.cjs';
+export { PD_GEO_CITIES, PdBlogArticle, PdBlogIndex, PdGeoPage, PdLanding, PdLandingFooter, PdLandingNav, PdSafeDeal, PdSeoMeta, nbsp } from './marketing.cjs';
 export { PdCatalog } from './catalog.cjs';
 export { D as DealDesktop, a as DealDisputed, b as DealPaidHeld, c as DealReleased, L as ListingDesktop, N as Notifications, d as NotificationsDesktop, e as NotificationsEmpty, O as Offline, P as PaymentFailed, f as ProfileDesktop, R as ReviewForm, S as SearchDesktop, g as SellDesktop } from './deal-DNJI6Y3U.cjs';
 export { LoginPhone, OtpLocked, OtpVerify, SellBlocked, SellForm, SellPublished, SellRemoved } from './screens.cjs';

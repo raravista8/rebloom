@@ -187,7 +187,7 @@ const PdLanding = (function () {
           <div className="pdl-vals">
             <div className="pdl-val"><div className="ic"><Tag /></div><div><b>В 2–3 раза дешевле</b><span>свежие букеты по-честному</span></div></div>
             <div className="pdl-val"><div className="ic g"><Shield /></div><div><b>Безопасная сделка</b><span>деньги под защитой эскроу</span></div></div>
-            <div className="pdl-val"><div className="ic gold"><Pin /></div><div><b>Рядом с вами</b><span>самовывоз или доставка по городу</span></div></div>
+            <div className="pdl-val"><div className="ic gold"><Pin /></div><div><b>Рядом с домом</b><span>самовывоз у дома или метро</span></div></div>
           </div>
         </div>
       </section>
@@ -207,7 +207,7 @@ const PdLanding = (function () {
           </div>
           <div className="pdl-escrow-grid">
             <div className="pdl-eflow"><span className="en">1</span><div><h4>Покупатель платит</h4><p>Деньги списываются и замораживаются на счёте сервиса, а не у продавца.</p></div></div>
-            <div className="pdl-eflow"><span className="en">2</span><div><h4>Забирает букет</h4><p>Самовывоз или доставка по городу. Покупатель видит, что цветы свежие.</p></div></div>
+            <div className="pdl-eflow"><span className="en">2</span><div><h4>Забирает букет</h4><p>Самовывоз рядом — у дома или метро. Покупатель видит, что цветы свежие.</p></div></div>
             <div className="pdl-eflow"><span className="en">3</span><div><h4>Деньги уходят продавцу</h4><p>Только после подтверждения получения, за вычетом 5% комиссии сервиса. До этого деньги под защитой.</p></div></div>
           </div>
           <div className="pdl-esafe">
@@ -290,7 +290,7 @@ const PdLanding = (function () {
   // ── FOOTER ─────────────────────────────────────────────────────────
   const FOOT_COLS = [
     { h: 'Сервис', links: ['О «Передариме»', 'Как это работает', 'Вторая жизнь букетов', 'Блог'] },
-    { h: 'Покупателям', links: ['Свежие букеты рядом', 'Безопасная сделка', 'Доставка и самовывоз', 'Возврат и споры'] },
+    { h: 'Покупателям', links: ['Свежие букеты рядом', 'Безопасная сделка', 'Самовывоз рядом', 'Возврат и споры'] },
     { h: 'Продавцам', links: ['Опубликовать букет', 'Правила публикации', 'Выплаты', 'Самозанятым'] },
     { h: 'Помощь', links: ['Поддержка', 'Вопросы и ответы', 'Безопасность', 'Связаться с нами'] },
   ];
@@ -429,8 +429,10 @@ const PdLanding = (function () {
     );
   };
   PdLandingComp._navComp = LandingNav;
+  PdLandingComp._footComp = Footer;
   return PdLandingComp;
 })();
 
 const PdLandingNav = PdLanding._navComp;
-export { PdLanding, PdLandingNav };
+const PdLandingFooter = PdLanding._footComp;
+export { PdLanding, PdLandingNav, PdLandingFooter };

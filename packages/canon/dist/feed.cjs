@@ -1,7 +1,7 @@
 'use strict';
 
 var chunk62H5VVHD_cjs = require('./chunk-62H5VVHD.cjs');
-var chunk4PD7A5S4_cjs = require('./chunk-4PD7A5S4.cjs');
+var chunkFNIROHCP_cjs = require('./chunk-FNIROHCP.cjs');
 var chunkBHFGC5NF_cjs = require('./chunk-BHFGC5NF.cjs');
 require('./chunk-75ZPJI57.cjs');
 
@@ -13,11 +13,11 @@ Object.defineProperty(exports, "PdFeedDesktop", {
 });
 Object.defineProperty(exports, "VitrinaEmpty", {
   enumerable: true,
-  get: function () { return chunk4PD7A5S4_cjs.VitrinaEmpty; }
+  get: function () { return chunkFNIROHCP_cjs.VitrinaEmpty; }
 });
 Object.defineProperty(exports, "VitrinaLoading", {
   enumerable: true,
-  get: function () { return chunk4PD7A5S4_cjs.VitrinaLoading; }
+  get: function () { return chunkFNIROHCP_cjs.VitrinaLoading; }
 });
 Object.defineProperty(exports, "PD_FRESH", {
   enumerable: true,
