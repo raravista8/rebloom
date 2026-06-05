@@ -20,3 +20,9 @@ LEGACY_STATUS_MAP: dict[str, str] = {
     "refunded": "cancelled",
     "cancelled": "cancelled",
 }
+
+
+def compute_commission(amount_kopecks: int, bps: int) -> int:
+    """Platform commission in kopecks (floor). DORMANT at launch — the no-escrow flow
+    takes no commission (ADR-0013); kept for the dormant ledger + future monetization."""
+    return amount_kopecks * bps // 10000
