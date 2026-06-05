@@ -46,13 +46,21 @@ body {
   body {
     background: var(--pd-surface-3);
   }
-  /* Centred auth/standalone cards that are NOT the full desktop chrome. */
-  .pd-root:not(.pd-web) {
+  /* Centred auth/standalone cards that are NOT a full desktop layout. EXCLUDES the
+   * canon desktop auth split (.pad) and catalog/landing/web chrome — those own their
+   * full width; clamping them to 460px crammed the split + clipped the brand/headline. */
+  .pd-root:not(.pd-web):not(.pad):not(.pdc):not(.pdl) {
     max-width: 460px;
     margin-inline: auto;
     min-height: 100vh;
     background: var(--pd-bg);
     box-shadow: 0 0 48px rgba(35, 32, 27, 0.07);
+  }
+  /* Desktop auth split (canon .pad): canon sets height:100% which collapses to
+   * content height under our min-height body — fill the viewport so the brand aside
+   * reaches the bottom. */
+  .pad {
+    min-height: 100vh;
   }
   /* ScreenChrome desktop column: heading spacing + footer rendered as an inline
    * action panel (the mobile .pd-footerbar is a sticky bar; here it's a rounded card). */
