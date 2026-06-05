@@ -30,20 +30,36 @@ body {
   min-height: 100%;
 }
 
-/* Responsive desktop. The home renders a real wide desktop layout (.pd-web —
- * top nav + multi-column grid). Single-column detail/flow screens (listing, deal,
- * sell, profile, login…) use .pd-root; on desktop we centre them in a comfortable
- * column over a neutral surround (a normal web detail-page pattern), NOT a cramped
- * phone. The admin (.pda-app) and the desktop home (.pd-web) are full-width. */
+/* Responsive desktop. Every primary screen now renders the shared desktop chrome
+ * (.pd-web — top nav via WebChrome + canon pd-web.css layouts): the home витрина,
+ * and via ScreenChrome the detail/flow screens (listing, deal, profile, sell,
+ * notifications, settings, …). Auth (.pd-root.pa, login) stays a centred card on a
+ * neutral surround — the conventional desktop auth pattern. Admin (.pda-app) is its
+ * own desktop-first shell. */
 @media (min-width: 1024px) {
   body {
     background: var(--pd-surface-3);
   }
+  /* Centred auth/standalone cards that are NOT the full desktop chrome. */
   .pd-root:not(.pd-web) {
-    max-width: 720px;
+    max-width: 460px;
     margin-inline: auto;
     min-height: 100vh;
     background: var(--pd-bg);
     box-shadow: 0 0 48px rgba(35, 32, 27, 0.07);
+  }
+  /* ScreenChrome desktop column: heading spacing + footer rendered as an inline
+   * action panel (the mobile .pd-footerbar is a sticky bar; here it's a rounded card). */
+  .pd-web .pdw-narrow .pdw-h1,
+  .pd-web .pdw-detailwrap .pdw-h1 {
+    margin: 4px 0 18px;
+  }
+  .pd-web .pdw-foot {
+    margin-top: 22px;
+  }
+  .pd-web .pdw-foot .pd-footerbar {
+    border: 1px solid var(--pd-border);
+    border-radius: 16px;
+    background: var(--pd-surface);
   }
 }

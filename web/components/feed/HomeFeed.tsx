@@ -7,29 +7,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PdSkelCard, PdEmpty, PdBtn } from '@/components/canon';
-import { IconPin, IconChev, IconSearch, IconBell, IconDeals, IconPlus, IconUser } from '@/components/icons';
 import TopBar from '@/components/shell/TopBar';
 import BottomNav from '@/components/shell/BottomNav';
+import WebChrome from '@/components/shell/WebChrome';
 import BouquetCard from '@/components/feed/BouquetCard';
+import useIsDesktop from '@/lib/useIsDesktop';
 import { api, ApiError } from '@/lib/api';
-import { cityName, cityPrepositional } from '@/lib/cities';
+import { cityPrepositional } from '@/lib/cities';
 import type { ListingCard, Paginated } from '@/lib/types';
 
 type Status = 'loading' | 'loaded' | 'empty' | 'error' | 'offline';
-
-// ≥1024px → desktop layout. SSR/first paint renders mobile (no viewport on the
-// server); the client corrects on mount. One tree in the DOM at a time.
-function useIsDesktop() {
-  const [desktop, setDesktop] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
-    const sync = () => setDesktop(mq.matches);
-    sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
-  }, []);
-  return desktop;
-}
 
 const feedUrl = (cityId: string, section: 'fresh' | 'liked') =>
   `/feed?city_id=${encodeURIComponent(cityId)}&section=${section}&limit=12`;
@@ -119,28 +106,7 @@ export default function HomeFeed({ cityId }: { cityId: string }) {
       {/* ─────────── DESKTOP (≥1024px) ─────────── */}
       {isDesktop && (
       <div className="pd-root pd-web" data-pd-theme="a">
-        <header className="pdw-nav">
-          <div className="pdw-nav-in">
-            <Link href="/" className="pd-brand pdw-brand" style={{ textDecoration: 'none' }}>Передарим</Link>
-            <div className="pdw-navmid">
-              <Link href="/city" className="pd-city pdw-city" style={{ textDecoration: 'none' }}>
-                <IconPin className="pd-i16" />
-                {cityName(cityId)}
-                <IconChev className="pd-i14" />
-              </Link>
-              <Link href="/search" className="pd-search pdw-search" style={{ textDecoration: 'none' }}>
-                <IconSearch className="pd-i18" />
-                <span className="pd-search-ph">Поиск свежих букетов в {prep}</span>
-              </Link>
-            </div>
-            <nav className="pdw-navright">
-              <Link href="/notifications" className="pdw-iconbtn" aria-label="Уведомления"><IconBell className="pd-i20" /></Link>
-              <Link href="/deals" className="pdw-iconbtn" aria-label="Сделки"><IconDeals className="pd-i20" /></Link>
-              <Link href="/me" className="pdw-avatar" aria-label="Профиль" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconUser className="pd-i18" /></Link>
-              <Link href="/sell" className="pdw-cta" style={{ textDecoration: 'none' }}><IconPlus className="pd-i18" />Продать букет</Link>
-            </nav>
-          </div>
-        </header>
+        <WebChrome cityId={cityId} />
 
         <main className="pd-scroll pdw-scroll">
           <div className="pdw-wrap">
