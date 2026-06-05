@@ -39,7 +39,9 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         ),
     )
 
-    phone: Mapped[str] = mapped_column(String(16), unique=True, nullable=False)  # 🔒
+    # 🔒 Nullable: phone+OTP users have it; OAuth-first users may not (linked later).
+    # Unique still holds — Postgres allows multiple NULLs in a unique index.
+    phone: Mapped[str | None] = mapped_column(String(16), unique=True)
     display_name: Mapped[str | None] = mapped_column(String(64))
     city_id: Mapped[str | None] = mapped_column(String(8))
     roles: Mapped[list[str]] = mapped_column(
@@ -78,6 +80,23 @@ class Consent(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     source_channel: Mapped[str] = mapped_column(String(16), nullable=False)
 
     user: Mapped[User] = relationship(back_populates="consents")
+
+
+class OAuthIdentity(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """A linked external identity (Яндекс/Sber/VK/T-ID). One platform user may
+    link several; ``(provider, subject)`` is globally unique (AUTH_HANDOFF §4)."""
+
+    __tablename__ = "oauth_identities"
+    __table_args__ = (
+        UniqueConstraint("provider", "subject", name="uq_oauth_identities_provider"),
+    )
+
+    provider: Mapped[str] = mapped_column(String(16), nullable=False)
+    subject: Mapped[str] = mapped_column(String(255), nullable=False)  # 🔒 provider user id
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    email: Mapped[str | None] = mapped_column(String(255))  # 🔒
 
 
 class City(TimestampMixin, Base):

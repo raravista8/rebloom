@@ -63,6 +63,19 @@ class Settings(BaseSettings):
     # Empty in dev → a deterministic dev key is used; MUST be set in prod.
     pii_enc_key: str = ""
 
+    # ── OAuth providers (AUTH_HANDOFF §4) — backend-only secrets, never shipped to
+    # the client. Empty id/secret = that provider is disabled (button → oauth_failed).
+    # `oauth_redirect_allowlist` = comma-separated permitted post-login redirect_uri.
+    oauth_redirect_allowlist: str = ""
+    oauth_yandex_client_id: str = ""
+    oauth_yandex_client_secret: str = ""
+    oauth_sber_client_id: str = ""
+    oauth_sber_client_secret: str = ""
+    oauth_vk_client_id: str = ""
+    oauth_vk_client_secret: str = ""
+    oauth_tid_client_id: str = ""
+    oauth_tid_client_secret: str = ""
+
     @property
     def is_prod(self) -> bool:
         return self.app_env == "prod"

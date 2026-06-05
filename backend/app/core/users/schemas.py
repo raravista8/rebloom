@@ -13,7 +13,7 @@ class UserView:
     """Immutable snapshot of a user, detached from any ORM session."""
 
     id: str
-    phone: str  # 🔒 never serialized in the clear
+    phone: str | None  # 🔒 never serialized in the clear (None for OAuth-first users)
     display_name: str | None
     city_id: str | None
     roles: tuple[str, ...]
