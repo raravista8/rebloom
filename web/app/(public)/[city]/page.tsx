@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { GeoPageView } from '@/components/marketing/CanonMarketing';
 import JsonLd from '@/components/marketing/JsonLd';
+import { SiteFooterStandalone } from '@/components/marketing/SiteFooter';
 import { GEO_SLUGS, geoCityBySlug } from '@/lib/geoCities';
 import { SITE_URL, abs } from '@/lib/site';
 
@@ -63,6 +64,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
     <>
       <JsonLd data={[breadcrumbs, itemList]} />
       <GeoPageView data={city} />
+      <SiteFooterStandalone />
     </>
   );
 }

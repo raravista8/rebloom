@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { PdBtn } from '@/components/canon';
 import { IconPlus } from '@/components/icons';
 import BouquetCard from '@/components/feed/BouquetCard';
+import SiteFooter from '@/components/marketing/SiteFooter';
 import { api, ApiError } from '@/lib/api';
 import { cityName } from '@/lib/cities';
 import type { ListingCard, Paginated } from '@/lib/types';
@@ -316,39 +317,7 @@ function Final() {
     </section>
   );
 }
-const FOOT_COLS = [
-  { h: 'Сервис', links: ['О «Передариме»', 'Как это работает', 'Вторая жизнь букетов', 'Блог'] },
-  { h: 'Покупателям', links: ['Свежие букеты рядом', 'Безопасная сделка', 'Доставка и самовывоз', 'Возврат и споры'] },
-  { h: 'Продавцам', links: ['Опубликовать букет', 'Правила публикации', 'Выплаты', 'Самозанятым'] },
-  { h: 'Помощь', links: ['Поддержка', 'Вопросы и ответы', 'Безопасность', 'Связаться с нами'] },
-];
-function Footer() {
-  return (
-    <footer className="pdl-foot">
-      <div className="pdl-in">
-        <div className="pdl-foot-top">
-          <div className="pdl-foot-brand">
-            <span className="pdl-foot-mark"><Mark size={26} /><span className="w">Передарим</span></span>
-            <p className="pdl-foot-tag">Сервис передаривания свежих букетов. Дарим цветам вторую жизнь и продаём их в 2–3 раза дешевле магазина.</p>
-          </div>
-          <div className="pdl-foot-cols">
-            {FOOT_COLS.map((c) => (
-              <div className="pdl-foot-col" key={c.h}><h4>{c.h}</h4><ul>{c.links.map((l) => <li key={l}><a href="#" onClick={(e) => e.preventDefault()}>{l}</a></li>)}</ul></div>
-            ))}
-          </div>
-        </div>
-        <div className="pdl-foot-legal">
-          <div className="links">
-            <Link href="/legal/terms">Пользовательское соглашение</Link>
-            <Link href="/legal/privacy">Политика конфиденциальности</Link>
-            <Link href="/legal/privacy">Согласие на обработку данных</Link>
-          </div>
-          <p>© 2026 «Передарим». Сервис не является цветочным магазином и не продаёт новые букеты. Обработка персональных данных по 152-ФЗ.</p>
-        </div>
-      </div>
-    </footer>
-  );
-}
+// Footer extracted to the shared SiteFooter (real links only) — imported above.
 
 export default function LandingHome({ cityId }: { cityId: string }) {
   const [pool, setPool] = useState<ListingCard[]>([]);
@@ -386,7 +355,7 @@ export default function LandingHome({ cityId }: { cityId: string }) {
         <Objections />
         <AppSec />
         <Final />
-        <Footer />
+        <SiteFooter />
       </main>
     </div>
   );

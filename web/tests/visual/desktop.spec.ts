@@ -103,3 +103,26 @@ test('safe-deal page: desktop renders, no overflow', async ({ page }) => {
   await expect(page.locator('h1.pds-h1')).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
+
+// Footer regression: every footer link must resolve to a real route — no dead
+// `href="#"` (canon's PdLandingFooter ships them; we replace it with SiteFooter).
+test('home footer: real links only, no dead href="#"', async ({ page }) => {
+  await page.route('**/api/feed**', (r) => ok(r, { items: [], next_cursor: null }));
+  await page.goto('/');
+  const foot = page.locator('.pdl-foot');
+  await expect(foot).toBeVisible();
+  expect(await foot.locator('a[href="#"]').count()).toBe(0);
+  await expect(foot.locator('a[href="/sell"]')).toHaveCount(1);
+  await expect(foot.locator('a[href="/bezopasnaya-sdelka"]')).toHaveCount(1);
+  await expect(foot.locator('a[href="/legal/privacy"]')).toHaveCount(1);
+});
+
+test('SEO page footer: canon dead footer hidden, real footer shown', async ({ page }) => {
+  await page.route('**/img/**', (r) =>
+    r.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"/>' }),
+  );
+  await page.goto('/moskva');
+  // No VISIBLE dead links (the baked canon footer is display:none; SiteFooter is real).
+  expect(await page.locator('.pdl-foot a[href="#"]:visible').count()).toBe(0);
+  await expect(page.locator('.pdl-foot a[href="/spb"]:visible')).toBeVisible();
+});

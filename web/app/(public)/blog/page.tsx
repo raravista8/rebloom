@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { BlogIndexView } from '@/components/marketing/CanonMarketing';
 import JsonLd from '@/components/marketing/JsonLd';
+import { SiteFooterStandalone } from '@/components/marketing/SiteFooter';
 import { BLOG_ARTICLES } from '@/lib/blogArticles';
 import { SITE_URL, abs } from '@/lib/site';
 
@@ -47,6 +48,7 @@ export default function BlogIndexPage() {
     <>
       <JsonLd data={[blogLd, breadcrumbs]} />
       <BlogIndexView />
+      <SiteFooterStandalone />
     </>
   );
 }
