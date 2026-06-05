@@ -18,7 +18,6 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
-    reducedMotion: 'reduce', // canon honours prefers-reduced-motion (MOTION.md)
   },
   projects: [
     {
