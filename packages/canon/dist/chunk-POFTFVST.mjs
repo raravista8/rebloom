@@ -1,4 +1,4 @@
-import { I, Ic, PdBtn, PdScreen, PdStepper, PdNotice, pdMoney, PdBubble, PdInput, Avatar, PdStars, PdField, LikeBtn, Freshness, PdSeg, PD_FRESH, Card, PdSizeSel, PD_LIKED } from './chunk-OS4LB2PH.mjs';
+import { I, Ic, PdBtn, PdScreen, PdStepper, PdNotice, pdMoney, PdBubble, PdInput, Avatar, PdStars, PdField, LikeBtn, Freshness, PD_FRESH, Card, PdSizeSel, PdSeg, PD_LIKED } from './chunk-OS4LB2PH.mjs';
 import 'react';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
@@ -252,7 +252,16 @@ function ListingDesktop() {
           wic(I.fwd, "pd-i18")
         ] }),
         /* @__PURE__ */ jsx("div", { className: "pd-label", style: { marginBottom: 8 }, children: "\u041A\u0430\u043A \u0437\u0430\u0431\u0440\u0430\u0442\u044C" }),
-        /* @__PURE__ */ jsx(PdSeg, { value: "pickup", options: [{ k: "pickup", label: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437", icon: I.walk }, { k: "courier", label: "\u041A\u0443\u0440\u044C\u0435\u0440", icon: I.truck }] }),
+        /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 11, padding: "13px 14px", border: "1px solid var(--pd-border)", borderRadius: 14 }, children: [
+          /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", width: "20", height: "20", fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", style: { color: "var(--pd-primary)", flex: "none" }, children: [
+            /* @__PURE__ */ jsx("path", { d: "M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z" }),
+            /* @__PURE__ */ jsx("circle", { cx: "12", cy: "10", r: "2.5" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { style: { flex: 1 }, children: [
+            /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 14 }, children: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0440\u044F\u0434\u043E\u043C" }),
+            /* @__PURE__ */ jsx("div", { style: { fontSize: 12.5, color: "var(--pd-muted)", marginTop: 1 }, children: "\u0417\u0430\u0431\u0435\u0440\u0451\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0443 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430 \u2014 \u043E\u0431\u044B\u0447\u043D\u043E \u0434\u0432\u043E\u0440 \u0438\u043B\u0438 \u043C\u0435\u0442\u0440\u043E \u043F\u043E\u0431\u043B\u0438\u0437\u043E\u0441\u0442\u0438" })
+          ] })
+        ] }),
         /* @__PURE__ */ jsx("div", { style: { margin: "16px 0" }, children: /* @__PURE__ */ jsxs(PdNotice, { kind: "ok", icon: I.shield, children: [
           /* @__PURE__ */ jsx("b", { children: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430." }),
           " \u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u044D\u0441\u043A\u0440\u043E\u0443. \u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u043F\u043E\u043B\u0443\u0447\u0438\u0442 \u0438\u0445 \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F."

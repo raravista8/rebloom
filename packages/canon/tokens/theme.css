@@ -61,4 +61,23 @@
   --pd-ease-accelerate:cubic-bezier(.4,0,1,1);
   --pd-press-scale:.97;
   --pd-card-hover-lift:-3px;
+
+  /* ── marketing / SEO surface (canon 0.4.0 · ./marketing) ──
+   * Системные отступы «заголовок → подзаголовок» + сетка карточек.
+   * Базовые значения = мобайл; десктоп-step-up — в `.pds--desk` ниже. */
+  --pds-gap-eyebrow:14px;  /* надзаголовок (eyebrow) → заголовок */
+  --pds-gap-deck:10px;     /* заголовок → подзаголовок/деск (тесная связка) */
+  --pds-gap-lede:22px;     /* H1 героя → вводный лид-абзац */
+  --pds-gap-sechead:28px;  /* блок заголовка → контент секции */
+  --pds-gap-qa:9px;        /* вопрос FAQ → ответ */
+  --pds-card-min:240px;    /* мин. ширина карточки букета; ниже — сетка убирает колонку */
+}
+
+/* десктоп-step-up маркетинговых отступов */
+.pds--desk {
+  --pds-gap-eyebrow:16px;
+  --pds-gap-deck:12px;
+  --pds-gap-lede:30px;
+  --pds-gap-sechead:34px;
+  --pds-gap-qa:10px;
 }

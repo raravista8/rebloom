@@ -2,6 +2,35 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## 0.4.0 — 2026-06-05 · marketing SEO pages (geo ×10 · safe-deal · blog) + pickup-only
+
+**Adds the public SEO/marketing surface** that converts the semantic-core work into canon, and applies
+the **pickup-only** product decision across customer-facing UI. Semantic core: `semantica_peredarim/peredarim-seo-yadro.md`.
+Implementation spec for `web/`: `CLAUDE_CODE_HANDOFF.md §8`. Semantic core: `reference/peredarim-seo-yadro.md`.
+
+### Added — `./marketing`
+- **`PdGeoPage`** — city SEO landing template (`data: CityData`, `platform`). One template → 10 cities; city declensions (nom/loc/gen) + districts + `metro` flag are **data** (`PD_GEO_CITIES`), not computed. Sections: hero (eyebrow/H1/lede/trust), live catalog with working price·freshness filters, districts/cities/occasions interlinking, FAQ. Copy auto-drops «у метро» where `metro:false` (Челябинск/Красноярск/Уфа). Только Title/H1 несут город (Директ — таргетингом, ядро §2.3).
+- **`PdSafeDeal`** — «Безопасная сделка»: escrow 3-step flow + «что такое эскроу простыми словами» + FAQ + CTA. Trust cluster; снимает возражение «обман».
+- **`PdBlogIndex` / `PdBlogArticle`** — мини-блог (supply warm-up): 3 статьи + article template with «Опубликовать букет» CTA. Темы из ядра.
+- **`PdSeoMeta`** — visible meta-plate (Title/Description/H1/alt preview); for `web/` the real meta goes via `generateMetadata` (§5 table).
+- **`PdLandingFooter`** — landing footer now exported (reused by all marketing pages).
+- **`nbsp(string)`** — SSR-safe typographer (pure string→string): glues short prepositions/conjunctions + numbers, keeps dashes/middots off line-start. Replaces the design-time DOM walker for prod (no layout shift, crawler-visible).
+
+### Added — tokens (`tokens/theme.css`, `canon.css`)
+- **Heading→subheading spacing system:** `--pds-gap-eyebrow / -deck / -lede / -sechead / -qa` (mobile base + `.pds--desk` step-up). One token per relationship — kills ad-hoc margins.
+- **Intrinsic card grid:** `--pds-card-min` (240px) + `.pds-grid` `repeat(auto-fill, minmax(min(100%, var(--pds-card-min)), 1fr))` with `min-width:0` on children. Grid self-drops a column when cards won't fit → 1-up on narrow mobile, 4-up desktop; never overflows the viewport.
+
+### Changed / Fixed — pickup-only
+- **`DeliveryToggle` removed** from buy/deal screens (`screens/discovery.jsx`, `screens/desktop.jsx`): the «Самовывоз/Курьер» segmented control → a static **«Самовывоз рядом»** row. Courier deferred behind `delivery.courier=off` (growth lever; backend `delivery_method` contract kept forward-compatible).
+- **Landing copy** (`marketing/landing.jsx`): «самовывоз или доставка по городу» → «самовывоз рядом / у дома или метро» (advantages + escrow step 2); footer link «Доставка и самовывоз» → «Самовывоз рядом».
+- **Specificity fix (canon-wide gotcha):** heading-gap rules are scoped under `.pds` (`.pds .pds-intro`…) so they beat the global `.pd-root p{margin:0}` reset (0,1,1) — single-class rules silently collapsed to 0 otherwise.
+
+### Notes for the consumer
+- `./marketing` exports map unchanged structurally (entry re-exports new names) — rebuild `dist/*.js` via `npm run build` (§9 step 4); verify ASCII markers (`grep -l "PdGeoPage" dist/marketing.js`).
+- `dist/canon.css` updated (appended `.pds-*` block). `tokens/theme.css` gained the `--pds-*` tokens.
+- **City data is a placeholder** — `web/` replaces `PD_GEO_CITIES` with the real declension table (esp. «Санкт-Петербург», «Нижний Новгород») and live counts.
+- **Typographer**: use `nbsp()` at SSR/build, not the client DOM walker — see `CLAUDE_CODE_HANDOFF.md §5`.
+
 ## 0.3.0 — 2026-06-05 · auth: OAuth ID on every platform + desktop split fix
 
 **Fixes the broken login on prod** and finishes the OAuth wiring. Two prod symptoms, one root cause —

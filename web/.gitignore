@@ -28,3 +28,6 @@ yarn-error.log*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Local macOS visual snapshots — canonical baselines are -linux.png (generated in CI)
+tests/visual/**/*-darwin.png

@@ -94,7 +94,13 @@ function ListingBody({ sold }) {
       {/* delivery */}
       <div style={{marginTop:16}}>
         <div className="pd-label" style={{marginBottom:8}}>Как забрать</div>
-        <PdSeg value="pickup" options={[{k:'pickup',label:'Самовывоз',icon:PdI.walk},{k:'courier',label:'Курьер',icon:PdI.truck}]} />
+        <div style={{display:'flex',alignItems:'center',gap:11,padding:'13px 14px',border:'1px solid var(--pd-border)',borderRadius:14}}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--pd-primary)',flex:'none'}}><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:700,fontSize:14}}>Самовывоз рядом</div>
+            <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца — обычно двор или метро поблизости</div>
+          </div>
+        </div>
         <p style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:8}}>Точный адрес появится в чате после оплаты. Двор или станцию выбирает продавец.</p>
       </div>
 
