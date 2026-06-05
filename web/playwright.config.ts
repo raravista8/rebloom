@@ -11,12 +11,14 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'line' : 'list',
   expect: {
-    // ≤2% pixel difference (CLAUDE.md UI DoD).
-    toHaveScreenshot: { maxDiffPixelRatio: 0.02 },
+    // ≤2% pixel difference (CLAUDE.md UI DoD). Freeze animations so framer-motion
+    // reveals/springs don't make shots flaky.
+    toHaveScreenshot: { maxDiffPixelRatio: 0.02, animations: 'disabled', caret: 'hide' },
   },
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    reducedMotion: 'reduce', // canon honours prefers-reduced-motion (MOTION.md)
   },
   projects: [
     {
@@ -29,9 +31,10 @@ export default defineConfig({
     {
       // Desktop layout coverage — the suite was 360-only, so desktop regressions
       // (clamped split, clipped text, mobile-tree-on-desktop) shipped unseen.
+      // `pixel.spec.ts` runs in BOTH projects → mobile + desktop baselines.
       name: 'desktop-1280',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } },
-      testMatch: '**/desktop.spec.ts',
+      testMatch: ['**/desktop.spec.ts', '**/pixel.spec.ts'],
     },
   ],
   webServer: {
