@@ -20,11 +20,18 @@ from app.config import get_settings
 _settings = get_settings()
 _CONNECT_ARGS = {"connect_timeout": 3}
 
+# Pool sizing for the single box: sync route handlers run in a threadpool, each
+# holding one connection while it does a DB round-trip. SQLAlchemy defaults
+# (pool_size=5, overflow=10 → 15) throttled throughput at ~315 rps with CPU idle.
+# Per worker: writer(16+16) + reader(16+16) = 64 connections; ×3 uvicorn workers =
+# 192 peak, under Postgres max_connections=200 (infra/docker-compose.prod.yml).
+_POOL = {"pool_size": 16, "max_overflow": 16, "pool_timeout": 10}
+
 writer_engine: Engine = create_engine(
-    _settings.database_url, pool_pre_ping=True, connect_args=_CONNECT_ARGS
+    _settings.database_url, pool_pre_ping=True, connect_args=_CONNECT_ARGS, **_POOL
 )
 reader_engine: Engine = create_engine(
-    _settings.reader_url, pool_pre_ping=True, connect_args=_CONNECT_ARGS
+    _settings.reader_url, pool_pre_ping=True, connect_args=_CONNECT_ARGS, **_POOL
 )
 
 SessionWriter = sessionmaker(bind=writer_engine, class_=Session, expire_on_commit=False)
