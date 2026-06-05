@@ -20,6 +20,17 @@ export const metadata: Metadata = {
   description:
     'C2C-маркетплейс ресейла подаренных букетов: свежие цветы дешевле флориста, безопасная сделка через эскроу.',
   applicationName: 'Передарим',
+  // «Соцветие» favicon set shipped with @rebloom/canon 0.2.0 (copied to public/).
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export const viewport: Viewport = {

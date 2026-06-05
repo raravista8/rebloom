@@ -1,0 +1,26 @@
+{
+  "name": "Передарим",
+  "short_name": "Передарим",
+  "description": "Свежие букеты в 2–3 раза дешевле цветочного магазина.",
+  "theme_color": "#CF5638",
+  "background_color": "#FAF8F4",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

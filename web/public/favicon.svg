@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="Передарим">
+  <rect width="100" height="100" rx="22" fill="#CF5638"></rect>
+  <g transform="translate(50 50) scale(0.64) translate(-50 -50)">
+    <g fill="#ffffff">
+    <path d="M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z" transform="rotate(0 50 50)"></path>
+    <path d="M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z" transform="rotate(72 50 50)"></path>
+    <path d="M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z" transform="rotate(144 50 50)"></path>
+    <path d="M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z" transform="rotate(216 50 50)"></path>
+    <path d="M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z" transform="rotate(288 50 50)"></path>
+    </g>
+    <circle cx="50" cy="50" r="8" fill="#E8A93B"></circle>
+  </g>
+</svg>
