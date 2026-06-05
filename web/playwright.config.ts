@@ -20,8 +20,18 @@ export default defineConfig({
   },
   projects: [
     {
+      // Functional/DOM specs run mobile-first; they own the admin desktop cases
+      // inline via test.use(). `desktop.spec.ts` is for the desktop project only.
       name: 'mobile-360',
       use: { ...devices['Pixel 5'], viewport: { width: 360, height: 800 } },
+      testIgnore: '**/desktop.spec.ts',
+    },
+    {
+      // Desktop layout coverage — the suite was 360-only, so desktop regressions
+      // (clamped split, clipped text, mobile-tree-on-desktop) shipped unseen.
+      name: 'desktop-1280',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } },
+      testMatch: '**/desktop.spec.ts',
     },
   ],
   webServer: {
