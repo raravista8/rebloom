@@ -54,7 +54,9 @@ class HttpxOAuthProviderClient:
         if not req.full_url.lower().startswith("https://"):
             return None  # never speak OAuth over plaintext
         try:
-            with urllib.request.urlopen(req, timeout=self._timeout) as resp:
+            # nosec B310 — scheme is restricted to https just above; URL is a fixed
+            # provider endpoint from config, never user input.
+            with urllib.request.urlopen(req, timeout=self._timeout) as resp:  # nosec B310
                 payload = json.loads(resp.read().decode("utf-8"))
         except (urllib.error.URLError, OSError, ValueError, TimeoutError):
             return None
