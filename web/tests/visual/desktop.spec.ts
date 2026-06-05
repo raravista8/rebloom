@@ -81,3 +81,25 @@ test('profile: desktop chrome renders, no overflow', async ({ page }) => {
   await expect(page.locator('.pd-web')).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
+
+// SEO marketing pages (canon ./marketing, 0.4.0). Stub the Unsplash-proxied teaser
+// images so the guard is hermetic; layout is CSS-driven (aspect-ratio boxes) so it
+// holds regardless. Catches desktop overflow / clipped headings on the geo lander —
+// the highest-value organic surface.
+test('geo city page: desktop landing, H1 not clipped, no overflow', async ({ page }) => {
+  await page.route('**/img/**', (r) =>
+    r.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"/>' }),
+  );
+  await page.goto('/moskva');
+  await expect(page.locator('.pds--desk')).toBeVisible(); // desktop variant mounts (useIsDesktop)
+  await expect(page.locator('h1.pds-h1')).toContainText('Москве');
+  await expectNoClip(page.locator('h1.pds-h1'));
+  await expectNoHorizontalOverflow(page);
+});
+
+test('safe-deal page: desktop renders, no overflow', async ({ page }) => {
+  await page.goto('/bezopasnaya-sdelka');
+  await expect(page.locator('.pds--desk')).toBeVisible();
+  await expect(page.locator('h1.pds-h1')).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});

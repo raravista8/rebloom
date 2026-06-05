@@ -6,6 +6,7 @@
 // (.pa mobile · .pad split desktop) — NOT the marketplace WebShell (the prod bug).
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { AuthChooser, AuthDesktopChooser } from '@rebloom/canon/auth';
 import { PdField, PdBtn, PdNotice } from '@/components/canon';
 import useIsDesktop from '@/lib/useIsDesktop';
@@ -238,7 +239,7 @@ export default function LoginFlow() {
               style={{ position: 'absolute', opacity: 0, width: 1, height: 1 }}
             />
             <span className="box">{consent && <IconCheck className="pd-i16" />}</span>
-            <span className="t">Соглашаюсь с <a href="/legal/terms">условиями</a> и <a href="/legal/privacy">политикой ПДн</a> (ФЗ-152).</span>
+            <span className="t">Соглашаюсь с <Link href="/legal/terms">условиями</Link> и <Link href="/legal/privacy">политикой ПДн</Link> (ФЗ-152).</span>
           </label>
           {consentErr && <p style={{ color: 'var(--pd-danger)', fontSize: 13, marginTop: 8 }}>Отметьте согласие, чтобы продолжить.</p>}
         </div>

@@ -339,9 +339,9 @@ function Footer() {
         </div>
         <div className="pdl-foot-legal">
           <div className="links">
-            <a href="/legal/terms">Пользовательское соглашение</a>
-            <a href="/legal/privacy">Политика конфиденциальности</a>
-            <a href="/legal/privacy">Согласие на обработку данных</a>
+            <Link href="/legal/terms">Пользовательское соглашение</Link>
+            <Link href="/legal/privacy">Политика конфиденциальности</Link>
+            <Link href="/legal/privacy">Согласие на обработку данных</Link>
           </div>
           <p>© 2026 «Передарим». Сервис не является цветочным магазином и не продаёт новые букеты. Обработка персональных данных по 152-ФЗ.</p>
         </div>

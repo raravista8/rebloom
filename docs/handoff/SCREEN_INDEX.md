@@ -26,5 +26,16 @@
 | 17 | Удаление аккаунта (DSR) | `/settings/delete` | подтвердить (OTP) | confirm/scheduled/error | 🔵 | FLOW-9 |
 | 18 | Пожаловаться | (modal) | отправить жалобу | form/submitting/success | 🔵 | FLOW-10 |
 
+## Public SEO / marketing surface (canon `./marketing` 0.4.0, SSG)
+Crawlable landing pages from `peredarim-seo-yadro.md`. SSR/SSG, per-page `generateMetadata` + JSON-LD; `sitemap.xml` + `robots.txt` live. Live wiring: geo catalog is a canon teaser (sample data) for now; live per-city counts/catalog deferred until inventory > 0.
+
+| # | Screen | Route (web) | Render | Meta / structured data | Status |
+|---|---|---|---|---|---|
+| 19 | Гео-лендинг города ×10 | `/[city]` (moskva…ufa) | 🟢 SSG | Title/H1 «…в {loc}», BreadcrumbList+ItemList, canonical | live |
+| 20 | Безопасная сделка | `/bezopasnaya-sdelka` | 🟢 SSG | FAQPage+BreadcrumbList | live |
+| 21 | Блог (индекс) | `/blog` | 🟢 SSG | Blog+BreadcrumbList | live |
+| 22 | Блог (статья ×3) | `/blog/[slug]` | 🟢 SSG | Article+BreadcrumbList | live (canon body templated — 1 written) |
+| — | sitemap / robots | `/sitemap.xml`, `/robots.txt` | 🟢 | 10 geo + safe-deal + blog; private routes disallowed | live |
+
 ## Component coverage (canon)
 Base + domain components per `DESIGN_BRIEF.md §4`. Track per-component status in `VISUAL_COVERAGE.md`.
