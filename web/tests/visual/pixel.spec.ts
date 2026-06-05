@@ -47,7 +47,7 @@ test('listing detail', async ({ page }) => {
     }),
   );
   await page.goto('/l/l1');
-  await expect(page.getByText('Безопасная сделка.')).toBeVisible();
+  await expect(page.getByText('Оплата при встрече.')).toBeVisible();
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveScreenshot('listing-detail.png');
 });
