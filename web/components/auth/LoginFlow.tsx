@@ -7,6 +7,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PdField, PdBtn, PdNotice } from '@/components/canon';
+import WebChrome from '@/components/shell/WebChrome';
+import useIsDesktop from '@/lib/useIsDesktop';
 import { api, ApiError, messageForCode } from '@/lib/api';
 import type { User } from '@/lib/types';
 import {
@@ -29,6 +31,29 @@ function AuthChrome({
   foot: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const isDesktop = useIsDesktop();
+
+  // Desktop: shared top nav + a centred auth card (a real web login page), not a
+  // full-height phone screen.
+  if (isDesktop) {
+    return (
+      <div className="pd-root pd-web" data-pd-theme="a">
+        <WebChrome />
+        <main className="pd-scroll pdw-scroll">
+          <div className="pdw-authwrap">
+            <div className="pdw-authcard">
+              <button className="pdw-back" onClick={onBack}>
+                <IconBack className="pd-i18" /> Назад
+              </button>
+              {children}
+              {foot}
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="pd-root pa pa--ios" data-pd-theme="a" style={{ position: 'relative' }}>
       <div className="pa-top">

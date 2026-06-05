@@ -62,4 +62,24 @@ body {
     border-radius: 16px;
     background: var(--pd-surface);
   }
+  /* Desktop login: centred auth card (not a full-height phone). */
+  .pd-web .pdw-authwrap {
+    display: flex;
+    justify-content: center;
+    padding: 56px 24px;
+  }
+  .pd-web .pdw-authcard {
+    width: 100%;
+    max-width: 420px;
+    background: var(--pd-surface);
+    border: 1px solid var(--pd-border);
+    border-radius: 20px;
+    padding: 24px 28px 26px;
+    box-shadow: 0 8px 40px rgba(35, 32, 27, 0.06);
+  }
+  .pd-web .pdw-authcard .pd-footerbar {
+    border: 0;
+    background: transparent;
+    padding: 18px 0 0;
+  }
 }
