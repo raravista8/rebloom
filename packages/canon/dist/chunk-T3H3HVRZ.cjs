@@ -46,17 +46,26 @@ var PROV = {
   gos: { mk: "pa-mk-gos", ch: "\u0413\u0423", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 \u0413\u043E\u0441\u0443\u0441\u043B\u0443\u0433\u0438" },
   phone: { mk: "pa-mk-phone", icon: A.phone, lbl: "\u0412\u043E\u0439\u0442\u0438 \u043F\u043E \u043D\u043E\u043C\u0435\u0440\u0443 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430", tint: true }
 };
-function OAuthBtn({ k, primary }) {
+var PROV_HOST = {
+  ya: "oauth.yandex.ru",
+  sber: "id.sber.ru",
+  vk: "id.vk.com",
+  tid: "id.tinkoff.ru",
+  apple: "appleid.apple.com",
+  gos: "esia.gosuslugi.ru"
+};
+function OAuthBtn({ k, primary, slot }) {
   const p = PROV[k];
-  return /* @__PURE__ */ jsxRuntime.jsxs("button", { className: `pa-oauthbtn${primary ? " pa-oauthbtn--primary" : ""}`, children: [
+  if (slot) return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `pa-oauthbtn pa-oauthbtn--slot${primary ? " pa-oauthbtn--primary" : ""}`, "data-provider": k, children: slot });
+  return /* @__PURE__ */ jsxRuntime.jsxs("button", { className: `pa-oauthbtn${primary ? " pa-oauthbtn--primary" : ""}`, "data-provider": k, children: [
     /* @__PURE__ */ jsxRuntime.jsx("span", { className: `mark ${p.mk}`, children: p.icon ? p.icon({ className: "pd-i18", style: { color: "inherit" } }) : p.ch }),
     /* @__PURE__ */ jsxRuntime.jsx("span", { className: "lbl", children: p.lbl }),
     /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: ic(A.chevR, "pd-i16") })
   ] });
 }
-function OauthList({ plat }) {
+function OauthList({ plat, slots }) {
   const list = plat === "ios" ? [["apple", true], ["ya", false], ["sber", false], ["vk", false], ["tid", false]] : [["ya", true], ["sber", false], ["vk", false], ["tid", false]];
-  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-oauth", children: list.map(([k, pr]) => /* @__PURE__ */ jsxRuntime.jsx(OAuthBtn, { k, primary: pr }, k)) });
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-oauth", children: list.map(([k, pr]) => /* @__PURE__ */ jsxRuntime.jsx(OAuthBtn, { k, primary: pr, slot: slots && slots[k] }, k)) });
 }
 var Consent = () => /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pa-consent", children: [
   "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0430\u044F, \u0432\u044B \u0441\u043E\u0433\u043B\u0430\u0448\u0430\u0435\u0442\u0435\u0441\u044C \u0441 ",
@@ -82,14 +91,14 @@ var Hero = ({ title, sub, logo = true }) => /* @__PURE__ */ jsxRuntime.jsxs("div
   title ? /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pa-h2", children: title }) : /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-brand", children: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }),
   sub && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-tag", children: sub })
 ] });
-function AuthChooser({ plat = "ios" }) {
+function AuthChooser({ plat = "ios", slots }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(AuthShell, { plat, back: false, children: [
     /* @__PURE__ */ jsxRuntime.jsx(Hero, { sub: /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
       "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439",
       /* @__PURE__ */ jsxRuntime.jsx("br", {}),
       "\u0438 \u0432\u0442\u043E\u0440\u0430\u044F \u0436\u0438\u0437\u043D\u044C \u0434\u043B\u044F \u043F\u043E\u0434\u0430\u0440\u0435\u043D\u043D\u044B\u0445 \u0446\u0432\u0435\u0442\u043E\u0432."
     ] }) }),
-    /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat }),
+    /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat, slots }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-or", children: "\u0431\u044B\u0441\u0442\u0440\u0435\u0435 \u0432\u0441\u0435\u0433\u043E \u0447\u0435\u0440\u0435\u0437 \u0441\u0435\u0440\u0432\u0438\u0441" }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-oauth", children: /* @__PURE__ */ jsxRuntime.jsx(OAuthBtn, { k: "phone" }) }),
     /* @__PURE__ */ jsxRuntime.jsx(Consent, {}),
@@ -104,9 +113,8 @@ function ProvHead({ k }) {
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "ttl", children: p.lbl.replace("\u0412\u043E\u0439\u0442\u0438 \u0441 ", "").replace("\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 ", "").replace("\u0412\u043E\u0439\u0442\u0438 \u0441\u043E ", "") }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "url", children: [
         ic(chunkBHFGC5NF_cjs.I.lock, "pd-i12"),
-        " id.",
-        k === "ya" ? "yandex" : k === "sber" ? "sber" : k,
-        ".ru"
+        " ",
+        PROV_HOST[k] || `id.${k}.ru`
       ] })
     ] })
   ] });
@@ -150,7 +158,7 @@ function ConsentBody({ k }) {
     /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-link", style: { display: "block", margin: "12px auto 0" }, children: "\u041E\u0442\u043C\u0435\u043D\u0430" })
   ] });
 }
-function AuthOAuthSheet({ plat = "ios", prov = "ya" }) {
+function AuthOAuthSheet({ plat = "ios", prov = "ya", slots }) {
   const overlay = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-scrim", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-sheet", children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "grab" }),
     /* @__PURE__ */ jsxRuntime.jsx(ConsentBody, { k: prov })
@@ -159,7 +167,7 @@ function AuthOAuthSheet({ plat = "ios", prov = "ya" }) {
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-top" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-body", style: { filter: "blur(1.5px)", opacity: 0.5, pointerEvents: "none" }, children: [
       /* @__PURE__ */ jsxRuntime.jsx(Hero, { sub: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439." }),
-      /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat })
+      /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat, slots })
     ] }),
     overlay
   ] });
@@ -364,19 +372,19 @@ function DeskShell({ children, popup }) {
     ] })
   ] });
 }
-function AuthDesktopChooser() {
+function AuthDesktopChooser({ slots }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-hero", style: { paddingTop: 0 }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pa-h2", style: { fontSize: 26 }, children: "\u0412\u0445\u043E\u0434 \u0438\u043B\u0438 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-tag", children: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0443\u0434\u043E\u0431\u043D\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431, \u0437\u0430 \u043F\u0430\u0440\u0443 \u0441\u0435\u043A\u0443\u043D\u0434." })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat: "desktop" }),
+    /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat: "desktop", slots }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-or", children: "\u0438\u043B\u0438" }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-oauth", children: /* @__PURE__ */ jsxRuntime.jsx(OAuthBtn, { k: "phone" }) }),
     /* @__PURE__ */ jsxRuntime.jsx(Consent, {})
   ] });
 }
-function AuthDesktopOAuth() {
+function AuthDesktopOAuth({ prov = "ya", slots }) {
   const popup = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pad-popup", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pad-popwin", children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pad-popbar", children: [
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "dot" }),
@@ -384,17 +392,18 @@ function AuthDesktopOAuth() {
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "dot" }),
       /* @__PURE__ */ jsxRuntime.jsxs("span", { style: { marginLeft: 8 }, children: [
         ic(chunkBHFGC5NF_cjs.I.lock, "pd-i12"),
-        " oauth.yandex.ru"
+        " ",
+        PROV_HOST[prov] || "oauth.yandex.ru"
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: 22 }, children: /* @__PURE__ */ jsxRuntime.jsx(ConsentBody, { k: "ya" }) })
+    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: 22 }, children: /* @__PURE__ */ jsxRuntime.jsx(ConsentBody, { k: prov }) })
   ] }) });
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { popup, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-hero", style: { paddingTop: 0 }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pa-h2", style: { fontSize: 26 }, children: "\u0412\u0445\u043E\u0434 \u0438\u043B\u0438 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-tag", children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u0432\u0445\u043E\u0434 \u0432 \u043E\u0442\u043A\u0440\u044B\u0432\u0448\u0435\u043C\u0441\u044F \u043E\u043A\u043D\u0435." })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat: "desktop" })
+    /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat: "desktop", slots })
   ] });
 }
 function AuthDesktopPhone({ state = "rest" }) {
@@ -420,10 +429,64 @@ function AuthDesktopRegister({ state = "rest" }) {
 function AuthDesktopWelcome() {
   return /* @__PURE__ */ jsxRuntime.jsx(DeskShell, { children: /* @__PURE__ */ jsxRuntime.jsx(WelcomeBody, {}) });
 }
+function AuthDesktopLink() {
+  return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { textAlign: "center", margin: "4px 0 20px" }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-logo", style: { background: "var(--pd-warn-soft)", color: "var(--pd-warn)" }, children: ic(chunkBHFGC5NF_cjs.I.shield, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u042D\u0442\u043E\u0442 \u043D\u043E\u043C\u0435\u0440 \u0443\u0436\u0435 \u0437\u043D\u0430\u043A\u043E\u043C" }),
+      /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pa-sub", children: [
+        "\u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0441 \u043D\u043E\u043C\u0435\u0440\u043E\u043C +7 999 \u2022\u2022\u2022-58-03 \u0443\u0436\u0435 \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D \u043A ",
+        /* @__PURE__ */ jsxRuntime.jsx("b", { children: "\u042F\u043D\u0434\u0435\u043A\u0441 ID" }),
+        ". \u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u043F\u0440\u0438\u0432\u044B\u0447\u043D\u044B\u043C \u0441\u043F\u043E\u0441\u043E\u0431\u043E\u043C, \u0432\u0441\u0435 \u043E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F \u0438 \u0441\u0434\u0435\u043B\u043A\u0438 \u043D\u0430 \u043C\u0435\u0441\u0442\u0435."
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-account", style: { margin: "0 0 16px" }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "av", children: /* @__PURE__ */ jsxRuntime.jsx("img", { src: "img/av/w4.jpg", alt: "" }) }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "nm", children: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430 \u041B." }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "ph", children: "\u042F\u043D\u0434\u0435\u043A\u0441 ID \xB7 \u043F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u0432\u0445\u043E\u0434 2 \u0434\u043D\u044F \u043D\u0430\u0437\u0430\u0434" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 \u042F\u043D\u0434\u0435\u043A\u0441 ID" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u043F\u043E SMS-\u043A\u043E\u0434\u0443" })
+    ] })
+  ] });
+}
+function AuthDesktopError({ offline = false }) {
+  return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-empty", style: { height: "auto", paddingTop: 24 }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", style: { color: offline ? "var(--pd-muted)" : "var(--pd-danger)" }, children: ic(offline ? A.wifi : chunkBHFGC5NF_cjs.I.alert, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("h3", { children: offline ? "\u041D\u0435\u0442 \u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u044F" : "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0432\u043E\u0439\u0442\u0438" }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { children: offline ? "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442. \u041A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u0441\u0432\u044F\u0437\u044C \u0432\u0435\u0440\u043D\u0451\u0442\u0441\u044F, \u043C\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043C \u0432\u0445\u043E\u0434. \u0414\u0435\u043D\u044C\u0433\u0438 \u0438 \u0430\u043A\u043A\u0430\u0443\u043D\u0442 \u0432 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438." : "\u0421\u0435\u0440\u0432\u0438\u0441 \u0432\u0445\u043E\u0434\u0430 \u043D\u0435 \u043E\u0442\u0432\u0435\u0442\u0438\u043B. \u042D\u0442\u043E \u0431\u044B\u0432\u0430\u0435\u0442 \u0440\u0435\u0434\u043A\u043E, \u043F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0441\u043D\u043E\u0432\u0430 \u0438\u043B\u0438 \u0432\u043E\u0439\u0434\u0438\u0442\u0435 \u0438\u043D\u0430\u0447\u0435." })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 9, marginTop: 14 }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkBHFGC5NF_cjs.I.refresh, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0432\u0445\u043E\u0434" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0434\u0440\u0443\u0433\u0438\u043C \u0441\u043F\u043E\u0441\u043E\u0431\u043E\u043C" })
+    ] })
+  ] });
+}
+function AuthDesktopBlocked() {
+  return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-empty pa-blocked", style: { height: "auto", paddingTop: 20 }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", children: ic(chunkBHFGC5NF_cjs.I.lock, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("h3", { children: "\u0414\u043E\u0441\u0442\u0443\u043F \u043E\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D" }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D \u043F\u043E\u0441\u043B\u0435 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438. \u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438 \u0438 \u0434\u0435\u043D\u044C\u0433\u0438 \u0437\u0430\u0449\u0438\u0449\u0435\u043D\u044B. \u0415\u0441\u043B\u0438 \u044D\u0442\u043E \u043E\u0448\u0438\u0431\u043A\u0430, \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435, \u0438 \u043C\u044B \u0440\u0430\u0437\u0431\u0435\u0440\u0451\u043C\u0441\u044F \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 24 \u0447\u0430\u0441\u043E\u0432." })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { margin: "4px 0 16px" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdNotice, { kind: "info", children: "\u041F\u0440\u0438\u0447\u0438\u043D\u0443 \u0441\u043E\u043E\u0431\u0449\u0438\u043C \u0432 \u043E\u0442\u0432\u0435\u0442\u0435 \u043D\u0430 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435. \u0412 \u0446\u0435\u043B\u044F\u0445 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438 \u043D\u0435 \u0440\u0430\u0441\u043A\u0440\u044B\u0432\u0430\u0435\u043C \u0434\u0435\u0442\u0430\u043B\u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0437\u0434\u0435\u0441\u044C." }) }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkBHFGC5NF_cjs.I.flag, children: "\u041E\u0431\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u044B\u0439\u0442\u0438" })
+    ] })
+  ] });
+}
 
 exports.AuthBlocked = AuthBlocked;
 exports.AuthChooser = AuthChooser;
+exports.AuthDesktopBlocked = AuthDesktopBlocked;
 exports.AuthDesktopChooser = AuthDesktopChooser;
+exports.AuthDesktopError = AuthDesktopError;
+exports.AuthDesktopLink = AuthDesktopLink;
 exports.AuthDesktopOAuth = AuthDesktopOAuth;
 exports.AuthDesktopOtp = AuthDesktopOtp;
 exports.AuthDesktopPhone = AuthDesktopPhone;

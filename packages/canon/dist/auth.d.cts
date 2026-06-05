@@ -1,18 +1,22 @@
 import React from 'react';
 
-declare function OAuthBtn({ k, primary }: {
+declare function OAuthBtn({ k, primary, slot }: {
     k: any;
     primary: any;
+    slot: any;
 }): React.JSX.Element;
-declare function OauthList({ plat }: {
+declare function OauthList({ plat, slots }: {
     plat: any;
+    slots: any;
 }): React.JSX.Element;
-declare function AuthChooser({ plat }: {
+declare function AuthChooser({ plat, slots }: {
     plat?: string | undefined;
+    slots: any;
 }): React.JSX.Element;
-declare function AuthOAuthSheet({ plat, prov }: {
+declare function AuthOAuthSheet({ plat, prov, slots }: {
     plat?: string | undefined;
     prov?: string | undefined;
+    slots: any;
 }): React.JSX.Element;
 declare function AuthPhone({ plat, state }: {
     plat?: string | undefined;
@@ -39,8 +43,13 @@ declare function AuthError({ plat, offline }: {
 declare function AuthBlocked({ plat }: {
     plat?: string | undefined;
 }): React.JSX.Element;
-declare function AuthDesktopChooser(): React.JSX.Element;
-declare function AuthDesktopOAuth(): React.JSX.Element;
+declare function AuthDesktopChooser({ slots }: {
+    slots: any;
+}): React.JSX.Element;
+declare function AuthDesktopOAuth({ prov, slots }: {
+    prov?: string | undefined;
+    slots: any;
+}): React.JSX.Element;
 declare function AuthDesktopPhone({ state }: {
     state?: string | undefined;
 }): React.JSX.Element;
@@ -51,5 +60,10 @@ declare function AuthDesktopRegister({ state }: {
     state?: string | undefined;
 }): React.JSX.Element;
 declare function AuthDesktopWelcome(): React.JSX.Element;
+declare function AuthDesktopLink(): React.JSX.Element;
+declare function AuthDesktopError({ offline }: {
+    offline?: boolean | undefined;
+}): React.JSX.Element;
+declare function AuthDesktopBlocked(): React.JSX.Element;
 
-export { AuthBlocked, AuthChooser, AuthDesktopChooser, AuthDesktopOAuth, AuthDesktopOtp, AuthDesktopPhone, AuthDesktopRegister, AuthDesktopWelcome, AuthError, AuthLink, AuthOAuthSheet, AuthOtp, AuthPhone, AuthRegister, AuthWelcome, OAuthBtn, OauthList };
+export { AuthBlocked, AuthChooser, AuthDesktopBlocked, AuthDesktopChooser, AuthDesktopError, AuthDesktopLink, AuthDesktopOAuth, AuthDesktopOtp, AuthDesktopPhone, AuthDesktopRegister, AuthDesktopWelcome, AuthError, AuthLink, AuthOAuthSheet, AuthOtp, AuthPhone, AuthRegister, AuthWelcome, OAuthBtn, OauthList };

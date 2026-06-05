@@ -1,7 +1,7 @@
 'use strict';
 
 require('./chunk-K5YZGDLZ.cjs');
-var chunk47U6EVFX_cjs = require('./chunk-47U6EVFX.cjs');
+var chunkT3H3HVRZ_cjs = require('./chunk-T3H3HVRZ.cjs');
 require('./chunk-BHFGC5NF.cjs');
 require('./chunk-75ZPJI57.cjs');
 
@@ -9,69 +9,81 @@ require('./chunk-75ZPJI57.cjs');
 
 Object.defineProperty(exports, "AuthBlocked", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthBlocked; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthBlocked; }
 });
 Object.defineProperty(exports, "AuthChooser", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthChooser; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthChooser; }
+});
+Object.defineProperty(exports, "AuthDesktopBlocked", {
+  enumerable: true,
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopBlocked; }
 });
 Object.defineProperty(exports, "AuthDesktopChooser", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthDesktopChooser; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopChooser; }
+});
+Object.defineProperty(exports, "AuthDesktopError", {
+  enumerable: true,
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopError; }
+});
+Object.defineProperty(exports, "AuthDesktopLink", {
+  enumerable: true,
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopLink; }
 });
 Object.defineProperty(exports, "AuthDesktopOAuth", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthDesktopOAuth; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopOAuth; }
 });
 Object.defineProperty(exports, "AuthDesktopOtp", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthDesktopOtp; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopOtp; }
 });
 Object.defineProperty(exports, "AuthDesktopPhone", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthDesktopPhone; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopPhone; }
 });
 Object.defineProperty(exports, "AuthDesktopRegister", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthDesktopRegister; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopRegister; }
 });
 Object.defineProperty(exports, "AuthDesktopWelcome", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthDesktopWelcome; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthDesktopWelcome; }
 });
 Object.defineProperty(exports, "AuthError", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthError; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthError; }
 });
 Object.defineProperty(exports, "AuthLink", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthLink; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthLink; }
 });
 Object.defineProperty(exports, "AuthOAuthSheet", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthOAuthSheet; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthOAuthSheet; }
 });
 Object.defineProperty(exports, "AuthOtp", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthOtp; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthOtp; }
 });
 Object.defineProperty(exports, "AuthPhone", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthPhone; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthPhone; }
 });
 Object.defineProperty(exports, "AuthRegister", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthRegister; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthRegister; }
 });
 Object.defineProperty(exports, "AuthWelcome", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.AuthWelcome; }
+  get: function () { return chunkT3H3HVRZ_cjs.AuthWelcome; }
 });
 Object.defineProperty(exports, "OAuthBtn", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.OAuthBtn; }
+  get: function () { return chunkT3H3HVRZ_cjs.OAuthBtn; }
 });
 Object.defineProperty(exports, "OauthList", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.OauthList; }
+  get: function () { return chunkT3H3HVRZ_cjs.OauthList; }
 });

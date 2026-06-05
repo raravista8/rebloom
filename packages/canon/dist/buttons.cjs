@@ -1,7 +1,7 @@
 'use strict';
 
 require('./chunk-PECT6YIX.cjs');
-var chunk47U6EVFX_cjs = require('./chunk-47U6EVFX.cjs');
+var chunkT3H3HVRZ_cjs = require('./chunk-T3H3HVRZ.cjs');
 var chunkBHFGC5NF_cjs = require('./chunk-BHFGC5NF.cjs');
 require('./chunk-75ZPJI57.cjs');
 
@@ -9,7 +9,7 @@ require('./chunk-75ZPJI57.cjs');
 
 Object.defineProperty(exports, "OAuthBtn", {
   enumerable: true,
-  get: function () { return chunk47U6EVFX_cjs.OAuthBtn; }
+  get: function () { return chunkT3H3HVRZ_cjs.OAuthBtn; }
 });
 Object.defineProperty(exports, "PdBtn", {
   enumerable: true,
