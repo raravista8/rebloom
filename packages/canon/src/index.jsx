@@ -5,6 +5,8 @@ export * from "./entries/buttons";
 export * from "./entries/cards";
 export * from "./entries/forms";
 export * from "./entries/feed";
+export * from "./entries/marketing";
+export * from "./entries/catalog";
 export * from "./entries/deal";
 export * from "./entries/auth";
 export * from "./entries/settings";

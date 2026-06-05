@@ -1,6 +1,6 @@
 'use strict';
 
-var chunkH7RTBAHX_cjs = require('./chunk-H7RTBAHX.cjs');
+var chunkBHFGC5NF_cjs = require('./chunk-BHFGC5NF.cjs');
 require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -51,7 +51,7 @@ function SetShell({ plat = "ios", title, back = true, footer, action, children }
   const top = plat === "ios" ? 54 : plat === "android" ? 8 : 12;
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-root", "data-pd-theme": "a", children: [
     /* @__PURE__ */ jsxRuntime.jsxs("header", { className: "pd-appbar", style: { paddingTop: top }, children: [
-      back ? /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", children: sic(chunkH7RTBAHX_cjs.I.back, "pd-i22") }) : /* @__PURE__ */ jsxRuntime.jsx("div", { style: { width: 6 } }),
+      back ? /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", children: sic(chunkBHFGC5NF_cjs.I.back, "pd-i22") }) : /* @__PURE__ */ jsxRuntime.jsx("div", { style: { width: 6 } }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-appbar-title center", children: title }),
       action || /* @__PURE__ */ jsxRuntime.jsx("div", { style: { width: 38 } })
     ] }),
@@ -82,29 +82,29 @@ function SettingsHub({ plat = "ios" }) {
       /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "nm", children: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430 \u041B." }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "meta", children: [
-          sic(chunkH7RTBAHX_cjs.Ic.pin, "pd-i13"),
+          sic(chunkBHFGC5NF_cjs.Ic.pin, "pd-i13"),
           "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 ",
-          sic(chunkH7RTBAHX_cjs.Ic.star, "pd-i13"),
+          sic(chunkBHFGC5NF_cjs.Ic.star, "pd-i13"),
           /* @__PURE__ */ jsxRuntime.jsx("b", { style: { color: "var(--pd-text)" }, children: "4.9" }),
           " \xB7 23 \u0441\u0434\u0435\u043B\u043A\u0438"
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn pd-iconbtn--ring edit", children: sic(chunkH7RTBAHX_cjs.I.camera, "pd-i18") })
+      /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn pd-iconbtn--ring edit", children: sic(chunkBHFGC5NF_cjs.I.camera, "pd-i18") })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0410\u043A\u043A\u0430\u0443\u043D\u0442", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.Ic.user, title: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", sub: "\u0418\u043C\u044F, \u0444\u043E\u0442\u043E, \u0433\u043E\u0440\u043E\u0434, \u043E \u0441\u0435\u0431\u0435" }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.Ic.user, title: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", sub: "\u0418\u043C\u044F, \u0444\u043E\u0442\u043E, \u0433\u043E\u0440\u043E\u0434, \u043E \u0441\u0435\u0431\u0435" }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.key, title: "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430", sub: "\u0422\u0435\u043B\u0435\u0444\u043E\u043D, email, \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438", value: "3 \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438" }),
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.I.wallet, title: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B", value: "\xB7\xB7 4242" }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.I.wallet, title: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B", value: "\xB7\xB7 4242" }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.briefcase, title: "\u0421\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill off", children: "\u043D\u0435 \u043E\u0444\u043E\u0440\u043C\u043B\u0435\u043D\u0430" }), chev: false })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.I.bell, title: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", sub: "Push, email, Telegram" }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.I.bell, title: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", sub: "Push, email, Telegram" }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.globe, title: "\u042F\u0437\u044B\u043A", value: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439" }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.moon, title: "\u0422\u0435\u043C\u0430", value: "\u0421\u0438\u0441\u0442\u0435\u043C\u043D\u0430\u044F" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.I.shield, title: "\u0421\u0435\u0441\u0441\u0438\u0438 \u0438 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430", value: "3 \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u0435" }),
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.I.lock, title: "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435", sub: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F 152-\u0424\u0417, \u044D\u043A\u0441\u043F\u043E\u0440\u0442" })
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.I.shield, title: "\u0421\u0435\u0441\u0441\u0438\u0438 \u0438 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430", value: "3 \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u0435" }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.I.lock, title: "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435", sub: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F 152-\u0424\u0417, \u044D\u043A\u0441\u043F\u043E\u0440\u0442" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: " ", children: [
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.logout, title: "\u0412\u044B\u0439\u0442\u0438", chev: false }),
@@ -114,31 +114,31 @@ function SettingsHub({ plat = "ios" }) {
   ] });
 }
 function SettingsProfile({ plat = "ios", state = "rest" }) {
-  const foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: state === "saving", disabled: state === "saving", children: state === "saving" ? "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u043C\u2026" : "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C" }) });
+  const foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: state === "saving", disabled: state === "saving", children: state === "saving" ? "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u043C\u2026" : "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C" }) });
   return /* @__PURE__ */ jsxRuntime.jsx(SetShell, { plat, title: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", footer: foot, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { padding: "0 18px" }, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-avedit", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "ring", children: [
         /* @__PURE__ */ jsxRuntime.jsx("img", { src: "img/av/w4.jpg", alt: "" }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "cam", children: sic(chunkH7RTBAHX_cjs.I.camera, "pd-i16") })
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "cam", children: sic(chunkBHFGC5NF_cjs.I.camera, "pd-i16") })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-link", children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0444\u043E\u0442\u043E" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 16 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdField, { label: "\u0418\u043C\u044F", hint: "\u0422\u0430\u043A \u0432\u0430\u0441 \u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438", children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdInput, { value: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430", state: "focus" }) }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdField, { label: "\u0413\u043E\u0440\u043E\u0434", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-citysel", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdField, { label: "\u0418\u043C\u044F", hint: "\u0422\u0430\u043A \u0432\u0430\u0441 \u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438", children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdInput, { value: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430", state: "focus" }) }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdField, { label: "\u0413\u043E\u0440\u043E\u0434", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-citysel", children: [
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041C\u043E\u0441\u043A\u0432\u0430" }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: sic(chunkH7RTBAHX_cjs.Ic.chev, "pd-i18") })
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: sic(chunkBHFGC5NF_cjs.Ic.chev, "pd-i18") })
       ] }) }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdField, { label: "\u041E \u0441\u0435\u0431\u0435", opt: "\u043F\u043E \u0436\u0435\u043B\u0430\u043D\u0438\u044E", counter: "48 / 160", children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdInput, { textarea: true, rows: 3, value: "\u0414\u0430\u0440\u044E \u0431\u0443\u043A\u0435\u0442\u0430\u043C \u0432\u0442\u043E\u0440\u0443\u044E \u0436\u0438\u0437\u043D\u044C \u{1F337} \u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0432 \u0446\u0435\u043D\u0442\u0440\u0435." }) })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdField, { label: "\u041E \u0441\u0435\u0431\u0435", opt: "\u043F\u043E \u0436\u0435\u043B\u0430\u043D\u0438\u044E", counter: "48 / 160", children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdInput, { textarea: true, rows: 3, value: "\u0414\u0430\u0440\u044E \u0431\u0443\u043A\u0435\u0442\u0430\u043C \u0432\u0442\u043E\u0440\u0443\u044E \u0436\u0438\u0437\u043D\u044C \u{1F337} \u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0432 \u0446\u0435\u043D\u0442\u0440\u0435." }) })
     ] })
   ] }) });
 }
 function SettingsLogins({ plat = "ios" }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(SetShell, { plat, title: "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430", children: [
-    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "14px 18px 4px" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdNotice, { kind: "info", children: "\u0425\u043E\u0442\u044F \u0431\u044B \u043E\u0434\u0438\u043D \u0441\u043F\u043E\u0441\u043E\u0431 \u0432\u0445\u043E\u0434\u0430 \u0434\u043E\u043B\u0436\u0435\u043D \u043E\u0441\u0442\u0430\u0432\u0430\u0442\u044C\u0441\u044F \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u043C. \u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0438 \u0443\u0441\u043A\u043E\u0440\u044F\u044E\u0442 \u0432\u0445\u043E\u0434 \u0438 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u044E\u0442 \u043B\u0438\u0447\u043D\u043E\u0441\u0442\u044C." }) }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "14px 18px 4px" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdNotice, { kind: "info", children: "\u0425\u043E\u0442\u044F \u0431\u044B \u043E\u0434\u0438\u043D \u0441\u043F\u043E\u0441\u043E\u0431 \u0432\u0445\u043E\u0434\u0430 \u0434\u043E\u043B\u0436\u0435\u043D \u043E\u0441\u0442\u0430\u0432\u0430\u0442\u044C\u0441\u044F \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u043C. \u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0438 \u0443\u0441\u043A\u043E\u0440\u044F\u044E\u0442 \u0432\u0445\u043E\u0434 \u0438 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u044E\u0442 \u043B\u0438\u0447\u043D\u043E\u0441\u0442\u044C." }) }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B", children: [
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.device, title: "\u0422\u0435\u043B\u0435\u0444\u043E\u043D", value: "+7 999 \xB7\xB7\xB7-58-03", right: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pds-pill ok", children: [
-        sic(chunkH7RTBAHX_cjs.I.check, "pd-i13"),
+        sic(chunkBHFGC5NF_cjs.I.check, "pd-i13"),
         "\u043E\u0441\u043D\u043E\u0432\u043D\u043E\u0439"
       ] }), chev: false }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.mail, title: "Email", sub: "\u0414\u043B\u044F \u0447\u0435\u043A\u043E\u0432 \u0438 \u0432\u0430\u0436\u043D\u044B\u0445 \u043F\u0438\u0441\u0435\u043C", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C" }), chev: false })
@@ -156,65 +156,65 @@ function SettingsPayments({ plat = "ios" }) {
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E\u043A\u0443\u043F\u043E\u043A", children: [
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { mark: { c: "#1a1f71", t: "\xB7\xB7" }, title: "Visa \xB7\xB7\xB7\xB7 4242", sub: "\u041E\u0441\u043D\u043E\u0432\u043D\u0430\u044F \u043A\u0430\u0440\u0442\u0430", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill ok", children: "\u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E" }), chev: false }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.card, title: "\u0421\u0411\u041F", sub: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E QR \u0438\u043B\u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443", chev: true }),
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.Ic.plus, title: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0441\u043F\u043E\u0441\u043E\u0431 \u043E\u043F\u043B\u0430\u0442\u044B", chev: false })
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.Ic.plus, title: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0441\u043F\u043E\u0441\u043E\u0431 \u043E\u043F\u043B\u0430\u0442\u044B", chev: false })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0412\u044B\u043F\u043B\u0430\u0442\u044B \u0437\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.I.wallet, title: "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u0432\u044B\u043F\u043B\u0430\u0442", value: "\xB7\xB7\xB7\xB7 7781", chev: true }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.I.wallet, title: "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u0432\u044B\u043F\u043B\u0430\u0442", value: "\xB7\xB7\xB7\xB7 7781", chev: true }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.doc, title: "\u0427\u0435\u043A\u0438 \u0438 \u0438\u0441\u0442\u043E\u0440\u0438\u044F", sub: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u043E\u0437\u0432\u0440\u0430\u0442\u044B" })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdNotice, { kind: "ok", children: "\u0414\u0435\u043D\u044C\u0433\u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F \u0434\u0435\u0440\u0436\u0430\u0442\u0441\u044F \u0432 \u044D\u0441\u043A\u0440\u043E\u0443 \u0438 \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u044F\u0442 \u0432\u0430\u043C \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F." }) })
+    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdNotice, { kind: "ok", children: "\u0414\u0435\u043D\u044C\u0433\u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F \u0434\u0435\u0440\u0436\u0430\u0442\u0441\u044F \u0432 \u044D\u0441\u043A\u0440\u043E\u0443 \u0438 \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u044F\u0442 \u0432\u0430\u043C \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F." }) })
   ] });
 }
 function SettingsNotifications({ plat = "ios" }) {
   const row = (icon, title, sub, on) => /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon, title, sub, right: /* @__PURE__ */ jsxRuntime.jsx(Switch, { on }), chev: false });
   return /* @__PURE__ */ jsxRuntime.jsxs(SetShell, { plat, title: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: [
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0421\u0434\u0435\u043B\u043A\u0438", children: [
-      row(chunkH7RTBAHX_cjs.I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u041E\u043F\u043B\u0430\u0442\u0430, \u044D\u0441\u043A\u0440\u043E\u0443, \u0441\u043F\u043E\u0440, \u0432\u043E\u0437\u0432\u0440\u0430\u0442", true),
-      row(chunkH7RTBAHX_cjs.I.bell, "\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F \u0432 \u0447\u0430\u0442\u0435", null, true),
-      row(chunkH7RTBAHX_cjs.Ic.star, "\u041D\u043E\u0432\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B", null, true)
+      row(chunkBHFGC5NF_cjs.I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u041E\u043F\u043B\u0430\u0442\u0430, \u044D\u0441\u043A\u0440\u043E\u0443, \u0441\u043F\u043E\u0440, \u0432\u043E\u0437\u0432\u0440\u0430\u0442", true),
+      row(chunkBHFGC5NF_cjs.I.bell, "\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F \u0432 \u0447\u0430\u0442\u0435", null, true),
+      row(chunkBHFGC5NF_cjs.Ic.star, "\u041D\u043E\u0432\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B", null, true)
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0410\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u044C", children: [
-      row(chunkH7RTBAHX_cjs.I.heartline, "\u041B\u0430\u0439\u043A\u0438 \u043D\u0430 \u0432\u0430\u0448\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u0430\u0445", null, false),
-      row(chunkH7RTBAHX_cjs.Ic.search, "\u041F\u043E\u0445\u043E\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C", null, true)
+      row(chunkBHFGC5NF_cjs.I.heartline, "\u041B\u0430\u0439\u043A\u0438 \u043D\u0430 \u0432\u0430\u0448\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u0430\u0445", null, false),
+      row(chunkBHFGC5NF_cjs.Ic.search, "\u041F\u043E\u0445\u043E\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C", null, true)
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u041A\u0430\u043D\u0430\u043B\u044B", children: [
       row(S.device, "Push", "\u041D\u0430 \u044D\u0442\u043E\u043C \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0435", true),
       row(S.mail, "Email", "katya@ya.ru", false),
-      row(chunkH7RTBAHX_cjs.I.send, "Telegram", "\u0411\u043E\u0442 @peredarim_bot", true)
+      row(chunkBHFGC5NF_cjs.I.send, "Telegram", "\u0411\u043E\u0442 @peredarim_bot", true)
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx(Group, { head: "\u041F\u0440\u043E\u0447\u0435\u0435", children: row(chunkH7RTBAHX_cjs.I.info, "\u041D\u043E\u0432\u043E\u0441\u0442\u0438 \u0438 \u0430\u043A\u0446\u0438\u0438", "\u041D\u0435 \u0447\u0430\u0449\u0435 \u0440\u0430\u0437\u0430 \u0432 \u043D\u0435\u0434\u0435\u043B\u044E", false) })
+    /* @__PURE__ */ jsxRuntime.jsx(Group, { head: "\u041F\u0440\u043E\u0447\u0435\u0435", children: row(chunkBHFGC5NF_cjs.I.info, "\u041D\u043E\u0432\u043E\u0441\u0442\u0438 \u0438 \u0430\u043A\u0446\u0438\u0438", "\u041D\u0435 \u0447\u0430\u0449\u0435 \u0440\u0430\u0437\u0430 \u0432 \u043D\u0435\u0434\u0435\u043B\u044E", false) })
   ] });
 }
 function SettingsPrivacy({ plat = "ios" }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(SetShell, { plat, title: "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435", children: [
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F 152-\u0424\u0417", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.I.shield, title: "\u041E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill ok", children: "\u0434\u0430\u043D\u043E" }), chev: false }),
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.Ic.pin, title: "\u0413\u0435\u043E\u043B\u043E\u043A\u0430\u0446\u0438\u044F", sub: "\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C", right: /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }), chev: false }),
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.Ic.user, title: "\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u043F\u0440\u043E\u0444\u0438\u043B\u044C \u0432 \u043F\u043E\u0438\u0441\u043A\u0435", right: /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }), chev: false })
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.I.shield, title: "\u041E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill ok", children: "\u0434\u0430\u043D\u043E" }), chev: false }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.Ic.pin, title: "\u0413\u0435\u043E\u043B\u043E\u043A\u0430\u0446\u0438\u044F", sub: "\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C", right: /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }), chev: false }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.Ic.user, title: "\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u043F\u0440\u043E\u0444\u0438\u043B\u044C \u0432 \u043F\u043E\u0438\u0441\u043A\u0435", right: /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }), chev: false })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0412\u0430\u0448\u0438 \u0434\u0430\u043D\u043D\u044B\u0435", children: [
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.doc, title: "\u0421\u043A\u0430\u0447\u0430\u0442\u044C \u043C\u043E\u0438 \u0434\u0430\u043D\u043D\u044B\u0435", sub: "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 30 \u0434\u043D\u0435\u0439" }),
-      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkH7RTBAHX_cjs.I.info, title: "\u041F\u043E\u043B\u0438\u0442\u0438\u043A\u0430 \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438" }),
+      /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: chunkBHFGC5NF_cjs.I.info, title: "\u041F\u043E\u043B\u0438\u0442\u0438\u043A\u0430 \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438" }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.doc, title: "\u0423\u0441\u043B\u043E\u0432\u0438\u044F \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u044F" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx(Group, { head: " ", children: /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.trash, iconKind: "danger", title: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0430\u043A\u043A\u0430\u0443\u043D\u0442", sub: "\u0423\u0434\u0430\u043B\u0435\u043D\u0438\u0435 \u043F\u043E \u0437\u0430\u043F\u0440\u043E\u0441\u0443 (DSR)", danger: true, chev: true }) })
   ] });
 }
 function SettingsSecurity({ plat = "ios" }) {
-  const foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "secondary", block: true, lg: true, children: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0432\u0441\u0435 \u0434\u0440\u0443\u0433\u0438\u0435 \u0441\u0435\u0441\u0441\u0438\u0438" }) });
+  const foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "secondary", block: true, lg: true, children: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0432\u0441\u0435 \u0434\u0440\u0443\u0433\u0438\u0435 \u0441\u0435\u0441\u0441\u0438\u0438" }) });
   return /* @__PURE__ */ jsxRuntime.jsxs(SetShell, { plat, title: "\u0421\u0435\u0441\u0441\u0438\u0438 \u0438 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430", footer: foot, children: [
     /* @__PURE__ */ jsxRuntime.jsxs(Group, { head: "\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0441\u0435\u0439\u0447\u0430\u0441", children: [
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.device, title: "iPhone 15 \xB7 \u044D\u0442\u043E \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E", sub: "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 \u0442\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u043E", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill ok", children: "\u0442\u0435\u043A\u0443\u0449\u0435\u0435" }), chev: false }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.laptop, title: "Web \xB7 Chrome, macOS", sub: "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 2 \u0447\u0430\u0441\u0430 \u043D\u0430\u0437\u0430\u0434", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0412\u044B\u0439\u0442\u0438" }), chev: false }),
       /* @__PURE__ */ jsxRuntime.jsx(SRow, { icon: S.device, title: "Android \xB7 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", sub: "\u0421\u041F\u0431 \xB7 3 \u0434\u043D\u044F \u043D\u0430\u0437\u0430\u0434", right: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0412\u044B\u0439\u0442\u0438" }), chev: false })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdNotice, { kind: "warn", icon: chunkH7RTBAHX_cjs.I.shield, children: "\u041D\u0435 \u0443\u0437\u043D\u0430\u0451\u0442\u0435 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E? \u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u0435 \u0441\u0435\u0441\u0441\u0438\u044E \u0438 \u0441\u043C\u0435\u043D\u0438\u0442\u0435 \u0441\u043F\u043E\u0441\u043E\u0431 \u0432\u0445\u043E\u0434\u0430. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043B\u043E\u0433\u0438\u0440\u0443\u0435\u0442\u0441\u044F." }) })
+    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdNotice, { kind: "warn", icon: chunkBHFGC5NF_cjs.I.shield, children: "\u041D\u0435 \u0443\u0437\u043D\u0430\u0451\u0442\u0435 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E? \u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u0435 \u0441\u0435\u0441\u0441\u0438\u044E \u0438 \u0441\u043C\u0435\u043D\u0438\u0442\u0435 \u0441\u043F\u043E\u0441\u043E\u0431 \u0432\u0445\u043E\u0434\u0430. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043B\u043E\u0433\u0438\u0440\u0443\u0435\u0442\u0441\u044F." }) })
   ] });
 }
 function SettingsSelfEmployed({ plat = "ios" }) {
   const foot = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-footerbar", style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421" }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041D\u0430\u043F\u043E\u043C\u043D\u0438\u0442\u044C \u043F\u043E\u0437\u0436\u0435" })
+    /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421" }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041D\u0430\u043F\u043E\u043C\u043D\u0438\u0442\u044C \u043F\u043E\u0437\u0436\u0435" })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsx(SetShell, { plat, title: "\u0421\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C", footer: foot, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { padding: "18px" }, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-confirm", style: { padding: "10px 0 8px" }, children: [
@@ -224,15 +224,15 @@ function SettingsSelfEmployed({ plat = "ios" }) {
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-keeplist", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "li", children: [
-        sic(chunkH7RTBAHX_cjs.I.check, "pd-i16 "),
+        sic(chunkBHFGC5NF_cjs.I.check, "pd-i16 "),
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u0427\u0435\u043A \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044E \u0444\u043E\u0440\u043C\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u0441\u0430\u043C \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "li", children: [
-        sic(chunkH7RTBAHX_cjs.I.check, "pd-i16"),
+        sic(chunkBHFGC5NF_cjs.I.check, "pd-i16"),
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041D\u0430\u043B\u043E\u0433 4% \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "li", children: [
-        sic(chunkH7RTBAHX_cjs.I.check, "pd-i16"),
+        sic(chunkBHFGC5NF_cjs.I.check, "pd-i16"),
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0430 \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421 \u0437\u0430 \u043F\u0430\u0440\u0443 \u043C\u0438\u043D\u0443\u0442, \u0431\u0435\u0437 \u0432\u0438\u0437\u0438\u0442\u043E\u0432" })
       ] })
     ] })
@@ -240,16 +240,16 @@ function SettingsSelfEmployed({ plat = "ios" }) {
 }
 function SettingsDelete({ plat = "ios", state = "warn" }) {
   if (state === "otp") {
-    const foot2 = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "danger", block: true, lg: true, children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u0443\u0434\u0430\u043B\u0435\u043D\u0438\u0435" }) });
+    const foot2 = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "danger", block: true, lg: true, children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u0443\u0434\u0430\u043B\u0435\u043D\u0438\u0435" }) });
     return /* @__PURE__ */ jsxRuntime.jsx(SetShell, { plat, title: "\u0423\u0434\u0430\u043B\u0435\u043D\u0438\u0435 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u0430", footer: foot2, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { padding: "24px 20px", textAlign: "center" }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("h2", { style: { fontSize: 21, fontWeight: 700, marginBottom: 8 }, children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u043F\u043E \u043A\u043E\u0434\u0443" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { style: { color: "var(--pd-muted)", fontSize: 14, lineHeight: 1.5, marginBottom: 24 }, children: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u043B\u0438 \u043A\u043E\u0434 \u043D\u0430 +7 999 \xB7\xB7\xB7-58-03. \u042D\u0442\u043E \u043F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u0448\u0430\u0433, \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u0430\u043A\u043A\u0430\u0443\u043D\u0442 \u043E\u0442\u043A\u043B\u044E\u0447\u0430\u0435\u0442\u0441\u044F \u0441\u0440\u0430\u0437\u0443." }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdOtp, { value: "41", cur: 2 })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdOtp, { value: "41", cur: 2 })
     ] }) });
   }
   const foot = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-footerbar", style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "danger", block: true, lg: true, children: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0430\u043A\u043A\u0430\u0443\u043D\u0442" }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" })
+    /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "danger", block: true, lg: true, children: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0430\u043A\u043A\u0430\u0443\u043D\u0442" }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsxs(SetShell, { plat, title: "\u0423\u0434\u0430\u043B\u0435\u043D\u0438\u0435 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u0430", footer: foot, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-confirm", children: [
@@ -263,23 +263,23 @@ function SettingsDelete({ plat = "ios", state = "warn" }) {
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C, \u0444\u043E\u0442\u043E, \u043E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F \u0438 \u043B\u0430\u0439\u043A\u0438 \u0443\u0434\u0430\u043B\u044F\u044E\u0442\u0441\u044F" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "li", children: [
-        sic(chunkH7RTBAHX_cjs.I.lock, "pd-i16"),
+        sic(chunkBHFGC5NF_cjs.I.lock, "pd-i16"),
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u0414\u0430\u043D\u043D\u044B\u0435 \u0437\u0430\u0432\u0435\u0440\u0448\u0451\u043D\u043D\u044B\u0445 \u0441\u0434\u0435\u043B\u043E\u043A \u0438 \u0447\u0435\u043A\u0438 \u0445\u0440\u0430\u043D\u044F\u0442\u0441\u044F \u043F\u043E 54-\u0424\u0417/152-\u0424\u0417" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "li", style: { color: "var(--pd-warn)" }, children: [
-        sic(chunkH7RTBAHX_cjs.I.alert, "pd-i16"),
+        sic(chunkBHFGC5NF_cjs.I.alert, "pd-i16"),
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438 \u043D\u0443\u0436\u043D\u043E \u0437\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0434\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0438\u044F" })
       ] })
     ] }) })
   ] });
 }
 var DNAV = [
-  ["profile", "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", chunkH7RTBAHX_cjs.Ic.user],
+  ["profile", "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", chunkBHFGC5NF_cjs.Ic.user],
   ["logins", "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430", S.key],
-  ["payments", "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B", chunkH7RTBAHX_cjs.I.wallet],
-  ["notif", "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", chunkH7RTBAHX_cjs.I.bell],
-  ["privacy", "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435", chunkH7RTBAHX_cjs.I.lock],
-  ["security", "\u0421\u0435\u0441\u0441\u0438\u0438", chunkH7RTBAHX_cjs.I.shield],
+  ["payments", "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B", chunkBHFGC5NF_cjs.I.wallet],
+  ["notif", "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", chunkBHFGC5NF_cjs.I.bell],
+  ["privacy", "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435", chunkBHFGC5NF_cjs.I.lock],
+  ["security", "\u0421\u0435\u0441\u0441\u0438\u0438", chunkBHFGC5NF_cjs.I.shield],
   ["self", "\u0421\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C", S.briefcase]
 ];
 function SettingsDesktop({ screen = "profile" }) {
@@ -316,21 +316,21 @@ var DESKBODY = {
         /* @__PURE__ */ jsxRuntime.jsx("div", { style: { fontWeight: 700, fontSize: 17 }, children: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430 \u041B." }),
         /* @__PURE__ */ jsxRuntime.jsx("div", { style: { color: "var(--pd-muted)", fontSize: 13, marginTop: 3 }, children: "katya@ya.ru" }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { marginTop: 10, display: "flex", gap: 8 }, children: [
-          /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "secondary", children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0444\u043E\u0442\u043E" }),
-          /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "ghost", children: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C" })
+          /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "secondary", children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0444\u043E\u0442\u043E" }),
+          /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "ghost", children: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C" })
         ] })
       ] })
     ] }) }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", style: { padding: "22px" }, children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 22px" }, children: [
-        /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdField, { label: "\u0418\u043C\u044F", children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdInput, { value: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430", state: "focus" }) }),
-        /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdField, { label: "\u0413\u043E\u0440\u043E\u0434", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-citysel", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdField, { label: "\u0418\u043C\u044F", children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdInput, { value: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430", state: "focus" }) }),
+        /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdField, { label: "\u0413\u043E\u0440\u043E\u0434", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-citysel", children: [
           /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041C\u043E\u0441\u043A\u0432\u0430" }),
-          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: sic(chunkH7RTBAHX_cjs.Ic.chev, "pd-i18") })
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: sic(chunkBHFGC5NF_cjs.Ic.chev, "pd-i18") })
         ] }) })
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdField, { label: "\u041E \u0441\u0435\u0431\u0435", opt: "\u043F\u043E \u0436\u0435\u043B\u0430\u043D\u0438\u044E", counter: "48 / 160", children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdInput, { textarea: true, rows: 3, value: "\u0414\u0430\u0440\u044E \u0431\u0443\u043A\u0435\u0442\u0430\u043C \u0432\u0442\u043E\u0440\u0443\u044E \u0436\u0438\u0437\u043D\u044C \u{1F337} \u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0432 \u0446\u0435\u043D\u0442\u0440\u0435." }) }) }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 20 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "primary", lg: true, children: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C" }) })
+      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdField, { label: "\u041E \u0441\u0435\u0431\u0435", opt: "\u043F\u043E \u0436\u0435\u043B\u0430\u043D\u0438\u044E", counter: "48 / 160", children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdInput, { textarea: true, rows: 3, value: "\u0414\u0430\u0440\u044E \u0431\u0443\u043A\u0435\u0442\u0430\u043C \u0432\u0442\u043E\u0440\u0443\u044E \u0436\u0438\u0437\u043D\u044C \u{1F337} \u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0432 \u0446\u0435\u043D\u0442\u0440\u0435." }) }) }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 20 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "primary", lg: true, children: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C" }) })
     ] })
   ] }),
   logins: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
@@ -357,16 +357,16 @@ var DESKBODY = {
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u0421\u0434\u0435\u043B\u043A\u0438" }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 6 } }),
-      dRow(chunkH7RTBAHX_cjs.I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u041E\u043F\u043B\u0430\u0442\u0430, \u044D\u0441\u043A\u0440\u043E\u0443, \u0441\u043F\u043E\u0440, \u0432\u043E\u0437\u0432\u0440\u0430\u0442", /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true })),
-      dRow(chunkH7RTBAHX_cjs.I.bell, "\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F \u0432 \u0447\u0430\u0442\u0435", null, /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true })),
-      dRow(chunkH7RTBAHX_cjs.Ic.star, "\u041D\u043E\u0432\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B", null, /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }))
+      dRow(chunkBHFGC5NF_cjs.I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u041E\u043F\u043B\u0430\u0442\u0430, \u044D\u0441\u043A\u0440\u043E\u0443, \u0441\u043F\u043E\u0440, \u0432\u043E\u0437\u0432\u0440\u0430\u0442", /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true })),
+      dRow(chunkBHFGC5NF_cjs.I.bell, "\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F \u0432 \u0447\u0430\u0442\u0435", null, /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true })),
+      dRow(chunkBHFGC5NF_cjs.Ic.star, "\u041D\u043E\u0432\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B", null, /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }))
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u041A\u0430\u043D\u0430\u043B\u044B" }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 6 } }),
       dRow(S.device, "Push", "\u041D\u0430 \u044D\u0442\u043E\u043C \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0435", /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true })),
       dRow(S.mail, "Email", "katya@ya.ru", /* @__PURE__ */ jsxRuntime.jsx(Switch, {})),
-      dRow(chunkH7RTBAHX_cjs.I.send, "Telegram", "\u0411\u043E\u0442 @peredarim_bot", /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }))
+      dRow(chunkBHFGC5NF_cjs.I.send, "Telegram", "\u0411\u043E\u0442 @peredarim_bot", /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }))
     ] })
   ] }),
   security: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
@@ -378,7 +378,7 @@ var DESKBODY = {
       dRow(S.device, "iPhone 15 \xB7 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 2 \u0447\u0430\u0441\u0430 \u043D\u0430\u0437\u0430\u0434", /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0412\u044B\u0439\u0442\u0438" })),
       dRow(S.device, "Android \xB7 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", "\u0421\u041F\u0431 \xB7 3 \u0434\u043D\u044F \u043D\u0430\u0437\u0430\u0434", /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0412\u044B\u0439\u0442\u0438" }))
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "secondary", lg: true, children: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0432\u0441\u0435 \u0434\u0440\u0443\u0433\u0438\u0435 \u0441\u0435\u0441\u0441\u0438\u0438" })
+    /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "secondary", lg: true, children: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0432\u0441\u0435 \u0434\u0440\u0443\u0433\u0438\u0435 \u0441\u0435\u0441\u0441\u0438\u0438" })
   ] }),
   payments: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pdss-h1", children: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B" }),
@@ -392,7 +392,7 @@ var DESKBODY = {
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u0412\u044B\u043F\u043B\u0430\u0442\u044B \u0437\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438" }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 6 } }),
-      dRow(chunkH7RTBAHX_cjs.I.wallet, "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u0432\u044B\u043F\u043B\u0430\u0442", "\xB7\xB7\xB7\xB7 7781", /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C" }))
+      dRow(chunkBHFGC5NF_cjs.I.wallet, "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u0432\u044B\u043F\u043B\u0430\u0442", "\xB7\xB7\xB7\xB7 7781", /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C" }))
     ] })
   ] }),
   privacy: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
@@ -401,8 +401,8 @@ var DESKBODY = {
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F" }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 6 } }),
-      dRow(chunkH7RTBAHX_cjs.I.shield, "\u041E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445", null, /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill ok", children: "\u0434\u0430\u043D\u043E" })),
-      dRow(chunkH7RTBAHX_cjs.Ic.pin, "\u0413\u0435\u043E\u043B\u043E\u043A\u0430\u0446\u0438\u044F", "\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C", /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }))
+      dRow(chunkBHFGC5NF_cjs.I.shield, "\u041E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445", null, /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill ok", children: "\u0434\u0430\u043D\u043E" })),
+      dRow(chunkBHFGC5NF_cjs.Ic.pin, "\u0413\u0435\u043E\u043B\u043E\u043A\u0430\u0446\u0438\u044F", "\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C", /* @__PURE__ */ jsxRuntime.jsx(Switch, { on: true }))
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u0412\u0430\u0448\u0438 \u0434\u0430\u043D\u043D\u044B\u0435" }),
@@ -418,7 +418,7 @@ var DESKBODY = {
       /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
         /* @__PURE__ */ jsxRuntime.jsx("div", { style: { fontWeight: 700, fontSize: 16 }, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u0437\u0430 \u043F\u0430\u0440\u0443 \u043C\u0438\u043D\u0443\u0442" }),
         /* @__PURE__ */ jsxRuntime.jsx("p", { style: { color: "var(--pd-muted)", fontSize: 13.5, lineHeight: 1.55, margin: "6px 0 16px" }, children: "\u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0430 \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421, \u0447\u0435\u043A \u0444\u043E\u0440\u043C\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u0441\u0430\u043C \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438, \u043D\u0430\u043B\u043E\u0433 4% \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438. \u041E\u0431\u044B\u0447\u043D\u044B\u0435 \u043F\u0440\u043E\u0434\u0430\u0436\u0438 \u043D\u0435 \u0431\u043B\u043E\u043A\u0438\u0440\u0443\u0435\u0442." }),
-        /* @__PURE__ */ jsxRuntime.jsx(chunkH7RTBAHX_cjs.PdBtn, { variant: "primary", lg: true, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421" })
+        /* @__PURE__ */ jsxRuntime.jsx(chunkBHFGC5NF_cjs.PdBtn, { variant: "primary", lg: true, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421" })
       ] })
     ] }) })
   ] })

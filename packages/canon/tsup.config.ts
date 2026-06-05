@@ -14,6 +14,8 @@ export default defineConfig({
     cards:            'src/entries/cards.jsx',
     forms:            'src/entries/forms.jsx',
     feed:             'src/entries/feed.jsx',
+    marketing:        'src/entries/marketing.jsx',
+    catalog:          'src/entries/catalog.jsx',
     deal:             'src/entries/deal.jsx',
     auth:             'src/entries/auth.jsx',
     settings:         'src/entries/settings.jsx',
@@ -31,13 +33,14 @@ export default defineConfig({
   external: ['react', 'react-dom', 'framer-motion'],
   // Bundle + emit the canonical stylesheet alongside JS.
   loader: { '.css': 'css' },
+  // Force ESM→.mjs / CJS→.cjs so output matches package.json "exports"
+  // (import→.mjs, require→.cjs). The 0.2.0 delivery dropped this, which made tsup
+  // emit .js under "type":"module" and broke the exports map — restored here.
+  outExtension({ format }) {
+    return { js: format === 'esm' ? '.mjs' : '.cjs' };
+  },
   esbuildOptions(options) {
     options.charset = 'ascii'; // escape Cyrillic to \uXXXX (§5)
     options.jsx = 'automatic';
-  },
-  // Unambiguous extensions under "type":"module": .mjs (ESM) / .cjs (CJS) —
-  // matches the package.json "exports" map regardless of the type field.
-  outExtension({ format }) {
-    return { js: format === 'esm' ? '.mjs' : '.cjs' };
   },
 });
