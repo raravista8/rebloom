@@ -14,7 +14,8 @@ test('auth gate: unauthenticated → redirected to login', async ({ page }) => {
   await page.route('**/api/me', (r) => json(r, 'unauthorized', false, 401));
   await page.goto('/sell');
   await page.waitForURL('**/login**');
-  await expect(page.getByRole('heading', { name: 'Вход по телефону' })).toBeVisible();
+  // /login opens at the OAuth-first chooser (AUTH_HANDOFF)
+  await expect(page.locator('[data-provider="phone"]')).toBeVisible();
 });
 
 test('validation: publish without photo/price shows inline errors', async ({ page }) => {

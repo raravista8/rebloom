@@ -36,6 +36,12 @@ body {
  * notifications, settings, …). Auth (.pd-root.pa, login) stays a centred card on a
  * neutral surround — the conventional desktop auth pattern. Admin (.pda-app) is its
  * own desktop-first shell. */
+/* canon's desktop auth aside (.pad) ships a broken relative hero <img>; the aside
+ * already carries its own terracotta gradient, so hide the placeholder image. */
+.pad-photo {
+  display: none;
+}
+
 @media (min-width: 1024px) {
   body {
     background: var(--pd-surface-3);
