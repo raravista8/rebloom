@@ -1,5 +1,6 @@
 'use client';
-// Карточка букета — GET /api/listings/{id}, escrow-safe buy → POST /api/deals.
+// Карточка букета — GET /api/listings/{id}. «Написать продавцу» → POST /api/deals
+// (deal:agreed, opens chat). No-escrow «оплата при встрече» (ADR-0013).
 // Mirrors canon's Listing screen (ListingBody) composed with live data. States:
 // loading / loaded / sold-unavailable / not-found / error (INTERACTION_STATES §5).
 import { useCallback, useEffect, useState } from 'react';
@@ -55,16 +56,17 @@ export default function ListingDetail({ id }: { id: string }) {
     void load();
   }, [load]);
 
+  // No-escrow (ADR-0013): «Написать продавцу» creates deal:agreed + opens the chat.
+  // No payment — people pay at the meeting.
   const buy = useCallback(async () => {
     setBuyErr(undefined);
     setBuying(true);
     try {
-      const res = await api.post<{ deal: Deal; payment: { confirmation_url?: string; token?: string } }>('/deals', {
+      const res = await api.post<{ deal: Deal }>('/deals', {
         listing_id: id,
         delivery_method: 'self_pickup',
       });
-      if (res.payment?.confirmation_url) window.location.href = res.payment.confirmation_url;
-      else router.push(`/deal/${res.deal.id}`);
+      router.push(`/deal/${res.deal.id}`);
     } catch (e) {
       if (e instanceof ApiError) {
         if (e.code === 'unauthorized') router.push(`/login?next=${encodeURIComponent(`/l/${id}`)}`);
@@ -128,14 +130,9 @@ export default function ListingDetail({ id }: { id: string }) {
   ) : (
     <div className="pd-footerbar">
       {buyErr && <div style={{ marginBottom: 8 }}><PdNotice kind="danger">{buyErr}</PdNotice></div>}
-      <div style={{ display: 'flex', gap: 10 }}>
-        <Link href={`/l/${id}/chat`} style={{ flex: 1 }}>
-          <PdBtn variant="secondary" block>Предложить цену</PdBtn>
-        </Link>
-        <PdBtn variant="primary" icon={IconCart} loading={buying} disabled={buying} onClick={buy} style={{ flex: 1.4 }}>
-          Купить · {formatPriceKopecks(listing.price_kopecks)}
-        </PdBtn>
-      </div>
+      <PdBtn variant="primary" icon={IconCart} block lg loading={buying} disabled={buying} onClick={buy}>
+        Написать продавцу · {formatPriceKopecks(listing.price_kopecks)}
+      </PdBtn>
     </div>
   );
 
@@ -194,7 +191,7 @@ export default function ListingDetail({ id }: { id: string }) {
               <PdNotice kind="info" icon={IconInfo}>Этот букет уже купили. Посмотрите другие свежие букеты рядом — их добавляют каждый день.</PdNotice>
             ) : (
               <PdNotice kind="ok" icon={IconShield}>
-                <b>Безопасная сделка.</b> Деньги в эскроу ЮKassa — продавец получит их только после того, как вы подтвердите получение.
+                <b>Оплата при встрече.</b> Никакой предоплаты — договоритесь в чате и заберите букет, оплатив продавцу на месте.
               </PdNotice>
             )}
 
@@ -205,16 +202,13 @@ export default function ListingDetail({ id }: { id: string }) {
             ) : (
               <>
                 {buyErr && <div style={{ margin: '12px 0' }}><PdNotice kind="danger">{buyErr}</PdNotice></div>}
-                <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-                  <Link href={`/l/${id}/chat`} style={{ flex: 1 }}>
-                    <PdBtn variant="secondary" block>Предложить цену</PdBtn>
-                  </Link>
-                  <PdBtn variant="primary" icon={IconCart} loading={buying} disabled={buying} onClick={buy} style={{ flex: 1.4 }}>
-                    Купить · {formatPriceKopecks(listing.price_kopecks)}
+                <div style={{ marginTop: 16 }}>
+                  <PdBtn variant="primary" icon={IconCart} block lg loading={buying} disabled={buying} onClick={buy}>
+                    Написать продавцу · {formatPriceKopecks(listing.price_kopecks)}
                   </PdBtn>
                 </div>
                 <p style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 12 }}>
-                  Самовывоз. Точный адрес появится в чате после оплаты — двор или станцию выбирает продавец.
+                  Самовывоз. Точное место появится в чате после договорённости — двор или станцию выбирает продавец.
                 </p>
               </>
             )}
@@ -272,7 +266,7 @@ export default function ListingDetail({ id }: { id: string }) {
           <PdNotice kind="info" icon={IconInfo}>Этот букет уже купили. Посмотрите другие свежие букеты рядом — их добавляют каждый день.</PdNotice>
         ) : (
           <PdNotice kind="ok" icon={IconShield}>
-            <b>Безопасная сделка.</b> Деньги в эскроу ЮKassa. Продавец получит их только после того, как вы подтвердите получение.
+            <b>Оплата при встрече.</b> Без предоплаты — договоритесь в чате и заберите букет, оплатив продавцу на месте.
           </PdNotice>
         )}
 
@@ -304,7 +298,7 @@ export default function ListingDetail({ id }: { id: string }) {
               </button>
             </div>
             <p style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 8 }}>
-              Точный адрес появится в чате после оплаты. Двор или станцию выбирает продавец.
+              Точное место появится в чате после договорённости. Двор или станцию выбирает продавец.
             </p>
           </div>
         )}

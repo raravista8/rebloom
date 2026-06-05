@@ -3,7 +3,8 @@
 
 export type Size = 'S' | 'M' | 'L' | 'XL';
 export type Freshness = 'today' | 'd1_2' | 'd3_plus';
-export type DealStatus = 'created' | 'paid_held' | 'released' | 'refunded' | 'disputed' | 'cancelled';
+// No-escrow «оплата при встрече» (ADR-0013): agreed → meeting → done (+ problem, cancelled).
+export type DealStatus = 'agreed' | 'meeting' | 'done' | 'problem' | 'cancelled';
 export type DeliveryMethod = 'self_pickup' | 'courier';
 export type ListingStatus = 'draft' | 'pending_review' | 'active' | 'reserved' | 'sold' | 'archived';
 export type FeedSection = 'fresh' | 'liked';
@@ -72,12 +73,11 @@ export interface DealView {
   listing: { id: string; photo_thumb_url?: string; price_kopecks?: number };
   role: 'buyer' | 'seller';
   counterparty: { id: string; display_name?: string; seller_rating?: number };
-  amount_kopecks: number;
-  commission_kopecks: number;
+  // No-escrow (ADR-0013): the platform processes no payment. price is the listing's
+  // reference price (in `listing.price_kopecks`); `done_at` is set on completion.
   delivery_method: DeliveryMethod;
-  delivery?: { tracking_status?: string };
   created_at?: string;
-  released_at?: string;
+  done_at?: string;
 }
 
 export interface ChatMessage {

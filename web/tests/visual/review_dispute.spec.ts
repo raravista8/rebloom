@@ -9,8 +9,6 @@ function deal(status: string) {
     listing: { id: 'l1', photo_thumb_url: PHOTO, price_kopecks: 99000 },
     role: 'buyer',
     counterparty: { id: 's1', display_name: 'Аня', seller_rating: 4.9 },
-    amount_kopecks: 99000,
-    commission_kopecks: 9900,
     delivery_method: 'self_pickup',
     created_at: '2026-06-04T15:00:00Z',
   };
@@ -20,7 +18,7 @@ function json(route: Route, data: unknown) {
 }
 
 test('review: validation then submit → спасибо', async ({ page }) => {
-  await page.route('**/api/deals/d1', (r) => json(r, deal('released')));
+  await page.route('**/api/deals/d1', (r) => json(r, deal('done')));
   await page.route('**/api/deals/d1/review', (r) => json(r, { id: 'r1', score: 5, text: 'ok' }));
   await page.goto('/deal/d1/review');
   await expect(page.getByText('Оцените Аня')).toBeVisible();
@@ -31,14 +29,14 @@ test('review: validation then submit → спасибо', async ({ page }) => {
   await expect(page.getByText('Спасибо за отзыв!')).toBeVisible();
 });
 
-test('dispute: reason required, then submit → back to deal', async ({ page }) => {
-  await page.route('**/api/deals/d1/dispute', (r) => json(r, deal('disputed')));
-  await page.route('**/api/deals/d1', (r) => json(r, deal('disputed')));
+test('report: reason required, then submit → back to deal', async ({ page }) => {
+  await page.route('**/api/deals/d1/report', (r) => json(r, deal('problem')));
+  await page.route('**/api/deals/d1', (r) => json(r, deal('problem')));
   await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [], next_cursor: null }));
   await page.goto('/deal/d1/dispute/new');
-  await page.getByRole('button', { name: 'Открыть спор' }).click();
+  await page.getByRole('button', { name: 'Отправить жалобу' }).click();
   await expect(page.getByText('Выберите причину')).toBeVisible();
   await page.getByText('Повреждён').click();
-  await page.getByRole('button', { name: 'Открыть спор' }).click();
+  await page.getByRole('button', { name: 'Отправить жалобу' }).click();
   await page.waitForURL('**/deal/d1');
 });

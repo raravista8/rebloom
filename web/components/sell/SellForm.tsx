@@ -187,7 +187,7 @@ export default function SellForm() {
           </div>
         </PdField>
 
-        <PdField label="Район" opt="необязательно" hint="Точный адрес покупатель увидит только после оплаты.">
+        <PdField label="Район" opt="необязательно" hint="Точное место покупатель увидит только после договорённости.">
           <div className="pd-input">
             <IconPin className="pd-i18" style={{ color: 'var(--pd-muted)', flex: 'none' }} />
             <input
