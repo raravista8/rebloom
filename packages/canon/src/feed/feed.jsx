@@ -49,7 +49,7 @@ const Ic = {
 const Heart = ({ filled, className }) => (
   <svg viewBox="0 0 24 24" className={className}
     fill={filled ? 'var(--pd-like)' : 'none'} stroke={filled ? 'var(--pd-like)' : 'currentColor'}>
-    <path d="M12 20s-7-4.6-9.2-9C1.3 8 2.6 4.6 5.9 4.6c2 0 3.3 1.2 4.1 2.4.8-1.2 2.1-2.4 4.1-2.4 3.3 0 4.6 3.4 3.1 6.4C19 15.4 12 20 12 20Z" />
+    <path d="M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" />
   </svg>
 );
 

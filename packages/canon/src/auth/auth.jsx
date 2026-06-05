@@ -23,11 +23,21 @@ const A = {
   globe:(p)=><svg viewBox="0 0 24 24" {...p}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18"/></svg>,
   lockGlobe:(p)=><svg viewBox="0 0 24 24" {...p}><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>,
   spark:(p)=><svg viewBox="0 0 24 24" {...p}><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>,
-  heart:(p)=><svg viewBox="0 0 24 24" {...p}><path d="M12 20s-7-4.6-9.2-9C1.3 8 2.6 4.6 5.9 4.6c2 0 3.3 1.2 4.1 2.4.8-1.2 2.1-2.4 4.1-2.4 3.3 0 4.6 3.4 3.1 6.4C19 15.4 12 20 12 20Z"/></svg>,
+  heart:(p)=><svg viewBox="0 0 24 24" {...p}><path d="M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z"/></svg>,
   star:(p)=><svg viewBox="0 0 24 24" {...p}><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9z"/></svg>,
   wifi:(p)=><svg viewBox="0 0 24 24" {...p}><path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0M8.5 15.5a6 6 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>,
 };
 const ic = (Fn,cls='pd-i18')=>Fn({className:cls,fill:'none',stroke:'currentColor'});
+
+// ── brand mark «Соцветие» (лепестки = currentColor, центр янтарный) ──────────
+const PETAL = 'M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z';
+const Mark = ({ size=26, center='#E8A93B', style, title='Передарим' }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={title}
+    style={{ display:'block', flex:'none', ...style }}>
+    {[0,72,144,216,288].map((a)=><path key={a} d={PETAL} fill="currentColor" transform={`rotate(${a} 50 50)`}/>)}
+    <circle cx="50" cy="50" r="8" fill={center}/>
+  </svg>
+);
 
 // ── providers ─────────────────────────────────────────────────────────────
 const PROV = {
@@ -82,7 +92,7 @@ function AuthShell({ plat='ios', back=true, children, foot, overlay }) {
 }
 const Hero = ({ title, sub, logo=true }) => (
   <div className="pa-hero">
-    {logo && <div className="pa-logo">{ic(A.gift,'pd-i28')}</div>}
+    {logo && <div className="pa-logo"><Mark size={30}/></div>}
     {title ? <h1 className="pa-h2">{title}</h1> : <div className="pa-brand">Передарим</div>}
     {sub && <p className="pa-tag">{sub}</p>}
   </div>
@@ -350,7 +360,7 @@ function DeskShell({ children, popup }) {
     <div className="pd-root pad pa pa--desktop" data-pd-theme="a">
       <aside className="pad-aside">
         <img className="pad-photo" src="img/1561181286-d3fee7d55364.jpg" alt=""/>
-        <div className="pad-brand">Передарим</div>
+        <div className="pad-brand"><Mark size={26}/>Передарим</div>
         <div className="pad-hl">Свежие букеты со скидкой и вторая жизнь подаренным цветам.</div>
         <p className="pad-hlsub">Тысячи букетов в вашем городе. Деньги в защищённой сделке, отзывы взаимные.</p>
         <div className="pad-points">

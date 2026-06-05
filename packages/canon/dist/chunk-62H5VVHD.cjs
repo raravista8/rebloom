@@ -1,12 +1,12 @@
 'use strict';
 
-var chunkH7RTBAHX_cjs = require('./chunk-H7RTBAHX.cjs');
+var chunkBHFGC5NF_cjs = require('./chunk-BHFGC5NF.cjs');
 require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
 function PdFeedDesktop({ theme = "a" }) {
-  const Card2 = chunkH7RTBAHX_cjs.Card, SectionHead2 = chunkH7RTBAHX_cjs.SectionHead, Ic2 = chunkH7RTBAHX_cjs.Ic;
-  const FRESH = chunkH7RTBAHX_cjs.PD_FRESH, LIKED = chunkH7RTBAHX_cjs.PD_LIKED;
+  const Card2 = chunkBHFGC5NF_cjs.Card, SectionHead2 = chunkBHFGC5NF_cjs.SectionHead, Ic2 = chunkBHFGC5NF_cjs.Ic;
+  const FRESH = chunkBHFGC5NF_cjs.PD_FRESH, LIKED = chunkBHFGC5NF_cjs.PD_LIKED;
   const Bell = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" }),
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M10 19a2 2 0 0 0 4 0" })

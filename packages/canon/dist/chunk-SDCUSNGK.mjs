@@ -1,4 +1,4 @@
-import { I, PdBtn, PdNotice, PdField, PdInput, PdOtp, Ic } from './chunk-GANLKAPU.mjs';
+import { I, PdBtn, PdNotice, PdField, PdInput, PdOtp, Ic } from './chunk-OS4LB2PH.mjs';
 import 'react';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 
@@ -6,16 +6,12 @@ var A = {
   chevR: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "m9 5 7 7-7 7" }) }),
   phone: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M6 3h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 4 5a2 2 0 0 1 2-2Z" }) }),
   apple: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", fill: "currentColor", stroke: "none", ...p, children: /* @__PURE__ */ jsx("path", { d: "M16 13c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.9-1.4-.1-2.8.9-3.5.9s-1.8-.8-3-.8C6.7 7.7 5.3 8.5 4.5 9.9c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.2c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.7ZM13.8 6.1c.6-.8 1.1-1.9.9-3-1 0-2.1.7-2.8 1.5-.6.7-1.1 1.8-.9 2.9 1.1 0 2.2-.6 2.8-1.4Z" }) }),
-  gift: (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
-    /* @__PURE__ */ jsx("rect", { x: "3", y: "9", width: "18", height: "11", rx: "1.5" }),
-    /* @__PURE__ */ jsx("path", { d: "M3 13h18M12 9v11M8.5 9C6 9 6 5 8.5 5S12 9 12 9s-.5-4 2-4 2.5 4 0 4" })
-  ] }),
   lockGlobe: (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
     /* @__PURE__ */ jsx("rect", { x: "5", y: "11", width: "14", height: "9", rx: "2.2" }),
     /* @__PURE__ */ jsx("path", { d: "M8 11V8a4 4 0 0 1 8 0v3" })
   ] }),
   spark: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" }) }),
-  heart: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M12 20s-7-4.6-9.2-9C1.3 8 2.6 4.6 5.9 4.6c2 0 3.3 1.2 4.1 2.4.8-1.2 2.1-2.4 4.1-2.4 3.3 0 4.6 3.4 3.1 6.4C19 15.4 12 20 12 20Z" }) }),
+  heart: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" }) }),
   star: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9z" }) }),
   wifi: (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
     /* @__PURE__ */ jsx("path", { d: "M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0M8.5 15.5a6 6 0 0 1 7 0" }),
@@ -23,6 +19,22 @@ var A = {
   ] })
 };
 var ic = (Fn, cls = "pd-i18") => Fn({ className: cls, fill: "none", stroke: "currentColor" });
+var PETAL = "M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z";
+var Mark = ({ size = 26, center = "#E8A93B", style, title = "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }) => /* @__PURE__ */ jsxs(
+  "svg",
+  {
+    width: size,
+    height: size,
+    viewBox: "0 0 100 100",
+    role: "img",
+    "aria-label": title,
+    style: { display: "block", flex: "none", ...style },
+    children: [
+      [0, 72, 144, 216, 288].map((a) => /* @__PURE__ */ jsx("path", { d: PETAL, fill: "currentColor", transform: `rotate(${a} 50 50)` }, a)),
+      /* @__PURE__ */ jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
+    ]
+  }
+);
 var PROV = {
   ya: { mk: "pa-mk-ya", ch: "\u042F", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0441 \u042F\u043D\u0434\u0435\u043A\u0441 ID" },
   sber: { mk: "pa-mk-sber", ch: "\u0421", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0441\u043E \u0421\u0431\u0435\u0440 ID" },
@@ -64,7 +76,7 @@ function AuthShell({ plat = "ios", back = true, children, foot, overlay }) {
   ] });
 }
 var Hero = ({ title, sub, logo = true }) => /* @__PURE__ */ jsxs("div", { className: "pa-hero", children: [
-  logo && /* @__PURE__ */ jsx("div", { className: "pa-logo", children: ic(A.gift, "pd-i28") }),
+  logo && /* @__PURE__ */ jsx("div", { className: "pa-logo", children: /* @__PURE__ */ jsx(Mark, { size: 30 }) }),
   title ? /* @__PURE__ */ jsx("h1", { className: "pa-h2", children: title }) : /* @__PURE__ */ jsx("div", { className: "pa-brand", children: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }),
   sub && /* @__PURE__ */ jsx("p", { className: "pa-tag", children: sub })
 ] });
@@ -319,7 +331,10 @@ function DeskShell({ children, popup }) {
   return /* @__PURE__ */ jsxs("div", { className: "pd-root pad pa pa--desktop", "data-pd-theme": "a", children: [
     /* @__PURE__ */ jsxs("aside", { className: "pad-aside", children: [
       /* @__PURE__ */ jsx("img", { className: "pad-photo", src: "img/1561181286-d3fee7d55364.jpg", alt: "" }),
-      /* @__PURE__ */ jsx("div", { className: "pad-brand", children: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }),
+      /* @__PURE__ */ jsxs("div", { className: "pad-brand", children: [
+        /* @__PURE__ */ jsx(Mark, { size: 26 }),
+        "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
+      ] }),
       /* @__PURE__ */ jsx("div", { className: "pad-hl", children: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439 \u0438 \u0432\u0442\u043E\u0440\u0430\u044F \u0436\u0438\u0437\u043D\u044C \u043F\u043E\u0434\u0430\u0440\u0435\u043D\u043D\u044B\u043C \u0446\u0432\u0435\u0442\u0430\u043C." }),
       /* @__PURE__ */ jsx("p", { className: "pad-hlsub", children: "\u0422\u044B\u0441\u044F\u0447\u0438 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 \u0432\u0430\u0448\u0435\u043C \u0433\u043E\u0440\u043E\u0434\u0435. \u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u0437\u0430\u0449\u0438\u0449\u0451\u043D\u043D\u043E\u0439 \u0441\u0434\u0435\u043B\u043A\u0435, \u043E\u0442\u0437\u044B\u0432\u044B \u0432\u0437\u0430\u0438\u043C\u043D\u044B\u0435." }),
       /* @__PURE__ */ jsxs("div", { className: "pad-points", children: [

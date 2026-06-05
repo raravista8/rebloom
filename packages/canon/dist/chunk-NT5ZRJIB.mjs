@@ -1,4 +1,4 @@
-import { PdScreen, PdField, PdSizeSel, PdSeg, PdInput, Ic, PdNotice, I, PdOtp, PdBtn } from './chunk-GANLKAPU.mjs';
+import { PdScreen, PdField, PdSizeSel, PdSeg, PdInput, Ic, PdNotice, I, PdOtp, PdBtn } from './chunk-OS4LB2PH.mjs';
 import 'react';
 import { jsx, jsxs } from 'react/jsx-runtime';
 

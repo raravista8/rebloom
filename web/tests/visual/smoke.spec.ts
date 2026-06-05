@@ -6,7 +6,9 @@ import { test, expect } from '@playwright/test';
 test('home shell renders (brand + bottom nav)', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.pd-root')).toBeVisible();
-  await expect(page.getByText('Передарим')).toBeVisible();
+  // Target the shell brand element specifically — getByText('Передарим') is ambiguous
+  // (also matches the <head><title>Передарим — …</title>), which trips strict mode.
+  await expect(page.locator('.pd-brand')).toBeVisible();
   await expect(page.locator('.pd-bottomnav')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Продать' })).toBeVisible();
 });
