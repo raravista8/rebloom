@@ -54,14 +54,29 @@ $C up -d --no-deps web
 > Native iOS/Android are produced by **Capacitor** from the same web build (signed in CI), not served from this VM (see DEPLOYMENT).
 
 ### Hard rules / gotchas
+- **Single-box MVP compose = ONE file:** `C="docker compose --env-file .env -f infra/docker-compose.prod.yml"` (the two-`-f` form above is the scale-out topology). There is **no `migrate` service** — run migrations as a one-shot (below).
 - **NEVER `docker compose build --pull` the whole stack** — build only the changed service, without `--pull` (base images cached on VM).
-- **`--no-deps`** so recreating one service doesn't bounce others.
-- Web (Next.js) builds can be slow → run detached and poll the log (foreground SSH times out).
-- **DB migrations are run from CI / a one-shot, never by the app on boot.** Migrations must be expand/contract (additive) so a rollback of code doesn't require a rollback of schema.
+- **`--no-deps`** so recreating one service doesn't bounce others; add `--force-recreate` when only the image changed.
+- **Web (Next.js) builds exceed the SSH command timeout (~300s) → background them, then poll, then `up` SEPARATELY.** A `build && up` one-liner loses the `up` when the SSH session buffers/drops mid-build. Proven recipe:
+  ```bash
+  SHA=$(git rev-parse --short HEAD); TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  nohup $C build --build-arg BUILD_VERSION=$SHA --build-arg BUILD_TIME=$TS web > /tmp/web-build.log 2>&1 &
+  until grep -q "Image rebloom-web Built" /tmp/web-build.log; do sleep 5; done   # poll
+  $C up -d --no-deps --force-recreate web caddy                                  # SEPARATE command
+  ```
+- **DB migrations: one-shot, never on boot, expand/contract only.** On the single box, after building `api` and BEFORE `up`:
+  ```bash
+  $C build api && $C run --rm --no-deps api alembic current      # see where we are
+  $C run --rm --no-deps api alembic upgrade head                 # apply (additive → order-safe vs old api)
+  $C up -d --no-deps --force-recreate api scheduler
+  ```
+- **`/version` reports the `api` build, not `web`.** A web-only deploy leaves `git_sha` on the api commit — verify web by the image-created timestamp (`docker image inspect rebloom-web:latest --format '{{.Created}}'`) and/or grepping the served bundle (`curl … | grep <marker>`), not `/version`.
+- **A new top-level `import` in backend app code must be a MAIN dependency**, not `[tool.poetry.group.dev]` — the prod image installs main deps only, so e.g. `import httpx` (dev-only, used by TestClient) crash-loops the api with `ModuleNotFoundError`. Use stdlib (`urllib`) for runtime HTTP, or promote the lib to a main dep via ADR. Catch it before deploy: `grep -rn "^import \|^from " app/ | <check against main deps>`.
 
 ### Verify a deploy
-- `curl -sk https://<domain>/version` → `git_sha` matches merged commit.
+- `curl -sk https://<domain>/version` → `git_sha` matches merged commit (api deploys only — see above).
 - `$C ps` shows services `healthy`; `/readyz` 200 (DB+Redis+storage+providers reachable).
+- SSH alias: `peredarim` (`~/.ssh/config` → `161.104.44.11`). `docker compose run` is the one-shot for migrations/alembic.
 
 ---
 
@@ -74,6 +89,9 @@ Infra — `docker compose config`. Plus `gitleaks` and the security-review gate.
 - Watch a PR: `gh pr checks <N> --watch`.
 - Visual regression flakes on slow navigation → `gh run rerun <run-id> --failed`.
 - Merge: `gh pr merge <N> --squash --delete-branch`.
+- **`ruff format --check`** is a separate gate from `ruff check` — run `poetry run ruff format` on every touched backend file (hand-written migrations especially), not just `ruff check`.
+- **Bandit version can differ local↔CI** (CI pinned newer, e.g. 1.9.4): CI flags things local misses — e.g. `urllib.request.urlopen` → **B310** (Medium/High). Suppress real false-positives with `# nosec <CODE>` (a bandit directive); ruff's `# noqa` does nothing for bandit, and ruff's `S`-rules aren't enabled so `# noqa: S310` is itself an unused-directive error. Don't trust a local `bandit` pass alone.
+- **Visual baselines are the `mobile-360` project** — desktop-only changes (gated behind `useIsDesktop`/container-queries) don't move them. Run a fresh server (`CI=1 npm run test:visual`) — a stale reused `next start` can mask real changes.
 
 ---
 
@@ -121,6 +139,13 @@ Canon is vendored at `packages/canon/`. Claude Design ships new versions as a zi
 8. Run `npm run test:visual` (diff ≤ 2%).
 
 > **NEVER edit `packages/canon/src/*` directly** — it round-trips through Claude Design.
+
+### Vendoring gotchas (learned the hard way)
+- **Unzip aborts on Cyrillic prototype filenames.** The export zip's `reference/prototypes/*.html` have Cyrillic names that make macOS `unzip` bail (`"disk full?"` / Bad file descriptor) *before* `src/` extracts. Always: `unzip -o -x "*/reference/prototypes/*" <zip> -d <dir>`. The prototypes aren't needed for vendoring.
+- **`tsup clean:true` wipes `dist/canon.css` + `dist/favicon/` on every build.** The build emits per-entry css, NOT the concatenated `dist/canon.css` that `web/` imports (`@rebloom/canon/canon.css`), nor the favicon. After `npm run build`, **re-copy both from the export's `dist/`** or the web build breaks. (Do it *after* build, every time.)
+- **Keep the local build-config fixes — the design export resets them.** Each delivery has shipped: `tsup.config.ts` missing the `outExtension` (→ emits `.js` under `"type":"module"`, breaking the `.mjs` exports map) and `package.json` `exports.require` set to `.js` instead of `.cjs`. Re-apply: `outExtension({format}) => ({js: format==='esm'?'.mjs':'.cjs'})` and `require → ./dist/X.cjs`. Verify nothing breaks: `node -e "require('@rebloom/canon/...')"`-style import + `npm run build` in `web/`.
+- **Verify the install with markers, not the version label** (§7.1): `grep -q PdLanding node_modules/@rebloom/canon/dist/<entry>.mjs`.
+- **The canon docs that ship in the package** (`AUTH_HANDOFF.md`, `CLAUDE_CODE_HANDOFF.md`, …) are the wiring spec for `web/` — copy them into `packages/canon/` so a future session sees them.
 
 ---
 
