@@ -87,9 +87,7 @@ class OAuthIdentity(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     link several; ``(provider, subject)`` is globally unique (AUTH_HANDOFF §4)."""
 
     __tablename__ = "oauth_identities"
-    __table_args__ = (
-        UniqueConstraint("provider", "subject", name="uq_oauth_identities_provider"),
-    )
+    __table_args__ = (UniqueConstraint("provider", "subject", name="uq_oauth_identities_provider"),)
 
     provider: Mapped[str] = mapped_column(String(16), nullable=False)
     subject: Mapped[str] = mapped_column(String(255), nullable=False)  # 🔒 provider user id
