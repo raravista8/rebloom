@@ -1,0 +1,83 @@
+import { test, expect, type Locator, type Page, type Route } from '@playwright/test';
+
+// Desktop layout coverage (runs in the desktop-1280 project). The functional suite
+// is 360-only, so desktop regressions shipped unseen: a clamped auth split, clipped
+// headings, the whole mobile tree rendering on desktop. These are DETERMINISTIC
+// geometry assertions (no pixel baselines → no OS-font flakiness): nothing is clipped
+// horizontally, the desktop tree actually mounts, and nothing overflows the viewport.
+
+const PHOTO =
+  'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22300%22%20height%3D%22300%22%3E%3Crect%20width%3D%22300%22%20height%3D%22300%22%20fill%3D%22%23e7d6c4%22/%3E%3C/svg%3E';
+const ok = (r: Route, data: unknown) =>
+  r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data }) });
+
+/** Every matched element must not be clipping its own text (overflow hidden). */
+async function expectNoClip(loc: Locator): Promise<void> {
+  const n = await loc.count();
+  for (let i = 0; i < n; i++) {
+    const el = loc.nth(i);
+    const [scrollW, clientW, text] = await el.evaluate((e) => [e.scrollWidth, e.clientWidth, (e.textContent || '').trim()]);
+    expect(scrollW, `clipped horizontally: "${text}"`).toBeLessThanOrEqual(clientW + 1);
+  }
+}
+
+/** The page must not overflow the viewport horizontally. */
+async function expectNoHorizontalOverflow(page: Page): Promise<void> {
+  const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(over, 'horizontal overflow (px)').toBeLessThanOrEqual(2);
+}
+
+test('login: full-width canon split, brand + headline not clipped', async ({ page }) => {
+  await page.goto('/login');
+  const pad = page.locator('.pad'); // canon desktop auth split mounts after useIsDesktop
+  await expect(pad).toBeVisible();
+  expect((await pad.boundingBox())!.width).toBeGreaterThan(1000); // not clamped to 460px
+  await expectNoClip(page.locator('.pad-brand'));
+  await expectNoClip(page.locator('.pad-hl'));
+  await expect(page.locator('[data-provider="ya"]')).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
+test('home: desktop landing chrome (not the mobile tree)', async ({ page }) => {
+  await page.route('**/api/feed**', (r) => ok(r, { items: [], next_cursor: null }));
+  await page.goto('/');
+  await expect(page.locator('.pdl')).toBeVisible();
+  await expect(page.locator('.pdl-nav')).toBeVisible(); // desktop nav, not the mobile TopBar/BottomNav
+  await expect(page.locator('.pd-bottomnav')).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+});
+
+test('listing: two-column detail, price/title not clipped', async ({ page }) => {
+  await page.route('**/api/listings/l1', (r) =>
+    ok(r, {
+      id: 'l1',
+      photos: [{ card_url: PHOTO, full_url: PHOTO }],
+      size: 'M', freshness: 'today', price_kopecks: 190000, city_id: 'msk', status: 'active',
+      like_count: 8, liked: false, seller: { id: 's1', display_name: 'Аня', seller_rating: 4.9, deals_count: 12 },
+    }),
+  );
+  await page.goto('/l/l1');
+  await expect(page.locator('.pdw-2col')).toBeVisible(); // canon desktop two-column
+  await expectNoClip(page.locator('.pdw-buy .price'));
+  await expectNoHorizontalOverflow(page);
+});
+
+test('deal: desktop chrome renders, no overflow', async ({ page }) => {
+  await page.route('**/api/deals/d1', (r) =>
+    ok(r, { id: 'd1', status: 'paid_held', listing: { id: 'l1', photo_thumb_url: PHOTO, price_kopecks: 99000 }, role: 'buyer', counterparty: { id: 's1', display_name: 'Аня', seller_rating: 4.9 }, amount_kopecks: 99000, commission_kopecks: 9900, delivery_method: 'self_pickup', created_at: '2026-06-04T15:00:00Z' }),
+  );
+  await page.route('**/api/deals/d1/messages', (r) => ok(r, { items: [], next_cursor: null }));
+  await page.route('**/api/deals/d1/delivery', (r) => ok(r, { revealed: false, address: null }));
+  await page.goto('/deal/d1');
+  await expect(page.locator('.pd-web')).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
+test('profile: desktop chrome renders, no overflow', async ({ page }) => {
+  await page.route('**/api/users/u1', (r) =>
+    ok(r, { user: { id: 'u1', display_name: 'Аня Петрова', seller_rating: 4.9, deals_count: 23, city_id: 'msk' }, reviews: [], active_listings: [] }),
+  );
+  await page.goto('/u/u1');
+  await expect(page.locator('.pd-web')).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
