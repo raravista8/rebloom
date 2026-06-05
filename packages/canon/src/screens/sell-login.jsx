@@ -35,7 +35,7 @@ function SellForm() {
         <PdField label="Цена" hint="Похожие букеты в Москве уходят за 700–1 300 ₽.">
           <PdInput prefix="₽" value="990" />
         </PdField>
-        <PdField label="Район" hint="Точный адрес покупатель увидит только после оплаты.">
+        <PdField label="Район" hint="Точный адрес покупатель увидит после договорённости.">
           <PdInput icon={PdIc.pin} value="Москва · Патрики" />
         </PdField>
         <PdField label="Описание" opt="необязательно" counter="84 / 600">
@@ -52,7 +52,7 @@ function SellBlocked() {
   return (
     <PdScreen title="Продать букет" footer={footer}>
       <div style={{padding:'16px',display:'flex',flexDirection:'column',gap:20}}>
-        <PdNotice kind="warn" icon={PdI.shield}>Контакты из объявления убираем: общаться и платить безопаснее внутри сделки.</PdNotice>
+        <PdNotice kind="warn" icon={PdI.shield}>Контакты из объявления убираем: общаться безопаснее внутри сделки.</PdNotice>
         <PdField label="Цена"><PdInput prefix="₽" value="990" /></PdField>
         <PdField label="Описание" error="В тексте есть запрещённые слова или контакты. Поправьте, пожалуйста." counter="38 / 600">
           <PdInput textarea rows={3} state="invalid" value="Свежий букет, пишите мне в телеграм @•••••" />

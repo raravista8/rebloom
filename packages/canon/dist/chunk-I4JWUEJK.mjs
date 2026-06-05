@@ -1,4 +1,4 @@
-import { Ic, I, PdField, PdInput, PdNotice, PdOtp, PdBtn } from './chunk-OS4LB2PH.mjs';
+import { Ic, I, PdField, PdInput, PdNotice, PdOtp, PdBtn } from './chunk-SNT6I4NE.mjs';
 import 'react';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 
@@ -156,18 +156,18 @@ function SettingsPayments({ plat = "ios" }) {
       /* @__PURE__ */ jsx(SRow, { icon: S.card, title: "\u0421\u0411\u041F", sub: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E QR \u0438\u043B\u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443", chev: true }),
       /* @__PURE__ */ jsx(SRow, { icon: Ic.plus, title: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0441\u043F\u043E\u0441\u043E\u0431 \u043E\u043F\u043B\u0430\u0442\u044B", chev: false })
     ] }),
-    /* @__PURE__ */ jsxs(Group, { head: "\u0412\u044B\u043F\u043B\u0430\u0442\u044B \u0437\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438", children: [
-      /* @__PURE__ */ jsx(SRow, { icon: I.wallet, title: "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u0432\u044B\u043F\u043B\u0430\u0442", value: "\xB7\xB7\xB7\xB7 7781", chev: true }),
-      /* @__PURE__ */ jsx(SRow, { icon: S.doc, title: "\u0427\u0435\u043A\u0438 \u0438 \u0438\u0441\u0442\u043E\u0440\u0438\u044F", sub: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u043E\u0437\u0432\u0440\u0430\u0442\u044B" })
+    /* @__PURE__ */ jsxs(Group, { head: "\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442\u044B \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430", children: [
+      /* @__PURE__ */ jsx(SRow, { icon: I.wallet, title: "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u0432", value: "\xB7\xB7\xB7\xB7 7781", chev: true }),
+      /* @__PURE__ */ jsx(SRow, { icon: S.doc, title: "\u0418\u0441\u0442\u043E\u0440\u0438\u044F \u0441\u0434\u0435\u043B\u043E\u043A", sub: "\u0417\u0430\u0432\u0435\u0440\u0448\u0451\u043D\u043D\u044B\u0435 \u0438 \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u0435" })
     ] }),
-    /* @__PURE__ */ jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsx(PdNotice, { kind: "ok", children: "\u0414\u0435\u043D\u044C\u0433\u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F \u0434\u0435\u0440\u0436\u0430\u0442\u0441\u044F \u0432 \u044D\u0441\u043A\u0440\u043E\u0443 \u0438 \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u044F\u0442 \u0432\u0430\u043C \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F." }) })
+    /* @__PURE__ */ jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsx(PdNotice, { kind: "ok", children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u043E\u0445\u043E\u0434\u0438\u0442 \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435 \u2014 \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u043C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443. \xAB\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C\xBB \u043D\u0435 \u0445\u0440\u0430\u043D\u0438\u0442 \u0432\u0430\u0448\u0438 \u0434\u0435\u043D\u044C\u0433\u0438." }) })
   ] });
 }
 function SettingsNotifications({ plat = "ios" }) {
   const row = (icon, title, sub, on) => /* @__PURE__ */ jsx(SRow, { icon, title, sub, right: /* @__PURE__ */ jsx(Switch, { on }), chev: false });
   return /* @__PURE__ */ jsxs(SetShell, { plat, title: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: [
     /* @__PURE__ */ jsxs(Group, { head: "\u0421\u0434\u0435\u043B\u043A\u0438", children: [
-      row(I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u041E\u043F\u043B\u0430\u0442\u0430, \u044D\u0441\u043A\u0440\u043E\u0443, \u0441\u043F\u043E\u0440, \u0432\u043E\u0437\u0432\u0440\u0430\u0442", true),
+      row(I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0451\u043D\u043D\u043E\u0441\u0442\u044C, \u0432\u0441\u0442\u0440\u0435\u0447\u0430, \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0438\u0435", true),
       row(I.bell, "\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F \u0432 \u0447\u0430\u0442\u0435", null, true),
       row(Ic.star, "\u041D\u043E\u0432\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B", null, true)
     ] }),
@@ -218,12 +218,12 @@ function SettingsSelfEmployed({ plat = "ios" }) {
     /* @__PURE__ */ jsxs("div", { className: "pds-confirm", style: { padding: "10px 0 8px" }, children: [
       /* @__PURE__ */ jsx("div", { className: "glyph", style: { background: "var(--pd-fresh-soft)", color: "var(--pd-fresh)" }, children: sic(S.briefcase, "pd-i28") }),
       /* @__PURE__ */ jsx("h2", { children: "\u0427\u0435\u043A\u0438 \u0438 \u043D\u0430\u043B\u043E\u0433\u0438 \u043B\u0435\u0433\u0430\u043B\u044C\u043D\u043E" }),
-      /* @__PURE__ */ jsx("p", { children: "\u0412\u044B \u043F\u0440\u043E\u0434\u0430\u0451\u0442\u0435 \u0447\u0430\u0441\u0442\u043E. \u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u0441\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C, \u0447\u0442\u043E\u0431\u044B \u0447\u0435\u043A\u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F\u043C \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043B\u0438\u0441\u044C \u0441\u0430\u043C\u0438, \u0430 \u043E \u043D\u0430\u043B\u043E\u0433\u0430\u0445 \u043C\u043E\u0436\u043D\u043E \u0431\u044B\u043B\u043E \u043D\u0435 \u0434\u0443\u043C\u0430\u0442\u044C. \u042D\u0442\u043E \u043D\u0435 \u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u0438 \u043D\u0435 \u043C\u0435\u0448\u0430\u0435\u0442 \u043F\u0440\u043E\u0434\u0430\u0432\u0430\u0442\u044C." })
+      /* @__PURE__ */ jsx("p", { children: "\u0412\u044B \u043F\u0440\u043E\u0434\u0430\u0451\u0442\u0435 \u0447\u0430\u0441\u0442\u043E. \u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u0441\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C, \u0447\u0442\u043E\u0431\u044B \u0432\u044B\u0434\u0430\u0432\u0430\u0442\u044C \u0447\u0435\u043A\u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F\u043C \u0438 \u043D\u0435 \u0434\u0443\u043C\u0430\u0442\u044C \u043E \u043D\u0430\u043B\u043E\u0433\u0430\u0445. \u042D\u0442\u043E \u043D\u0435 \u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u0438 \u043D\u0435 \u043C\u0435\u0448\u0430\u0435\u0442 \u043F\u0440\u043E\u0434\u0430\u0432\u0430\u0442\u044C." })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "pds-keeplist", children: [
       /* @__PURE__ */ jsxs("div", { className: "li", children: [
         sic(I.check, "pd-i16 "),
-        /* @__PURE__ */ jsx("span", { children: "\u0427\u0435\u043A \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044E \u0444\u043E\u0440\u043C\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u0441\u0430\u043C \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438" })
+        /* @__PURE__ */ jsx("span", { children: "\u0427\u0435\u043A \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044E \u043E\u0444\u043E\u0440\u043C\u043B\u044F\u0435\u0442\u0441\u044F \u0432 \u043F\u0430\u0440\u0443 \u043A\u0430\u0441\u0430\u043D\u0438\u0439 \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "li", children: [
         sic(I.check, "pd-i16"),
@@ -355,7 +355,7 @@ var DESKBODY = {
     /* @__PURE__ */ jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsx("div", { className: "bh", children: "\u0421\u0434\u0435\u043B\u043A\u0438" }),
       /* @__PURE__ */ jsx("div", { style: { height: 6 } }),
-      dRow(I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u041E\u043F\u043B\u0430\u0442\u0430, \u044D\u0441\u043A\u0440\u043E\u0443, \u0441\u043F\u043E\u0440, \u0432\u043E\u0437\u0432\u0440\u0430\u0442", /* @__PURE__ */ jsx(Switch, { on: true })),
+      dRow(I.wallet, "\u0421\u0442\u0430\u0442\u0443\u0441\u044B \u0441\u0434\u0435\u043B\u043E\u043A", "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0451\u043D\u043D\u043E\u0441\u0442\u044C, \u0432\u0441\u0442\u0440\u0435\u0447\u0430, \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0438\u0435", /* @__PURE__ */ jsx(Switch, { on: true })),
       dRow(I.bell, "\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u044F \u0432 \u0447\u0430\u0442\u0435", null, /* @__PURE__ */ jsx(Switch, { on: true })),
       dRow(Ic.star, "\u041D\u043E\u0432\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B", null, /* @__PURE__ */ jsx(Switch, { on: true }))
     ] }),
@@ -380,7 +380,7 @@ var DESKBODY = {
   ] }),
   payments: () => /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("h1", { className: "pdss-h1", children: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B" }),
-    /* @__PURE__ */ jsx("p", { className: "pdss-sub", children: "\u041A\u0430\u0440\u0442\u044B \u0434\u043B\u044F \u043E\u043F\u043B\u0430\u0442\u044B \u043F\u043E\u043A\u0443\u043F\u043E\u043A \u0438 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F \u0432\u044B\u043F\u043B\u0430\u0442 \u0437\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438." }),
+    /* @__PURE__ */ jsx("p", { className: "pdss-sub", children: "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u0432 \u0438 \u0438\u0441\u0442\u043E\u0440\u0438\u044F \u0441\u0434\u0435\u043B\u043E\u043A." }),
     /* @__PURE__ */ jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsx("div", { className: "bh", children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E\u043A\u0443\u043F\u043E\u043A" }),
       /* @__PURE__ */ jsx("div", { style: { height: 6 } }),
@@ -388,9 +388,9 @@ var DESKBODY = {
       dRow(S.card, "\u0421\u0411\u041F", "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E QR \u0438\u043B\u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443", /* @__PURE__ */ jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C" }))
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "pdss-block", children: [
-      /* @__PURE__ */ jsx("div", { className: "bh", children: "\u0412\u044B\u043F\u043B\u0430\u0442\u044B \u0437\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438" }),
+      /* @__PURE__ */ jsx("div", { className: "bh", children: "\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442\u044B \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430" }),
       /* @__PURE__ */ jsx("div", { style: { height: 6 } }),
-      dRow(I.wallet, "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u0432\u044B\u043F\u043B\u0430\u0442", "\xB7\xB7\xB7\xB7 7781", /* @__PURE__ */ jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C" }))
+      dRow(I.wallet, "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u0432", "\xB7\xB7\xB7\xB7 7781", /* @__PURE__ */ jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C" }))
     ] })
   ] }),
   privacy: () => /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -415,7 +415,7 @@ var DESKBODY = {
       /* @__PURE__ */ jsx("span", { className: "ic", style: { width: 44, height: 44, borderRadius: 12, background: "var(--pd-fresh-soft)", color: "var(--pd-fresh)", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }, children: sic(S.briefcase, "pd-i24") }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 16 }, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u0437\u0430 \u043F\u0430\u0440\u0443 \u043C\u0438\u043D\u0443\u0442" }),
-        /* @__PURE__ */ jsx("p", { style: { color: "var(--pd-muted)", fontSize: 13.5, lineHeight: 1.55, margin: "6px 0 16px" }, children: "\u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0430 \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421, \u0447\u0435\u043A \u0444\u043E\u0440\u043C\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u0441\u0430\u043C \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438, \u043D\u0430\u043B\u043E\u0433 4% \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438. \u041E\u0431\u044B\u0447\u043D\u044B\u0435 \u043F\u0440\u043E\u0434\u0430\u0436\u0438 \u043D\u0435 \u0431\u043B\u043E\u043A\u0438\u0440\u0443\u0435\u0442." }),
+        /* @__PURE__ */ jsx("p", { style: { color: "var(--pd-muted)", fontSize: 13.5, lineHeight: 1.55, margin: "6px 0 16px" }, children: "\u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0430 \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421, \u0447\u0435\u043A \u043E\u0444\u043E\u0440\u043C\u043B\u044F\u0435\u0442\u0441\u044F \u0432 \u043F\u0430\u0440\u0443 \u043A\u0430\u0441\u0430\u043D\u0438\u0439 \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438, \u043D\u0430\u043B\u043E\u0433 4% \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438. \u041E\u0431\u044B\u0447\u043D\u044B\u0435 \u043F\u0440\u043E\u0434\u0430\u0436\u0438 \u043D\u0435 \u0431\u043B\u043E\u043A\u0438\u0440\u0443\u0435\u0442." }),
         /* @__PURE__ */ jsx(PdBtn, { variant: "primary", lg: true, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421" })
       ] })
     ] }) })

@@ -1,6 +1,6 @@
 'use strict';
 
-var chunkBHFGC5NF_cjs = require('./chunk-BHFGC5NF.cjs');
+var chunkGT5S3QFQ_cjs = require('./chunk-GT5S3QFQ.cjs');
 var React = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -14,8 +14,8 @@ var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u
   /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
 ] });
 var PdCatalog = (function() {
-  const Ic2 = chunkBHFGC5NF_cjs.Ic, Card2 = chunkBHFGC5NF_cjs.Card, Btn = chunkBHFGC5NF_cjs.PdBtn;
-  const FRESH = chunkBHFGC5NF_cjs.PD_FRESH || [], LIKED = chunkBHFGC5NF_cjs.PD_LIKED || [];
+  const Ic2 = chunkGT5S3QFQ_cjs.Ic, Card2 = chunkGT5S3QFQ_cjs.Card, Btn = chunkGT5S3QFQ_cjs.PdBtn;
+  const FRESH = chunkGT5S3QFQ_cjs.PD_FRESH || [], LIKED = chunkGT5S3QFQ_cjs.PD_LIKED || [];
   const BASE = [...FRESH, ...LIKED];
   const DISTRICTS = ["\u041F\u0430\u0442\u0440\u0438\u043A\u0438", "\u0425\u0430\u043C\u043E\u0432\u043D\u0438\u043A\u0438", "\u0410\u0440\u0431\u0430\u0442", "\u0421\u043E\u043A\u043E\u043B", "\u0422\u0432\u0435\u0440\u0441\u043A\u043E\u0439", "\u041F\u0440\u0435\u0441\u043D\u044F", "\u042F\u043A\u0438\u043C\u0430\u043D\u043A\u0430", "\u0417\u0430\u043C\u043E\u0441\u043A\u0432\u043E\u0440\u0435\u0447\u044C\u0435", "\u041E\u0441\u0442\u043E\u0436\u0435\u043D\u043A\u0430", "\u0422\u0430\u0433\u0430\u043D\u043A\u0430"];
   const FRESHES = ["today", "d1_2", "d3_plus"];

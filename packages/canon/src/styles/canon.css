@@ -1253,3 +1253,9 @@
 .pds-metaplate dl{ margin:10px 0 0; display:grid; grid-template-columns:88px 1fr; gap:8px 14px; }
 .pds-metaplate dt{ font-size:12.5px; font-weight:700; color:#8B8378; }
 .pds-metaplate dd{ margin:0; font-size:13.5px; line-height:1.45; color:#3F3A33; font-family:ui-monospace,'SF Mono',Menlo,monospace; }
+
+/* deal-status badges (canon: agreed/meeting/done/problem/cancelled) */
+.pda-badge.done{background:var(--pd-fresh-soft);color:#2f5a3c}
+.pda-badge.meeting{background:var(--pd-warn-soft);color:#7a5a16}
+.pda-badge.problem{background:var(--pd-danger-soft);color:#7e2c1e}
+.pda-badge.agreed,.pda-badge.cancelled{background:var(--pd-surface-3);color:var(--pd-muted)}

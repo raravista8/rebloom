@@ -2,6 +2,11 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.5.0] — 2026-06-05 — Без онлайн-оплаты: модель «оплата при встрече» (убран эскроу)
+- Сделка больше не проводит платежи: статусы `agreed → meeting → done` (+ `problem`, `cancelled`); эскроу/выплаты/комиссия/возвраты/чарджбэки удалены.
+- Расчёт между пользователями напрямую при встрече (наличные/перевод). Споры → жалобы в поддержку/модерацию.
+- Экран «Оплата не прошла» удалён. Лендинг/SEO/настройки/админка переописаны под оплату при встрече. Монетизация — отдельный ADR post-MVP.
+
 ## 0.4.0 — 2026-06-05 · marketing SEO pages (geo ×10 · safe-deal · blog) + pickup-only
 
 **Adds the public SEO/marketing surface** that converts the semantic-core work into canon, and applies
@@ -10,7 +15,7 @@ Implementation spec for `web/`: `CLAUDE_CODE_HANDOFF.md §8`. Semantic core: `re
 
 ### Added — `./marketing`
 - **`PdGeoPage`** — city SEO landing template (`data: CityData`, `platform`). One template → 10 cities; city declensions (nom/loc/gen) + districts + `metro` flag are **data** (`PD_GEO_CITIES`), not computed. Sections: hero (eyebrow/H1/lede/trust), live catalog with working price·freshness filters, districts/cities/occasions interlinking, FAQ. Copy auto-drops «у метро» where `metro:false` (Челябинск/Красноярск/Уфа). Только Title/H1 несут город (Директ — таргетингом, ядро §2.3).
-- **`PdSafeDeal`** — «Безопасная сделка»: escrow 3-step flow + «что такое эскроу простыми словами» + FAQ + CTA. Trust cluster; снимает возражение «обман».
+- **`PdSafeDeal`** — «Безопасная сделка»: 3-step «оплата при встрече» flow + «как безопасно купить с рук» + FAQ + CTA. Trust cluster; снимает возражение «обман».
 - **`PdBlogIndex` / `PdBlogArticle`** — мини-блог (supply warm-up): 3 статьи + article template with «Опубликовать букет» CTA. Темы из ядра.
 - **`PdSeoMeta`** — visible meta-plate (Title/Description/H1/alt preview); for `web/` the real meta goes via `generateMetadata` (§5 table).
 - **`PdLandingFooter`** — landing footer now exported (reused by all marketing pages).

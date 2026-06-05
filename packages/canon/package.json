@@ -1,7 +1,7 @@
 {
   "name": "@rebloom/canon",
-  "version": "0.4.0",
-  "description": "Передарим client + operator-admin + public SEO/marketing UI canon — tokens, motion, primitives, feed, marketing+SEO, catalog, listing, deal, OAuth auth, settings, admin.",
+  "version": "0.5.0",
+  "description": "Передарим client + operator-admin + public SEO/marketing UI canon — no-escrow «оплата при встрече» deal model (agreed→meeting→done/problem/cancelled), pickup-only; tokens, motion, primitives, feed, marketing+SEO, catalog, listing, deal, OAuth auth, settings, admin.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",

@@ -131,20 +131,20 @@ function PdChip({ on, children, icon }) {
     children
   ] });
 }
-var DEAL_STEPS = [["created", "\u041E\u043F\u043B\u0430\u0442\u0430"], ["paid_held", "\u0412 \u044D\u0441\u043A\u0440\u043E\u0443"], ["handover", "\u041F\u0435\u0440\u0435\u0434\u0430\u0447\u0430"], ["released", "\u0413\u043E\u0442\u043E\u0432\u043E"]];
+var DEAL_STEPS = [["agreed", "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u043B\u0438\u0441\u044C"], ["meeting", "\u0412\u0441\u0442\u0440\u0435\u0447\u0430"], ["done", "\u0417\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E"]];
 function PdStepper({ status }) {
-  const order = ["created", "paid_held", "handover", "released"];
-  let curIdx = status === "disputed" ? 2 : order.indexOf(status === "released" ? "released" : status === "paid_held" ? "handover" : status);
-  if (status === "paid_held") curIdx = 2;
-  if (status === "released") curIdx = 3;
-  if (status === "created") curIdx = 1;
+  const order = ["agreed", "meeting", "done"];
+  let curIdx = order.indexOf(status);
+  if (status === "problem") curIdx = 1;
+  if (curIdx < 0) curIdx = 0;
   return /* @__PURE__ */ jsx("div", { className: "pd-stepper", children: DEAL_STEPS.map(([k, l], i) => {
     let cls = "";
-    if (status === "disputed") {
-      cls = i < 2 ? "done" : i === 2 ? "warn" : "";
+    if (status === "problem") {
+      cls = i < 1 ? "done" : i === 1 ? "warn" : "";
+    } else if (status === "done") {
+      cls = "done";
     } else {
       cls = i < curIdx ? "done" : i === curIdx ? "cur" : "";
-      if (status === "released") cls = i <= 3 ? "done" : "";
     }
     return /* @__PURE__ */ jsxs("div", { className: `pd-step ${cls}`, children: [
       /* @__PURE__ */ jsx("span", { className: "dot", children: cls === "done" ? I.check({ className: "pd-i16", fill: "none", stroke: "currentColor" }) : cls === "warn" ? "!" : i + 1 }),

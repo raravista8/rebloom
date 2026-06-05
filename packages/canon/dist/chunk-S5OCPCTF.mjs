@@ -1,4 +1,4 @@
-import { TopBar, SectionHead, PdSkelCard, BottomNav, PdEmpty, I, PdBtn, Ic, pdMoney, PdScreen, PdChip, PD_LIKED, Card, PdStars, PdNotice, PD_FRESH, Avatar, PdGallery, LikeBtn, Freshness } from './chunk-OS4LB2PH.mjs';
+import { TopBar, SectionHead, PdSkelCard, BottomNav, PdEmpty, I, PdBtn, Ic, PdScreen, PdChip, PD_LIKED, Card, PdStars, PdNotice, PD_FRESH, Avatar, PdGallery, pdMoney, LikeBtn, Freshness } from './chunk-SNT6I4NE.mjs';
 import 'react';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 
@@ -71,8 +71,8 @@ function ListingBody({ sold }) {
         LISTING.district
       ] }),
       sold ? /* @__PURE__ */ jsx(PdNotice, { kind: "info", icon: I.info, children: "\u042D\u0442\u043E\u0442 \u0431\u0443\u043A\u0435\u0442 \u0443\u0436\u0435 \u043A\u0443\u043F\u0438\u043B\u0438. \u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0438\u0442\u0435 \u0434\u0440\u0443\u0433\u0438\u0435 \u0441\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C, \u0438\u0445 \u0434\u043E\u0431\u0430\u0432\u043B\u044F\u044E\u0442 \u043A\u0430\u0436\u0434\u044B\u0439 \u0434\u0435\u043D\u044C." }) : /* @__PURE__ */ jsxs(PdNotice, { kind: "ok", icon: I.shield, children: [
-        /* @__PURE__ */ jsx("b", { children: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430." }),
-        " \u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u044D\u0441\u043A\u0440\u043E\u0443 \u042EKassa. \u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u043F\u043E\u043B\u0443\u0447\u0438\u0442 \u0438\u0445 \u0442\u043E\u043B\u044C\u043A\u043E \u043F\u043E\u0441\u043B\u0435 \u0442\u043E\u0433\u043E, \u043A\u0430\u043A \u0432\u044B \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435."
+        /* @__PURE__ */ jsx("b", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435." }),
+        " \u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u0432 \u0447\u0430\u0442\u0435 \u0438 \u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0440\u044F\u0434\u043E\u043C \u2014 \u043F\u043B\u0430\u0442\u0438\u0442\u0435, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0446\u0432\u0435\u0442\u044B."
       ] }),
       /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 11, padding: "14px 0", marginTop: 6, borderTop: "1px solid var(--pd-border)", borderBottom: "1px solid var(--pd-border)" }, children: [
         /* @__PURE__ */ jsx(Avatar, { seller: LISTING.seller, size: 44 }),
@@ -101,7 +101,7 @@ function ListingBody({ sold }) {
             /* @__PURE__ */ jsx("div", { style: { fontSize: 12.5, color: "var(--pd-muted)", marginTop: 1 }, children: "\u0417\u0430\u0431\u0435\u0440\u0451\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0443 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430 \u2014 \u043E\u0431\u044B\u0447\u043D\u043E \u0434\u0432\u043E\u0440 \u0438\u043B\u0438 \u043C\u0435\u0442\u0440\u043E \u043F\u043E\u0431\u043B\u0438\u0437\u043E\u0441\u0442\u0438" })
           ] })
         ] }),
-        /* @__PURE__ */ jsx("p", { style: { fontSize: 12.5, color: "var(--pd-muted)", marginTop: 8 }, children: "\u0422\u043E\u0447\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u043F\u043E\u044F\u0432\u0438\u0442\u0441\u044F \u0432 \u0447\u0430\u0442\u0435 \u043F\u043E\u0441\u043B\u0435 \u043E\u043F\u043B\u0430\u0442\u044B. \u0414\u0432\u043E\u0440 \u0438\u043B\u0438 \u0441\u0442\u0430\u043D\u0446\u0438\u044E \u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442 \u043F\u0440\u043E\u0434\u0430\u0432\u0435\u0446." })
+        /* @__PURE__ */ jsx("p", { style: { fontSize: 12.5, color: "var(--pd-muted)", marginTop: 8 }, children: "\u0422\u043E\u0447\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u043F\u043E\u044F\u0432\u0438\u0442\u0441\u044F \u0432 \u0447\u0430\u0442\u0435, \u043A\u043E\u0433\u0434\u0430 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u043E \u0432\u0441\u0442\u0440\u0435\u0447\u0435. \u0414\u0432\u043E\u0440 \u0438\u043B\u0438 \u0441\u0442\u0430\u043D\u0446\u0438\u044E \u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442 \u043F\u0440\u043E\u0434\u0430\u0432\u0435\u0446." })
       ] }),
       /* @__PURE__ */ jsxs("div", { style: { marginTop: 18 }, children: [
         /* @__PURE__ */ jsx("div", { className: "pd-label", style: { marginBottom: 6 }, children: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435" }),
@@ -113,10 +113,7 @@ function ListingBody({ sold }) {
 function Listing() {
   const footer = /* @__PURE__ */ jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 10 }, children: [
     /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", style: { flex: 1 }, children: "\u041F\u0440\u0435\u0434\u043B\u043E\u0436\u0438\u0442\u044C \u0446\u0435\u043D\u0443" }),
-    /* @__PURE__ */ jsxs(PdBtn, { variant: "primary", icon: I.cart, style: { flex: 1.4 }, children: [
-      "\u041A\u0443\u043F\u0438\u0442\u044C \xB7 ",
-      pdMoney(LISTING.price)
-    ] })
+    /* @__PURE__ */ jsx(PdBtn, { variant: "primary", icon: I.send, style: { flex: 1.4 }, children: "\u041D\u0430\u043F\u0438\u0441\u0430\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443" })
   ] }) });
   return /* @__PURE__ */ jsx(PdScreen, { title: "\u0411\u0443\u043A\u0435\u0442", center: true, action: /* @__PURE__ */ jsx(ListingActions, {}), footer, children: /* @__PURE__ */ jsx(ListingBody, {}) });
 }
@@ -188,7 +185,7 @@ function Profile() {
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { style: { padding: "0 16px" }, children: /* @__PURE__ */ jsx(PdNotice, { kind: "ok", icon: I.shield, children: "\u041F\u0440\u043E\u0432\u0435\u0440\u0435\u043D\u043D\u044B\u0439 \u043F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \xB7 97% \u0441\u0434\u0435\u043B\u043E\u043A \u0431\u0435\u0437 \u0441\u043F\u043E\u0440\u0430. \u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u0437\u0430\u0449\u0438\u0449\u0451\u043D\u043D\u043E\u0439 \u0441\u0434\u0435\u043B\u043A\u0435." }) }),
+    /* @__PURE__ */ jsx("div", { style: { padding: "0 16px" }, children: /* @__PURE__ */ jsx(PdNotice, { kind: "ok", icon: I.shield, children: "\u041F\u0440\u043E\u0432\u0435\u0440\u0435\u043D\u043D\u044B\u0439 \u043F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \xB7 97% \u0441\u0434\u0435\u043B\u043E\u043A \u0431\u0435\u0437 \u0436\u0430\u043B\u043E\u0431. \u0420\u0435\u0430\u043B\u044C\u043D\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B \u0438 \u0440\u0435\u0439\u0442\u0438\u043D\u0433." }) }),
     /* @__PURE__ */ jsx(SectionHead, { title: "\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u043E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F", sub: "3 \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u0430" }),
     /* @__PURE__ */ jsx("div", { className: "pd-grid", children: PD_FRESH.slice(0, 2).map((d) => /* @__PURE__ */ jsx("div", { className: "pd-rise", children: /* @__PURE__ */ jsx(Card, { d, variant: "grid" }) }, d.id)) }),
     /* @__PURE__ */ jsx(SectionHead, { title: "\u041E\u0442\u0437\u044B\u0432\u044B", sub: "23 \u043E\u0442\u0437\u044B\u0432\u0430 \xB7 4,9 \u2605" }),

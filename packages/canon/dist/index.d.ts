@@ -6,7 +6,7 @@ export { PdFeedDesktop } from './feed.js';
 export { L as Listing, a as ListingSold, P as Profile, S as SearchNoResults, V as VitrinaEmpty, b as VitrinaLoading } from './discovery-Daf9f7-t.js';
 export { PD_GEO_CITIES, PdBlogArticle, PdBlogIndex, PdGeoPage, PdLanding, PdLandingFooter, PdLandingNav, PdSafeDeal, PdSeoMeta, nbsp } from './marketing.js';
 export { PdCatalog } from './catalog.js';
-export { D as DealDesktop, a as DealDisputed, b as DealPaidHeld, c as DealReleased, L as ListingDesktop, N as Notifications, d as NotificationsDesktop, e as NotificationsEmpty, O as Offline, P as PaymentFailed, f as ProfileDesktop, R as ReviewForm, S as SearchDesktop, g as SellDesktop } from './deal-Cxjm0VCC.js';
+export { D as DealActive, a as DealDesktop, b as DealDone, c as DealProblem, L as ListingDesktop, N as Notifications, d as NotificationsDesktop, e as NotificationsEmpty, O as Offline, P as PaymentFailed, f as ProfileDesktop, R as ReviewForm, S as SearchDesktop, g as SellDesktop } from './deal-nhT793UG.js';
 export { LoginPhone, OtpLocked, OtpVerify, SellBlocked, SellForm, SellPublished, SellRemoved } from './screens.js';
 export { AdminDashboard, AdminDealConfirm, AdminDeals, AdminFinance, AdminFraud, AdminListings, AdminMobileBlock, AdminMobileDash, AdminMobileDealCancel, AdminMobileDeals, AdminMobileDispute, AdminMobileFinance, AdminMobileFraud, AdminMobileFraudDrill, AdminMobileListings, AdminMobileLogin, AdminMobileMod, AdminMobileModReject, AdminMobileMore, AdminMobileReports, AdminMobileUserDrill, AdminMobileUsers, AdminModeration, AdminReports, AdminShell, AdminSide, AdminSpark, AdminToast, AdminUserDrill, AdminUsers, adminIc } from './admin.js';
 export { t as tokens } from './tokens-JJOd-W8h.js';

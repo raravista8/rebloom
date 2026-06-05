@@ -70,10 +70,10 @@ function ListingDesktop() {
                 <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца — обычно двор или метро поблизости</div>
               </div>
             </div>
-            <div style={{margin:'16px 0'}}><PdNotice kind="ok" icon={PdI.shield}><b>Безопасная сделка.</b> Деньги в эскроу. Продавец получит их после подтверждения получения.</PdNotice></div>
+            <div style={{margin:'16px 0'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом — платите, когда увидели цветы.</PdNotice></div>
             <div style={{display:'flex',gap:10}}>
               <PdBtn variant="secondary" style={{flex:1}}>Предложить цену</PdBtn>
-              <PdBtn variant="primary" icon={PdI.cart} style={{flex:1.4}}>Купить · {pdMoney(990)}</PdBtn>
+              <PdBtn variant="primary" icon={PdI.send} style={{flex:1.4}}>Написать продавцу</PdBtn>
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@ function ProfileDesktop() {
           <div style={{flex:1}}>
             <h2>Аня</h2>
             <div style={{display:'flex',alignItems:'center',gap:6,marginTop:5}}><PdStars value={5}/><b>4,9</b><span style={{color:'var(--pd-muted)',fontSize:13}}>· 23 сделки</span></div>
-            <div className="pdw-statrow"><span><b>12</b> объявлений</span><span><b>с 2025</b> на площадке</span><span><b>97%</b> сделок без спора</span></div>
+            <div className="pdw-statrow"><span><b>12</b> объявлений</span><span><b>с 2025</b> на площадке</span><span><b>97%</b> сделок без жалоб</span></div>
           </div>
           <PdBtn variant="secondary">Пожаловаться</PdBtn>
         </div>
@@ -127,12 +127,12 @@ function DealDesktop() {
               <div style={{display:'flex',gap:12,alignItems:'center',marginBottom:16}}>
                 <img src="img/1561181286-d3fee7d55364.jpg" alt="" style={{width:64,height:64,borderRadius:14,objectFit:'cover'}}/>
                 <div style={{flex:1}}><div style={{fontWeight:700,fontSize:16}}>Букет M · Патрики</div><div style={{fontSize:13,color:'var(--pd-muted)',marginTop:2}}>Продавец Аня · 4,9 ★</div></div>
-                <div style={{textAlign:'right'}}><div className="pd-price" style={{fontSize:20}}>{pdMoney(990)}</div><div style={{fontSize:12,color:'var(--pd-muted)'}}>в эскроу</div></div>
+                <div style={{textAlign:'right'}}><div className="pd-price" style={{fontSize:20}}>{pdMoney(990)}</div><div style={{fontSize:12,color:'var(--pd-muted)'}}>договорились</div></div>
               </div>
-              <PdStepper status="paid_held"/>
-              <div style={{margin:'16px 0'}}><PdNotice kind="ok" icon={PdI.shield}><b>Деньги в безопасности.</b> Аня получит {pdMoney(900)} после подтверждения. Комиссия {pdMoney(90)}.</PdNotice></div>
+              <PdStepper status="meeting"/>
+              <div style={{margin:'16px 0'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь о времени, заберите букет и расплатитесь на месте.</PdNotice></div>
               <div style={{display:'flex',alignItems:'center',gap:10,padding:'12px 14px',border:'1px solid var(--pd-border)',borderRadius:13}}>
-                {wic(PdI.walk,'pd-i20 ')}<div style={{flex:1}}><div style={{fontWeight:600,fontSize:13.5}}>Самовывоз · м. Маяковская</div><div style={{fontSize:12,color:'var(--pd-muted)'}}>Двор, Тверская 12, после оплаты</div></div>
+                {wic(PdI.walk,'pd-i20 ')}<div style={{flex:1}}><div style={{fontWeight:600,fontSize:13.5}}>Самовывоз · м. Маяковская</div><div style={{fontSize:12,color:'var(--pd-muted)'}}>Двор, Тверская 12, после договорённости</div></div>
               </div>
               <div style={{display:'flex',gap:10,marginTop:16}}>
                 <PdBtn variant="secondary" icon={PdI.alert} style={{flex:1}}>Проблема</PdBtn>
@@ -143,7 +143,7 @@ function DealDesktop() {
           <div className="pdw-chatcard">
             <div style={{padding:'13px 16px',borderBottom:'1px solid var(--pd-border)',fontWeight:700,fontSize:14}}>Чат сделки · Аня</div>
             <div className="pd-chat">
-              <PdBubble kind="sys">Оплата прошла · {pdMoney(990)} в эскроу</PdBubble>
+              <PdBubble kind="sys">Чат сделки открыт · договоритесь о встрече</PdBubble>
               <PdBubble kind="in" time="17:58">Здравствуйте! Можно забрать сегодня после 18:00 🌸</PdBubble>
               <PdBubble kind="out" time="18:01">Отлично, буду к 18:30</PdBubble>
               <PdBubble kind="in" time="18:02">Двор дома по Тверской, 12. Напишу, как выйду</PdBubble>
@@ -175,7 +175,7 @@ function SellDesktop() {
             <PdField label="Цена" hint="Похожие: 700–1 300 ₽."><PdInput prefix="₽" value="990"/></PdField>
           </div>
           <PdField label="Свежесть"><PdSeg value="today" options={[{k:'today',label:'Сегодня'},{k:'d1_2',label:'1–2 дня'},{k:'d3_plus',label:'3+ дня'}]}/></PdField>
-          <PdField label="Район" hint="Точный адрес виден только после оплаты."><PdInput icon={PdIc.pin} value="Москва · Патрики"/></PdField>
+          <PdField label="Район" hint="Точный адрес виден после договорённости."><PdInput icon={PdIc.pin} value="Москва · Патрики"/></PdField>
           <PdField label="Описание" opt="необязательно" counter="84 / 600"><PdInput textarea rows={3} value="Подарили утром, пионовидные розы и эвкалипт. Очень свежие, стоят в воде."/></PdField>
           <div><PdBtn variant="primary" lg>Опубликовать букет</PdBtn></div>
         </div>
@@ -187,7 +187,7 @@ function SellDesktop() {
 // ── Уведомления (desktop) ───────────────────────────────────────────────────
 function NotificationsDesktop() {
   const N=[
-    {ic:PdI.check,unread:true,t:'Покупатель подтвердил получение',s:'Сделка «Букет M · Патрики» завершена · 900 ₽ в пути',tm:'5 мин'},
+    {ic:PdI.check,unread:true,t:'Сделка завершена',s:'«Букет M · Патрики» · покупатель подтвердил получение',tm:'5 мин'},
     {ic:PdI.heartline,unread:true,t:'Ваш букет залайкали',s:'Уже 47 лайков, он в топе «Самые залайканные»',tm:'1 ч'},
     {ic:PdIc.search,unread:false,t:'Похожий букет рядом',s:'Пионовидные розы в Патриках за 890 ₽',tm:'3 ч'},
     {ic:PdIc.star,unread:false,t:'Новый отзыв от Марины',s:'«Букет был свежий, как на фото» · 5 ★',tm:'вчера'},

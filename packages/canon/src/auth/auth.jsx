@@ -339,7 +339,7 @@ function AuthError({ plat='ios', offline=false }) {
         <div className="glyph" style={{color:offline?'var(--pd-muted)':'var(--pd-danger)'}}>{ic(offline?A.wifi:PdI.alert,'pd-i28')}</div>
         <h3>{offline?'Нет соединения':'Не удалось войти'}</h3>
         <p>{offline
-          ? 'Проверьте интернет. Как только связь вернётся, мы продолжим вход. Деньги и аккаунт в безопасности.'
+          ? 'Проверьте интернет. Как только связь вернётся, мы продолжим вход. Аккаунт и данные в безопасности.'
           : 'Сервис входа не ответил. Это бывает редко, попробуйте снова или войдите иначе.'}</p>
       </div>
     </AuthShell>
@@ -359,7 +359,7 @@ function AuthBlocked({ plat='ios' }) {
       <div className="pd-empty pa-blocked" style={{height:'auto',paddingTop:56}}>
         <div className="glyph">{ic(PdI.lock,'pd-i28')}</div>
         <h3>Доступ ограничен</h3>
-        <p>Аккаунт временно заблокирован после проверки безопасности. Активные сделки и деньги защищены. Если это ошибка, отправьте обращение, и мы разберёмся в течение 24 часов.</p>
+        <p>Аккаунт временно заблокирован после проверки безопасности. Активные сделки и данные защищены. Если это ошибка, отправьте обращение, и мы разберёмся в течение 24 часов.</p>
       </div>
       <div style={{padding:'0 6px'}}><PdNotice kind="info">Причину сообщим в ответе на обращение. В целях безопасности не раскрываем детали проверки здесь.</PdNotice></div>
     </AuthShell>
@@ -376,10 +376,10 @@ function DeskShell({ children, popup }) {
         <img className="pad-photo" src="img/1561181286-d3fee7d55364.jpg" alt=""/>
         <div className="pad-brand"><Mark size={26}/>Передарим</div>
         <div className="pad-hl">Свежие букеты со скидкой и вторая жизнь подаренным цветам.</div>
-        <p className="pad-hlsub">Тысячи букетов в вашем городе. Деньги в защищённой сделке, отзывы взаимные.</p>
+        <p className="pad-hlsub">Тысячи букетов в вашем городе. Оплата при встрече, отзывы взаимные.</p>
         <div className="pad-points">
           <div className="pad-pt"><span className="ic">{ic(A.spark,'pd-i16')}</span>Публикация букета за 2 минуты</div>
-          <div className="pad-pt"><span className="ic">{ic(PdI.shield,'pd-i16')}</span>Деньги в эскроу до подтверждения</div>
+          <div className="pad-pt"><span className="ic">{ic(PdI.shield,'pd-i16')}</span>Оплата при встрече, без предоплаты</div>
           <div className="pad-pt"><span className="ic">{ic(A.star,'pd-i16')}</span>Рейтинги и реальные отзывы</div>
         </div>
       </aside>
@@ -478,7 +478,7 @@ function AuthDesktopError({ offline=false }) {
         <div className="glyph" style={{color:offline?'var(--pd-muted)':'var(--pd-danger)'}}>{ic(offline?A.wifi:PdI.alert,'pd-i28')}</div>
         <h3>{offline?'Нет соединения':'Не удалось войти'}</h3>
         <p>{offline
-          ? 'Проверьте интернет. Как только связь вернётся, мы продолжим вход. Деньги и аккаунт в безопасности.'
+          ? 'Проверьте интернет. Как только связь вернётся, мы продолжим вход. Аккаунт и данные в безопасности.'
           : 'Сервис входа не ответил. Это бывает редко, попробуйте снова или войдите иначе.'}</p>
       </div>
       <div style={{display:'flex',flexDirection:'column',gap:9,marginTop:14}}>
@@ -494,7 +494,7 @@ function AuthDesktopBlocked() {
       <div className="pd-empty pa-blocked" style={{height:'auto',paddingTop:20}}>
         <div className="glyph">{ic(PdI.lock,'pd-i28')}</div>
         <h3>Доступ ограничен</h3>
-        <p>Аккаунт временно заблокирован после проверки безопасности. Активные сделки и деньги защищены. Если это ошибка, отправьте обращение, и мы разберёмся в течение 24 часов.</p>
+        <p>Аккаунт временно заблокирован после проверки безопасности. Активные сделки и данные защищены. Если это ошибка, отправьте обращение, и мы разберёмся в течение 24 часов.</p>
       </div>
       <div style={{margin:'4px 0 16px'}}><PdNotice kind="info">Причину сообщим в ответе на обращение. В целях безопасности не раскрываем детали проверки здесь.</PdNotice></div>
       <div style={{display:'flex',flexDirection:'column',gap:9}}>

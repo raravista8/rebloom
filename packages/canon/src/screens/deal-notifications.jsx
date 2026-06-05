@@ -5,7 +5,7 @@ import "../styles/canon.css";
 import { PdAvatar, PdIc, pdMoney } from "../feed/feed";
 import { PdBtn, PdBubble, PdField, PdI, PdInput, PdNotice, PdScreen, PdStars, PdStepper } from "../primitives/kit";
 
-// pd-scr-3.jsx — Сделка (paid_held / disputed / released), оплата-сбой, отзыв, уведомления, offline
+// pd-scr-3.jsx — Сделка (agreed/meeting/done/problem), отзыв, уведомления, offline
 
 const IMG3 = (id)=>`img/${id}.jpg`;
 
@@ -30,25 +30,25 @@ function ChatInput() {
   </div>;
 }
 
-// 3a — Сделка: оплачено, деньги в эскроу (paid_held)
-function DealPaidHeld() {
+// 3a — Сделка: договорились, ждём встречи
+function DealActive() {
   const footer = (<div className="pd-footerbar"><div style={{display:'flex',gap:10}}>
     <PdBtn variant="secondary" icon={PdI.alert} style={{flex:1}}>Проблема</PdBtn>
     <PdBtn variant="primary" icon={PdI.check} style={{flex:1.5}}>Подтвердить получение</PdBtn>
   </div></div>);
   return (
     <PdScreen title="Сделка" center footer={footer}>
-      <div style={{padding:'14px 16px 4px'}}><PdStepper status="paid_held"/></div>
-      <DealMini status="в эскроу"/>
-      <div style={{padding:'14px 16px'}}><PdNotice kind="ok" icon={PdI.shield}><b>Деньги в безопасности.</b> Аня получит {pdMoney(900)} после того, как вы подтвердите получение. Комиссия площадки {pdMoney(90)}.</PdNotice></div>
+      <div style={{padding:'14px 16px 4px'}}><PdStepper status="meeting"/></div>
+      <DealMini status="договорились"/>
+      <div style={{padding:'14px 16px'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь о времени, заберите букет и расплатитесь на месте — наличными или переводом продавцу.</PdNotice></div>
       <div style={{padding:'0 16px'}}>
         <div style={{display:'flex',alignItems:'center',gap:10,padding:'12px 14px',border:'1px solid var(--pd-border)',borderRadius:13}}>
           {PdI.walk({className:'pd-i20',fill:'none',stroke:'var(--pd-primary)'})}
-          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13.5}}>Самовывоз · м. Маяковская</div><div style={{fontSize:12,color:'var(--pd-muted)'}}>Двор, Тверская 12, появился после оплаты</div></div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:13.5}}>Самовывоз · м. Маяковская</div><div style={{fontSize:12,color:'var(--pd-muted)'}}>Двор, Тверская 12, появился после договорённости</div></div>
         </div>
       </div>
       <div className="pd-chat">
-        <PdBubble kind="sys">Оплата прошла · {pdMoney(990)} в эскроу</PdBubble>
+        <PdBubble kind="sys">Чат сделки открыт · договоритесь о встрече</PdBubble>
         <PdBubble kind="in" time="17:58">Здравствуйте! Можно забрать сегодня после 18:00 🌸</PdBubble>
         <PdBubble kind="out" time="18:01">Отлично, буду к 18:30</PdBubble>
         <PdBubble kind="in" time="18:02">Двор дома по Тверской, 12. Напишу, как выйду</PdBubble>
@@ -59,18 +59,18 @@ function DealPaidHeld() {
 }
 
 // 3b — Сделка: спор (disputed)
-function DealDisputed() {
+function DealProblem() {
   const footer = (<div className="pd-footerbar"><div style={{display:'flex',gap:10}}>
-    <PdBtn variant="secondary" style={{flex:1}}>Отозвать спор</PdBtn>
+    <PdBtn variant="secondary" style={{flex:1}}>Отозвать обращение</PdBtn>
     <PdBtn variant="primary" icon={PdI.image} style={{flex:1}}>Добавить фото</PdBtn>
   </div></div>);
   return (
-    <PdScreen title="Спор по сделке" center footer={footer}>
-      <div style={{padding:'14px 16px 4px'}}><PdStepper status="disputed"/></div>
-      <DealMini status="заморожено"/>
-      <div style={{padding:'14px 16px'}}><PdNotice kind="warn" icon={PdI.clock}><b>На рассмотрении.</b> Деньги заморожены. Поддержка ответит в течение 24 часов, осталось ~21 ч.</PdNotice></div>
+    <PdScreen title="Проблема по сделке" center footer={footer}>
+      <div style={{padding:'14px 16px 4px'}}><PdStepper status="problem"/></div>
+      <DealMini status="на проверке"/>
+      <div style={{padding:'14px 16px'}}><PdNotice kind="warn" icon={PdI.clock}><b>На рассмотрении.</b> Поддержка изучит обращение и ответит в течение 24 часов, осталось ~21 ч.</PdNotice></div>
       <div className="pd-chat">
-        <PdBubble kind="sys">Открыт спор · 12 июня, 14:20 · причина: «не соответствует»</PdBubble>
+        <PdBubble kind="sys">Открыто обращение · 12 июня, 14:20 · причина: «не соответствует»</PdBubble>
         <div style={{alignSelf:'flex-end',maxWidth:'78%'}}>
           <img src={IMG3('1583228858294-6745cb25969e')} alt="" style={{width:140,borderRadius:14,display:'block',marginBottom:4,marginLeft:'auto'}}/>
           <PdBubble kind="out" time="14:21">Букет завял к вечеру, лепестки осыпались</PdBubble>
@@ -84,13 +84,13 @@ function DealDisputed() {
 }
 
 // 3c — Сделка: завершено (released)
-function DealReleased() {
+function DealDone() {
   const footer = (<div className="pd-footerbar"><PdBtn variant="primary" block lg icon={PdIc.star}>Оценить продавца</PdBtn></div>);
   return (
     <PdScreen title="Сделка" center footer={footer}>
-      <div style={{padding:'14px 16px 4px'}}><PdStepper status="released"/></div>
+      <div style={{padding:'14px 16px 4px'}}><PdStepper status="done"/></div>
       <DealMini status="завершено"/>
-      <div style={{padding:'16px'}}><PdNotice kind="ok" icon={PdI.check}><b>Готово!</b> Вы подтвердили получение. {pdMoney(900)} отправлены Ане, чек придёт на e-mail.</PdNotice></div>
+      <div style={{padding:'16px'}}><PdNotice kind="ok" icon={PdI.check}><b>Готово!</b> Вы подтвердили получение букета. Расскажите, как всё прошло — это поможет другим покупателям.</PdNotice></div>
       <div className="pd-empty" style={{height:'auto',padding:'10px 30px 24px'}}>
         <div className="glyph" style={{color:'var(--pd-like)'}}>{PdI.heartline({className:'pd-i28',fill:'var(--pd-like)',stroke:'var(--pd-like)'})}</div>
         <h3>Как всё прошло?</h3>
@@ -109,11 +109,11 @@ function PaymentFailed() {
     <PdScreen title="Оплата" center footer={footer}>
       <div className="pd-empty" style={{height:'auto',paddingTop:54}}>
         <div className="glyph" style={{color:'var(--pd-danger)',background:'var(--pd-danger-soft)'}}>{PdI.alert({className:'pd-i28',fill:'none',stroke:'currentColor'})}</div>
-        <h3>Оплата не прошла</h3>
-        <p>Банк отклонил платёж. С вашей карты ничего не списано, букет всё ещё зарезервирован за вами.</p>
+        <h3>Оплата при встрече</h3>
+        <p>Договоритесь с продавцом в чате и заберите букет рядом — оплата при встрече, когда увидели цветы.</p>
       </div>
       <div style={{padding:'4px 16px'}}>
-        <PdNotice kind="ok" icon={PdI.shield}>Деньги в безопасности. Попробуйте ещё раз картой или через СБП.</PdNotice>
+        <PdNotice kind="ok" icon={PdI.shield}>Платите продавцу на месте — наличными или переводом. Площадка деньги не держит.</PdNotice>
         <div style={{marginTop:12}}><PdInput icon={PdI.wallet} value="Карта •••• 4416" /></div>
       </div>
     </PdScreen>
@@ -143,7 +143,7 @@ function ReviewForm() {
 
 // 3f — Уведомления (список)
 const NOTIFS=[
-  {ic:PdI.check,unread:true,t:'Покупатель подтвердил получение',s:'Сделка «Букет M · Патрики» завершена · 900 ₽ в пути',tm:'5 мин'},
+  {ic:PdI.check,unread:true,t:'Сделка завершена',s:'«Букет M · Патрики» · покупатель подтвердил получение',tm:'5 мин'},
   {ic:PdI.heartline,unread:true,t:'Ваш букет залайкали',s:'Уже 47 лайков, он в топе «Самые залайканные»',tm:'1 ч'},
   {ic:PdI.shield,unread:false,t:'Объявление прошло модерацию',s:'«Пионовидные розы» опубликовано в ленте Москвы',tm:'3 ч'},
   {ic:PdIc.star,unread:false,t:'Новый отзыв от Марины',s:'«Букет был свежий, как на фото» · 5 ★',tm:'вчера'},
@@ -196,9 +196,9 @@ function Offline() {
 }
 
 export {
-  DealPaidHeld,
-  DealDisputed,
-  DealReleased,
+  DealActive,
+  DealProblem,
+  DealDone,
   PaymentFailed,
   ReviewForm,
   Notifications,

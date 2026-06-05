@@ -60,8 +60,8 @@ function AdminDashboard() {
   const kpis=[
     {lab:'Онлайн сейчас',val:'342',d:'+5%',up:true,sp:'0,28 14,24 28,26 42,18 56,20 70,12 84,14 100,8'},
     {lab:'DAU / MAU',val:'4 870',sub:'/ 51 200',d:'+8%',up:true,sp:'0,30 16,26 32,22 48,24 64,16 80,14 100,9'},
-    {lab:'GMV за месяц',val:'3,24 млн ₽',d:'+14%',up:true,sp:'0,32 16,28 32,24 48,20 64,17 80,11 100,7'},
-    {lab:'Комиссия',val:'318 тыс ₽',d:'+12%',up:true,sp:'0,31 16,27 32,25 48,19 64,16 80,12 100,8'},
+    {lab:'Оборот сделок',val:'3,24 млн ₽',d:'+14%',up:true,sp:'0,32 16,28 32,24 48,20 64,17 80,11 100,7'},
+    {lab:'Сделок за месяц',val:'1 142',d:'+12%',up:true,sp:'0,31 16,27 32,25 48,19 64,16 80,12 100,8'},
   ];
   const months=['Янв','Фев','Мар','Апр','Май','Июн'];
   const dataW=[40,52,60,72,84,96], dataA=[26,30,40,52,64,78];
@@ -69,9 +69,10 @@ function AdminDashboard() {
   const cities=[['Москва',2870,'var(--pd-primary)'],['Санкт-Петербург',1120,'#5B8C68'],['Новосибирск',430,'#D29A33'],['Екатеринбург',310,'#9B7BB8']];
   const cmax=2870;
   const deals=[
-    ['Марина → Аня','Москва',990,90,'released'],['Катя → Лена','Москва',1190,107,'paid_held'],
-    ['Соня → Юля','СПб',850,76,'disputed'],['Вера → Ольга','Казань',590,53,'released'],
+    ['Марина → Аня','Москва',990,90,'done'],['Катя → Лена','Москва',1190,107,'meeting'],
+    ['Соня → Юля','СПб',850,76,'problem'],['Вера → Ольга','Казань',590,53,'done'],
   ];
+  const DEAL_LBL={done:'завершена',meeting:'идёт',problem:'жалоба'};
   return (
     <div className="pda-app">
       <Side active="dash"/>
@@ -128,12 +129,12 @@ function AdminDashboard() {
             </div>
           </div>
           <div className="pda-panel" style={{padding:0,overflow:'hidden'}}>
-            <div style={{padding:'16px 18px 12px'}}><h3>Последние сделки</h3><div className="psub" style={{margin:0}}>Суммы в ₽, комиссия площадки 10%</div></div>
+            <div style={{padding:'16px 18px 12px'}}><h3>Последние сделки</h3><div className="psub" style={{margin:0}}>Суммы сделок в ₽</div></div>
             <table className="pda-table">
-              <thead><tr><th>Участники</th><th>Город</th><th>Сумма</th><th>Комиссия</th><th>Статус</th></tr></thead>
+              <thead><tr><th>Участники</th><th>Город</th><th>Сумма</th><th>Статус</th></tr></thead>
               <tbody>{deals.map((d,i)=>(
-                <tr key={i}><td>{d[0]}</td><td>{d[1]}</td><td style={{fontWeight:700}}>{pdMoney(d[2])}</td><td>{pdMoney(d[3])}</td>
-                  <td><span className={`pda-badge ${d[4]}`}>{ {released:'released',paid_held:'paid_held',disputed:'disputed'}[d[4]] }</span></td></tr>
+                <tr key={i}><td>{d[0]}</td><td>{d[1]}</td><td style={{fontWeight:700}}>{pdMoney(d[2])}</td>
+                  <td><span className={`pda-badge ${d[4]}`}>{DEAL_LBL[d[4]]}</span></td></tr>
               ))}</tbody>
             </table>
           </div>
