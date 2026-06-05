@@ -38,6 +38,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No baseline changes."
           else
-            git commit -m "test(web): update visual baselines [skip ci]"
+            git commit -m "test(web): update visual baselines"
             git push origin HEAD:${{ github.ref_name }}
           fi
