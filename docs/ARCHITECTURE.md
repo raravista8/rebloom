@@ -1,5 +1,7 @@
 # ARCHITECTURE — Передарим (code-name `rebloom`)
 
+> ⚠️ **ОБНОВЛЕНО — ADR-0013 (запуск без эскроу).** Денежный путь (эскроу/ЮKassa/ledger/выплаты/webhook) **исключён из MVP**: сделка = `agreed → meeting → done`(+`problem`/`cancelled`), деньги не проходят через платформу (оплата при встрече). Код `core/payments`, `core/deals/ledger.py`, `infrastructure/yookassa.py` остаётся в репо **DORMANT** (маршруты не зарегистрированы, тесты зелёные) — основа для будущего ADR монетизации. Разделы §3–§7 про эскроу/ЮKassa/ledger/PCI ниже — для MVP читать по ADR-0013.
+
 > **Action title:** Modular monolith (FastAPI + Postgres + Redis) с hexagonal-ядром для денежных и PII-модулей; единый backend обслуживает один **web-фронт** (Next.js + `@rebloom/canon`, верифицируемый в Claude Design), который Capacitor оборачивает в iOS/Android (тот же build), и Telegram-бот (aiogram); деньги — через ЮKassa «Безопасная сделка»; всё хостится в РФ (ФЗ-152).
 
 **TL;DR**
