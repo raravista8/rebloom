@@ -2,6 +2,8 @@
 
 > **Heaviest artifact.** Read before any change to `core/{auth,payments,deals,listings,photos,reviews,moderation,consent}`.
 
+> ⚠️ **ОБНОВЛЕНО — ADR-0013 (запуск без эскроу).** Платформа не держит и не двигает деньги (оплата при встрече), поэтому **из MVP-скоупа сняты** связанные с эскроу/оплатой угрозы: **T-02** (forged webhook), **T-03** (double-release race), **T-12** (reservation DoS на оплату — переосмыслен как agreement-timeout) — они вернутся вместе с монетизацией (отдельный ADR), а соответствующий код dormant. Остаточный денежный риск несётся P2P при встрече (нет предоплаты), смягчается репутацией/модерацией/жалобами. T-05 (увод контактов), T-06 (IDOR), T-13 (раскрытие адреса после `meeting`), T-10/16 (ПДн/ФЗ-152), T-14/15 — **в силе без изменений**.
+
 ## 1. TL;DR
 
 - **Top risks:** (1) **escrow integrity / payment-flow abuse** — double-release, replayed webhooks, race on deal release → прямые финансовые потери; (2) **PII exposure (ФЗ-152)** — телефоны, адреса встреч, лица на фото → утечка + штраф/реестр РКН; (3) **C2C abuse & off-platform leakage** — фрод «оплатил-не получил», увод сделки в офлайн, фейковые/чужие фото, контакты в чате.

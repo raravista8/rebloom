@@ -11,7 +11,7 @@
 ## 1. Общие enum'ы (фронт и бек используют одинаковые)
 - `size`: `S | M | L | XL`
 - `freshness`: `today | d1_2 | d3_plus`
-- `deal.status`: `created → paid_held → released | refunded | disputed | cancelled`
+- `deal.status`: `agreed → meeting → done | problem | cancelled` (no-escrow «оплата при встрече», ADR-0013; the platform processes no payment)
 - `delivery_method`: `self_pickup | courier`
 - `listing.status`: `draft | pending_review | active | reserved | sold | archived`
 - `feed.section`: `fresh | liked`
@@ -51,25 +51,26 @@ Errors: `validation_error`, `moderation_pending` (FR-012), `forbidden` (not your
 ## 4. Deals, chat & payment
 | Method | Path | Auth | Request | Response `data` | FR |
 |---|---|---|---|---|---|
-| POST | `/api/deals` | session(buyer) | `{listing_id, delivery_method}` | `{deal, payment:{confirmation_url\|token}}` | FR-020/021 |
+| POST | `/api/deals` | session(buyer) | `{listing_id, delivery_method}` | `{deal}` (status `agreed`, opens chat) — **no payment** | FR-020/021 |
 | GET | `/api/deals` | session | `?role=buyer\|seller&status&limit` | `{items: deal[], next_cursor}` — caller's own deals | — |
 | GET | `/api/deals/{id}` | party only | — | `deal` | T-06 |
-| POST | `/api/deals/{id}/confirm-receipt` | buyer | — | `deal` (released) | FR-023 |
-| POST | `/api/deals/{id}/dispute` | party | `{reason, photo_ids[]}` | `deal` (disputed) | FR-024 |
+| POST | `/api/deals/{id}/share-point` | seller | `{address}` | `deal` (→`meeting`); pickup address stored AES-256-GCM (ADR-0012) + revealed to buyer | FR-030 |
+| POST | `/api/deals/{id}/confirm-receipt` | buyer | — | `deal` (→`done`) — opens reviews | FR-023 |
+| POST | `/api/deals/{id}/report` | party | `{reason, photo_ids[]}` | `deal` (→`problem`) — to support/moderation | FR-024 |
+| POST | `/api/deals/{id}/cancel` | party | `{reason?}` | `deal` (→`cancelled`), listing → `active` | FLOW-3 |
 | GET | `/api/deals/{id}/messages` | party | `?cursor` | `{messages[], next_cursor}` | FR-030 |
 | POST | `/api/deals/{id}/messages` | party | `{body}` | `message` (or held if contacts) | FR-030/ T-05 |
-| POST | `/api/deals/{id}/delivery` | seller | `{address}` | `{ok}` — pickup address, AES-256-GCM at rest (ADR-0012) | FR-030 |
-| GET | `/api/deals/{id}/delivery` | party | — | `{revealed, address}` — exact address only after `paid_held` (T-13) | FR-030 |
-| POST | `/api/webhooks/yookassa` | **provider signature** | provider payload | `200` (idempotent) | FR-025, T-02/03 |
+| GET | `/api/deals/{id}/delivery` | party | — | `{revealed, address}` — exact address only after `meeting` (T-13) | FR-030 |
+| POST | `/api/account/transfer-details` | session | `{card_last4?, phone?}` | `{ok}` — seller payout details for the **direct** P2P transfer (informational) | — |
 
-`deal`: `{id, status, listing:{id,photo_thumb_url,price_kopecks}, role:"buyer"\|"seller", counterparty:{id,display_name,seller_rating}, amount_kopecks, commission_kopecks, delivery_method, delivery:{tracking_status?}, created_at, released_at?}`
-**Frontend never calls the webhook**; it polls `GET /api/deals/{id}` or subscribes via WS for status. Exact address is returned only after `paid_held` (T-13).
-Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail-secure, A10), `conflict`, `forbidden`.
+`deal`: `{id, status, listing:{id,photo_thumb_url,price_kopecks}, role:"buyer"\|"seller", counterparty:{id,display_name,seller_rating}, delivery_method, created_at, done_at?}`. `price_kopecks` is the listing's **reference price**, not a charge.
+**No payment layer at MVP (ADR-0013):** removed `payment` from `POST /api/deals`, `POST /api/webhooks/yookassa`, `amount_kopecks`/`commission_kopecks`/`released_at`, and the `payment_failed` error. The frontend polls `GET /api/deals/{id}` or subscribes via WS for status. Exact address is returned only after `meeting` (T-13).
+Errors: `listing_unavailable`, `conflict`, `forbidden`.
 
 ## 5. Reviews & profile
 | Method | Path | Auth | Request | Response `data` | FR |
 |---|---|---|---|---|---|
-| POST | `/api/deals/{id}/review` | party (after released) | `{score:1..5, text}` | `review` (or held) | FR-040/042 |
+| POST | `/api/deals/{id}/review` | party (after `done`) | `{score:1..5, text}` | `review` (or held) | FR-040/042 |
 | GET | `/api/users/{id}` | optional | — | `{user, reviews[], active_listings[]}` | FR-041 |
 
 ## 6. Notifications, reports & admin
@@ -87,11 +88,11 @@ Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail
 | POST | `/api/admin/moderation/{id}` | admin/moderator(2FA) | `{type:"listing"\|"review", action:"approve"\|"reject", reason}` | `{status}` (audit-logged) | FR-061 |
 | POST | `/api/admin/2fa/verify` | admin (session) | `{code}` (TOTP) | `{verified_2fa:true}` — unlocks 2FA session | — |
 | GET | `/api/admin/deals` | admin(2FA) | `?status&limit` | `{items: deal[], next_cursor}` — all deals | FR-072 |
-| POST | `/api/admin/deals/{id}/resolve` | admin(2FA) | `{action:"release"\|"refund"\|"partial", refund_kopecks?, reason}` | `deal` (released/refunded) — ledger-settled, audit-logged, **4-eyes > threshold** | FR-024, FLOW-1 |
-| GET | `/api/admin/finance` | admin(2FA) | `?since&until` (ISO) | `{gmv_kopecks, commission_kopecks, payout_kopecks, refund_kopecks, held_kopecks, deals_by_status}` — derived from append-only ledger | FR-070 |
+| POST | `/api/admin/deals/{id}/resolve` | admin(2FA) | `{action:"done"\|"cancelled", reason}` | `deal` (done/cancelled) — audit-logged. No money moves → **no 4-eyes** (ADR-0013) | FR-024, FLOW-1 |
+| GET | `/api/admin/finance` | admin(2FA) | `?since&until` (ISO) | `{deal_turnover_kopecks, deals_by_status, avg_ticket_kopecks}` — turnover estimate over `done` deals at listing price; no GMV/commission/ledger (ADR-0013) `[verify: KPI-rename pending]` | FR-070 |
 
 ## 7. Error code catalogue (stable `error` values)
-`validation_error`, `unauthorized`, `forbidden`, `not_found`, `rate_limited`, `otp_locked`, `oauth_failed`, `moderation_pending`, `content_blocked`, `listing_unavailable`, `payment_failed`, `conflict`, `internal`.
+`validation_error`, `unauthorized`, `forbidden`, `not_found`, `rate_limited`, `otp_locked`, `oauth_failed`, `moderation_pending`, `content_blocked`, `listing_unavailable`, `conflict`, `internal`. (`payment_failed` removed — no payment layer at MVP, ADR-0013.)
 > `content_blocked` — текст не прошёл модерацию (мат/слуры/контакты, см. `../MODERATION.md`); UI — инлайн-ошибка без эха запрещённого слова.
 UI maps each to a user-facing RU message + a design state. **State ↔ backend binding (empty vs no-results vs error vs offline, pagination end) — в `handoff/INTERACTION_STATES.md §6`.** Key rule: `empty` (нет данных, фильтр не задан) ≠ `no-results` (запрос/фильтр задан, 0 результатов) — бек различает их через эхо `applied` (есть ли запрос/фильтры) и пустой `items`; `end-of-list` = `next_cursor:null`. No stack traces to clients.
 

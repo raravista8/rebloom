@@ -11,7 +11,7 @@
 | 2 | Карточка букета | `/l/[id]` | Купить / Предложить цену | loading/sold/error | 🔵 | фото-каррусель, FreshnessBadge, LikeButton, цена, SellerBadge |
 | 3 | Продать (публикация) | `/sell` | Опубликовать | upload-progress/validation-error/success | 🔵 | PhotoUploader 1–5, SizeSelector, FreshnessIndicator, PriceInput, город (FR-010) |
 | 4 | Вход (phone+OTP) | `/login` | Войти | sending/invalid-otp/locked | 🔵 | OtpInput, согласие 152-ФЗ (FR-001..004) |
-| 5 | Сделка + чат + статус | `/deal/[id]` | Подтвердить получение | paid_held/disputed/released | 🔵 | DealStatusStepper, ChatBubble/Input, DeliveryToggle/tracking |
+| 5 | Сделка + чат + статус | `/deal/[id]` | Подтвердить получение | agreed/meeting/done/problem/cancelled | 🔵 | PdStepper «Договорились/Встреча/Завершено», ChatBubble/Input, share-point (seller), оплата при встрече (ADR-0013) |
 | 6 | Отзыв | `/deal/[id]/review` | Оставить отзыв | empty/submitted | 🔵 | RatingStars + текст, взаимный, 14 дней (FR-040) |
 | 7 | Профиль продавца | `/u/[id]` | — | loading/empty | 🔵 | рейтинг, отзывы, активные объявления (FR-041) |
 | 8 | Уведомления | `/notifications` | открыть сделку | empty | 🔵 | статусы сделок, лайки |
@@ -21,7 +21,7 @@
 | 12 | Открыть спор (причина+доказательства) | `/deal/[id]/dispute/new` | отправить спор | reason/error/submitting/success | 🔵 | FLOW-1 шаги 1–2 |
 | 13 | Спор (ведение) | `/deal/[id]/dispute` | сообщение/доказательство | open/на рассмотрении/решён, SLA, empty/sending/error/offline | 🔵 | FLOW-1 шаг 3 |
 | 14 | Разрешение спора (саппорт) | `/admin/deals/[id]/dispute` | release/refund/partial/escalate | loading/confirm+reason/in-flight/success | 🔵 | desktop; FLOW-1 шаг 4, 4-eyes |
-| 15 | Оплата не прошла | `/deal/[id]/pay` (state) | повторить/сменить метод | pending/failed/retry/success | 🔵 | FLOW-4 |
+| 15 | ~~Оплата не прошла~~ | — | — | — | ❌ removed | No payment layer at MVP (ADR-0013) — screen deleted |
 | 16 | Объявление отклонено / апелляция | `/sell` (state) | редактировать/обжаловать | rejected/appealed | 🔵 | FLOW-5 |
 | 17 | Удаление аккаунта (DSR) | `/settings/delete` | подтвердить (OTP) | confirm/scheduled/error | 🔵 | FLOW-9 |
 | 18 | Пожаловаться | (modal) | отправить жалобу | form/submitting/success | 🔵 | FLOW-10 |
