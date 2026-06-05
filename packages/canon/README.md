@@ -1,4 +1,4 @@
-# @rebloom/canon — v0.2.0
+# @rebloom/canon — v0.6.0
 
 Versioned UI canon for **Передарим** (code-name `rebloom`): the client app + operator admin.
 Authored in Claude Design, consumed by Claude Code in `web/`. This package is the **single source of truth** for the product UI — what's drawn and reviewed here is what `web/` (and the Capacitor iOS/Android wrappers) render. Manual JSX re-implementation in `web/` is forbidden (`CANON_PACKAGE_TZ.md §1`, §10).
@@ -19,7 +19,8 @@ canon-0.1.0-pkg/
     entries/              # entry-point barrels (buttons, cards, forms, feed, deal, auth, settings, screens, admin, tokens, motion)
     primitives/kit.jsx    # PdBtn, PdField, PdInput, PdOtp, PdSeg, PdSizeSel, PdChip, PdStepper, PdBubble, PdStars, PdNotice, PdEmpty, PdSkelCard, PdGallery, PdScreen, PdToast, PdI (icons)
     feed/                 # PdFeed, PdFeedDesktop, PdCard, PdAvatar, PdFreshness, PdLikeBtn, PdTopBar, PdBottomNav, PdSectionHead, pdMoney, PD_FRESH, PD_LIKED, PD_THEMES
-    marketing/landing.jsx # PdLanding, PdLandingNav — public peredarim.ru landing (hero, live catalog teaser, how-it-works, reviews, escrow, objections, app, split CTA, footer)
+    marketing/landing.jsx # PdLanding, PdLandingNav, PdLandingFooter — public peredarim.ru landing (hero, live catalog teaser, how-it-works, reviews, safe-deal, objections, app, split CTA, footer)
+    marketing/seo.jsx     # PdGeoPage, PdSafeDeal, PdBlogIndex, PdBlogArticle, PdSeoMeta, PD_GEO_CITIES, nbsp — SEO pages (geo ×10 cities, safe-deal, blog) + SSR typographer
     catalog/catalog.jsx   # PdCatalog — bouquet catalog: filters (price/fresh/rating/size) + sort + pagination
     auth/                 # OAuth + phone/OTP + знакомство + link + welcome + error/offline/blocked (mobile + desktop)
     settings/             # hub, profile, logins, payments, notifications, privacy, security, self-employed, delete (PdSwitch)
@@ -53,7 +54,7 @@ committed `dist/` matches your exact React/TS/tsup versions. Everything needed t
 
 ```tsx
 // Whole surface (simplest; pulls canon.css):
-import { PdFeed, Listing, DealPaidHeld } from '@rebloom/canon';
+import { PdFeed, Listing, DealActive } from '@rebloom/canon';
 import '@rebloom/canon/canon.css';
 
 // Scoped entries (smaller bundles — preferred):
@@ -61,9 +62,9 @@ import { PdBtn, PdChip } from '@rebloom/canon/buttons';
 import { PdCard, PdGallery } from '@rebloom/canon/cards';
 import { PdField, PdInput, PdOtp, PdSwitch } from '@rebloom/canon/forms';
 import { PdFeed, PdFeedDesktop } from '@rebloom/canon/feed';
-import { PdLanding } from '@rebloom/canon/marketing';
+import { PdLanding, PdGeoPage, PdSafeDeal, PdBlogIndex, PD_GEO_CITIES } from '@rebloom/canon/marketing';
 import { PdCatalog } from '@rebloom/canon/catalog';
-import { PdStepper, DealPaidHeld, DealDesktop } from '@rebloom/canon/deal';
+import { PdStepper, DealActive, DealDesktop } from '@rebloom/canon/deal';
 import { AuthChooser, AuthOtp, AuthDesktopChooser } from '@rebloom/canon/auth';
 import { SettingsHub, SettingsDesktop } from '@rebloom/canon/settings';
 import { AdminDashboard, AdminFraud, AdminMobileMod } from '@rebloom/canon/admin';

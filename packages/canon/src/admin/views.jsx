@@ -301,7 +301,7 @@ function AdminFinance({ state='loaded' }) {
         <div className="pda-finbig"><div className="lab">Средний чек</div><div className="val">1 040 ₽</div><div className="sub">медиана 950 ₽</div></div>
       </div>
       <div className="pda-panel" style={{display:'flex',alignItems:'flex-start',gap:12,background:'var(--pd-warn-soft)',border:'none'}}>
-        {vic(PdI.info,'pd-i20')}<div style={{fontSize:13.5,color:'#7a5a16',lineHeight:1.5}}>Платежи проходят между пользователями напрямую — площадка их не обрабатывает и не хранит. Комиссия, выплаты и сверка появятся после подключения монетизации.</div>
+        {vic(PdI.info,'pd-i20')}<div style={{fontSize:13.5,color:'#7a5a16',lineHeight:1.5}}>Платежи идут между пользователями напрямую, площадка их не обрабатывает и не хранит. Комиссия, выплаты и сверка появятся после подключения монетизации.</div>
       </div>
       <div className="pda-row2">
         <div className="pda-panel">
@@ -412,7 +412,7 @@ function AdminReports({ state='loaded' }) {
                 <td><span className={`pda-badge ${st[r[5]][1]}`}>{st[r[5]][0]}</span></td>
                 <td style={{color:'var(--pd-muted)'}}>{r[6]}</td>
                 <td>{r[5]!=='resolved'
-                  ? <div style={{display:'flex',gap:6}}><button className="pda-mini-act">Открыть</button><button className="pda-mini-act ok">Решить</button></div>
+                  ? <div style={{display:'flex',gap:6}}><button className="pda-mini-act">Открыть</button><button className="pda-mini-act ok">Разобрать</button></div>
                   : <button className="pda-mini-act">Открыть</button>}</td>
               </tr>
             ))}

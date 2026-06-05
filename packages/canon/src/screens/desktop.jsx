@@ -67,10 +67,10 @@ function ListingDesktop() {
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--pd-primary)',flex:'none'}}><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
               <div style={{flex:1}}>
                 <div style={{fontWeight:700,fontSize:14}}>Самовывоз рядом</div>
-                <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца — обычно двор или метро поблизости</div>
+                <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца, обычно двор или метро поблизости</div>
               </div>
             </div>
-            <div style={{margin:'16px 0'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом — платите, когда увидели цветы.</PdNotice></div>
+            <div style={{margin:'16px 0'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом. Платите, когда увидели цветы.</PdNotice></div>
             <div style={{display:'flex',gap:10}}>
               <PdBtn variant="secondary" style={{flex:1}}>Предложить цену</PdBtn>
               <PdBtn variant="primary" icon={PdI.send} style={{flex:1.4}}>Написать продавцу</PdBtn>
@@ -187,9 +187,9 @@ function SellDesktop() {
 // ── Уведомления (desktop) ───────────────────────────────────────────────────
 function NotificationsDesktop() {
   const N=[
-    {ic:PdI.check,unread:true,t:'Сделка завершена',s:'«Букет M · Патрики» · покупатель подтвердил получение',tm:'5 мин'},
-    {ic:PdI.heartline,unread:true,t:'Ваш букет залайкали',s:'Уже 47 лайков, он в топе «Самые залайканные»',tm:'1 ч'},
-    {ic:PdIc.search,unread:false,t:'Похожий букет рядом',s:'Пионовидные розы в Патриках за 890 ₽',tm:'3 ч'},
+    {ic:PdI.check,unread:true,t:'Сделка завершена',s:'«Букет M · Патрики», покупатель подтвердил получение',tm:'5 мин'},
+    {ic:PdI.heartline,unread:true,t:'Ваш букет залайкали',s:'уже 47 лайков, он в топе «Самые залайканные»',tm:'1 ч'},
+    {ic:PdIc.search,unread:false,t:'Похожий букет рядом',s:'пионовидные розы в Патриках за 890 ₽',tm:'3 ч'},
     {ic:PdIc.star,unread:false,t:'Новый отзыв от Марины',s:'«Букет был свежий, как на фото» · 5 ★',tm:'вчера'},
   ];
   return (

@@ -40,7 +40,7 @@ function DealActive() {
     <PdScreen title="Сделка" center footer={footer}>
       <div style={{padding:'14px 16px 4px'}}><PdStepper status="meeting"/></div>
       <DealMini status="договорились"/>
-      <div style={{padding:'14px 16px'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь о времени, заберите букет и расплатитесь на месте — наличными или переводом продавцу.</PdNotice></div>
+      <div style={{padding:'14px 16px'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь о времени, заберите букет и расплатитесь на месте: наличными или переводом продавцу.</PdNotice></div>
       <div style={{padding:'0 16px'}}>
         <div style={{display:'flex',alignItems:'center',gap:10,padding:'12px 14px',border:'1px solid var(--pd-border)',borderRadius:13}}>
           {PdI.walk({className:'pd-i20',fill:'none',stroke:'var(--pd-primary)'})}
@@ -90,7 +90,7 @@ function DealDone() {
     <PdScreen title="Сделка" center footer={footer}>
       <div style={{padding:'14px 16px 4px'}}><PdStepper status="done"/></div>
       <DealMini status="завершено"/>
-      <div style={{padding:'16px'}}><PdNotice kind="ok" icon={PdI.check}><b>Готово!</b> Вы подтвердили получение букета. Расскажите, как всё прошло — это поможет другим покупателям.</PdNotice></div>
+      <div style={{padding:'16px'}}><PdNotice kind="ok" icon={PdI.check}><b>Готово!</b> Вы подтвердили получение букета. Расскажите, как всё прошло, это поможет другим покупателям.</PdNotice></div>
       <div className="pd-empty" style={{height:'auto',padding:'10px 30px 24px'}}>
         <div className="glyph" style={{color:'var(--pd-like)'}}>{PdI.heartline({className:'pd-i28',fill:'var(--pd-like)',stroke:'var(--pd-like)'})}</div>
         <h3>Как всё прошло?</h3>
@@ -143,8 +143,8 @@ function ReviewForm() {
 
 // 3f — Уведомления (список)
 const NOTIFS=[
-  {ic:PdI.check,unread:true,t:'Сделка завершена',s:'«Букет M · Патрики» · покупатель подтвердил получение',tm:'5 мин'},
-  {ic:PdI.heartline,unread:true,t:'Ваш букет залайкали',s:'Уже 47 лайков, он в топе «Самые залайканные»',tm:'1 ч'},
+  {ic:PdI.check,unread:true,t:'Сделка завершена',s:'«Букет M · Патрики», покупатель подтвердил получение',tm:'5 мин'},
+  {ic:PdI.heartline,unread:true,t:'Ваш букет залайкали',s:'уже 47 лайков, он в топе «Самые залайканные»',tm:'1 ч'},
   {ic:PdI.shield,unread:false,t:'Объявление прошло модерацию',s:'«Пионовидные розы» опубликовано в ленте Москвы',tm:'3 ч'},
   {ic:PdIc.star,unread:false,t:'Новый отзыв от Марины',s:'«Букет был свежий, как на фото» · 5 ★',tm:'вчера'},
 ];

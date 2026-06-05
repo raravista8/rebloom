@@ -7,9 +7,8 @@ import { PdBtn, PdField, PdI, PdInput, PdNotice, PdOtp } from "../primitives/kit
 
 // pd-settings.jsx — «Передарим» · Настройки аккаунта (все платформы).
 // Reuses pd-kit / pd-feed components. Switch is a new base component.
-// Screens: hub, profile, logins(привязки), payments, notifications, privacy,
-//   security(sessions), self-employed(FLOW-7), delete-account(FLOW-9).
-
+// Screens: hub, profile, logins(привязки), notifications, privacy,
+//   security(sessions), delete-account(FLOW-9). Площадка не проводит денег — payments/self-employed убраны.
 const sic = (Fn,cls='pd-i18')=>Fn({className:cls,fill:'none',stroke:'currentColor'});
 
 const S = {
@@ -78,8 +77,6 @@ function SettingsHub({ plat='ios' }) {
       <Group head="Аккаунт">
         <SRow icon={PdIc.user} title="Профиль" sub="Имя, фото, город, о себе"/>
         <SRow icon={S.key} title="Способы входа" sub="Телефон, email, привязки" value="3 привязки"/>
-        <SRow icon={PdI.wallet} title="Платежи и выплаты" value="·· 4242"/>
-        <SRow icon={S.briefcase} title="Самозанятость" right={<span className="pds-pill off">не оформлена</span>} chev={false}/>
       </Group>
       <Group head="Приложение">
         <SRow icon={PdI.bell} title="Уведомления" sub="Push, email, Telegram"/>
@@ -145,23 +142,6 @@ function SettingsLogins({ plat='ios' }) {
 // ════════════════════════════════════════════════════════════════════════
 // 4 · PAYMENTS
 // ════════════════════════════════════════════════════════════════════════
-function SettingsPayments({ plat='ios' }) {
-  return (
-    <SetShell plat={plat} title="Платежи и выплаты">
-      <Group head="Оплата покупок">
-        <SRow mark={{c:'#1a1f71',t:'··'}} title="Visa ···· 4242" sub="Основная карта" right={<span className="pds-pill ok">по умолчанию</span>} chev={false}/>
-        <SRow icon={S.card} title="СБП" sub="Оплата по QR или телефону" chev/>
-        <SRow icon={PdIc.plus} title="Добавить способ оплаты" chev={false}/>
-      </Group>
-      <Group head="Реквизиты для перевода">
-        <SRow icon={PdI.wallet} title="Карта для переводов" value="···· 7781" chev/>
-        <SRow icon={S.doc} title="История сделок" sub="Завершённые и активные"/>
-      </Group>
-      <div style={{padding:'4px 18px 0'}}><PdNotice kind="ok">Оплата проходит напрямую при встрече — наличными или переводом продавцу. «Передарим» не хранит ваши деньги.</PdNotice></div>
-    </SetShell>
-  );
-}
-
 // ════════════════════════════════════════════════════════════════════════
 // 5 · NOTIFICATIONS (toggles)
 // ════════════════════════════════════════════════════════════════════════
@@ -231,32 +211,6 @@ function SettingsSecurity({ plat='ios' }) {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-// 8 · SELF-EMPLOYED (FLOW-7)
-// ════════════════════════════════════════════════════════════════════════
-function SettingsSelfEmployed({ plat='ios' }) {
-  const foot = <div className="pd-footerbar" style={{display:'flex',flexDirection:'column',gap:9}}>
-    <PdBtn variant="primary" block lg>Оформить через ФНС</PdBtn>
-    <PdBtn variant="ghost" block>Напомнить позже</PdBtn>
-  </div>;
-  return (
-    <SetShell plat={plat} title="Самозанятость" footer={foot}>
-      <div style={{padding:'18px'}}>
-        <div className="pds-confirm" style={{padding:'10px 0 8px'}}>
-          <div className="glyph" style={{background:'var(--pd-fresh-soft)',color:'var(--pd-fresh)'}}>{sic(S.briefcase,'pd-i28')}</div>
-          <h2>Чеки и налоги легально</h2>
-          <p>Вы продаёте часто. Оформите самозанятость, чтобы выдавать чеки покупателям и не думать о налогах. Это не обязательно и не мешает продавать.</p>
-        </div>
-        <div className="pds-keeplist">
-          <div className="li">{sic(PdI.check,'pd-i16 ')}<span>Чек покупателю оформляется в пару касаний после сделки</span></div>
-          <div className="li">{sic(PdI.check,'pd-i16')}<span>Налог 4% рассчитывается автоматически</span></div>
-          <div className="li">{sic(PdI.check,'pd-i16')}<span>Привязка через ФНС за пару минут, без визитов</span></div>
-        </div>
-      </div>
-    </SetShell>
-  );
-}
-
-// ════════════════════════════════════════════════════════════════════════
 // 9 · DELETE ACCOUNT (FLOW-9): warn → otp-confirm
 // ════════════════════════════════════════════════════════════════════════
 function SettingsDelete({ plat='ios', state='warn' }) {
@@ -298,9 +252,8 @@ function SettingsDelete({ plat='ios', state='warn' }) {
 // DESKTOP — two-pane settings
 // ════════════════════════════════════════════════════════════════════════
 const DNAV = [
-  ['profile','Профиль',PdIc.user],['logins','Способы входа',S.key],['payments','Платежи и выплаты',PdI.wallet],
+  ['profile','Профиль',PdIc.user],['logins','Способы входа',S.key],
   ['notif','Уведомления',PdI.bell],['privacy','Приватность и данные',PdI.lock],['security','Сессии',PdI.shield],
-  ['self','Самозанятость',S.briefcase],
 ];
 function SettingsDesktop({ screen='profile' }) {
   return (
@@ -346,7 +299,7 @@ const DESKBODY = {
   </>),
   logins: () => (<>
     <h1 className="pdss-h1">Способы входа</h1>
-    <p className="pdss-sub">Контакты и сервисы для быстрого входа. Минимум один способ должен оставаться активным.</p>
+    <p className="pdss-sub">Контакты и сервисы для быстрого входа. Хотя бы один способ должен оставаться активным.</p>
     <div className="pdss-block"><div className="bh">Контакты</div><div style={{height:6}}/>
       {dRow(S.device,'Телефон','+7 999 ···-58-03',<span className="pds-pill ok">основной</span>)}
       {dRow(S.mail,'Email','Не добавлен',<span className="pd-link" style={{fontSize:13}}>Добавить</span>)}
@@ -382,17 +335,6 @@ const DESKBODY = {
     </div>
     <PdBtn variant="secondary" lg>Завершить все другие сессии</PdBtn>
   </>),
-  payments: () => (<>
-    <h1 className="pdss-h1">Платежи и выплаты</h1>
-    <p className="pdss-sub">Карта для переводов и история сделок.</p>
-    <div className="pdss-block"><div className="bh">Оплата покупок</div><div style={{height:6}}/>
-      {dRow(null,'Visa ···· 4242','Основная карта',<span className="pds-pill ok">по умолчанию</span>,{mark:{c:'#1a1f71',t:'··'}})}
-      {dRow(S.card,'СБП','Оплата по QR или телефону',<span className="pd-link" style={{fontSize:13}}>Настроить</span>)}
-    </div>
-    <div className="pdss-block"><div className="bh">Реквизиты для перевода</div><div style={{height:6}}/>
-      {dRow(PdI.wallet,'Карта для переводов','···· 7781',<span className="pd-link" style={{fontSize:13}}>Изменить</span>)}
-    </div>
-  </>),
   privacy: () => (<>
     <h1 className="pdss-h1">Приватность и данные</h1>
     <p className="pdss-sub">Согласия по 152-ФЗ и управление вашими данными.</p>
@@ -404,18 +346,6 @@ const DESKBODY = {
       {dRow(S.doc,'Скачать мои данные','Выгрузка в течение 30 дней',<span className="pd-link" style={{fontSize:13}}>Запросить</span>)}
     </div>
   </>),
-  self: () => (<>
-    <h1 className="pdss-h1">Самозанятость</h1>
-    <p className="pdss-sub">Опционально. Чеки покупателям и налоги автоматически.</p>
-    <div className="pdss-block" style={{padding:24}}>
-      <div style={{display:'flex',gap:16,alignItems:'flex-start'}}>
-        <span className="ic" style={{width:44,height:44,borderRadius:12,background:'var(--pd-fresh-soft)',color:'var(--pd-fresh)',display:'flex',alignItems:'center',justifyContent:'center',flex:'none'}}>{sic(S.briefcase,'pd-i24')}</span>
-        <div><div style={{fontWeight:700,fontSize:16}}>Оформите за пару минут</div>
-          <p style={{color:'var(--pd-muted)',fontSize:13.5,lineHeight:1.55,margin:'6px 0 16px'}}>Привязка через ФНС, чек оформляется в пару касаний после сделки, налог 4% считается автоматически. Обычные продажи не блокирует.</p>
-          <PdBtn variant="primary" lg>Оформить через ФНС</PdBtn></div>
-      </div>
-    </div>
-  </>),
 };
 
 export {
@@ -423,11 +353,9 @@ export {
   SettingsHub,
   SettingsProfile,
   SettingsLogins,
-  SettingsPayments,
   SettingsNotifications,
   SettingsPrivacy,
   SettingsSecurity,
-  SettingsSelfEmployed,
   SettingsDelete,
   SettingsDesktop
 };

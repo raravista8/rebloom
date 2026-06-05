@@ -1,7 +1,7 @@
 # VISUAL_COVERAGE — live tracker (canon-import vs hand-rolled)
 
 > Per-screen / per-component status across viewports. Update on every canon vendoring (`CANON_PACKAGE_TZ.md §9`) and every UI task (CLAUDE.md UI DoD).
-> Сейчас: canon `0.5.0` вендорен и рендерится в `web/` (Next.js 15 + Playwright-харнесс поднят, smoke зелёный). Экраны постепенно подключаются к API; per-screen pixel-baselines добавляются по мере готовности (T2.2).
+> Сейчас: canon `0.6.0` вендорен и рендерится в `web/` (Next.js 15 + Playwright-харнесс поднят, smoke зелёный). Экраны постепенно подключаются к API; per-screen pixel-baselines добавляются по мере готовности (T2.2).
 > Legend: 🔵 spec only · 🟢 canon-import + visual ≤2% · 🟡 hand-rolled (justify) · 🔴 missing/broken
 
 ## Screens

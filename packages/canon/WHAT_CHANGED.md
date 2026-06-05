@@ -1,15 +1,21 @@
-# WHAT CHANGED — canon 0.4.0 (basis for the CHANGELOG section)
+# WHAT CHANGED — canon 0.6.0 (basis for the CHANGELOG section)
 
-1. **Public SEO/marketing surface added (`./marketing`).** Converts the semantic-core work (`reference/peredarim-seo-yadro.md`) into canon: `PdGeoPage` (city SEO landing, one template → 10 cities), `PdSafeDeal` («Безопасная сделка», trust cluster), `PdBlogIndex`/`PdBlogArticle` (supply warm-up blog), `PdSeoMeta` (meta-plate preview). Strategy = intercept «дешёвые/свежие цветы рядом»; city in Title/H1 only (Директ via geo-targeting, not keywords).
+1. **Settings: «Способы оплаты» (payments) + «Самозанятость» (self-employment) removed.** The platform handles no money in the current model (pay-on-meeting, peer-to-peer), so a payouts/receipts surface was dangling. Removed from the hub, mobile screens, desktop nav + panes, and module exports. Hub «Аккаунт» is now **Профиль · Способы входа**. `web/` drops `/settings/payments` and `/settings/self-employed`.
 
-2. **City declensions are DATA, not computed.** `PD_GEO_CITIES` carries `nom/loc/gen` + `districts` + `metro` per city. Copy auto-drops «у метро» where `metro:false` (Челябинск/Красноярск/Уфа). `web/` swaps in the production declension table + live counts (esp. «Санкт-Петербург», «Нижний Новгород»).
+2. **Landing hero re-led on the C2C story.** It under-communicated that real people resell their own gifted bouquets. Eyebrow «Люди передаривают свои букеты»; **H1 «Свежие букеты _напрямую от людей_, в 2–3 раза дешевле магазина»**; lede now spells out the mechanic. New premium hero photo (`hero-lacybird.png`); price proof **17 200 ₽ → от 4 500 ₽ (−74%)**; live-count «128 букетов от людей рядом». An interim seller-avatar row was added then removed per review.
 
-3. **Pickup-only applied across customer UI.** `DeliveryToggle` (Самовывоз/Курьер) removed from buy/deal screens → static «Самовывоз рядом» row; landing copy and footer de-delivered. Courier is deferred behind `delivery.courier=off` (growth lever #1); backend `delivery_method` contract kept forward-compatible — nothing deleted, just hidden.
+3. **Hero composition fix.** `text-wrap:balance` + desktop H1 `60→50px` + wider text column (`1.16fr`) + top-aligned image (`align-self:start`) + «2–3» `nowrap` — eliminates one-word-per-line ragging.
 
-4. **Two reusable design-system additions (whole canon benefits).**
-   - **Heading→subheading spacing tokens** `--pds-gap-eyebrow/-deck/-lede/-sechead/-qa` (mobile + `.pds--desk` step-up) — one token per relationship, no ad-hoc margins. Includes the specificity fix: rules scoped under `.pds` to beat `.pd-root p{margin:0}` (0,1,1), which otherwise silently zeroes single-class margins.
-   - **Intrinsic card grid** `--pds-card-min` + `repeat(auto-fill, minmax(min(100%, …),1fr))` + `min-width:0` children — never overflows; self-collapses to 1-up on narrow mobile, 4-up desktop.
+4. **SEO geo hero mirrors the landing, city-substituted.** «Свежие букеты _напрямую от людей_ в {городе}, в 2–3 раза дешевле магазина» + matching intro. `PdSeoMeta` **H1** synced; **Title/Description stay as the keyword snippet** (Title ≠ H1 on purpose). SEO H1/Title keep dashes (snippet format).
 
-5. **`nbsp()` SSR typographer.** Pure string→string helper (glues short prepositions/conjunctions + numbers, keeps dashes/middots off line-start) replaces the design-time DOM walker for prod — crawler-visible, no layout shift. `web/` applies at SSR/build (`CLAUDE_CODE_HANDOFF.md §5`).
+5. **Admin polish.** Жалоба action **«Решить» → «Разобрать»** (desktop + mobile); Finance plashka reworded («Платежи **идут**… напрямую, площадка их не обрабатывает»); Overview KPI «Оборот сделок» gains an **«оценка по завершённым»** caption to match Finance (platform can't see payments → turnover is an estimate).
 
-6. **`PdLandingFooter` exported** — landing footer reused by all marketing pages instead of duplicated.
+6. **Copy pass.** Interface text de-em-dashed across client app + admin (connector «—» → comma/colon); city normalized to Москва. SEO H1/Title intentionally keep dashes.
+
+---
+
+**Authoritative source:** everything was authored in the design prototypes — `reference/prototypes/*`
+(+ `reference/prototypes/img/hero-lacybird.png`) is byte-current. `src/*` and `dist/canon.css` are
+re-converted from them. Note: `src/marketing/seo.jsx` had pre-existing copy drift in a few
+safe-deal/rules sentences — trust `reference/prototypes/pd-seo.jsx` there. Rebuild `dist/*.js` via
+`npm run build`.

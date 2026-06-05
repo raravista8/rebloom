@@ -4,10 +4,6 @@ import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 
 var sic = (Fn, cls = "pd-i18") => Fn({ className: cls, fill: "none", stroke: "currentColor" });
 var S = {
-  card: (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
-    /* @__PURE__ */ jsx("rect", { x: "3", y: "5", width: "18", height: "14", rx: "2.5" }),
-    /* @__PURE__ */ jsx("path", { d: "M3 9h18M7 15h4" })
-  ] }),
   trash: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13" }) }),
   logout: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M14 4h5v16h-5M14 12H4m0 0 3.5-3.5M4 12l3.5 3.5" }) }),
   globe: (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
@@ -31,10 +27,6 @@ var S = {
     /* @__PURE__ */ jsx("path", { d: "M14 3v4h4M9 13h6M9 17h6" })
   ] }),
   moon: (p) => /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", ...p, children: /* @__PURE__ */ jsx("path", { d: "M20 14a8 8 0 1 1-9.5-9 6.5 6.5 0 0 0 9.5 9Z" }) }),
-  briefcase: (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
-    /* @__PURE__ */ jsx("rect", { x: "3", y: "7", width: "18", height: "13", rx: "2" }),
-    /* @__PURE__ */ jsx("path", { d: "M8 7V5h8v2M3 12h18" })
-  ] }),
   key: (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
     /* @__PURE__ */ jsx("circle", { cx: "8", cy: "8", r: "4" }),
     /* @__PURE__ */ jsx("path", { d: "m11 11 8 8M16 16l2-2M19 19l1.5-1.5" })
@@ -91,9 +83,7 @@ function SettingsHub({ plat = "ios" }) {
     ] }),
     /* @__PURE__ */ jsxs(Group, { head: "\u0410\u043A\u043A\u0430\u0443\u043D\u0442", children: [
       /* @__PURE__ */ jsx(SRow, { icon: Ic.user, title: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", sub: "\u0418\u043C\u044F, \u0444\u043E\u0442\u043E, \u0433\u043E\u0440\u043E\u0434, \u043E \u0441\u0435\u0431\u0435" }),
-      /* @__PURE__ */ jsx(SRow, { icon: S.key, title: "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430", sub: "\u0422\u0435\u043B\u0435\u0444\u043E\u043D, email, \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438", value: "3 \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438" }),
-      /* @__PURE__ */ jsx(SRow, { icon: I.wallet, title: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B", value: "\xB7\xB7 4242" }),
-      /* @__PURE__ */ jsx(SRow, { icon: S.briefcase, title: "\u0421\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C", right: /* @__PURE__ */ jsx("span", { className: "pds-pill off", children: "\u043D\u0435 \u043E\u0444\u043E\u0440\u043C\u043B\u0435\u043D\u0430" }), chev: false })
+      /* @__PURE__ */ jsx(SRow, { icon: S.key, title: "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430", sub: "\u0422\u0435\u043B\u0435\u0444\u043E\u043D, email, \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438", value: "3 \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438" })
     ] }),
     /* @__PURE__ */ jsxs(Group, { head: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", children: [
       /* @__PURE__ */ jsx(SRow, { icon: I.bell, title: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", sub: "Push, email, Telegram" }),
@@ -149,20 +139,6 @@ function SettingsLogins({ plat = "ios" }) {
     ] })
   ] });
 }
-function SettingsPayments({ plat = "ios" }) {
-  return /* @__PURE__ */ jsxs(SetShell, { plat, title: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B", children: [
-    /* @__PURE__ */ jsxs(Group, { head: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E\u043A\u0443\u043F\u043E\u043A", children: [
-      /* @__PURE__ */ jsx(SRow, { mark: { c: "#1a1f71", t: "\xB7\xB7" }, title: "Visa \xB7\xB7\xB7\xB7 4242", sub: "\u041E\u0441\u043D\u043E\u0432\u043D\u0430\u044F \u043A\u0430\u0440\u0442\u0430", right: /* @__PURE__ */ jsx("span", { className: "pds-pill ok", children: "\u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E" }), chev: false }),
-      /* @__PURE__ */ jsx(SRow, { icon: S.card, title: "\u0421\u0411\u041F", sub: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E QR \u0438\u043B\u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443", chev: true }),
-      /* @__PURE__ */ jsx(SRow, { icon: Ic.plus, title: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0441\u043F\u043E\u0441\u043E\u0431 \u043E\u043F\u043B\u0430\u0442\u044B", chev: false })
-    ] }),
-    /* @__PURE__ */ jsxs(Group, { head: "\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442\u044B \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430", children: [
-      /* @__PURE__ */ jsx(SRow, { icon: I.wallet, title: "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u0432", value: "\xB7\xB7\xB7\xB7 7781", chev: true }),
-      /* @__PURE__ */ jsx(SRow, { icon: S.doc, title: "\u0418\u0441\u0442\u043E\u0440\u0438\u044F \u0441\u0434\u0435\u043B\u043E\u043A", sub: "\u0417\u0430\u0432\u0435\u0440\u0448\u0451\u043D\u043D\u044B\u0435 \u0438 \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u0435" })
-    ] }),
-    /* @__PURE__ */ jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsx(PdNotice, { kind: "ok", children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u043E\u0445\u043E\u0434\u0438\u0442 \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435 \u2014 \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u043C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443. \xAB\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C\xBB \u043D\u0435 \u0445\u0440\u0430\u043D\u0438\u0442 \u0432\u0430\u0448\u0438 \u0434\u0435\u043D\u044C\u0433\u0438." }) })
-  ] });
-}
 function SettingsNotifications({ plat = "ios" }) {
   const row = (icon, title, sub, on) => /* @__PURE__ */ jsx(SRow, { icon, title, sub, right: /* @__PURE__ */ jsx(Switch, { on }), chev: false });
   return /* @__PURE__ */ jsxs(SetShell, { plat, title: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: [
@@ -209,33 +185,6 @@ function SettingsSecurity({ plat = "ios" }) {
     /* @__PURE__ */ jsx("div", { style: { padding: "4px 18px 0" }, children: /* @__PURE__ */ jsx(PdNotice, { kind: "warn", icon: I.shield, children: "\u041D\u0435 \u0443\u0437\u043D\u0430\u0451\u0442\u0435 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E? \u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u0435 \u0441\u0435\u0441\u0441\u0438\u044E \u0438 \u0441\u043C\u0435\u043D\u0438\u0442\u0435 \u0441\u043F\u043E\u0441\u043E\u0431 \u0432\u0445\u043E\u0434\u0430. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043B\u043E\u0433\u0438\u0440\u0443\u0435\u0442\u0441\u044F." }) })
   ] });
 }
-function SettingsSelfEmployed({ plat = "ios" }) {
-  const foot = /* @__PURE__ */ jsxs("div", { className: "pd-footerbar", style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-    /* @__PURE__ */ jsx(PdBtn, { variant: "primary", block: true, lg: true, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421" }),
-    /* @__PURE__ */ jsx(PdBtn, { variant: "ghost", block: true, children: "\u041D\u0430\u043F\u043E\u043C\u043D\u0438\u0442\u044C \u043F\u043E\u0437\u0436\u0435" })
-  ] });
-  return /* @__PURE__ */ jsx(SetShell, { plat, title: "\u0421\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C", footer: foot, children: /* @__PURE__ */ jsxs("div", { style: { padding: "18px" }, children: [
-    /* @__PURE__ */ jsxs("div", { className: "pds-confirm", style: { padding: "10px 0 8px" }, children: [
-      /* @__PURE__ */ jsx("div", { className: "glyph", style: { background: "var(--pd-fresh-soft)", color: "var(--pd-fresh)" }, children: sic(S.briefcase, "pd-i28") }),
-      /* @__PURE__ */ jsx("h2", { children: "\u0427\u0435\u043A\u0438 \u0438 \u043D\u0430\u043B\u043E\u0433\u0438 \u043B\u0435\u0433\u0430\u043B\u044C\u043D\u043E" }),
-      /* @__PURE__ */ jsx("p", { children: "\u0412\u044B \u043F\u0440\u043E\u0434\u0430\u0451\u0442\u0435 \u0447\u0430\u0441\u0442\u043E. \u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u0441\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C, \u0447\u0442\u043E\u0431\u044B \u0432\u044B\u0434\u0430\u0432\u0430\u0442\u044C \u0447\u0435\u043A\u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F\u043C \u0438 \u043D\u0435 \u0434\u0443\u043C\u0430\u0442\u044C \u043E \u043D\u0430\u043B\u043E\u0433\u0430\u0445. \u042D\u0442\u043E \u043D\u0435 \u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u0438 \u043D\u0435 \u043C\u0435\u0448\u0430\u0435\u0442 \u043F\u0440\u043E\u0434\u0430\u0432\u0430\u0442\u044C." })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "pds-keeplist", children: [
-      /* @__PURE__ */ jsxs("div", { className: "li", children: [
-        sic(I.check, "pd-i16 "),
-        /* @__PURE__ */ jsx("span", { children: "\u0427\u0435\u043A \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044E \u043E\u0444\u043E\u0440\u043C\u043B\u044F\u0435\u0442\u0441\u044F \u0432 \u043F\u0430\u0440\u0443 \u043A\u0430\u0441\u0430\u043D\u0438\u0439 \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "li", children: [
-        sic(I.check, "pd-i16"),
-        /* @__PURE__ */ jsx("span", { children: "\u041D\u0430\u043B\u043E\u0433 4% \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "li", children: [
-        sic(I.check, "pd-i16"),
-        /* @__PURE__ */ jsx("span", { children: "\u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0430 \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421 \u0437\u0430 \u043F\u0430\u0440\u0443 \u043C\u0438\u043D\u0443\u0442, \u0431\u0435\u0437 \u0432\u0438\u0437\u0438\u0442\u043E\u0432" })
-      ] })
-    ] })
-  ] }) });
-}
 function SettingsDelete({ plat = "ios", state = "warn" }) {
   if (state === "otp") {
     const foot2 = /* @__PURE__ */ jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsx(PdBtn, { variant: "danger", block: true, lg: true, children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u0443\u0434\u0430\u043B\u0435\u043D\u0438\u0435" }) });
@@ -274,11 +223,9 @@ function SettingsDelete({ plat = "ios", state = "warn" }) {
 var DNAV = [
   ["profile", "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", Ic.user],
   ["logins", "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430", S.key],
-  ["payments", "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B", I.wallet],
   ["notif", "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", I.bell],
   ["privacy", "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435", I.lock],
-  ["security", "\u0421\u0435\u0441\u0441\u0438\u0438", I.shield],
-  ["self", "\u0421\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C", S.briefcase]
+  ["security", "\u0421\u0435\u0441\u0441\u0438\u0438", I.shield]
 ];
 function SettingsDesktop({ screen = "profile" }) {
   return /* @__PURE__ */ jsxs("div", { className: "pdss pd-root", "data-pd-theme": "a", children: [
@@ -333,7 +280,7 @@ var DESKBODY = {
   ] }),
   logins: () => /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("h1", { className: "pdss-h1", children: "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430" }),
-    /* @__PURE__ */ jsx("p", { className: "pdss-sub", children: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B \u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u044B \u0434\u043B\u044F \u0431\u044B\u0441\u0442\u0440\u043E\u0433\u043E \u0432\u0445\u043E\u0434\u0430. \u041C\u0438\u043D\u0438\u043C\u0443\u043C \u043E\u0434\u0438\u043D \u0441\u043F\u043E\u0441\u043E\u0431 \u0434\u043E\u043B\u0436\u0435\u043D \u043E\u0441\u0442\u0430\u0432\u0430\u0442\u044C\u0441\u044F \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u043C." }),
+    /* @__PURE__ */ jsx("p", { className: "pdss-sub", children: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B \u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u044B \u0434\u043B\u044F \u0431\u044B\u0441\u0442\u0440\u043E\u0433\u043E \u0432\u0445\u043E\u0434\u0430. \u0425\u043E\u0442\u044F \u0431\u044B \u043E\u0434\u0438\u043D \u0441\u043F\u043E\u0441\u043E\u0431 \u0434\u043E\u043B\u0436\u0435\u043D \u043E\u0441\u0442\u0430\u0432\u0430\u0442\u044C\u0441\u044F \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u043C." }),
     /* @__PURE__ */ jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsx("div", { className: "bh", children: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B" }),
       /* @__PURE__ */ jsx("div", { style: { height: 6 } }),
@@ -378,21 +325,6 @@ var DESKBODY = {
     ] }),
     /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", lg: true, children: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0432\u0441\u0435 \u0434\u0440\u0443\u0433\u0438\u0435 \u0441\u0435\u0441\u0441\u0438\u0438" })
   ] }),
-  payments: () => /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx("h1", { className: "pdss-h1", children: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438 \u0432\u044B\u043F\u043B\u0430\u0442\u044B" }),
-    /* @__PURE__ */ jsx("p", { className: "pdss-sub", children: "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u0432 \u0438 \u0438\u0441\u0442\u043E\u0440\u0438\u044F \u0441\u0434\u0435\u043B\u043E\u043A." }),
-    /* @__PURE__ */ jsxs("div", { className: "pdss-block", children: [
-      /* @__PURE__ */ jsx("div", { className: "bh", children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E\u043A\u0443\u043F\u043E\u043A" }),
-      /* @__PURE__ */ jsx("div", { style: { height: 6 } }),
-      dRow(null, "Visa \xB7\xB7\xB7\xB7 4242", "\u041E\u0441\u043D\u043E\u0432\u043D\u0430\u044F \u043A\u0430\u0440\u0442\u0430", /* @__PURE__ */ jsx("span", { className: "pds-pill ok", children: "\u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E" }), { mark: { c: "#1a1f71", t: "\xB7\xB7" } }),
-      dRow(S.card, "\u0421\u0411\u041F", "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u043E QR \u0438\u043B\u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443", /* @__PURE__ */ jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C" }))
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "pdss-block", children: [
-      /* @__PURE__ */ jsx("div", { className: "bh", children: "\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442\u044B \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430" }),
-      /* @__PURE__ */ jsx("div", { style: { height: 6 } }),
-      dRow(I.wallet, "\u041A\u0430\u0440\u0442\u0430 \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u0432", "\xB7\xB7\xB7\xB7 7781", /* @__PURE__ */ jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C" }))
-    ] })
-  ] }),
   privacy: () => /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("h1", { className: "pdss-h1", children: "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435" }),
     /* @__PURE__ */ jsx("p", { className: "pdss-sub", children: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F \u043F\u043E 152-\u0424\u0417 \u0438 \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0432\u0430\u0448\u0438\u043C\u0438 \u0434\u0430\u043D\u043D\u044B\u043C\u0438." }),
@@ -407,19 +339,7 @@ var DESKBODY = {
       /* @__PURE__ */ jsx("div", { style: { height: 6 } }),
       dRow(S.doc, "\u0421\u043A\u0430\u0447\u0430\u0442\u044C \u043C\u043E\u0438 \u0434\u0430\u043D\u043D\u044B\u0435", "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 30 \u0434\u043D\u0435\u0439", /* @__PURE__ */ jsx("span", { className: "pd-link", style: { fontSize: 13 }, children: "\u0417\u0430\u043F\u0440\u043E\u0441\u0438\u0442\u044C" }))
     ] })
-  ] }),
-  self: () => /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx("h1", { className: "pdss-h1", children: "\u0421\u0430\u043C\u043E\u0437\u0430\u043D\u044F\u0442\u043E\u0441\u0442\u044C" }),
-    /* @__PURE__ */ jsx("p", { className: "pdss-sub", children: "\u041E\u043F\u0446\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E. \u0427\u0435\u043A\u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F\u043C \u0438 \u043D\u0430\u043B\u043E\u0433\u0438 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438." }),
-    /* @__PURE__ */ jsx("div", { className: "pdss-block", style: { padding: 24 }, children: /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 16, alignItems: "flex-start" }, children: [
-      /* @__PURE__ */ jsx("span", { className: "ic", style: { width: 44, height: 44, borderRadius: 12, background: "var(--pd-fresh-soft)", color: "var(--pd-fresh)", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }, children: sic(S.briefcase, "pd-i24") }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 16 }, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u0437\u0430 \u043F\u0430\u0440\u0443 \u043C\u0438\u043D\u0443\u0442" }),
-        /* @__PURE__ */ jsx("p", { style: { color: "var(--pd-muted)", fontSize: 13.5, lineHeight: 1.55, margin: "6px 0 16px" }, children: "\u041F\u0440\u0438\u0432\u044F\u0437\u043A\u0430 \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421, \u0447\u0435\u043A \u043E\u0444\u043E\u0440\u043C\u043B\u044F\u0435\u0442\u0441\u044F \u0432 \u043F\u0430\u0440\u0443 \u043A\u0430\u0441\u0430\u043D\u0438\u0439 \u043F\u043E\u0441\u043B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438, \u043D\u0430\u043B\u043E\u0433 4% \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438. \u041E\u0431\u044B\u0447\u043D\u044B\u0435 \u043F\u0440\u043E\u0434\u0430\u0436\u0438 \u043D\u0435 \u0431\u043B\u043E\u043A\u0438\u0440\u0443\u0435\u0442." }),
-        /* @__PURE__ */ jsx(PdBtn, { variant: "primary", lg: true, children: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u0424\u041D\u0421" })
-      ] })
-    ] }) })
   ] })
 };
 
-export { SettingsDelete, SettingsDesktop, SettingsHub, SettingsLogins, SettingsNotifications, SettingsPayments, SettingsPrivacy, SettingsProfile, SettingsSecurity, SettingsSelfEmployed, Switch };
+export { SettingsDelete, SettingsDesktop, SettingsHub, SettingsLogins, SettingsNotifications, SettingsPrivacy, SettingsProfile, SettingsSecurity, Switch };

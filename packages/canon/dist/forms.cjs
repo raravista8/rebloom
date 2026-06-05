@@ -1,7 +1,7 @@
 'use strict';
 
 require('./chunk-ZGJMN6YO.cjs');
-var chunkUV6QAFMQ_cjs = require('./chunk-UV6QAFMQ.cjs');
+var chunkO5FXA664_cjs = require('./chunk-O5FXA664.cjs');
 var chunkGT5S3QFQ_cjs = require('./chunk-GT5S3QFQ.cjs');
 require('./chunk-75ZPJI57.cjs');
 
@@ -9,7 +9,7 @@ require('./chunk-75ZPJI57.cjs');
 
 Object.defineProperty(exports, "PdSwitch", {
   enumerable: true,
-  get: function () { return chunkUV6QAFMQ_cjs.Switch; }
+  get: function () { return chunkO5FXA664_cjs.Switch; }
 });
 Object.defineProperty(exports, "PdEmpty", {
   enumerable: true,

@@ -110,6 +110,7 @@ Infra — `docker compose config`. Plus `gitleaks` and the security-review gate.
 - **Object Storage write path** must be configured before the publish/photo flow works (api+workers need `S3_*` creds). Without them, uploads are inert.
 - **Caddy is bind-mounted** — after `git pull`, reload config atomically:
   `$C exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile`.
+  - **Gotcha:** the Caddyfile is a *single-file* bind mount (`./Caddyfile:/etc/caddy/Caddyfile`). `git pull` replaces the file via rename → new inode → the container keeps the **old** inode, so `caddy reload` re-reads the stale file. After a Caddyfile change you must **`$C up -d --no-deps --force-recreate caddy`** (re-binds the current inode), not just reload. (Bitten tuning the `/media` cache header.)
 
 ---
 

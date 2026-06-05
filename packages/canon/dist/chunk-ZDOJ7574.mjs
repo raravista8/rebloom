@@ -58,7 +58,7 @@ function AdminDashboard() {
   const kpis = [
     { lab: "\u041E\u043D\u043B\u0430\u0439\u043D \u0441\u0435\u0439\u0447\u0430\u0441", val: "342", d: "+5%", up: true, sp: "0,28 14,24 28,26 42,18 56,20 70,12 84,14 100,8" },
     { lab: "DAU / MAU", val: "4 870", sub: "/ 51 200", d: "+8%", up: true, sp: "0,30 16,26 32,22 48,24 64,16 80,14 100,9" },
-    { lab: "\u041E\u0431\u043E\u0440\u043E\u0442 \u0441\u0434\u0435\u043B\u043E\u043A", val: "3,24 \u043C\u043B\u043D \u20BD", d: "+14%", up: true, sp: "0,32 16,28 32,24 48,20 64,17 80,11 100,7" },
+    { lab: "\u041E\u0431\u043E\u0440\u043E\u0442 \u0441\u0434\u0435\u043B\u043E\u043A", val: "3,24 \u043C\u043B\u043D \u20BD", note: "\u043E\u0446\u0435\u043D\u043A\u0430 \u043F\u043E \u0437\u0430\u0432\u0435\u0440\u0448\u0451\u043D\u043D\u044B\u043C", d: "+14%", up: true, sp: "0,32 16,28 32,24 48,20 64,17 80,11 100,7" },
     { lab: "\u0421\u0434\u0435\u043B\u043E\u043A \u0437\u0430 \u043C\u0435\u0441\u044F\u0446", val: "1 142", d: "+12%", up: true, sp: "0,31 16,27 32,25 48,19 64,16 80,12 100,8" }
   ];
   const months = ["\u042F\u043D\u0432", "\u0424\u0435\u0432", "\u041C\u0430\u0440", "\u0410\u043F\u0440", "\u041C\u0430\u0439", "\u0418\u044E\u043D"];
@@ -99,6 +99,7 @@ function AdminDashboard() {
               k.sub
             ] })
           ] }),
+          k.note && /* @__PURE__ */ jsx("div", { style: { fontSize: 11, color: "var(--pd-faint)", marginTop: 2 }, children: k.note }),
           k.d && /* @__PURE__ */ jsxs("div", { className: `delta ${k.up ? "up" : "down"}`, children: [
             "\u2191 ",
             k.d,
@@ -659,7 +660,7 @@ function AdminFinance({ state = "loaded" }) {
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "pda-panel", style: { display: "flex", alignItems: "flex-start", gap: 12, background: "var(--pd-warn-soft)", border: "none" }, children: [
       vic(I.info, "pd-i20"),
-      /* @__PURE__ */ jsx("div", { style: { fontSize: 13.5, color: "#7a5a16", lineHeight: 1.5 }, children: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u043F\u0440\u043E\u0445\u043E\u0434\u044F\u0442 \u043C\u0435\u0436\u0434\u0443 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F\u043C\u0438 \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E \u2014 \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0430 \u0438\u0445 \u043D\u0435 \u043E\u0431\u0440\u0430\u0431\u0430\u0442\u044B\u0432\u0430\u0435\u0442 \u0438 \u043D\u0435 \u0445\u0440\u0430\u043D\u0438\u0442. \u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F, \u0432\u044B\u043F\u043B\u0430\u0442\u044B \u0438 \u0441\u0432\u0435\u0440\u043A\u0430 \u043F\u043E\u044F\u0432\u044F\u0442\u0441\u044F \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u043C\u043E\u043D\u0435\u0442\u0438\u0437\u0430\u0446\u0438\u0438." })
+      /* @__PURE__ */ jsx("div", { style: { fontSize: 13.5, color: "#7a5a16", lineHeight: 1.5 }, children: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438\u0434\u0443\u0442 \u043C\u0435\u0436\u0434\u0443 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F\u043C\u0438 \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E, \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0430 \u0438\u0445 \u043D\u0435 \u043E\u0431\u0440\u0430\u0431\u0430\u0442\u044B\u0432\u0430\u0435\u0442 \u0438 \u043D\u0435 \u0445\u0440\u0430\u043D\u0438\u0442. \u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F, \u0432\u044B\u043F\u043B\u0430\u0442\u044B \u0438 \u0441\u0432\u0435\u0440\u043A\u0430 \u043F\u043E\u044F\u0432\u044F\u0442\u0441\u044F \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u043C\u043E\u043D\u0435\u0442\u0438\u0437\u0430\u0446\u0438\u0438." })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "pda-row2", children: [
       /* @__PURE__ */ jsxs("div", { className: "pda-panel", children: [
@@ -813,7 +814,7 @@ function AdminReports({ state = "loaded" }) {
             /* @__PURE__ */ jsx("td", { style: { color: "var(--pd-muted)" }, children: r[6] }),
             /* @__PURE__ */ jsx("td", { children: r[5] !== "resolved" ? /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 6 }, children: [
               /* @__PURE__ */ jsx("button", { className: "pda-mini-act", children: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C" }),
-              /* @__PURE__ */ jsx("button", { className: "pda-mini-act ok", children: "\u0420\u0435\u0448\u0438\u0442\u044C" })
+              /* @__PURE__ */ jsx("button", { className: "pda-mini-act ok", children: "\u0420\u0430\u0437\u043E\u0431\u0440\u0430\u0442\u044C" })
             ] }) : /* @__PURE__ */ jsx("button", { className: "pda-mini-act", children: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C" }) })
           ] }, i))
         ] })
@@ -1040,7 +1041,7 @@ function DealsList() {
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "pdam-modact", style: { display: "flex", gap: 8, padding: "11px 15px", borderTop: "1px solid var(--pd-border)" }, children: [
         /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", block: true, children: "\u0414\u0435\u0442\u0430\u043B\u0438 \u0436\u0430\u043B\u043E\u0431\u044B" }),
-        /* @__PURE__ */ jsx(PdBtn, { variant: "primary", block: true, children: "\u0420\u0435\u0448\u0438\u0442\u044C" })
+        /* @__PURE__ */ jsx(PdBtn, { variant: "primary", block: true, children: "\u0420\u0430\u0437\u043E\u0431\u0440\u0430\u0442\u044C" })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "pdam-sec", children: [

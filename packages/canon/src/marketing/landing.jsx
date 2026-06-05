@@ -21,7 +21,7 @@ const Mark = ({ size=22, center='#E8A93B', style, className, title='Переда
 const PdLanding = (function () {
   const Ic = PdIc, Btn = PdBtn, Card = PdCard;
   const FRESH = PD_FRESH || [], LIKED = PD_LIKED || [];
-  const HERO_IMG = 'img/1561181286-d3fee7d55364.jpg';
+  const HERO_IMG = 'img/hero-lacybird.png';
 
   const CITIES = [
     { id: 'msk', name: 'Москва', count: 128 },
@@ -70,10 +70,10 @@ const PdLanding = (function () {
   function Hero({ desk }) {
     const text = (
       <div className="pdl-herotext">
-        <p className="pdl-kicker"><Leaf className="lf" />Вторая жизнь букетов</p>
+        <p className="pdl-kicker"><Leaf className="lf" />Люди передаривают свои букеты</p>
         {/* H1 — ведём ОБЕ аудитории, выгода покупателя в заголовке, идея — в лиде */}
-        <h1 className="pdl-h1">Свежие букеты <em>в 2–3 раза дешевле</em> цветочного магазина</h1>
-        <p className="pdl-lead">Кому-то подарили цветы, а они ещё свежие. Вместо мусорного ведра букет находит новый дом. Вы передаёте свой букет дальше или забираете чужой за полцены.</p>
+        <h1 className="pdl-h1">Свежие букеты <em>напрямую от людей</em>, <span style={{whiteSpace:'nowrap'}}>в 2–3 раза</span> дешевле магазина</h1>
+        <p className="pdl-lead"><b>Букет подарили, он порадовал и уже не нужен.</b> Вместо мусорки свежие цветы за полцены находят нового хозяина. Выставьте свой за минуту или заберите чужой.</p>
         <div className="pdl-cta">
           {/* главный CTA — продавец */}
           <Btn variant="primary" lg icon={Ic && Ic.plus}>Опубликовать букет</Btn>
@@ -92,11 +92,11 @@ const PdLanding = (function () {
     const vis = (
       <div className="pdl-herovis">
         <div className="pdl-herophoto">
-          <img src={HERO_IMG} alt="Свежий букет тюльпанов" loading="lazy" />
-          <span className="pdl-livecount"><span className="pdl-livedot" />128 свежих букетов сейчас</span>
+          <img src={HERO_IMG} alt="Свежий букет роз и гортензий" loading="lazy" />
+          <span className="pdl-livecount"><span className="pdl-livedot" />128 букетов от людей рядом</span>
           <div className="pdl-pricetag">
-            <div><div className="old">2 490 ₽ в цветочной</div><div className="new">от 690 ₽</div></div>
-            <div className="save"><b>−60%</b><span>дешевле</span></div>
+            <div><div className="old">17 200 ₽ в цветочной</div><div className="new">от 4 500 ₽</div></div>
+            <div className="save"><b>−74%</b><span>дешевле</span></div>
           </div>
         </div>
       </div>
@@ -202,17 +202,17 @@ const PdLanding = (function () {
         <div className="pdl-in">
           <div className="pdl-sechead l">
             <p className="pdl-kicker"><Shield style={{ width: 14, height: 14 }} />Безопасная сделка</p>
-            <h2 className="pdl-h2">Покупатель ничего не платит вперёд — оплата при встрече</h2>
+            <h2 className="pdl-h2">Покупатель ничего не платит вперёд, оплата при встрече</h2>
             <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому деньги никуда не уходят заранее: вы платите, только когда увидели букет вживую.</p>
           </div>
           <div className="pdl-escrow-grid">
             <div className="pdl-eflow"><span className="en">1</span><div><h4>Написали и договорились</h4><p>Покупатель пишет продавцу в чате и договаривается о времени и месте встречи.</p></div></div>
-            <div className="pdl-eflow"><span className="en">2</span><div><h4>Встретились и проверили</h4><p>Самовывоз рядом — у дома или метро. Покупатель видит букет вживую.</p></div></div>
+            <div className="pdl-eflow"><span className="en">2</span><div><h4>Встретились и проверили</h4><p>Самовывоз рядом, у дома или метро. Покупатель видит букет вживую.</p></div></div>
             <div className="pdl-eflow"><span className="en">3</span><div><h4>Оплата при встрече</h4><p>Расплачиваетесь на месте, наличными или переводом продавцу. Никаких предоплат.</p></div></div>
           </div>
           <div className="pdl-esafe">
             <HeartHands />
-            <p><b>Доверие — на отзывах.</b> Рейтинг и реальные отзывы показывают надёжных продавцов, а модерация убирает обманщиков. Что-то не так — можно пожаловаться.</p>
+            <p><b>Доверие держится на отзывах.</b> Рейтинг и реальные отзывы показывают надёжных продавцов, а модерация убирает обманщиков. Если что-то не так, можно пожаловаться.</p>
           </div>
         </div>
       </section>
@@ -326,7 +326,7 @@ const PdLanding = (function () {
   const REVIEWS = [
     { q: 'Забрала пионы за 690 ₽ в соседнем дворе, в магазине такие же по 2 000. Свежие, простояли восемь дней.', n: 'Алина', city: 'Москва', role: 'buyer', c: '#CF5638' },
     { q: 'Подарили огромный букет на юбилей, а дома ставить некуда. Выставила за полцены, забрали через час. Приятно, что не выбросила.', n: 'Ольга', city: 'Санкт-Петербург', role: 'seller', c: '#5B8C68' },
-    { q: 'Боялся развода, но договорились в чате, встретились у метро — заплатил, когда увидел букет. Всё честно.', n: 'Тимур', city: 'Казань', role: 'buyer', c: '#C98A1E' },
+    { q: 'Боялся развода, но договорились в чате, встретились у метро, заплатил, когда увидел букет. Всё честно.', n: 'Тимур', city: 'Казань', role: 'buyer', c: '#C98A1E' },
     { q: 'Опубликовать вышло реально за минуту с телефона. Покупатель забрал в тот же вечер.', n: 'Марина', city: 'Москва', role: 'seller', c: '#23201B' },
     { q: 'Взяла букет к свиданию за треть цены. Никто и не догадался, что он «передаренный».', n: 'Вера', city: 'Екатеринбург', role: 'buyer', c: '#5B8C68' },
     { q: 'Сначала было неловко продавать подарок. Но кому-то он по-настоящему пригодился, это куда приятнее мусорки.', n: 'Никита', city: 'Москва', role: 'seller', c: '#CF5638' },
