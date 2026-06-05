@@ -1,14 +1,18 @@
-"""httpx OAuthProviderClient — token exchange (PKCE) + userinfo, fail-closed.
+"""OAuthProviderClient — token exchange (PKCE) + userinfo, fail-closed.
 
 Backend-mediated Authorization Code + PKCE (AUTH_HANDOFF §4.1): the verifier never
-leaves the server; client_secret stays here. Any provider/transport error returns
-``None`` so the domain fails closed (``oauth_failed``). Tokens/secrets are never
-logged.
+leaves the server; client_secret stays here. Uses the stdlib (``urllib``) — no new
+runtime dependency (CLAUDE.md §6). Any provider/transport error returns ``None`` so
+the domain fails closed (``oauth_failed``). Tokens/secrets are never logged.
 """
 
 from __future__ import annotations
 
-import httpx
+import json
+import urllib.error
+import urllib.parse
+import urllib.request
+from typing import Any
 
 from app.core.auth.oauth_config import ProviderConfig
 from app.core.auth.oauth_ports import OAuthProfile
@@ -25,43 +29,63 @@ class HttpxOAuthProviderClient:
         self._configs = configs
         self._timeout = timeout
 
+    def _post_json(self, url: str, form: dict[str, str]) -> dict[str, Any] | None:
+        body = urllib.parse.urlencode(form).encode("ascii")
+        req = urllib.request.Request(
+            url,
+            data=body,
+            method="POST",
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/json",
+            },
+        )
+        return self._read_json(req)
+
+    def _get_json(self, url: str, bearer: str) -> dict[str, Any] | None:
+        req = urllib.request.Request(
+            url,
+            method="GET",
+            headers={"Authorization": f"Bearer {bearer}", "Accept": "application/json"},
+        )
+        return self._read_json(req)
+
+    def _read_json(self, req: urllib.request.Request) -> dict[str, Any] | None:
+        if not req.full_url.lower().startswith("https://"):
+            return None  # never speak OAuth over plaintext
+        try:
+            # nosec B310 — scheme is restricted to https just above; URL is a fixed
+            # provider endpoint from config, never user input.
+            with urllib.request.urlopen(req, timeout=self._timeout) as resp:  # nosec B310
+                payload = json.loads(resp.read().decode("utf-8"))
+        except (urllib.error.URLError, OSError, ValueError, TimeoutError):
+            return None
+        return payload if isinstance(payload, dict) else None
+
     def fetch_profile(
         self, provider: str, *, code: str, verifier: str, redirect_uri: str
     ) -> OAuthProfile | None:
         cfg = self._configs.get(provider)
         if cfg is None or not cfg.configured:
             return None
-        try:
-            with httpx.Client(timeout=self._timeout) as client:
-                token_resp = client.post(
-                    cfg.token_url,
-                    data={
-                        "grant_type": "authorization_code",
-                        "code": code,
-                        "redirect_uri": redirect_uri,
-                        "client_id": cfg.client_id,
-                        "client_secret": cfg.client_secret,
-                        "code_verifier": verifier,
-                    },
-                    headers={"Accept": "application/json"},
-                )
-                token_resp.raise_for_status()
-                access_token = token_resp.json().get("access_token")
-                if not access_token:
-                    return None
-                info_resp = client.get(
-                    cfg.userinfo_url,
-                    headers={
-                        "Authorization": f"Bearer {access_token}",
-                        "Accept": "application/json",
-                    },
-                )
-                info_resp.raise_for_status()
-                data = info_resp.json()
-        except (httpx.HTTPError, ValueError):
+
+        token = self._post_json(
+            cfg.token_url,
+            {
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": redirect_uri,
+                "client_id": cfg.client_id,
+                "client_secret": cfg.client_secret,
+                "code_verifier": verifier,
+            },
+        )
+        access_token = token.get("access_token") if token else None
+        if not access_token:
             return None
 
-        if not isinstance(data, dict):
+        data = self._get_json(cfg.userinfo_url, str(access_token))
+        if data is None:
             return None
         subject = str(data.get(cfg.subject_field) or "").strip()
         if not subject:
