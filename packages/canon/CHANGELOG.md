@@ -2,6 +2,30 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## 0.3.0 — 2026-06-05 · auth: OAuth ID on every platform + desktop split fix
+
+**Fixes the broken login on prod** and finishes the OAuth wiring. Two prod symptoms, one root cause —
+`web/` was on the **legacy phone-only** auth and never adopted the OAuth-first canon: mobile `/login`
+showed *no* ID buttons (Яндекс/Sber/VK/T-ID), and desktop `/login` rendered the **adaptive mobile
+card** (`AuthPhone plat="web"`) centered inside the marketplace `WebShell` instead of the **desktop
+split** (`AuthDesktop*` → brand aside + card). The correct screens already shipped in 0.1.0 — this
+version makes them adoptable and documents the exact wiring in `AUTH_HANDOFF.md`.
+
+### Added
+- **`AuthDesktopOAuth` `prov` prop** (`'ya' | 'sber' | 'vk' | 'tid'`) — desktop OAuth consent popup now renders the chosen provider (host + consent body), instead of being hard-pinned to Яндекс.
+- **Official-button slots** on `OAuthBtn` / `OauthList` — new optional `slots` map (`{ ya:<…/>, vk:<…/> }`) and `slot` prop. When a provider's slot is supplied, canon renders that node (the real SDK widget — VK ID One Tap, Яндекс/Sber/T-ID branded button, native Apple) in place of the design placeholder. `web/` mounts SDK widgets here **without forking** the component. New `.pa-oauthbtn--slot` style (unstyled mount, full-width child, `min-height:50px`).
+- **Desktop variants `AuthDesktopLink` / `AuthDesktopError` / `AuthDesktopBlocked`** — link-accounts, error/offline (`offline` prop), and access-blocked now have proper `DeskShell` split-layout versions, so desktop no longer falls back to `plat="web"` mobile cards.
+- **`AUTH_HANDOFF.md`** — implementation spec for `web/`: platform→component route map (the desktop fix), full OAuth flow (backend-mediated Authorization Code + PKCE), per-provider notes (Яндекс ID / Sber ID / VK ID / T-ID / Apple-iOS), `prov`/`slots` usage, canon `ya`↔API `yandex` key mapping, phone/OTP states, consent (152-ФЗ), API binding, security, acceptance criteria.
+
+### Changed / Fixed
+- **Consent host** now derived from a single `PROV_HOST` map (consent header + desktop popup chrome agree); display-only — the real authorize URL comes from backend `/start`.
+- `data-provider={k}` added to every OAuth row for analytics / SDK targeting in `web/`.
+
+### Notes for the consumer
+- `./auth` entry is `export *` — the new `AuthDesktopLink/Error/Blocked` are already exported; no exports-map change. `dist/canon.css` updated (`.pa-oauthbtn--slot`); rebuild `dist/*.js` via `npm run build` (§9 step 4).
+- **Provider marks remain placeholders by default.** Prod MUST supply `slots` with official SDK widgets per each provider's brandbook — placeholders are not prod-ready (`AUTH_HANDOFF.md §4`).
+- Desktop `AuthDesktop*` is a standalone page — do **not** wrap it in the marketplace `WebShell`/site header.
+
 ## 0.2.0 — 2026-06-05 · marketing site + catalog + responsive fix
 
 **Adds the public site** (marketing landing + bouquet catalog) and fixes the responsive system that

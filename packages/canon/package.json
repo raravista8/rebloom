@@ -1,7 +1,7 @@
 {
   "name": "@rebloom/canon",
-  "version": "0.2.0",
-  "description": "Передарим client + operator-admin UI canon — tokens, motion, primitives, feed, marketing landing, catalog, listing, deal, auth, settings, admin.",
+  "version": "0.3.0",
+  "description": "Передарим client + operator-admin UI canon — tokens, motion, primitives, feed, marketing landing, catalog, listing, deal, OAuth-first auth, settings, admin.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",

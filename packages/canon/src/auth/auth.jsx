@@ -49,24 +49,38 @@ const PROV = {
   gos:   { mk:'pa-mk-gos',  ch:'ГУ', lbl:'Войти через Госуслуги' },
   phone: { mk:'pa-mk-phone', icon:A.phone, lbl:'Войти по номеру телефона', tint:true },
 };
-function OAuthBtn({ k, primary }) {
+// Display-only authorize host shown in the consent header / desktop popup chrome.
+// In прод the real authorize domain comes from the backend `/start` response.
+const PROV_HOST = {
+  ya:'oauth.yandex.ru', sber:'id.sber.ru', vk:'id.vk.com',
+  tid:'id.tinkoff.ru', apple:'appleid.apple.com', gos:'esia.gosuslugi.ru',
+};
+// `slot` — official provider SDK widget injected by web/ (VK ID One Tap,
+// Яндекс/Sber/T-ID branded buttons, native Apple). Absent → render the design
+// placeholder (brand swatch + letter). web/ must NOT fork this component: pass
+// `slots={{ya:<…/>, vk:<…/>}}` down through the Auth* screens instead (§AUTH_HANDOFF).
+function OAuthBtn({ k, primary, slot }) {
   const p = PROV[k];
+  if (slot) return (
+    <div className={`pa-oauthbtn pa-oauthbtn--slot${primary?' pa-oauthbtn--primary':''}`} data-provider={k}>{slot}</div>
+  );
   return (
-    <button className={`pa-oauthbtn${primary?' pa-oauthbtn--primary':''}`}>
+    <button className={`pa-oauthbtn${primary?' pa-oauthbtn--primary':''}`} data-provider={k}>
       <span className={`mark ${p.mk}`}>{p.icon ? p.icon({className:'pd-i18',style:{color:'inherit'}}) : p.ch}</span>
       <span className="lbl">{p.lbl}</span>
       <span className="chev">{ic(A.chevR,'pd-i16')}</span>
     </button>
   );
 }
-// provider stack — iOS adds Apple on top
-function OauthList({ plat }) {
+// provider stack — iOS adds Apple on top. `slots` (optional) = official SDK
+// widgets keyed by provider, injected by web/ without forking the component.
+function OauthList({ plat, slots }) {
   const list = plat==='ios'
     ? [['apple',true],['ya',false],['sber',false],['vk',false],['tid',false]]
     : [['ya',true],['sber',false],['vk',false],['tid',false]];
   return (
     <div className="pa-oauth">
-      {list.map(([k,pr])=> <OAuthBtn key={k} k={k} primary={pr}/>)}
+      {list.map(([k,pr])=> <OAuthBtn key={k} k={k} primary={pr} slot={slots&&slots[k]}/>)}
     </div>
   );
 }
@@ -101,11 +115,11 @@ const Hero = ({ title, sub, logo=true }) => (
 // ════════════════════════════════════════════════════════════════════════
 // 1 · CHOOSER (вход или регистрация)
 // ════════════════════════════════════════════════════════════════════════
-function AuthChooser({ plat='ios' }) {
+function AuthChooser({ plat='ios', slots }) {
   return (
     <AuthShell plat={plat} back={false}>
       <Hero sub={<>Свежие букеты со скидкой<br/>и вторая жизнь для подаренных цветов.</>}/>
-      <OauthList plat={plat}/>
+      <OauthList plat={plat} slots={slots}/>
       <div className="pa-or">быстрее всего через сервис</div>
       <div className="pa-oauth"><OAuthBtn k="phone"/></div>
       <Consent/>
@@ -123,7 +137,7 @@ function ProvHead({ k }) {
     <div className="pa-provhead">
       <span className={`mark ${p.mk}`}>{p.icon ? p.icon({className:'pd-i20'}) : p.ch}</span>
       <div><div className="ttl">{p.lbl.replace('Войти с ','').replace('Войти через ','').replace('Войти со ','')}</div>
-        <div className="url">{ic(PdI.lock,'pd-i12')} id.{k==='ya'?'yandex':k==='sber'?'sber':k}.ru</div></div>
+        <div className="url">{ic(PdI.lock,'pd-i12')} {PROV_HOST[k]||`id.${k}.ru`}</div></div>
     </div>
   );
 }
@@ -147,7 +161,7 @@ function ConsentBody({ k }) {
     </>
   );
 }
-function AuthOAuthSheet({ plat='ios', prov='ya' }) {
+function AuthOAuthSheet({ plat='ios', prov='ya', slots }) {
   const overlay = (
     <div className="pa-scrim">
       <div className="pa-sheet">
@@ -161,7 +175,7 @@ function AuthOAuthSheet({ plat='ios', prov='ya' }) {
       <div className="pa-top"/>
       <div className="pa-body" style={{filter:'blur(1.5px)',opacity:.5,pointerEvents:'none'}}>
         <Hero sub="Свежие букеты со скидкой."/>
-        <OauthList plat={plat}/>
+        <OauthList plat={plat} slots={slots}/>
       </div>
       {overlay}
     </div>
@@ -377,33 +391,33 @@ function DeskShell({ children, popup }) {
     </div>
   );
 }
-function AuthDesktopChooser() {
+function AuthDesktopChooser({ slots }) {
   return (
     <DeskShell>
       <div className="pa-hero" style={{paddingTop:0}}>
         <h1 className="pa-h2" style={{fontSize:26}}>Вход или регистрация</h1>
         <p className="pa-tag">Выберите удобный способ, за пару секунд.</p>
       </div>
-      <OauthList plat="desktop"/>
+      <OauthList plat="desktop" slots={slots}/>
       <div className="pa-or">или</div>
       <div className="pa-oauth"><OAuthBtn k="phone"/></div>
       <Consent/>
     </DeskShell>
   );
 }
-function AuthDesktopOAuth() {
+function AuthDesktopOAuth({ prov='ya', slots }) {
   const popup = (
     <div className="pad-popup">
       <div className="pad-popwin">
-        <div className="pad-popbar"><span className="dot"/><span className="dot"/><span className="dot"/><span style={{marginLeft:8}}>{ic(PdI.lock,'pd-i12')} oauth.yandex.ru</span></div>
-        <div style={{padding:22}}><ConsentBody k="ya"/></div>
+        <div className="pad-popbar"><span className="dot"/><span className="dot"/><span className="dot"/><span style={{marginLeft:8}}>{ic(PdI.lock,'pd-i12')} {PROV_HOST[prov]||'oauth.yandex.ru'}</span></div>
+        <div style={{padding:22}}><ConsentBody k={prov}/></div>
       </div>
     </div>
   );
   return (
     <DeskShell popup={popup}>
       <div className="pa-hero" style={{paddingTop:0}}><h1 className="pa-h2" style={{fontSize:26}}>Вход или регистрация</h1><p className="pa-tag">Подтвердите вход в открывшемся окне.</p></div>
-      <OauthList plat="desktop"/>
+      <OauthList plat="desktop" slots={slots}/>
     </DeskShell>
   );
 }
@@ -437,6 +451,60 @@ function AuthDesktopWelcome() {
   return <DeskShell><WelcomeBody/></DeskShell>;
 }
 
+// ── desktop variants of link / error / blocked (split layout, not plat="web") ──
+function AuthDesktopLink() {
+  return (
+    <DeskShell>
+      <div style={{textAlign:'center',margin:'4px 0 20px'}}>
+        <div className="pa-logo" style={{background:'var(--pd-warn-soft)',color:'var(--pd-warn)'}}>{ic(PdI.shield,'pd-i28')}</div>
+        <h2 className="pa-h2">Этот номер уже знаком</h2>
+        <p className="pa-sub">Аккаунт с номером +7 999 •••-58-03 уже привязан к <b>Яндекс ID</b>. Войдите привычным способом, все объявления и сделки на месте.</p>
+      </div>
+      <div className="pa-account" style={{margin:'0 0 16px'}}>
+        <div className="av"><img src="img/av/w4.jpg" alt=""/></div>
+        <div><div className="nm">Екатерина Л.</div><div className="ph">Яндекс ID · последний вход 2 дня назад</div></div>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:9}}>
+        <PdBtn variant="primary" block lg>Войти через Яндекс ID</PdBtn>
+        <PdBtn variant="ghost" block>Продолжить по SMS-коду</PdBtn>
+      </div>
+    </DeskShell>
+  );
+}
+function AuthDesktopError({ offline=false }) {
+  return (
+    <DeskShell>
+      <div className="pd-empty" style={{height:'auto',paddingTop:24}}>
+        <div className="glyph" style={{color:offline?'var(--pd-muted)':'var(--pd-danger)'}}>{ic(offline?A.wifi:PdI.alert,'pd-i28')}</div>
+        <h3>{offline?'Нет соединения':'Не удалось войти'}</h3>
+        <p>{offline
+          ? 'Проверьте интернет. Как только связь вернётся, мы продолжим вход. Деньги и аккаунт в безопасности.'
+          : 'Сервис входа не ответил. Это бывает редко, попробуйте снова или войдите иначе.'}</p>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:9,marginTop:14}}>
+        <PdBtn variant="primary" block lg icon={PdI.refresh}>Повторить вход</PdBtn>
+        <PdBtn variant="ghost" block>Войти другим способом</PdBtn>
+      </div>
+    </DeskShell>
+  );
+}
+function AuthDesktopBlocked() {
+  return (
+    <DeskShell>
+      <div className="pd-empty pa-blocked" style={{height:'auto',paddingTop:20}}>
+        <div className="glyph">{ic(PdI.lock,'pd-i28')}</div>
+        <h3>Доступ ограничен</h3>
+        <p>Аккаунт временно заблокирован после проверки безопасности. Активные сделки и деньги защищены. Если это ошибка, отправьте обращение, и мы разберёмся в течение 24 часов.</p>
+      </div>
+      <div style={{margin:'4px 0 16px'}}><PdNotice kind="info">Причину сообщим в ответе на обращение. В целях безопасности не раскрываем детали проверки здесь.</PdNotice></div>
+      <div style={{display:'flex',flexDirection:'column',gap:9}}>
+        <PdBtn variant="primary" block lg icon={PdI.flag}>Обжаловать</PdBtn>
+        <PdBtn variant="ghost" block>Выйти</PdBtn>
+      </div>
+    </DeskShell>
+  );
+}
+
 export {
   OAuthBtn,
   OauthList,
@@ -454,5 +522,8 @@ export {
   AuthDesktopPhone,
   AuthDesktopOtp,
   AuthDesktopRegister,
-  AuthDesktopWelcome
+  AuthDesktopWelcome,
+  AuthDesktopLink,
+  AuthDesktopError,
+  AuthDesktopBlocked
 };
