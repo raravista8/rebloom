@@ -21,12 +21,15 @@
 |---|---|---|---|---|---|
 | POST | `/api/auth/otp/request` | — | `{phone}` | `{sent:true, retry_after_sec}` | FR-001 |
 | POST | `/api/auth/otp/verify` | — | `{phone, code}` | `{user}` (+ session cookie) | FR-002 |
+| POST | `/api/auth/oauth/{provider}/start` | — | `{redirect_uri}` | `{authorize_url, state}` | FR-005 |
+| POST | `/api/auth/oauth/{provider}/callback` | — | `{code, state}` | `{user, is_new}` (+ session cookie) | FR-005 |
 | POST | `/api/auth/logout` | session | — | `{ok}` | — |
 | GET | `/api/me` | session | — | `{user}` | — |
 | POST | `/api/consent` | session | `{policy_version}` | `{accepted_at}` | FR-004 |
 
-`user`: `{id, display_name, phone_masked, city_id, roles[], seller_rating, deals_count}`
-Errors: `validation_error`, `otp_locked` (FR-003), `rate_limited`.
+`{provider}` ∈ `yandex | sber | vk | tid` (`apple` iOS-only, post-MVP). OAuth is **Authorization Code + PKCE, backend-mediated** (AUTH_HANDOFF §4.1): the verifier/secret never touch the client; `state` is single-use server-side (anti-CSRF/replay); `redirect_uri` must be on the backend allowlist. A provider with no configured credentials returns `oauth_failed` (button disabled).
+`user`: `{id, display_name, phone_masked, city_id, roles[], seller_rating, deals_count}` (OAuth-first users may have `phone_masked: ""` until linked).
+Errors: `validation_error`, `otp_locked` (FR-003), `rate_limited`, `oauth_failed`, `not_found` (unknown provider).
 
 ## 3. Photos & listings
 | Method | Path | Auth | Request | Response `data` | FR |
@@ -88,7 +91,7 @@ Errors: `listing_unavailable`, `payment_failed` (deal stays `paid_held` — fail
 | GET | `/api/admin/finance` | admin(2FA) | `?since&until` (ISO) | `{gmv_kopecks, commission_kopecks, payout_kopecks, refund_kopecks, held_kopecks, deals_by_status}` — derived from append-only ledger | FR-070 |
 
 ## 7. Error code catalogue (stable `error` values)
-`validation_error`, `unauthorized`, `forbidden`, `not_found`, `rate_limited`, `otp_locked`, `moderation_pending`, `content_blocked`, `listing_unavailable`, `payment_failed`, `conflict`, `internal`.
+`validation_error`, `unauthorized`, `forbidden`, `not_found`, `rate_limited`, `otp_locked`, `oauth_failed`, `moderation_pending`, `content_blocked`, `listing_unavailable`, `payment_failed`, `conflict`, `internal`.
 > `content_blocked` — текст не прошёл модерацию (мат/слуры/контакты, см. `../MODERATION.md`); UI — инлайн-ошибка без эха запрещённого слова.
 UI maps each to a user-facing RU message + a design state. **State ↔ backend binding (empty vs no-results vs error vs offline, pagination end) — в `handoff/INTERACTION_STATES.md §6`.** Key rule: `empty` (нет данных, фильтр не задан) ≠ `no-results` (запрос/фильтр задан, 0 результатов) — бек различает их через эхо `applied` (есть ли запрос/фильтры) и пустой `items`; `end-of-list` = `next_cursor:null`. No stack traces to clients.
 

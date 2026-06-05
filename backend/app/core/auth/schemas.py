@@ -25,8 +25,12 @@ def normalize_phone(raw: str) -> str | None:
     return None
 
 
-def mask_phone(phone: str) -> str:
-    """``+79161234567`` → ``+7•••••••67`` (last 2 kept) for logs/UI (T-07)."""
+def mask_phone(phone: str | None) -> str:
+    """``+79161234567`` → ``+7•••••••67`` (last 2 kept) for logs/UI (T-07).
+
+    Returns ``""`` for a phone-less (OAuth-first) user."""
+    if not phone:
+        return ""
     if len(phone) < 4:
         return "•" * len(phone)
     return phone[:2] + "•" * (len(phone) - 4) + phone[-2:]
@@ -41,3 +45,14 @@ class OtpVerifyIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
     phone: str = Field(min_length=5, max_length=20)
     code: str = Field(min_length=4, max_length=8)
+
+
+class OAuthStartIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    redirect_uri: str = Field(min_length=8, max_length=512)
+
+
+class OAuthCallbackIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    code: str = Field(min_length=1, max_length=2048)
+    state: str = Field(min_length=1, max_length=256)
