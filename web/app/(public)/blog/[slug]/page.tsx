@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { BlogArticleView } from '@/components/marketing/CanonMarketing';
 import JsonLd from '@/components/marketing/JsonLd';
+import { SiteFooterStandalone } from '@/components/marketing/SiteFooter';
 import { BLOG_ARTICLES, blogArticleBySlug } from '@/lib/blogArticles';
 import { SITE_URL, abs } from '@/lib/site';
 
@@ -56,6 +57,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     <>
       <JsonLd data={[articleLd, breadcrumbs]} />
       <BlogArticleView article={a} />
+      <SiteFooterStandalone />
     </>
   );
 }

@@ -17,5 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/blog', 0.5, 'weekly'),
     ...GEO_SLUGS.map((slug) => entry(`/${slug}`, 0.8, 'daily')),
     ...BLOG_ARTICLES.map((a) => entry(`/blog/${a.id}`, 0.4, 'monthly')),
+    entry('/legal/terms', 0.3, 'yearly'),
+    entry('/legal/privacy', 0.3, 'yearly'),
   ];
 }

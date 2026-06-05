@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SafeDealView } from '@/components/marketing/CanonMarketing';
 import JsonLd from '@/components/marketing/JsonLd';
+import { SiteFooterStandalone } from '@/components/marketing/SiteFooter';
 import { SITE_URL, abs } from '@/lib/site';
 
 // «Безопасная сделка» — снимает возражение «обман» (semantic core §6, кластер доверия).
@@ -64,6 +65,7 @@ export default function SafeDealPage() {
     <>
       <JsonLd data={[faqLd, breadcrumbs]} />
       <SafeDealView />
+      <SiteFooterStandalone />
     </>
   );
 }

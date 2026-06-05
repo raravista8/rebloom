@@ -97,3 +97,13 @@ body {
     padding: 18px 0 0;
   }
 }
+
+/* SEO/marketing pages (canon `.pds` shell) render canon's PdLandingFooter with dead
+ * `href="#"` links baked into canon src (not editable here). Hide it; the route
+ * renders <SiteFooterStandalone/> (real links only) just after the canon root. The
+ * home landing uses `.pdl` WITHOUT `.pds`, and SiteFooter sits outside `.pds`, so
+ * neither footer there is affected. Round-trip: slim the canon footer in a future
+ * canon export, then drop this rule. */
+.pds .pdl-foot {
+  display: none;
+}
