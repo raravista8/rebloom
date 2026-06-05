@@ -71,7 +71,7 @@ def test_held_review_approve_makes_visible_and_rates() -> None:
             seller_id=seller_uuid,
             amount_kopecks=80000,
             commission_kopecks=8000,
-            status="released",
+            status="done",
             delivery_method="self_pickup",
             released_at=datetime.now(UTC),
         )

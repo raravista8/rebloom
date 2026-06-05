@@ -186,13 +186,15 @@ class Like(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
 
 class Deal(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    """Escrow deal (ARCHITECTURE §6). Money in kopecks; the ledger is the source
-    of truth — these columns are denormalized convenience."""
+    """Deal — no-escrow «оплата при встрече» (ADR-0013). The platform records an
+    agreement + pickup hand-off, no money. ``amount_kopecks`` is the listing's
+    reference price (not a charge); ``commission_kopecks`` is 0 at launch.
+    ``released_at`` doubles as the done-at timestamp."""
 
     __tablename__ = "deals"
     __table_args__ = (
         CheckConstraint(
-            "status IN ('created','paid_held','released','refunded','disputed','cancelled')",
+            "status IN ('agreed','meeting','done','problem','cancelled')",
             name="status_valid",
         ),
         CheckConstraint(
@@ -213,7 +215,7 @@ class Deal(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     amount_kopecks: Mapped[int] = mapped_column(BigInteger, nullable=False)
     commission_kopecks: Mapped[int] = mapped_column(BigInteger, nullable=False)
     status: Mapped[str] = mapped_column(
-        String(16), nullable=False, server_default=text("'created'"), index=True
+        String(16), nullable=False, server_default=text("'agreed'"), index=True
     )
     delivery_method: Mapped[str] = mapped_column(String(16), nullable=False)
     released_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

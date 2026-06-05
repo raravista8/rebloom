@@ -39,10 +39,10 @@ class ReviewService:
             return Err(DomainError(NOT_FOUND, "deal"))
         if author_id not in (deal.buyer_id, deal.seller_id):
             return Err(DomainError(FORBIDDEN, "not_a_party"))
-        if deal.status != "released" or deal.released_at is None:
-            return Err(DomainError(CONFLICT, "not_released"))
-        released_at = datetime.fromisoformat(deal.released_at)
-        if datetime.now(UTC) - released_at > timedelta(days=REVIEW_WINDOW_DAYS):
+        if deal.status != "done" or deal.done_at is None:
+            return Err(DomainError(CONFLICT, "not_done"))
+        done_at = datetime.fromisoformat(deal.done_at)
+        if datetime.now(UTC) - done_at > timedelta(days=REVIEW_WINDOW_DAYS):
             return Err(DomainError(CONFLICT, "review_window_closed"))
 
         verdict = self._moderation.check_text(payload.text)

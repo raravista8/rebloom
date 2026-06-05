@@ -43,7 +43,7 @@ def _seed_deal() -> tuple[str, str, str]:
             seller_id=uuid.UUID(seller.id),
             amount_kopecks=50000,
             commission_kopecks=5000,
-            status="paid_held",
+            status="meeting",
             delivery_method="self_pickup",
         )
         session.add(deal)

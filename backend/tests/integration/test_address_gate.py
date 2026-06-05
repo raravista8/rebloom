@@ -46,7 +46,7 @@ def test_address_ciphertext_at_rest_and_roundtrip() -> None:
             seller_id=seller,
             amount_kopecks=50000,
             commission_kopecks=5000,
-            status="paid_held",
+            status="meeting",
             delivery_method="self_pickup",
         )
         session.add(deal)

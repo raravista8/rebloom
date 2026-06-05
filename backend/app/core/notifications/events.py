@@ -14,51 +14,62 @@ from app.core.notifications.schemas import Channel, NotificationDraft
 _MESSAGE_CHANNELS: tuple[Channel, ...] = ("inapp", "push")
 
 
-def deal_paid(deal_id: str, seller_id: str) -> NotificationDraft:
+def deal_agreed(deal_id: str, seller_id: str) -> NotificationDraft:
     return NotificationDraft(
-        event_id=f"deal:{deal_id}:paid",
+        event_id=f"deal:{deal_id}:agreed",
         user_id=seller_id,
         kind="deal_status",
-        title="Букет оплачен",
-        body="Покупатель оплатил — деньги в безопасной сделке. Договоритесь о передаче.",
-        payload={"deal_id": deal_id, "status": "paid_held"},
+        title="Новый покупатель",
+        body="Покупатель написал по вашему букету — откройте чат и договоритесь о встрече.",
+        payload={"deal_id": deal_id, "status": "agreed"},
     )
 
 
-def deal_released(deal_id: str, recipient_id: str, *, is_seller: bool) -> NotificationDraft:
+def deal_meeting(deal_id: str, buyer_id: str) -> NotificationDraft:
+    return NotificationDraft(
+        event_id=f"deal:{deal_id}:meeting",
+        user_id=buyer_id,
+        kind="deal_status",
+        title="Продавец назначил встречу",
+        body="Продавец поделился местом самовывоза — посмотрите детали в сделке.",
+        payload={"deal_id": deal_id, "status": "meeting"},
+    )
+
+
+def deal_done(deal_id: str, recipient_id: str, *, is_seller: bool) -> NotificationDraft:
     body = (
-        "Покупатель подтвердил получение — выплата отправлена."
+        "Покупатель подтвердил, что забрал букет. Спасибо! Оставьте отзыв."
         if is_seller
         else "Вы подтвердили получение. Спасибо! Оставьте отзыв продавцу."
     )
     return NotificationDraft(
-        event_id=f"deal:{deal_id}:released:{'seller' if is_seller else 'buyer'}",
+        event_id=f"deal:{deal_id}:done:{'seller' if is_seller else 'buyer'}",
         user_id=recipient_id,
         kind="deal_status",
         title="Сделка завершена",
         body=body,
-        payload={"deal_id": deal_id, "status": "released"},
+        payload={"deal_id": deal_id, "status": "done"},
     )
 
 
-def dispute_opened(deal_id: str, recipient_id: str) -> NotificationDraft:
+def deal_reported(deal_id: str, recipient_id: str) -> NotificationDraft:
     return NotificationDraft(
-        event_id=f"deal:{deal_id}:dispute_opened",
+        event_id=f"deal:{deal_id}:problem",
         user_id=recipient_id,
         kind="dispute",
-        title="Открыт спор по сделке",
-        body="По вашей сделке открыт спор. Деньги заморожены до решения поддержки.",
-        payload={"deal_id": deal_id, "status": "disputed"},
+        title="Жалоба по сделке",
+        body="По вашей сделке оставлена жалоба. Её рассмотрит поддержка.",
+        payload={"deal_id": deal_id, "status": "problem"},
     )
 
 
-def dispute_resolved(deal_id: str, recipient_id: str, outcome: str) -> NotificationDraft:
+def deal_problem_resolved(deal_id: str, recipient_id: str, outcome: str) -> NotificationDraft:
     return NotificationDraft(
-        event_id=f"deal:{deal_id}:dispute_resolved:{recipient_id}",
+        event_id=f"deal:{deal_id}:problem_resolved:{recipient_id}",
         user_id=recipient_id,
         kind="dispute",
-        title="Спор решён",
-        body="Поддержка приняла решение по спору. Подробности — в сделке.",
+        title="Жалоба рассмотрена",
+        body="Поддержка рассмотрела жалобу по сделке. Подробности — в сделке.",
         payload={"deal_id": deal_id, "outcome": outcome},
     )
 

@@ -543,13 +543,9 @@ class FakeDealRepository:
             buyer_id=str(d["buyer_id"]),
             seller_id=str(d["seller_id"]),
             amount_kopecks=int(d["amount"]),  # type: ignore[arg-type]
-            commission_kopecks=int(d["commission"]),  # type: ignore[arg-type]
             delivery_method=str(d["delivery"]),
-            released_at=d["released_at"],  # type: ignore[arg-type]
+            done_at=d["done_at"],  # type: ignore[arg-type]
         )
-
-    def ledger(self, deal_id: str) -> list[tuple[str, int]]:
-        return self._deals[deal_id]["ledger"]  # type: ignore[return-value]
 
     def create_and_reserve(
         self,
@@ -558,27 +554,21 @@ class FakeDealRepository:
         listing_id: str,
         seller_id: str,
         amount_kopecks: int,
-        commission_kopecks: int,
         delivery_method: str,
     ) -> object | None:
         self._seq += 1
         did = f"deal-{self._seq}"
         self._deals[did] = {
-            "status": "created",
+            "status": "agreed",
             "buyer_id": buyer_id,
             "seller_id": seller_id,
             "listing_id": listing_id,
             "amount": amount_kopecks,
-            "commission": commission_kopecks,
             "delivery": delivery_method,
-            "released_at": None,
+            "done_at": None,
             "created": self._seq,
-            "ledger": [],
         }
         return self._view(did)
-
-    def attach_payment(self, deal_id: str, yk_payment_id: str, idempotency_key: str) -> None:
-        self._by_payment[yk_payment_id] = deal_id
 
     def get(self, deal_id: str) -> object | None:
         return self._view(deal_id) if deal_id in self._deals else None
@@ -615,57 +605,35 @@ class FakeDealRepository:
             return None
         return str(d["buyer_id"]), str(d["seller_id"])
 
-    def mark_paid(self, yk_payment_id: str) -> object | None:
-        did = self._by_payment.get(yk_payment_id)
-        if did is None:
-            return None
-        d = self._deals[did]
-        if d["status"] == "created":
-            d["status"] = "paid_held"
-            d["ledger"].append(("hold", int(d["amount"])))  # type: ignore[union-attr,arg-type]
-        return self._view(did)
-
-    def release(self, deal_id: str) -> object | None:
+    def _move(
+        self, deal_id: str, allowed: set[str], target: str, *, done: bool = False
+    ) -> object | None:
         d = self._deals.get(deal_id)
-        if d is None or d["status"] not in ("paid_held", "disputed"):
+        if d is None or d["status"] not in allowed:
             return None
-        amount, commission = int(d["amount"]), int(d["commission"])  # type: ignore[arg-type]
-        d["ledger"].append(("commission", commission))  # type: ignore[union-attr]
-        d["ledger"].append(("payout", amount - commission))  # type: ignore[union-attr]
-        d["status"] = "released"
-        d["released_at"] = _now_iso()
+        d["status"] = target
+        if done:
+            d["done_at"] = _now_iso()
         return self._view(deal_id)
 
-    def open_dispute(self, deal_id: str) -> object | None:
-        d = self._deals.get(deal_id)
-        if d is None or d["status"] != "paid_held":
-            return None
-        d["status"] = "disputed"  # funds stay held — no ledger change
-        return self._view(deal_id)
+    def to_meeting(self, deal_id: str) -> object | None:
+        return self._move(deal_id, {"agreed"}, "meeting")
 
-    def resolve_dispute(self, deal_id: str, action: str, refund_kopecks: int = 0) -> object | None:
-        d = self._deals.get(deal_id)
-        if d is None or d["status"] != "disputed":
-            return None
-        amount, commission = int(d["amount"]), int(d["commission"])  # type: ignore[arg-type]
-        ledger = d["ledger"]
-        if action == "release":
-            ledger.append(("commission", commission))  # type: ignore[union-attr]
-            ledger.append(("payout", amount - commission))  # type: ignore[union-attr]
-            d["status"] = "released"
-        elif action == "refund":
-            ledger.append(("refund", amount))  # type: ignore[union-attr]
-            d["status"] = "refunded"
-        elif action == "partial":
-            if not (0 < refund_kopecks < amount):
-                return None
-            ledger.append(("refund", refund_kopecks))  # type: ignore[union-attr]
-            ledger.append(("payout", amount - refund_kopecks))  # type: ignore[union-attr]
-            d["status"] = "refunded"
-        else:
-            return None
-        d["released_at"] = _now_iso()
-        return self._view(deal_id)
+    def mark_done(self, deal_id: str) -> object | None:
+        return self._move(deal_id, {"agreed", "meeting"}, "done", done=True)
+
+    def report(self, deal_id: str) -> object | None:
+        return self._move(deal_id, {"agreed", "meeting"}, "problem")
+
+    def cancel(self, deal_id: str) -> object | None:
+        return self._move(deal_id, {"agreed", "meeting", "problem"}, "cancelled")
+
+    def resolve_problem(self, deal_id: str, action: str) -> object | None:
+        if action == "done":
+            return self._move(deal_id, {"problem"}, "done", done=True)
+        if action == "cancelled":
+            return self._move(deal_id, {"problem"}, "cancelled")
+        return None
 
     def set_pickup_address(self, deal_id: str, address_enc: str) -> bool:
         d = self._deals.get(deal_id)
@@ -678,27 +646,18 @@ class FakeDealRepository:
         d = self._deals.get(deal_id)
         return d.get("pickup_address_enc") if d is not None else None  # type: ignore[return-value]
 
-    def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:
-        self._deals[deal_id]["payout"] = (yk_payout_id, fiscal_receipt_id)
-
-    def seed_released(self, buyer_id: str, seller_id: str, amount: int = 100000) -> str:
-        """Test helper: a released deal (released just now, within the review window)."""
+    def seed_done(self, buyer_id: str, seller_id: str, amount: int = 100000) -> str:
+        """Test helper: a done deal (completed just now, within the review window)."""
         self._seq += 1
         did = f"deal-{self._seq}"
         self._deals[did] = {
-            "status": "released",
+            "status": "done",
             "buyer_id": buyer_id,
             "seller_id": seller_id,
             "listing_id": "L",
             "amount": amount,
-            "commission": amount // 10,
             "delivery": "self_pickup",
-            "released_at": _now_iso(),
-            "ledger": [
-                ("hold", amount),
-                ("commission", amount // 10),
-                ("payout", amount - amount // 10),
-            ],
+            "done_at": _now_iso(),
         }
         return did
 

@@ -1,31 +1,22 @@
-"""Postgres deals repository — the transactional money path (SECURITY T-03).
+"""Postgres deals repository — no-escrow status path (ADR-0013).
 
-Every mutation is one writer transaction; ``mark_paid`` and ``release`` take a
-row lock (SELECT … FOR UPDATE) so a retried webhook and a confirm can't both
-settle. The ledger invariant (:func:`can_apply`) is re-checked under the lock.
+Every transition is one writer transaction that locks the deal row
+(SELECT … FOR UPDATE) and updates conditionally on the current status, so a
+concurrent confirm/cancel/report settles exactly once. The platform moves no
+money — there is no ledger/payment here.
 """
 
 from __future__ import annotations
 
 import uuid
 from datetime import UTC, datetime
-from typing import cast
 
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session, selectinload
 
-from app.core.deals.ledger import (
-    LedgerEntry,
-    LedgerKind,
-    build_partial_entries,
-    build_refund_entries,
-    build_release_entries,
-    can_apply,
-)
 from app.core.deals.ports import DealView, ListingSummary
 from app.infrastructure.postgres.engine import reader_session, writer_session
-from app.infrastructure.postgres.models import Deal, Listing, Payment, Payout, User
-from app.infrastructure.postgres.models import LedgerEntry as LedgerRow
+from app.infrastructure.postgres.models import Deal, Listing, User
 
 
 def _to_view(deal: Deal) -> DealView:
@@ -36,9 +27,8 @@ def _to_view(deal: Deal) -> DealView:
         buyer_id=str(deal.buyer_id),
         seller_id=str(deal.seller_id),
         amount_kopecks=deal.amount_kopecks,
-        commission_kopecks=deal.commission_kopecks,
         delivery_method=deal.delivery_method,
-        released_at=deal.released_at.isoformat() if deal.released_at else None,
+        done_at=deal.released_at.isoformat() if deal.released_at else None,
         created_at=deal.created_at.isoformat() if deal.created_at else None,
     )
 
@@ -50,8 +40,8 @@ def _rating(user: User | None) -> float | None:
 
 
 def _enrich(session: Session, deals: list[Deal]) -> list[DealView]:
-    """Add display fields (listing cover/price, party names/ratings) to deal views in
-    a fixed 2 extra batched queries (no N+1). Money logic never reads these fields."""
+    """Add display fields (listing cover/price, party names/ratings) in 2 batched
+    queries (no N+1)."""
     if not deals:
         return []
     listing_ids = {d.listing_id for d in deals}
@@ -78,9 +68,8 @@ def _enrich(session: Session, deals: list[Deal]) -> list[DealView]:
                 buyer_id=str(d.buyer_id),
                 seller_id=str(d.seller_id),
                 amount_kopecks=d.amount_kopecks,
-                commission_kopecks=d.commission_kopecks,
                 delivery_method=d.delivery_method,
-                released_at=d.released_at.isoformat() if d.released_at else None,
+                done_at=d.released_at.isoformat() if d.released_at else None,
                 created_at=d.created_at.isoformat() if d.created_at else None,
                 listing_thumb_url=thumb,
                 listing_price_kopecks=lst.price_kopecks if lst is not None else None,
@@ -123,7 +112,6 @@ class PostgresDealRepository:
         listing_id: str,
         seller_id: str,
         amount_kopecks: int,
-        commission_kopecks: int,
         delivery_method: str,
     ) -> DealView | None:
         with writer_session() as session:
@@ -137,25 +125,14 @@ class PostgresDealRepository:
                 buyer_id=uuid.UUID(buyer_id),
                 seller_id=uuid.UUID(seller_id),
                 listing_id=uuid.UUID(listing_id),
-                amount_kopecks=amount_kopecks,
-                commission_kopecks=commission_kopecks,
-                status="created",
+                amount_kopecks=amount_kopecks,  # reference price, not a charge
+                commission_kopecks=0,  # no-escrow: platform takes nothing (ADR-0013)
+                status="agreed",
                 delivery_method=delivery_method,
             )
             session.add(deal)
             session.flush()
             return _to_view(deal)
-
-    def attach_payment(self, deal_id: str, yk_payment_id: str, idempotency_key: str) -> None:
-        with writer_session() as session:
-            session.add(
-                Payment(
-                    deal_id=uuid.UUID(deal_id),
-                    yk_payment_id=yk_payment_id,
-                    idempotency_key=idempotency_key,
-                    status="pending",
-                )
-            )
 
     def get(self, deal_id: str) -> DealView | None:
         try:
@@ -187,7 +164,6 @@ class PostgresDealRepository:
             return _enrich(session, list(session.scalars(stmt).all()))
 
     def list_all(self, *, status: str | None = None, limit: int = 50) -> list[DealView]:
-        """Admin view — every deal (optionally filtered by status). Read-only."""
         stmt = select(Deal)
         if status:
             stmt = stmt.where(Deal.status == status)
@@ -207,110 +183,80 @@ class PostgresDealRepository:
                 return None
             return str(deal.buyer_id), str(deal.seller_id)
 
-    def mark_paid(self, yk_payment_id: str) -> DealView | None:
-        with writer_session() as session:
-            payment = session.execute(
-                select(Payment).where(Payment.yk_payment_id == yk_payment_id)
-            ).scalar_one_or_none()
-            if payment is None:
-                return None
-            deal = session.execute(
-                select(Deal).where(Deal.id == payment.deal_id).with_for_update()
-            ).scalar_one_or_none()
-            if deal is None:
-                return None
-            if deal.status != "created":
-                return _to_view(deal)  # idempotent: already held or further along
-            deal.status = "paid_held"
-            payment.status = "succeeded"
-            payment.captured_at = datetime.now(UTC)
-            session.add(LedgerRow(deal_id=deal.id, kind="hold", amount_kopecks=deal.amount_kopecks))
-            return _to_view(deal)
+    # ── status transitions (conditional, row-locked → exactly-once) ──────────────
 
-    def release(self, deal_id: str) -> DealView | None:
-        with writer_session() as session:
-            deal = session.execute(
-                select(Deal).where(Deal.id == uuid.UUID(deal_id)).with_for_update()
-            ).scalar_one_or_none()
-            if deal is None or deal.status not in ("paid_held", "disputed"):
-                return None  # already settled / illegal — exactly-once release
-
-            existing = [
-                LedgerEntry(str(deal.id), cast(LedgerKind, row.kind), row.amount_kopecks)
-                for row in session.scalars(
-                    select(LedgerRow).where(LedgerRow.deal_id == deal.id)
-                ).all()
-            ]
-            new = build_release_entries(str(deal.id), deal.amount_kopecks, deal.commission_kopecks)
-            if not can_apply(existing, new):
-                return None  # ledger invariant guard (defence in depth)
-            for entry in new:
-                session.add(
-                    LedgerRow(deal_id=deal.id, kind=entry.kind, amount_kopecks=entry.amount_kopecks)
-                )
-            deal.status = "released"
-            deal.released_at = datetime.now(UTC)
-            listing = session.get(Listing, deal.listing_id)
-            if listing is not None:
-                listing.status = "sold"
-            return _to_view(deal)
-
-    def open_dispute(self, deal_id: str) -> DealView | None:
-        with writer_session() as session:
-            deal = session.execute(
-                select(Deal).where(Deal.id == uuid.UUID(deal_id)).with_for_update()
-            ).scalar_one_or_none()
-            if deal is None or deal.status != "paid_held":
-                return None  # only a held deal can be disputed; funds stay held
-            deal.status = "disputed"
-            return _to_view(deal)
-
-    def resolve_dispute(
-        self, deal_id: str, action: str, refund_kopecks: int = 0
+    def _transition(
+        self,
+        deal_id: str,
+        *,
+        allowed_from: frozenset[str],
+        target: str,
+        listing_status: str | None = None,
+        set_done: bool = False,
     ) -> DealView | None:
+        try:
+            did = uuid.UUID(deal_id)
+        except ValueError:
+            return None
         with writer_session() as session:
             deal = session.execute(
-                select(Deal).where(Deal.id == uuid.UUID(deal_id)).with_for_update()
+                select(Deal).where(Deal.id == did).with_for_update()
             ).scalar_one_or_none()
-            if deal is None or deal.status != "disputed":
-                return None  # exactly-once resolution
-
-            if action == "release":
-                new = build_release_entries(
-                    str(deal.id), deal.amount_kopecks, deal.commission_kopecks
-                )
-                deal_status, listing_status = "released", "sold"
-            elif action == "refund":
-                new = build_refund_entries(str(deal.id), deal.amount_kopecks)
-                deal_status, listing_status = "refunded", "archived"
-            elif action == "partial":
-                if not (0 < refund_kopecks < deal.amount_kopecks):
-                    return None
-                new = build_partial_entries(
-                    str(deal.id), refund_kopecks, deal.amount_kopecks - refund_kopecks
-                )
-                deal_status, listing_status = "refunded", "sold"
-            else:
-                return None
-
-            existing = [
-                LedgerEntry(str(deal.id), cast(LedgerKind, row.kind), row.amount_kopecks)
-                for row in session.scalars(
-                    select(LedgerRow).where(LedgerRow.deal_id == deal.id)
-                ).all()
-            ]
-            if not can_apply(existing, new):
-                return None  # ledger invariant guard
-            for entry in new:
-                session.add(
-                    LedgerRow(deal_id=deal.id, kind=entry.kind, amount_kopecks=entry.amount_kopecks)
-                )
-            deal.status = deal_status
-            deal.released_at = datetime.now(UTC)
-            listing = session.get(Listing, deal.listing_id)
-            if listing is not None:
-                listing.status = listing_status
+            if deal is None or deal.status not in allowed_from:
+                return None  # raced / illegal — exactly-once
+            deal.status = target
+            if set_done:
+                deal.released_at = datetime.now(UTC)
+            if listing_status is not None:
+                listing = session.get(Listing, deal.listing_id)
+                if listing is not None:
+                    listing.status = listing_status
             return _to_view(deal)
+
+    def to_meeting(self, deal_id: str) -> DealView | None:
+        return self._transition(deal_id, allowed_from=frozenset({"agreed"}), target="meeting")
+
+    def mark_done(self, deal_id: str) -> DealView | None:
+        return self._transition(
+            deal_id,
+            allowed_from=frozenset({"agreed", "meeting"}),
+            target="done",
+            listing_status="sold",
+            set_done=True,
+        )
+
+    def report(self, deal_id: str) -> DealView | None:
+        return self._transition(
+            deal_id, allowed_from=frozenset({"agreed", "meeting"}), target="problem"
+        )
+
+    def cancel(self, deal_id: str) -> DealView | None:
+        return self._transition(
+            deal_id,
+            allowed_from=frozenset({"agreed", "meeting", "problem"}),
+            target="cancelled",
+            listing_status="active",
+        )
+
+    def resolve_problem(self, deal_id: str, action: str) -> DealView | None:
+        if action == "done":
+            return self._transition(
+                deal_id,
+                allowed_from=frozenset({"problem"}),
+                target="done",
+                listing_status="sold",
+                set_done=True,
+            )
+        if action == "cancelled":
+            return self._transition(
+                deal_id,
+                allowed_from=frozenset({"problem"}),
+                target="cancelled",
+                listing_status="active",
+            )
+        return None
+
+    # ── pickup address (T-13 gate via DeliveryService) ───────────────────────────
 
     def set_pickup_address(self, deal_id: str, address_enc: str) -> bool:
         try:
@@ -332,14 +278,3 @@ class PostgresDealRepository:
         with reader_session() as session:
             deal = session.get(Deal, did)
             return deal.pickup_address_enc if deal is not None else None
-
-    def record_payout(self, deal_id: str, yk_payout_id: str, fiscal_receipt_id: str | None) -> None:
-        with writer_session() as session:
-            session.add(
-                Payout(
-                    deal_id=uuid.UUID(deal_id),
-                    yk_payout_id=yk_payout_id,
-                    fiscal_receipt_id=fiscal_receipt_id,
-                    status="succeeded",
-                )
-            )

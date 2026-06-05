@@ -45,10 +45,10 @@ def test_party_receives_published_event(app: FastAPI) -> None:
         assert ws.receive_json() == {"type": "connected", "deal_id": DEAL}
         # Publish on the real Redis channel; the live subscription forwards it.
         RedisRealtimeBus().publish(
-            deal_channel(DEAL), {"type": "status", "deal_id": DEAL, "status": "paid_held"}
+            deal_channel(DEAL), {"type": "status", "deal_id": DEAL, "status": "meeting"}
         )
         event = ws.receive_json()
-        assert event["type"] == "status" and event["status"] == "paid_held"
+        assert event["type"] == "status" and event["status"] == "meeting"
 
 
 def test_no_session_is_rejected(app: FastAPI) -> None:

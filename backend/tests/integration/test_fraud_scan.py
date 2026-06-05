@@ -54,7 +54,7 @@ def test_high_dispute_rate_flags_seller() -> None:
     seller = uuid.UUID(users.get_or_create_by_phone(_phone()).id)
     buyer = uuid.UUID(users.get_or_create_by_phone(_phone()).id)
     with writer_session() as session:
-        _deal(session, seller, buyer, "released")
+        _deal(session, seller, buyer, "done")
         _deal(session, seller, buyer, "disputed")
         _deal(session, seller, buyer, "disputed")  # 2/3 disputed → over threshold
 

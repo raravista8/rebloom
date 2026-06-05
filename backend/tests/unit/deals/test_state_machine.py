@@ -1,52 +1,44 @@
-"""Deal state machine — one legal release path (FR-020..026)."""
+"""Deal state machine — no-escrow «оплата при встрече» (ADR-0013)."""
 
 from __future__ import annotations
 
 import pytest
-from app.core.deals.state_machine import (
-    can_transition,
-    is_release_trigger,
-    is_terminal,
-)
+from app.core.deals.state_machine import can_transition, is_terminal
+
+LEGAL = [
+    ("agreed", "meeting"),
+    ("agreed", "done"),
+    ("agreed", "problem"),
+    ("agreed", "cancelled"),
+    ("meeting", "done"),
+    ("meeting", "problem"),
+    ("meeting", "cancelled"),
+    ("problem", "done"),
+    ("problem", "cancelled"),
+]
+
+ILLEGAL = [
+    ("done", "meeting"),
+    ("done", "cancelled"),
+    ("cancelled", "agreed"),
+    ("meeting", "agreed"),
+    ("problem", "meeting"),
+]
 
 
-@pytest.mark.parametrize(
-    ("frm", "to"),
-    [
-        ("created", "paid_held"),
-        ("created", "cancelled"),
-        ("paid_held", "released"),
-        ("paid_held", "refunded"),
-        ("paid_held", "disputed"),
-        ("disputed", "released"),
-        ("disputed", "refunded"),
-    ],
-)
+@pytest.mark.parametrize(("frm", "to"), LEGAL)
 def test_legal_transitions(frm: str, to: str) -> None:
     assert can_transition(frm, to)
 
 
-@pytest.mark.parametrize(
-    ("frm", "to"),
-    [
-        ("created", "released"),  # must be paid first
-        ("paid_held", "created"),
-        ("released", "refunded"),  # terminal
-        ("refunded", "released"),
-        ("cancelled", "paid_held"),
-        ("released", "disputed"),
-    ],
-)
+@pytest.mark.parametrize(("frm", "to"), ILLEGAL)
 def test_illegal_transitions(frm: str, to: str) -> None:
     assert not can_transition(frm, to)
 
 
 def test_terminal_states() -> None:
-    assert is_terminal("released") and is_terminal("refunded") and is_terminal("cancelled")
-    assert not is_terminal("paid_held") and not is_terminal("created")
-
-
-def test_release_triggers() -> None:
-    assert is_release_trigger("buyer_confirm")
-    assert is_release_trigger("support_decision")
-    assert not is_release_trigger("timeout")  # never release on timeout (fail-secure)
+    assert is_terminal("done")
+    assert is_terminal("cancelled")
+    assert not is_terminal("agreed")
+    assert not is_terminal("meeting")
+    assert not is_terminal("problem")

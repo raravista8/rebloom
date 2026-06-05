@@ -42,7 +42,7 @@ def _make_created_deal() -> tuple[uuid.UUID, uuid.UUID]:
             seller_id=uuid.UUID(seller.id),
             amount_kopecks=100000,
             commission_kopecks=10000,
-            status="created",
+            status="agreed",
             delivery_method="self_pickup",
         )
         session.add(deal)

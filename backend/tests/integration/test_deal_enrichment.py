@@ -58,7 +58,7 @@ def test_deal_view_is_enriched() -> None:
             seller_id=uuid.UUID(seller.id),
             amount_kopecks=99000,
             commission_kopecks=9900,
-            status="paid_held",
+            status="meeting",
             delivery_method="self_pickup",
         )
         session.add(deal)

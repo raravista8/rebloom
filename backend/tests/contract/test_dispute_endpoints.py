@@ -1,6 +1,7 @@
-"""Dispute endpoints (T5.6, FLOW-1, API_CONTRACT §4/§6).
+"""Report endpoints (FLOW-1, API_CONTRACT §4/§6) — no-escrow (ADR-0013).
 
-Party opens a dispute (funds freeze); only a 2FA-verified admin can resolve it.
+A party reports a problem (deal → problem); only a 2FA-verified admin resolves it
+(done / cancelled). No money moves.
 """
 
 from __future__ import annotations
@@ -25,7 +26,6 @@ from tests.fakes import (
     FakeDealRepository,
     FakeListingReader,
     FakeOtpStore,
-    FakePaymentProvider,
     FakeSessionStore,
     FakeUserRepository,
     RecordingSms,
@@ -47,14 +47,11 @@ def ctx() -> (
     users = FakeUserRepository()
     deals = FakeDealRepository()
     listings = FakeListingReader()
-    payments = FakePaymentProvider()
     audit = FakeAuditLog()
     app.dependency_overrides[get_otp_service] = lambda: otp
     app.dependency_overrides[get_session_service] = lambda: sessions
     app.dependency_overrides[get_user_repo] = lambda: users
-    app.dependency_overrides[get_deal_service] = lambda: DealService(
-        deals, listings, payments, 1000, audit=audit
-    )
+    app.dependency_overrides[get_deal_service] = lambda: DealService(deals, listings, audit=audit)
     yield app, deals, listings, users, audit
 
 
@@ -66,13 +63,12 @@ def _login(app: FastAPI, phone: str) -> tuple[TestClient, str]:
     return client, uid
 
 
-def _held_deal(
+def _agreed_deal(
     app: FastAPI, deals: FakeDealRepository, listings: FakeListingReader
 ) -> tuple[TestClient, str]:
     client, _uid = _login(app, "+79161112233")
     listings.seed("L", "seller-x", price=100_000, status="active")
     deal_id = client.post("/api/deals", json={"listing_id": "L"}).json()["data"]["deal"]["id"]
-    deals.mark_paid(f"yk_{deal_id}")
     return client, deal_id
 
 
@@ -84,72 +80,68 @@ def _admin_client(app: FastAPI, users: FakeUserRepository) -> TestClient:
     return client
 
 
-def test_party_opens_dispute(ctx) -> None:  # type: ignore[no-untyped-def]
+def test_party_reports_problem(ctx) -> None:  # type: ignore[no-untyped-def]
     app, deals, listings, _users, audit = ctx
-    client, deal_id = _held_deal(app, deals, listings)
+    client, deal_id = _agreed_deal(app, deals, listings)
 
-    resp = client.post(f"/api/deals/{deal_id}/dispute", json={"reason": "увял", "photo_ids": []})
+    resp = client.post(f"/api/deals/{deal_id}/report", json={"reason": "увял", "photo_ids": []})
     assert resp.status_code == 200
-    assert resp.json()["data"]["deal"]["status"] == "disputed"
-    assert any(e["action"] == "deal.dispute_opened" for e in audit.entries)
+    assert resp.json()["data"]["deal"]["status"] == "problem"
+    assert any(e["action"] == "deal.problem" for e in audit.entries)
 
 
-def test_dispute_requires_reason(ctx) -> None:  # type: ignore[no-untyped-def]
+def test_report_requires_reason(ctx) -> None:  # type: ignore[no-untyped-def]
     app, deals, listings, _users, _audit = ctx
-    client, deal_id = _held_deal(app, deals, listings)
-    resp = client.post(f"/api/deals/{deal_id}/dispute", json={"reason": ""})
+    client, deal_id = _agreed_deal(app, deals, listings)
+    resp = client.post(f"/api/deals/{deal_id}/report", json={"reason": ""})
     assert resp.status_code == 422  # validation: reason min_length
 
 
-def test_admin_resolves_release(ctx) -> None:  # type: ignore[no-untyped-def]
+def test_admin_resolves_done(ctx) -> None:  # type: ignore[no-untyped-def]
     app, deals, listings, users, audit = ctx
-    client, deal_id = _held_deal(app, deals, listings)
-    client.post(f"/api/deals/{deal_id}/dispute", json={"reason": "x"})
+    client, deal_id = _agreed_deal(app, deals, listings)
+    client.post(f"/api/deals/{deal_id}/report", json={"reason": "x"})
 
     admin = _admin_client(app, users)
     resp = admin.post(
-        f"/api/admin/deals/{deal_id}/resolve", json={"action": "release", "reason": "seller right"}
+        f"/api/admin/deals/{deal_id}/resolve", json={"action": "done", "reason": "seller right"}
     )
     assert resp.status_code == 200
-    assert resp.json()["data"]["deal"]["status"] == "released"
-    assert any(e["action"] == "deal.dispute_resolved.release" for e in audit.entries)
+    assert resp.json()["data"]["deal"]["status"] == "done"
+    assert any(e["action"] == "deal.problem_resolved.done" for e in audit.entries)
 
 
 def test_admin_lists_deals(ctx) -> None:  # type: ignore[no-untyped-def]
     app, deals, listings, users, _audit = ctx
-    _client, deal_id = _held_deal(app, deals, listings)
+    _client, deal_id = _agreed_deal(app, deals, listings)
     admin = _admin_client(app, users)
 
     items = admin.get("/api/admin/deals").json()["data"]["items"]
     assert any(i["id"] == deal_id for i in items)
-    # status filter
-    assert admin.get("/api/admin/deals?status=paid_held").json()["data"]["items"]
-    assert admin.get("/api/admin/deals?status=released").json()["data"]["items"] == []
-    # non-2FA blocked
+    assert admin.get("/api/admin/deals?status=agreed").json()["data"]["items"]
+    assert admin.get("/api/admin/deals?status=done").json()["data"]["items"] == []
     assert TestClient(app).get("/api/admin/deals").status_code in (401, 403)
 
 
-def test_admin_resolves_partial(ctx) -> None:  # type: ignore[no-untyped-def]
+def test_admin_resolves_cancelled(ctx) -> None:  # type: ignore[no-untyped-def]
     app, deals, listings, users, _audit = ctx
-    client, deal_id = _held_deal(app, deals, listings)
-    client.post(f"/api/deals/{deal_id}/dispute", json={"reason": "x"})
+    client, deal_id = _agreed_deal(app, deals, listings)
+    client.post(f"/api/deals/{deal_id}/report", json={"reason": "x"})
 
     admin = _admin_client(app, users)
     resp = admin.post(
-        f"/api/admin/deals/{deal_id}/resolve",
-        json={"action": "partial", "reason": "half", "refund_kopecks": 40_000},
+        f"/api/admin/deals/{deal_id}/resolve", json={"action": "cancelled", "reason": "возврат"}
     )
     assert resp.status_code == 200
-    assert resp.json()["data"]["deal"]["status"] == "refunded"
+    assert resp.json()["data"]["deal"]["status"] == "cancelled"
 
 
 def test_resolve_requires_admin_2fa(ctx) -> None:  # type: ignore[no-untyped-def]
     app, deals, listings, _users, _audit = ctx
-    client, deal_id = _held_deal(app, deals, listings)
-    client.post(f"/api/deals/{deal_id}/dispute", json={"reason": "x"})
+    client, deal_id = _agreed_deal(app, deals, listings)
+    client.post(f"/api/deals/{deal_id}/report", json={"reason": "x"})
 
-    # The buyer (a plain user) cannot reach the admin resolution route.
     resp = client.post(
-        f"/api/admin/deals/{deal_id}/resolve", json={"action": "release", "reason": "x"}
+        f"/api/admin/deals/{deal_id}/resolve", json={"action": "done", "reason": "x"}
     )
     assert resp.status_code == 403

@@ -33,7 +33,9 @@ from app.api.envelope import (
     unhandled_exception_handler,
     validation_exception_handler,
 )
-from app.api.webhooks import yookassa as yookassa_webhook
+
+# No-escrow launch (ADR-0013): the ЮKassa payment webhook is NOT registered. The
+# adapter/handler stay dormant in-repo for the future monetization ADR.
 from app.config import get_settings
 from app.infrastructure.logging import configure_logging
 
@@ -76,7 +78,6 @@ def create_app() -> FastAPI:
     app.include_router(support.router)
     app.include_router(admin.router)
     app.include_router(ws.router)
-    app.include_router(yookassa_webhook.router)
 
     return app
 

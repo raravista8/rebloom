@@ -13,11 +13,9 @@ from tests.fakes import (
     FakeDealPartyReader,
     FakeDealRepository,
     FakeListingReader,
-    FakePaymentProvider,
     FakeRealtimeBus,
 )
 
-BPS = 1000
 LEXICON = build_lexicon(
     profanity=[], hate_slurs=[], banned_terms=[], contact_patterns=[r"@[a-z0-9_]{3,}"]
 )
@@ -35,34 +33,34 @@ def _types(bus: FakeRealtimeBus) -> list[str]:
 
 
 def _deal_svc(bus: FakeRealtimeBus) -> tuple[DealService, FakeDealRepository]:
-    deals, listings, payments = FakeDealRepository(), FakeListingReader(), FakePaymentProvider()
+    deals, listings = FakeDealRepository(), FakeListingReader()
     listings.seed("L", "seller", price=100_000, status="active")
-    return DealService(deals, listings, payments, BPS, bus=bus), deals
+    return DealService(deals, listings, bus=bus), deals
 
 
 def test_status_changes_broadcast() -> None:
     bus = FakeRealtimeBus()
-    svc, deals = _deal_svc(bus)
-    deal = svc.create_deal("buyer", "L", "self_pickup").value[0]  # type: ignore[union-attr]
-    svc.mark_paid(f"yk_{deal.id}")
+    svc, _deals = _deal_svc(bus)
+    deal = svc.create_deal("buyer", "L", "self_pickup").value  # type: ignore[union-attr]
+    bus.published.clear()
+    svc.share_point("seller", deal.id)
     svc.confirm_receipt("buyer", deal.id)
 
     assert _channels(bus) == [f"deal:{deal.id}", f"deal:{deal.id}"]
     assert _types(bus) == ["status", "status"]
     statuses = [msg["status"] for _, msg in bus.published]
-    assert statuses == ["paid_held", "released"]
+    assert statuses == ["meeting", "done"]
 
 
-def test_dispute_broadcasts_disputed_then_resolution() -> None:
+def test_report_broadcasts_problem_then_resolution() -> None:
     bus = FakeRealtimeBus()
-    svc, deals = _deal_svc(bus)
-    deal = svc.create_deal("buyer", "L", "self_pickup").value[0]  # type: ignore[union-attr]
-    deals.mark_paid(f"yk_{deal.id}")
+    svc, _deals = _deal_svc(bus)
+    deal = svc.create_deal("buyer", "L", "self_pickup").value  # type: ignore[union-attr]
     bus.published.clear()
 
-    svc.open_dispute("buyer", deal.id, reason="x")
-    svc.resolve_dispute("admin", deal.id, action="refund", reason="x")
-    assert [msg["status"] for _, msg in bus.published] == ["disputed", "refunded"]
+    svc.report("buyer", deal.id, reason="x")
+    svc.resolve_problem("admin", deal.id, action="cancelled", reason="x")
+    assert [msg["status"] for _, msg in bus.published] == ["problem", "cancelled"]
 
 
 # --- chat -------------------------------------------------------------------

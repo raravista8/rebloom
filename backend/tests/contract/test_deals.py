@@ -1,4 +1,5 @@
-"""Deal endpoints (API_CONTRACT §4): create → confirm-receipt, party-only (T-06)."""
+"""Deal endpoints (API_CONTRACT §4): create → confirm-receipt, party-only (T-06).
+No-escrow «оплата при встрече» (ADR-0013)."""
 
 from __future__ import annotations
 
@@ -20,7 +21,6 @@ from tests.fakes import (
     FakeDealRepository,
     FakeListingReader,
     FakeOtpStore,
-    FakePaymentProvider,
     FakeSessionStore,
     FakeUserRepository,
     RecordingSms,
@@ -37,13 +37,10 @@ def ctx() -> Iterator[tuple[FastAPI, FakeDealRepository, FakeListingReader]]:
     users = FakeUserRepository()
     deals = FakeDealRepository()
     listings = FakeListingReader()
-    payments = FakePaymentProvider()
     app.dependency_overrides[get_otp_service] = lambda: otp
     app.dependency_overrides[get_session_service] = lambda: sessions
     app.dependency_overrides[get_user_repo] = lambda: users
-    app.dependency_overrides[get_deal_service] = lambda: DealService(
-        deals, listings, payments, 1000
-    )
+    app.dependency_overrides[get_deal_service] = lambda: DealService(deals, listings)
     yield app, deals, listings
 
 
@@ -55,25 +52,23 @@ def _login(app: FastAPI, phone: str) -> tuple[TestClient, str]:
     return client, uid
 
 
-def test_create_then_webhook_then_confirm_releases(
+def test_create_agreed_then_confirm_done(
     ctx: tuple[FastAPI, FakeDealRepository, FakeListingReader],
 ) -> None:
-    app, deals, listings = ctx
+    app, _deals, listings = ctx
     client, _uid = _login(app, "+79161112233")
     listings.seed("L", "seller-x", price=200_000, status="active")
 
     created = client.post("/api/deals", json={"listing_id": "L", "delivery_method": "self_pickup"})
     assert created.status_code == 200
     data = created.json()["data"]
-    assert data["deal"]["status"] == "created"
-    assert data["payment"]["confirmation_url"]
+    assert data["deal"]["status"] == "agreed"
+    assert "payment" not in data  # no escrow / no online payment (ADR-0013)
     deal_id = data["deal"]["id"]
-
-    deals.mark_paid(f"yk_{deal_id}")  # simulate ЮKassa webhook (T5.3)
 
     confirmed = client.post(f"/api/deals/{deal_id}/confirm-receipt")
     assert confirmed.status_code == 200
-    assert confirmed.json()["data"]["deal"]["status"] == "released"
+    assert confirmed.json()["data"]["deal"]["status"] == "done"
 
 
 def test_cannot_buy_own_listing(
@@ -86,15 +81,18 @@ def test_cannot_buy_own_listing(
     assert resp.status_code == 403
 
 
-def test_confirm_before_paid_conflicts(
+def test_report_then_cancel(
     ctx: tuple[FastAPI, FakeDealRepository, FakeListingReader],
 ) -> None:
     app, _deals, listings = ctx
     client, _uid = _login(app, "+79161112233")
     listings.seed("L", "seller-x", status="active")
     deal_id = client.post("/api/deals", json={"listing_id": "L"}).json()["data"]["deal"]["id"]
-    resp = client.post(f"/api/deals/{deal_id}/confirm-receipt")
-    assert resp.status_code == 409  # not paid_held
+    reported = client.post(f"/api/deals/{deal_id}/report", json={"reason": "не пришёл"})
+    assert reported.status_code == 200 and reported.json()["data"]["deal"]["status"] == "problem"
+    cancelled = client.post(f"/api/deals/{deal_id}/cancel", json={})
+    assert cancelled.status_code == 200
+    assert cancelled.json()["data"]["deal"]["status"] == "cancelled"
 
 
 def test_get_deal_is_party_only(
@@ -128,7 +126,6 @@ def test_list_my_deals(
     assert d["counterparty"]["id"] == "seller-x"
     assert d["listing"]["id"] == "L"
     assert "created_at" in d
-    # role filter: this user has no deals as a seller
     assert client.get("/api/deals?role=seller").json()["data"]["items"] == []
 
 

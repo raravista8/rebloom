@@ -1,7 +1,8 @@
-"""SECURITY T-03 — concurrent confirm-receipt releases a deal exactly once.
+"""SECURITY T-03 — concurrent confirm-receipt completes a deal exactly once.
 
-Real Postgres + threads: the SELECT … FOR UPDATE row lock must serialize
-releases so there is never a double payout or a negative escrow balance.
+Real Postgres + threads: the conditional UPDATE (WHERE status='agreed'|'meeting')
+under the row lock must serialize, so a flood of confirms produces exactly one
+`done` (no double-settle). No-escrow: no money/ledger involved (ADR-0013).
 """
 
 from __future__ import annotations
@@ -14,7 +15,6 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pytest
-from app.core.deals.schemas import compute_commission
 from app.core.deals.service import DealService
 from app.core.listings.schemas import ListingCreateIn
 from app.core.listings.service import ListingService
@@ -29,12 +29,10 @@ from app.infrastructure.postgres.deals_repo import (
 )
 from app.infrastructure.postgres.engine import writer_session
 from app.infrastructure.postgres.listings_repo import PostgresListingRepository
-from app.infrastructure.postgres.models import Deal, LedgerEntry, Payout
+from app.infrastructure.postgres.models import Deal
 from app.infrastructure.postgres.photos_repo import PostgresPhotoRepository
 from app.infrastructure.postgres.users_repo import PostgresUserRepository
-from app.infrastructure.yookassa import SandboxYooKassa
 from PIL import Image
-from sqlalchemy import func, select
 
 pytestmark = pytest.mark.integration
 
@@ -46,10 +44,10 @@ def _unique_phone() -> str:
 
 
 def _deal_service() -> DealService:
-    return DealService(PostgresDealRepository(), PostgresListingReader(), SandboxYooKassa(), 1000)
+    return DealService(PostgresDealRepository(), PostgresListingReader())
 
 
-def _setup_paid_held_deal() -> tuple[str, str]:
+def _setup_agreed_deal() -> tuple[str, str]:
     users, photos, listings = (
         PostgresUserRepository(),
         PostgresPhotoRepository(),
@@ -74,13 +72,11 @@ def _setup_paid_held_deal() -> tuple[str, str]:
     buyer = users.get_or_create_by_phone(_unique_phone())
     created = _deal_service().create_deal(buyer.id, listing.value.id, "self_pickup")
     assert isinstance(created, Ok)
-    deal, _url = created.value
-    PostgresDealRepository().mark_paid(f"yk_pay_{deal.id}")  # simulate the webhook
-    return deal.id, buyer.id
+    return created.value.id, buyer.id
 
 
-def test_concurrent_confirm_releases_exactly_once() -> None:
-    deal_id, buyer_id = _setup_paid_held_deal()
+def test_concurrent_confirm_completes_exactly_once() -> None:
+    deal_id, buyer_id = _setup_agreed_deal()
     service = _deal_service()
 
     workers = 8
@@ -89,23 +85,9 @@ def test_concurrent_confirm_releases_exactly_once() -> None:
             pool.map(lambda _: service.confirm_receipt(buyer_id, deal_id), range(workers))
         )
 
-    releases = [r for r in results if isinstance(r, Ok)]
-    assert len(releases) == 1, f"exactly one release expected, got {len(releases)}"
+    wins = [r for r in results if isinstance(r, Ok)]
+    assert len(wins) == 1, f"exactly one completion expected, got {len(wins)}"
 
-    did = uuid.UUID(deal_id)
     with writer_session() as session:
-        rows = list(session.scalars(select(LedgerEntry).where(LedgerEntry.deal_id == did)).all())
-        assert sorted(r.kind for r in rows) == ["commission", "hold", "payout"]
-        balance = sum((1 if r.kind == "hold" else -1) * r.amount_kopecks for r in rows)
-        assert balance == 0  # escrow break = 0
-
-        commission = next(r.amount_kopecks for r in rows if r.kind == "commission")
-        assert commission == compute_commission(PRICE, 1000)
-
-        payouts = session.scalar(
-            select(func.count()).select_from(Payout).where(Payout.deal_id == did)
-        )
-        assert payouts == 1  # exactly one payout, never doubled
-
-        deal = session.get(Deal, did)
-        assert deal is not None and deal.status == "released"
+        deal = session.get(Deal, uuid.UUID(deal_id))
+        assert deal is not None and deal.status == "done" and deal.released_at is not None
