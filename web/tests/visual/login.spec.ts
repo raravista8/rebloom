@@ -13,6 +13,20 @@ test('login opens at the chooser with ID buttons + phone', async ({ page }) => {
   await expect(page.locator('[data-provider="phone"]')).toBeVisible();
 });
 
+test.describe('desktop', () => {
+  test.use({ viewport: { width: 1280, height: 900 } });
+  // Regression guard: the canon desktop auth split (.pad) must span the full width.
+  // A stray `.pd-root:not(.pd-web)` max-width:460px once clamped it → brand/headline
+  // clipped (one-word-per-line). It must NOT be clamped.
+  test('desktop chooser renders the full-width split (not a 460px card)', async ({ page }) => {
+    await page.goto('/login');
+    const pad = page.locator('.pad');
+    await expect(pad).toBeVisible();
+    const box = await pad.boundingBox();
+    expect(box!.width).toBeGreaterThan(1000);
+  });
+});
+
 test('phone branch: chooser → phone step renders, CTA enabled', async ({ page }) => {
   await page.goto('/login');
   await page.locator('[data-provider="phone"]').click();
