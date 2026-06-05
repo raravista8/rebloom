@@ -1,14 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-// Home shell renders in every fetch state (TopBar + BottomNav are always present,
-// independent of the /api/feed result — which has no backend in CI). Data-state
-// coverage (loaded/empty/offline) lives in feed.spec.ts via route stubbing.
-test('home shell renders (brand + bottom nav)', async ({ page }) => {
+// Home = marketing landing + live catalog (canon PdLanding, ./marketing). The shell
+// (nav brand, hero, catalog/safety sections) renders independent of /api/feed — which
+// has no backend in CI. Catalog data-states live in feed.spec.ts.
+test('home renders the landing shell (brand + hero + catalog)', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.pd-root')).toBeVisible();
-  // Target the shell brand element specifically — getByText('Передарим') is ambiguous
-  // (also matches the <head><title>Передарим — …</title>), which trips strict mode.
-  await expect(page.locator('.pd-brand')).toBeVisible();
-  await expect(page.locator('.pd-bottomnav')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Продать' })).toBeVisible();
+  await expect(page.locator('.pdl')).toBeVisible();
+  await expect(page.locator('.pdl-brand')).toBeVisible();
+  await expect(page.locator('#catalog')).toBeVisible();
+  await expect(page.locator('#safety')).toBeVisible();
 });

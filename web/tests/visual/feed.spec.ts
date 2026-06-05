@@ -1,7 +1,8 @@
 import { test, expect, type Route } from '@playwright/test';
 
-// Home feed data-state coverage (INTERACTION_STATES §4) via /api/feed stubbing —
-// no backend needed. Covers loaded / empty / offline distinctly.
+// Home = marketing landing + LIVE catalog block (canon PdLanding). Catalog data-state
+// coverage (INTERACTION_STATES §4) via /api/feed stubbing — no backend needed.
+// The landing fetches fresh+liked and merges them into the catalog pool.
 
 const PHOTO =
   'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221%22%20height%3D%221%22/%3E';
@@ -33,26 +34,24 @@ async function stubFeed(route: Route, freshItems: unknown[], likedItems: unknown
   });
 }
 
-test('loaded: renders both sections with cards', async ({ page }) => {
+test('loaded: live catalog renders cards', async ({ page }) => {
   await page.route('**/api/feed**', (r) => stubFeed(r, [card('f1', 180000)], [card('l1', 250000)]));
   await page.goto('/');
-  await expect(page.getByText('Самые свежие')).toBeVisible();
-  await expect(page.getByText('Самые залайканные')).toBeVisible();
-  await expect(page.locator('.pd-card')).toHaveCount(2);
+  await expect(page.getByRole('heading', { name: /Свежие букеты рядом/ })).toBeVisible();
+  await expect(page.locator('.pdl-catgrid .pd-card')).toHaveCount(2);
   await expect(page.getByText('1 800 ₽')).toBeVisible();
   await expect(page.getByText('2 500 ₽')).toBeVisible();
 });
 
-test('empty: no listings in city → empty state CTA', async ({ page }) => {
+test('empty: no listings in city → catalog note', async ({ page }) => {
   await page.route('**/api/feed**', (r) => stubFeed(r, [], []));
   await page.goto('/');
-  await expect(page.getByText('Здесь пока пусто')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Опубликовать букет' })).toBeVisible();
+  await expect(page.getByText(/пока нет букетов/)).toBeVisible();
 });
 
-test('offline: network failure → offline state with retry', async ({ page }) => {
+test('offline: feed error → catalog retry', async ({ page }) => {
   await page.route('**/api/feed**', (r) => r.abort('failed'));
   await page.goto('/');
-  await expect(page.getByText('Нет соединения')).toBeVisible();
+  await expect(page.getByText(/Не удалось загрузить каталог/)).toBeVisible();
   await expect(page.getByRole('button', { name: 'Повторить' })).toBeVisible();
 });
