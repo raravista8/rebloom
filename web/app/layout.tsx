@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Golos_Text } from 'next/font/google';
+import { SITE_URL } from '@/lib/site';
 // Token order: theme vars first, then canon component styles, then our overrides.
 import '@rebloom/canon/tokens/theme.css';
 import '@rebloom/canon/canon.css';
@@ -16,6 +17,8 @@ const golos = Golos_Text({
 });
 
 export const metadata: Metadata = {
+  // Absolute origin for canonical/OG/sitemap URLs (per-page canonical set on each page).
+  metadataBase: new URL(SITE_URL),
   title: 'Передарим — вторая жизнь подаренных букетов',
   description:
     'C2C-маркетплейс ресейла подаренных букетов: свежие цветы дешевле флориста, безопасная сделка через эскроу.',
