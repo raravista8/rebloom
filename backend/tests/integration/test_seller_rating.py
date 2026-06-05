@@ -46,7 +46,7 @@ def test_seller_rating_is_average_of_visible_reviews() -> None:
                 seller_id=seller_uuid,
                 amount_kopecks=100000,
                 commission_kopecks=10000,
-                status="released",
+                status="done",
                 delivery_method="self_pickup",
                 released_at=datetime.now(UTC),
             )

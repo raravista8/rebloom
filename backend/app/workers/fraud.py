@@ -30,7 +30,7 @@ def scan(now: datetime | None = None) -> int:
             select(
                 Deal.seller_id,
                 func.count(),
-                func.count().filter(Deal.status == "disputed"),
+                func.count().filter(Deal.status == "problem"),
             ).group_by(Deal.seller_id)
         ).all()
         # Listings created in the last day per seller.

@@ -14,10 +14,7 @@ from tests.fakes import (
     FakeDealPartyReader,
     FakeDealRepository,
     FakeListingReader,
-    FakePaymentProvider,
 )
-
-BPS = 1000
 
 
 class _RecordingNotifier:
@@ -38,69 +35,60 @@ def _kinds(n: _RecordingNotifier) -> set[str]:
 
 
 def _deal_svc() -> tuple[DealService, FakeDealRepository, _RecordingNotifier]:
-    deals, listings, payments, notifier = (
-        FakeDealRepository(),
-        FakeListingReader(),
-        FakePaymentProvider(),
-        _RecordingNotifier(),
-    )
+    deals, listings, notifier = FakeDealRepository(), FakeListingReader(), _RecordingNotifier()
     listings.seed("L", "seller", price=100_000, status="active")
-    svc = DealService(deals, listings, payments, BPS, notifier=notifier)
+    svc = DealService(deals, listings, notifier=notifier)
     return svc, deals, notifier
 
 
-def _held(svc: DealService, deals: FakeDealRepository) -> str:
-    deal = svc.create_deal("buyer", "L", "self_pickup").value[0]  # type: ignore[union-attr]
-    deals.mark_paid(f"yk_{deal.id}")  # paid directly on repo to reach paid_held
-    return deal.id
+def _agreed(svc: DealService) -> str:
+    return svc.create_deal("buyer", "L", "self_pickup").value.id  # type: ignore[union-attr]
 
 
-def test_mark_paid_notifies_seller() -> None:
+def test_create_notifies_seller() -> None:
     svc, _deals, notifier = _deal_svc()
-    deal = svc.create_deal("buyer", "L", "self_pickup").value[0]  # type: ignore[union-attr]
-    svc.mark_paid(f"yk_{deal.id}")
+    _agreed(svc)
     assert _recipients(notifier) == {"seller"}
     assert _kinds(notifier) == {"deal_status"}
 
 
-def test_release_notifies_both_parties() -> None:
-    svc, deals, notifier = _deal_svc()
-    did = _held(svc, deals)
+def test_done_notifies_both_parties() -> None:
+    svc, _deals, notifier = _deal_svc()
+    did = _agreed(svc)
     notifier.drafts.clear()
     svc.confirm_receipt("buyer", did)
     assert _recipients(notifier) == {"buyer", "seller"}
 
 
-def test_dispute_open_notifies_counterparty_only() -> None:
-    svc, deals, notifier = _deal_svc()
-    did = _held(svc, deals)
+def test_report_notifies_counterparty_only() -> None:
+    svc, _deals, notifier = _deal_svc()
+    did = _agreed(svc)
     notifier.drafts.clear()
-    svc.open_dispute("buyer", did, reason="x")
-    assert _recipients(notifier) == {"seller"}  # the buyer opened it
+    svc.report("buyer", did, reason="x")
+    assert _recipients(notifier) == {"seller"}  # the buyer reported it
     assert _kinds(notifier) == {"dispute"}
 
 
 def test_resolve_notifies_both() -> None:
-    svc, deals, notifier = _deal_svc()
-    did = _held(svc, deals)
-    svc.open_dispute("buyer", did, reason="x")
+    svc, _deals, notifier = _deal_svc()
+    did = _agreed(svc)
+    svc.report("buyer", did, reason="x")
     notifier.drafts.clear()
-    svc.resolve_dispute("admin", did, action="refund", reason="x")
+    svc.resolve_problem("admin", did, action="cancelled", reason="x")
     assert _recipients(notifier) == {"buyer", "seller"}
 
 
-def test_notify_failure_does_not_break_release() -> None:
+def test_notify_failure_does_not_break_done() -> None:
     class _Boom:
         def notify(self, draft: NotificationDraft) -> int:
             raise RuntimeError("outbox down")
 
-    deals, listings, payments = FakeDealRepository(), FakeListingReader(), FakePaymentProvider()
+    deals, listings = FakeDealRepository(), FakeListingReader()
     listings.seed("L", "seller", price=100_000, status="active")
-    svc = DealService(deals, listings, payments, BPS, notifier=_Boom())
-    deal = svc.create_deal("buyer", "L", "self_pickup").value[0]  # type: ignore[union-attr]
-    deals.mark_paid(f"yk_{deal.id}")
+    svc = DealService(deals, listings, notifier=_Boom())
+    deal = svc.create_deal("buyer", "L", "self_pickup").value  # type: ignore[union-attr]
     result = svc.confirm_receipt("buyer", deal.id)  # must still succeed
-    assert result.value.status == "released"  # type: ignore[union-attr]
+    assert result.value.status == "done"  # type: ignore[union-attr]
 
 
 # --- chat -------------------------------------------------------------------

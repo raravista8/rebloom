@@ -42,7 +42,7 @@ def _make_created_deal() -> tuple[uuid.UUID, uuid.UUID]:
             seller_id=uuid.UUID(seller.id),
             amount_kopecks=100000,
             commission_kopecks=10000,
-            status="created",
+            status="agreed",
             delivery_method="self_pickup",
         )
         session.add(deal)
@@ -63,5 +63,5 @@ def test_fresh_reservation_is_untouched() -> None:
     deal_id, listing_id = _make_created_deal()
     expire_stale_reservations(now=datetime.now(UTC))  # cutoff = now - 30min
     with writer_session() as session:
-        assert session.get(Deal, deal_id).status == "created"  # type: ignore[union-attr]
+        assert session.get(Deal, deal_id).status == "agreed"  # type: ignore[union-attr]
         assert session.get(Listing, listing_id).status == "reserved"  # type: ignore[union-attr]

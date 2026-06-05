@@ -54,9 +54,9 @@ def test_high_dispute_rate_flags_seller() -> None:
     seller = uuid.UUID(users.get_or_create_by_phone(_phone()).id)
     buyer = uuid.UUID(users.get_or_create_by_phone(_phone()).id)
     with writer_session() as session:
-        _deal(session, seller, buyer, "released")
-        _deal(session, seller, buyer, "disputed")
-        _deal(session, seller, buyer, "disputed")  # 2/3 disputed → over threshold
+        _deal(session, seller, buyer, "done")
+        _deal(session, seller, buyer, "problem")
+        _deal(session, seller, buyer, "problem")  # 2/3 disputed → over threshold
 
     scan()
 
@@ -76,7 +76,7 @@ def test_rescan_is_idempotent() -> None:
     buyer = uuid.UUID(PostgresUserRepository().get_or_create_by_phone(_phone()).id)
     with writer_session() as session:
         for _ in range(3):
-            _deal(session, seller, buyer, "disputed")
+            _deal(session, seller, buyer, "problem")
 
     scan()
     scan()  # second run must not duplicate the signal (upsert by user+type)

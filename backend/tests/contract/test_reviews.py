@@ -63,7 +63,7 @@ def _login(app: FastAPI, phone: str) -> tuple[TestClient, str]:
 def test_clean_review_is_visible(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
     app, deals = ctx
     buyer, uid = _login(app, "+79161112233")
-    deal_id = deals.seed_released(uid, "seller-x")
+    deal_id = deals.seed_done(uid, "seller-x")
     resp = buyer.post(
         f"/api/deals/{deal_id}/review", json={"score": 5, "text": "Свежий букет, спасибо!"}
     )
@@ -74,7 +74,7 @@ def test_clean_review_is_visible(ctx: tuple[FastAPI, FakeDealRepository]) -> Non
 def test_contact_in_review_blocked(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
     app, deals = ctx
     buyer, uid = _login(app, "+79161112233")
-    deal_id = deals.seed_released(uid, "seller-x")
+    deal_id = deals.seed_done(uid, "seller-x")
     resp = buyer.post(
         f"/api/deals/{deal_id}/review", json={"score": 5, "text": "пишите @ivan_petrov"}
     )
@@ -85,7 +85,7 @@ def test_contact_in_review_blocked(ctx: tuple[FastAPI, FakeDealRepository]) -> N
 def test_banned_term_review_held(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
     app, deals = ctx
     buyer, uid = _login(app, "+79161112233")
-    deal_id = deals.seed_released(uid, "seller-x")
+    deal_id = deals.seed_done(uid, "seller-x")
     resp = buyer.post(
         f"/api/deals/{deal_id}/review", json={"score": 4, "text": "нашёл на барахолка"}
     )
@@ -96,7 +96,7 @@ def test_banned_term_review_held(ctx: tuple[FastAPI, FakeDealRepository]) -> Non
 def test_non_party_forbidden(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
     app, deals = ctx
     _buyer, uid = _login(app, "+79161112233")
-    deal_id = deals.seed_released(uid, "seller-x")
+    deal_id = deals.seed_done(uid, "seller-x")
     stranger, _sid = _login(app, "+79165556677")
     resp = stranger.post(f"/api/deals/{deal_id}/review", json={"score": 1, "text": "плохо"})
     assert resp.status_code == 403
@@ -110,7 +110,6 @@ def test_not_released_conflict(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
         listing_id="L",
         seller_id="seller-x",
         amount_kopecks=100000,
-        commission_kopecks=10000,
         delivery_method="self_pickup",
     )
     resp = buyer.post(f"/api/deals/{deal.id}/review", json={"score": 5, "text": "ok"})  # type: ignore[attr-defined]
@@ -120,7 +119,7 @@ def test_not_released_conflict(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
 def test_double_review_conflict(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
     app, deals = ctx
     buyer, uid = _login(app, "+79161112233")
-    deal_id = deals.seed_released(uid, "seller-x")
+    deal_id = deals.seed_done(uid, "seller-x")
     assert (
         buyer.post(f"/api/deals/{deal_id}/review", json={"score": 5, "text": "ok"}).status_code
         == 200
@@ -133,7 +132,7 @@ def test_profile_lists_reviews(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
     app, deals = ctx
     buyer, buyer_id = _login(app, "+79161112233")
     _seller, seller_id = _login(app, "+79167778899")
-    deal_id = deals.seed_released(buyer_id, seller_id)
+    deal_id = deals.seed_done(buyer_id, seller_id)
     buyer.post(f"/api/deals/{deal_id}/review", json={"score": 5, "text": "Отличный продавец"})
 
     profile = buyer.get(f"/api/users/{seller_id}")

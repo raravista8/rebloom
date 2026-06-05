@@ -81,11 +81,12 @@ class Admin2FAIn(BaseModel):
     code: str = Field(min_length=6, max_length=8)
 
 
-class DisputeResolveIn(BaseModel):
+class ProblemResolveIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    action: Literal["release", "refund", "partial"]
+    # No-escrow (ADR-0013): support closes a reported deal as done or cancelled —
+    # no money moves, so no release/refund/partial and no 4-eyes.
+    action: Literal["done", "cancelled"]
     reason: str = Field(min_length=1, max_length=2000)
-    refund_kopecks: int = Field(default=0, ge=0)
 
 
 class ModerationDecisionIn(BaseModel):
@@ -150,21 +151,20 @@ def admin_list_deals(
 
 
 @router.post("/api/admin/deals/{deal_id}/resolve", response_model=None)
-def resolve_dispute(
+def resolve_problem(
     deal_id: str,
-    payload: DisputeResolveIn,
+    payload: ProblemResolveIn,
     request: Request,
     admin: RequireAdmin2FADep,
     service: DealServiceDep,
 ) -> dict[str, Any] | JSONResponse:
-    """Support/admin resolves a dispute (FLOW-1 step 4) — release / refund /
-    partial. Money settles in the ledger; the action is audit-logged."""
-    result = service.resolve_dispute(
+    """Support/admin closes a reported deal (FLOW-1) — done or cancelled. No money
+    moves (ADR-0013); the action is audit-logged."""
+    result = service.resolve_problem(
         admin.id,
         deal_id,
         action=payload.action,
         reason=payload.reason,
-        refund_kopecks=payload.refund_kopecks,
         request_id=request_id(request),
     )
     if isinstance(result, Ok):

@@ -51,7 +51,7 @@ def test_released_deal_totals_window() -> None:
             seller_id=uuid.UUID(seller.id),
             amount_kopecks=100_000,
             commission_kopecks=10_000,
-            status="released",
+            status="done",
             delivery_method="self_pickup",
             released_at=datetime.now(UTC),
         )
@@ -70,4 +70,4 @@ def test_released_deal_totals_window() -> None:
     assert summary.commission_kopecks == 10_000
     assert summary.payout_kopecks == 90_000
     assert summary.held_kopecks == 0  # ledger settles to zero
-    assert summary.deals_by_status.get("released", 0) >= 1
+    assert summary.deals_by_status.get("done", 0) >= 1

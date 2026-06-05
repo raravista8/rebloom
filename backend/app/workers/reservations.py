@@ -1,9 +1,9 @@
-"""Reservation TTL worker (FR-022, SECURITY T-12).
+"""Agreement TTL worker (FR-022, SECURITY T-12; no-escrow ADR-0013).
 
-Cancels deals stuck in ``created`` (payment never completed) past the TTL and
-releases the listing back to ``active``. No ledger entries — no money moved.
-Runs periodically (cron / RQ-scheduler in prod). FOR UPDATE SKIP LOCKED so
-concurrent runs don't double-process.
+Cancels deals stuck in ``agreed`` (the parties never arranged a meeting) past the
+TTL and releases the listing back to ``active`` so it doesn't stay reserved
+forever. No money is involved. Runs periodically (cron / RQ-scheduler in prod).
+FOR UPDATE SKIP LOCKED so concurrent runs don't double-process.
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ def expire_stale_reservations(now: datetime | None = None) -> int:
         stale = (
             session.execute(
                 select(Deal)
-                .where(Deal.status == "created", Deal.created_at < cutoff)
+                .where(Deal.status == "agreed", Deal.created_at < cutoff)
                 .with_for_update(skip_locked=True)
             )
             .scalars()

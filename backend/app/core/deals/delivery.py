@@ -15,8 +15,9 @@ from app.core.deals.ports import DealRepository
 from app.core.errors import CONFLICT, FORBIDDEN, NOT_FOUND, DomainError
 from app.core.result import Err, Ok, Result
 
-# Statuses at/after which the exact address may be revealed.
-_REVEALED_STATUSES = frozenset({"paid_held", "disputed", "released"})
+# Statuses at/after which the exact pickup address may be revealed (after the seller
+# shares the point → meeting). No-escrow: there is no payment to gate on (ADR-0013).
+_REVEALED_STATUSES = frozenset({"meeting", "done", "problem"})
 
 
 class PickupAddressStore(Protocol):
@@ -44,7 +45,7 @@ class DeliveryService:
             return Err(DomainError(NOT_FOUND, "deal"))
         if deal.seller_id != seller_id:  # only the seller provides the meeting point
             return Err(DomainError(FORBIDDEN, "not_seller"))
-        if deal.status in ("released", "refunded", "cancelled"):
+        if deal.status in ("done", "cancelled"):
             return Err(DomainError(CONFLICT, "deal_closed"))
         self._store.set_pickup_address(deal_id, self._cipher.encrypt(address.strip()))
         return Ok(None)
