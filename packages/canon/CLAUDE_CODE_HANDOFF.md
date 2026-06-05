@@ -12,7 +12,7 @@ hover/focus/validation states**.
 
 | Area | New / changed | Source |
 |------|---------------|--------|
-| Marketing landing | `PdLanding`, `PdLandingNav` (`@rebloom/canon/marketing`) — hero, live catalog teaser, how-it-works, reviews, escrow, objections, app, split CTA, footer | `src/marketing/landing.jsx` |
+| Marketing landing | `PdLanding`, `PdLandingNav` (`@rebloom/canon/marketing`) — hero, live catalog teaser, how-it-works, reviews, safe-deal, objections, app, split CTA, footer | `src/marketing/landing.jsx` |
 | Catalog | `PdCatalog` (`@rebloom/canon/catalog`) — sidebar/sheet filters + sort + pagination | `src/catalog/catalog.jsx` |
 | **Responsive** | landing + catalog now switch layout via **container queries** (`@container`), not a hard-coded class — see §4 | `canon.css` |
 | Forms | real `:focus-within` + `:hover` states baked into `canon.css` (inputs, checkbox, size, seg, switch, oauth) | `canon.css` |
@@ -292,7 +292,7 @@ type CityData = { id:string; nom:string; loc:string; gen:string; count:number; m
 |---|---|---|
 | `/` | `Свежие букеты в 2–3 раза дешевле магазина \| Передарим` | H1: «Свежие букеты в 2–3 раза дешевле цветочного магазина» |
 | `/[city]` | `Дешёвые свежие букеты в {loc} — самовывоз рядом \| Передарим` | H1: «Дешёвые свежие букеты в {loc} — самовывоз рядом» |
-| `/bezopasnaya-sdelka` | `Безопасная сделка и эскроу — как защищены деньги \| Передарим` | H1: «Деньги придут продавцу только после того, как вы забрали букет» |
+| `/bezopasnaya-sdelka` | `Безопасная сделка — оплата при встрече \| Передарим` | H1: «Платите за букет, только когда забрали егоко после того, как вы забрали букет» |
 | `/blog` | `Блог «Передарима» — что делать с подаренным букетом \| Передарим` | H1: «Что делать с букетом, который уже подарили» |
 | `/blog/[slug]` | `{Заголовок} \| Передарим` | H1 = заголовок |
 | `/l/[id]` | `{Цветы} за {цена} ₽ рядом, {район} — самовывоз \| Передарим` | `alt`: «свежий букет {цветы} недорого, {район}» |

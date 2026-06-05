@@ -5642,3 +5642,20 @@
     Menlo,
     monospace;
 }
+.pda-badge.done {
+  background: var(--pd-fresh-soft);
+  color: #2f5a3c;
+}
+.pda-badge.meeting {
+  background: var(--pd-warn-soft);
+  color: #7a5a16;
+}
+.pda-badge.problem {
+  background: var(--pd-danger-soft);
+  color: #7e2c1e;
+}
+.pda-badge.agreed,
+.pda-badge.cancelled {
+  background: var(--pd-surface-3);
+  color: var(--pd-muted);
+}

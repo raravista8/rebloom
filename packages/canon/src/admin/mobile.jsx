@@ -70,11 +70,11 @@ function AdminMobileLogin({ step='login' }) {
 
 // ════════════════ 1 · ОБЗОР ════════════════
 function AdminMobileDash() {
-  const k=[['Онлайн','342','+5%'],['DAU','4 870','+8%'],['GMV / мес','3,24 млн ₽','+14%'],['Комиссия','318 тыс ₽','+12%']];
+  const k=[['Онлайн','342','+5%'],['DAU','4 870','+8%'],['Оборот / мес','3,24 млн ₽','+14%'],['Сделок','1 142','+12%']];
   const att=[
     [PdI.alert,'var(--pd-warn)','Модерация','12 в очереди · 1 оспорено'],
     [PdI.shield,'var(--pd-danger)','Антифрод','7 сигналов · 2 высокого риска'],
-    [PdIc.deals,'var(--pd-danger)','Споры по сделкам','1 активный · SLA 24 ч'],
+    [PdIc.deals,'var(--pd-danger)','Жалобы на сделки','1 активная · SLA 24 ч'],
     [PdI.flag,'var(--pd-warn)','Жалобы','3 новых'],
   ];
   return (
@@ -138,19 +138,19 @@ function AdminMobileModReject() {
 }
 
 // ════════════════ 3 · СДЕЛКИ (+cancel sheet, +dispute drill) ════════════════
-const MDEALS=[['#10478','Соня → Юля',850,'disputed','спор · SLA 24 ч'],['#10482','Марина → Аня',990,'paid_held','в эскроу'],['#10481','Катя → Лена',1190,'released','завершена'],['#10475','Вера → Ольга',590,'refunded','возврат']];
-const STC={disputed:['var(--pd-danger-soft)','#7e2c1e'],paid_held:['var(--pd-warn-soft)','#7a5a16'],released:['var(--pd-fresh-soft)','#2f5a3c'],refunded:['var(--pd-surface-3)','#7a6a52'],created:['#e9eefb','#33508f']};
+const MDEALS=[['#10478','Соня → Юля',850,'problem','жалоба · SLA 24 ч'],['#10482','Марина → Аня',990,'meeting','идёт'],['#10481','Катя → Лена',1190,'done','завершена'],['#10475','Вера → Ольга',590,'cancelled','отменена']];
+const STC={problem:['var(--pd-danger-soft)','#7e2c1e'],meeting:['var(--pd-warn-soft)','#7a5a16'],done:['var(--pd-fresh-soft)','#2f5a3c'],cancelled:['var(--pd-surface-3)','#7a6a52'],agreed:['#e9eefb','#33508f']};
 function DealsList() {
   return (<>
-    <div className="pdam-chips"><button className="pdam-chip on">Спор<span className="n">1</span></button><button className="pdam-chip">В эскроу</button><button className="pdam-chip">Завершена</button><button className="pdam-chip">Возврат</button><button className="pdam-chip">Все</button></div>
+    <div className="pdam-chips"><button className="pdam-chip on">Жалоба<span className="n">1</span></button><button className="pdam-chip">Идёт</button><button className="pdam-chip">Завершена</button><button className="pdam-chip">Отменена</button><button className="pdam-chip">Все</button></div>
     <div className="pdam-sec">
-      <div className="sh">Споры <span className="ct">1</span></div>
+      <div className="sh">Жалобы <span className="ct">1</span></div>
       <div className="pdam-item">
         <span className="ic" style={{background:'var(--pd-danger-soft)',color:'var(--pd-danger)'}}>{mic(PdI.alert,'pd-i18')}</span>
         <div className="mid"><div className="t1">#10478 · Соня → Юля</div><div className="t2">Букет не соответствует фото · SLA 24 ч</div></div>
         <span className="amt">{pdMoney(850)}</span>
       </div>
-      <div className="pdam-modact" style={{display:'flex',gap:8,padding:'11px 15px',borderTop:'1px solid var(--pd-border)'}}><PdBtn variant="secondary" block>Детали спора</PdBtn><PdBtn variant="primary" block>Решить</PdBtn></div>
+      <div className="pdam-modact" style={{display:'flex',gap:8,padding:'11px 15px',borderTop:'1px solid var(--pd-border)'}}><PdBtn variant="secondary" block>Детали жалобы</PdBtn><PdBtn variant="primary" block>Решить</PdBtn></div>
     </div>
     <div className="pdam-sec">
       <div className="sh">Последние сделки</div>
@@ -162,7 +162,7 @@ function DealsList() {
         </div>
       ))}
     </div>
-    <div className="pdam-readonly">Заморозка и отмена денежных сделок требуют 2-го оператора (4-eyes).</div>
+    <div className="pdam-readonly">Отмена сделки фиксируется в audit-log.</div>
   </>);
 }
 function AdminMobileDeals() { return <MShell active="deals" title="Сделки"><DealsList/></MShell>; }
@@ -170,10 +170,10 @@ function AdminMobileDealCancel() {
   const sheet = (
     <Sheet>
       <h3>Отменить сделку #10482?</h3>
-      <p className="sub">Марина → Аня · 990 ₽ в эскроу. Отмена запустит возврат покупателю. Необратимо.</p>
+      <p className="sub">Марина → Аня · 990 ₽. Отмена снимет сделку, стороны получат уведомление. Необратимо.</p>
       <div className="pd-field" style={{textAlign:'left'}}><label className="pd-label">Причина отмены *</label></div>
       <textarea rows={3} defaultValue="Продавец недоступен 48 ч, букет неактуален. Обращение #1902.">{}</textarea>
-      <div className="pdam-4eyes">{mic(PdI.shield,'pd-i16')}Денежная операция: нужно подтверждение 2-го оператора (4-eyes).</div>
+      <div className="pdam-4eyes">{mic(PdI.shield,'pd-i16')}Действие фиксируется в audit-log.</div>
       <div className="sf"><PdBtn variant="ghost" block>Отмена</PdBtn><PdBtn variant="danger" block>Отменить сделку</PdBtn></div>
     </Sheet>
   );
@@ -181,17 +181,17 @@ function AdminMobileDealCancel() {
 }
 function AdminMobileDispute() {
   return (
-    <MShell active="deals" title="Спор #10478" back action={<button className="pd-iconbtn">{mic(dots,'pd-i20')}</button>}>
+    <MShell active="deals" title="Жалоба #10478" back action={<button className="pd-iconbtn">{mic(dots,'pd-i20')}</button>}>
       <div className="pdam-sec" style={{padding:'14px 15px'}}>
         <div className="rw" style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-          <span className="pda-badge disputed">спор</span><span style={{fontSize:12,color:'var(--pd-danger)',fontWeight:700}}>SLA 24 ч · осталось 18:42</span>
+          <span className="pda-badge problem">жалоба</span><span style={{fontSize:12,color:'var(--pd-danger)',fontWeight:700}}>SLA 24 ч · осталось 18:42</span>
         </div>
-        <div style={{fontSize:20,fontWeight:700,marginTop:10}}>{pdMoney(850)} <span style={{fontSize:13,color:'var(--pd-muted)',fontWeight:600}}>в эскроу</span></div>
+        <div style={{fontSize:20,fontWeight:700,marginTop:10}}>{pdMoney(850)} <span style={{fontSize:13,color:'var(--pd-muted)',fontWeight:600}}>сумма сделки</span></div>
       </div>
       <div className="pdam-sec">
         <div className="pdam-kv"><span className="k">Покупатель</span><span className="v">Юля В.</span></div>
         <div className="pdam-kv"><span className="k">Продавец</span><span className="v">Соня Л.</span></div>
-        <div className="pdam-kv"><span className="k">Причина спора</span><span className="v">Букет не соответствует фото</span></div>
+        <div className="pdam-kv"><span className="k">Причина жалобы</span><span className="v">Букет не соответствует фото</span></div>
         <div className="pdam-kv"><span className="k">Открыт</span><span className="v">02.06 19:41</span></div>
       </div>
       <div className="pdam-sec">
@@ -202,16 +202,16 @@ function AdminMobileDispute() {
         </div>
       </div>
       <div className="pdam-actbar">
-        <PdBtn variant="primary" block lg>Вернуть покупателю</PdBtn>
-        <PdBtn variant="secondary" block lg>Передать продавцу</PdBtn>
-        <PdBtn variant="ghost" block>Запросить ещё доказательства</PdBtn>
+        <PdBtn variant="primary" block lg>Предупредить продавца</PdBtn>
+        <PdBtn variant="secondary" block lg>Заблокировать продавца…</PdBtn>
+        <PdBtn variant="ghost" block>Отклонить жалобу</PdBtn>
       </div>
     </MShell>
   );
 }
 
 // ════════════════ 4 · АНТИФРОД (+cluster drill) ════════════════
-const SIG=[['hi',92,'Мульти-аккаунты по IP','2.18.··.41 · 3 аккаунта'],['hi',88,'Накрутка отзывов','цепочка из 3 аккаунтов'],['md',64,'Выплаты на одну карту','···7781 · 5 продавцов'],['md',57,'Переиспользование фото','хэш 98% · 4 объявления'],['lo',34,'Аномалия цены','120 ₽ при медиане 950 ₽']];
+const SIG=[['hi',92,'Мульти-аккаунты по IP','2.18.··.41 · 3 аккаунта'],['hi',88,'Накрутка отзывов','цепочка из 3 аккаунтов'],['md',64,'Повторные жалобы','3 жалобы · 1 продавец'],['md',57,'Переиспользование фото','хэш 98% · 4 объявления'],['lo',34,'Аномалия цены','120 ₽ при медиане 950 ₽']];
 function AdminMobileFraud() {
   return (
     <MShell active="fraud" title="Антифрод">
@@ -257,7 +257,7 @@ function AdminMobileFraudDrill() {
       </div>
       <div className="pdam-actbar">
         <PdBtn variant="danger" block lg icon={PdI.shield}>Заблокировать кластер…</PdBtn>
-        <PdBtn variant="secondary" block>Ограничить выплаты</PdBtn>
+        <PdBtn variant="secondary" block>Ограничить аккаунты</PdBtn>
       </div>
     </MShell>
   );
@@ -316,7 +316,7 @@ function AdminMobileUserDrill() {
         <div className="pdam-kv"><span className="k">Email</span><span className="v">katya@ya.ru</span></div>
         <div className="pdam-kv"><span className="k">Привязки</span><span className="v">Яндекс ID · VK ID</span></div>
         <div className="pdam-kv"><span className="k">Объявлений</span><span className="v">23 (4 активных)</span></div>
-        <div className="pdam-kv"><span className="k">Сделок</span><span className="v">57 · 1 спор</span></div>
+        <div className="pdam-kv"><span className="k">Сделок</span><span className="v">57 · 1 жалоба</span></div>
         <div className="pdam-kv"><span className="k">Рейтинг</span><span className="v">4.9 · 57 отзывов</span></div>
       </div>
       <div className="pdam-actbar">
@@ -371,28 +371,28 @@ function AdminMobileFinance() {
   return (
     <MShell active="more" title="Финансы" back>
       <div style={{background:'linear-gradient(155deg,#CF5638,#A8402A)',color:'#fff',borderRadius:16,padding:18}}>
-        <div style={{fontSize:12.5,color:'rgba(255,255,255,.85)',fontWeight:600}}>Оборот (GMV) за месяц</div>
+        <div style={{fontSize:12.5,color:'rgba(255,255,255,.85)',fontWeight:600}}>Оборот сделок за месяц</div>
         <div style={{fontSize:30,fontWeight:700,letterSpacing:'-.5px',marginTop:6}}>3,24 млн ₽</div>
-        <div style={{fontSize:12.5,color:'rgba(255,255,255,.85)',marginTop:4}}>↑ 14% к прошлому месяцу</div>
+        <div style={{fontSize:12.5,color:'rgba(255,255,255,.85)',marginTop:4}}>оценка по завершённым · ↑ 14%</div>
       </div>
       <div className="pdam-kpis">
-        <div className="pdam-kpi"><div className="lab">Комиссия</div><div className="val">318 тыс ₽</div><div className="delta">↑ 12%</div></div>
-        <div className="pdam-kpi"><div className="lab">Выплачено</div><div className="val">2,86 млн ₽</div></div>
+        <div className="pdam-kpi"><div className="lab">Завершено</div><div className="val">1 142</div><div className="delta">↑ 12%</div></div>
+        <div className="pdam-kpi"><div className="lab">Средний чек</div><div className="val">1 040 ₽</div></div>
       </div>
       <div className="pdam-sec">
-        <div className="sh">Сверка ledger</div>
-        <div className="pdam-kv"><span className="k">Эквайринг (вход)</span><span className="v">+3 240 000 ₽</span></div>
-        <div className="pdam-kv"><span className="k">Выплаты</span><span className="v" style={{color:'var(--pd-danger)'}}>−2 856 000 ₽</span></div>
-        <div className="pdam-kv"><span className="k">Заморожено (споры)</span><span className="v" style={{color:'var(--pd-danger)'}}>−54 600 ₽</span></div>
-        <div className="pdam-kv"><span className="k">Расхождение</span><span className="v"><span className="pda-recon ok" style={{fontSize:11}}>{mic(PdI.check,'pd-i12')}0,00 ₽</span></span></div>
+        <div className="sh">Сделки по статусам</div>
+        <div className="pdam-kv"><span className="k">Завершено</span><span className="v">1 142</span></div>
+        <div className="pdam-kv"><span className="k">Идёт сейчас</span><span className="v">86</span></div>
+        <div className="pdam-kv"><span className="k">Жалобы</span><span className="v" style={{color:'var(--pd-warn)'}}>3</span></div>
+        <div className="pdam-kv"><span className="k">Отменено</span><span className="v">41</span></div>
       </div>
-      <div className="pdam-readonly">Экспорт CSV/XLSX и детальные проводки в десктопной версии.</div>
+      <div className="pdam-readonly">Платежи проходят между пользователями напрямую — площадка их не обрабатывает. Комиссия и выплаты появятся после монетизации.</div>
     </MShell>
   );
 }
 function AdminMobileReports() {
   const reps=[['#R-882','Спам / контакты','Пионы, большой букет','new'],['#R-879','Оскорбления в чате','Юля В.','review'],['#R-877','Недостоверный отзыв','к сделке #10478','new']];
-  const st={new:['disputed','новая'],review:['held','в работе']};
+  const st={new:['problem','новая'],review:['held','в работе']};
   return (
     <MShell active="more" title="Жалобы" back>
       <div className="pdam-chips"><button className="pdam-chip on">Новые + в работе</button><button className="pdam-chip">Все</button></div>

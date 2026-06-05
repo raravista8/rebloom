@@ -102,20 +102,20 @@ function PdChip({ on, children, icon }) {
   return <button className={`pd-chip${on?' pd-chip--on':''}`}>{Icon&&<Icon className="pd-i14" fill="none" stroke="currentColor"/>}{children}</button>;
 }
 
-// deal status stepper — status: created|paid_held|released|disputed
-const DEAL_STEPS=[['created','Оплата'],['paid_held','В эскроу'],['handover','Передача'],['released','Готово']];
+// deal status stepper — status: agreed|meeting|done|problem
+const DEAL_STEPS=[['agreed','Договорились'],['meeting','Встреча'],['done','Завершено']];
 function PdStepper({ status }) {
-  const order=['created','paid_held','handover','released'];
-  let curIdx = status==='disputed' ? 2 : order.indexOf(status==='released'?'released':status==='paid_held'?'handover':status);
-  if(status==='paid_held') curIdx=2;
-  if(status==='released') curIdx=3;
-  if(status==='created') curIdx=1;
+  const order=['agreed','meeting','done'];
+  let curIdx = order.indexOf(status);
+  if(status==='problem') curIdx=1;
+  if(curIdx<0) curIdx=0;
   return (
     <div className="pd-stepper">
       {DEAL_STEPS.map(([k,l],i)=>{
         let cls='';
-        if(status==='disputed'){ cls = i<2?'done':(i===2?'warn':''); }
-        else { cls = i<curIdx?'done':(i===curIdx?'cur':''); if(status==='released') cls=i<=3?'done':''; }
+        if(status==='problem'){ cls = i<1?'done':(i===1?'warn':''); }
+        else if(status==='done'){ cls='done'; }
+        else { cls = i<curIdx?'done':(i===curIdx?'cur':''); }
         return <div key={k} className={`pd-step ${cls}`}>
           <span className="dot">{(cls==='done')?I.check({className:'pd-i16',fill:'none',stroke:'currentColor'}):(cls==='warn'?'!':i+1)}</span>
           <span className="lab">{l}</span>

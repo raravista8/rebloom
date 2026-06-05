@@ -1,4 +1,4 @@
-import { I, Ic, PdBtn, PdScreen, PdStepper, PdNotice, pdMoney, PdBubble, PdInput, Avatar, PdStars, PdField, LikeBtn, Freshness, PD_FRESH, Card, PdSizeSel, PdSeg, PD_LIKED } from './chunk-OS4LB2PH.mjs';
+import { I, Ic, PdBtn, PdScreen, PdStepper, PdNotice, PdBubble, PdInput, Avatar, PdStars, PdField, pdMoney, LikeBtn, Freshness, PD_FRESH, Card, PdSizeSel, PdSeg, PD_LIKED } from './chunk-SNT6I4NE.mjs';
 import 'react';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
@@ -20,35 +20,27 @@ function ChatInput() {
     /* @__PURE__ */ jsx("button", { className: "send", children: I.send({ className: "pd-i20", fill: "none", stroke: "currentColor" }) })
   ] });
 }
-function DealPaidHeld() {
+function DealActive() {
   const footer = /* @__PURE__ */ jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 10 }, children: [
     /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", icon: I.alert, style: { flex: 1 }, children: "\u041F\u0440\u043E\u0431\u043B\u0435\u043C\u0430" }),
     /* @__PURE__ */ jsx(PdBtn, { variant: "primary", icon: I.check, style: { flex: 1.5 }, children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435" })
   ] }) });
   return /* @__PURE__ */ jsxs(PdScreen, { title: "\u0421\u0434\u0435\u043B\u043A\u0430", center: true, footer, children: [
-    /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px 4px" }, children: /* @__PURE__ */ jsx(PdStepper, { status: "paid_held" }) }),
-    /* @__PURE__ */ jsx(DealMini, { status: "\u0432 \u044D\u0441\u043A\u0440\u043E\u0443" }),
+    /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px 4px" }, children: /* @__PURE__ */ jsx(PdStepper, { status: "meeting" }) }),
+    /* @__PURE__ */ jsx(DealMini, { status: "\u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u043B\u0438\u0441\u044C" }),
     /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px" }, children: /* @__PURE__ */ jsxs(PdNotice, { kind: "ok", icon: I.shield, children: [
-      /* @__PURE__ */ jsx("b", { children: "\u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438." }),
-      " \u0410\u043D\u044F \u043F\u043E\u043B\u0443\u0447\u0438\u0442 ",
-      pdMoney(900),
-      " \u043F\u043E\u0441\u043B\u0435 \u0442\u043E\u0433\u043E, \u043A\u0430\u043A \u0432\u044B \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435. \u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0438 ",
-      pdMoney(90),
-      "."
+      /* @__PURE__ */ jsx("b", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435." }),
+      " \u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u043E \u0432\u0440\u0435\u043C\u0435\u043D\u0438, \u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0438 \u0440\u0430\u0441\u043F\u043B\u0430\u0442\u0438\u0442\u0435\u0441\u044C \u043D\u0430 \u043C\u0435\u0441\u0442\u0435 \u2014 \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u043C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443."
     ] }) }),
     /* @__PURE__ */ jsx("div", { style: { padding: "0 16px" }, children: /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", border: "1px solid var(--pd-border)", borderRadius: 13 }, children: [
       I.walk({ className: "pd-i20", fill: "none", stroke: "var(--pd-primary)" }),
       /* @__PURE__ */ jsxs("div", { style: { flex: 1 }, children: [
         /* @__PURE__ */ jsx("div", { style: { fontWeight: 600, fontSize: 13.5 }, children: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \xB7 \u043C. \u041C\u0430\u044F\u043A\u043E\u0432\u0441\u043A\u0430\u044F" }),
-        /* @__PURE__ */ jsx("div", { style: { fontSize: 12, color: "var(--pd-muted)" }, children: "\u0414\u0432\u043E\u0440, \u0422\u0432\u0435\u0440\u0441\u043A\u0430\u044F 12, \u043F\u043E\u044F\u0432\u0438\u043B\u0441\u044F \u043F\u043E\u0441\u043B\u0435 \u043E\u043F\u043B\u0430\u0442\u044B" })
+        /* @__PURE__ */ jsx("div", { style: { fontSize: 12, color: "var(--pd-muted)" }, children: "\u0414\u0432\u043E\u0440, \u0422\u0432\u0435\u0440\u0441\u043A\u0430\u044F 12, \u043F\u043E\u044F\u0432\u0438\u043B\u0441\u044F \u043F\u043E\u0441\u043B\u0435 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0451\u043D\u043D\u043E\u0441\u0442\u0438" })
       ] })
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "pd-chat", children: [
-      /* @__PURE__ */ jsxs(PdBubble, { kind: "sys", children: [
-        "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u043E\u0448\u043B\u0430 \xB7 ",
-        pdMoney(990),
-        " \u0432 \u044D\u0441\u043A\u0440\u043E\u0443"
-      ] }),
+      /* @__PURE__ */ jsx(PdBubble, { kind: "sys", children: "\u0427\u0430\u0442 \u0441\u0434\u0435\u043B\u043A\u0438 \u043E\u0442\u043A\u0440\u044B\u0442 \xB7 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u043E \u0432\u0441\u0442\u0440\u0435\u0447\u0435" }),
       /* @__PURE__ */ jsx(PdBubble, { kind: "in", time: "17:58", children: "\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435! \u041C\u043E\u0436\u043D\u043E \u0437\u0430\u0431\u0440\u0430\u0442\u044C \u0441\u0435\u0433\u043E\u0434\u043D\u044F \u043F\u043E\u0441\u043B\u0435 18:00 \u{1F338}" }),
       /* @__PURE__ */ jsx(PdBubble, { kind: "out", time: "18:01", children: "\u041E\u0442\u043B\u0438\u0447\u043D\u043E, \u0431\u0443\u0434\u0443 \u043A 18:30" }),
       /* @__PURE__ */ jsx(PdBubble, { kind: "in", time: "18:02", children: "\u0414\u0432\u043E\u0440 \u0434\u043E\u043C\u0430 \u043F\u043E \u0422\u0432\u0435\u0440\u0441\u043A\u043E\u0439, 12. \u041D\u0430\u043F\u0438\u0448\u0443, \u043A\u0430\u043A \u0432\u044B\u0439\u0434\u0443" })
@@ -56,20 +48,20 @@ function DealPaidHeld() {
     /* @__PURE__ */ jsx(ChatInput, {})
   ] });
 }
-function DealDisputed() {
+function DealProblem() {
   const footer = /* @__PURE__ */ jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 10 }, children: [
-    /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", style: { flex: 1 }, children: "\u041E\u0442\u043E\u0437\u0432\u0430\u0442\u044C \u0441\u043F\u043E\u0440" }),
+    /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", style: { flex: 1 }, children: "\u041E\u0442\u043E\u0437\u0432\u0430\u0442\u044C \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435" }),
     /* @__PURE__ */ jsx(PdBtn, { variant: "primary", icon: I.image, style: { flex: 1 }, children: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0444\u043E\u0442\u043E" })
   ] }) });
-  return /* @__PURE__ */ jsxs(PdScreen, { title: "\u0421\u043F\u043E\u0440 \u043F\u043E \u0441\u0434\u0435\u043B\u043A\u0435", center: true, footer, children: [
-    /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px 4px" }, children: /* @__PURE__ */ jsx(PdStepper, { status: "disputed" }) }),
-    /* @__PURE__ */ jsx(DealMini, { status: "\u0437\u0430\u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E" }),
+  return /* @__PURE__ */ jsxs(PdScreen, { title: "\u041F\u0440\u043E\u0431\u043B\u0435\u043C\u0430 \u043F\u043E \u0441\u0434\u0435\u043B\u043A\u0435", center: true, footer, children: [
+    /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px 4px" }, children: /* @__PURE__ */ jsx(PdStepper, { status: "problem" }) }),
+    /* @__PURE__ */ jsx(DealMini, { status: "\u043D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0435" }),
     /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px" }, children: /* @__PURE__ */ jsxs(PdNotice, { kind: "warn", icon: I.clock, children: [
       /* @__PURE__ */ jsx("b", { children: "\u041D\u0430 \u0440\u0430\u0441\u0441\u043C\u043E\u0442\u0440\u0435\u043D\u0438\u0438." }),
-      " \u0414\u0435\u043D\u044C\u0433\u0438 \u0437\u0430\u043C\u043E\u0440\u043E\u0436\u0435\u043D\u044B. \u041F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0430 \u043E\u0442\u0432\u0435\u0442\u0438\u0442 \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 24 \u0447\u0430\u0441\u043E\u0432, \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C ~21 \u0447."
+      " \u041F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0430 \u0438\u0437\u0443\u0447\u0438\u0442 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435 \u0438 \u043E\u0442\u0432\u0435\u0442\u0438\u0442 \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 24 \u0447\u0430\u0441\u043E\u0432, \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C ~21 \u0447."
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "pd-chat", children: [
-      /* @__PURE__ */ jsx(PdBubble, { kind: "sys", children: "\u041E\u0442\u043A\u0440\u044B\u0442 \u0441\u043F\u043E\u0440 \xB7 12 \u0438\u044E\u043D\u044F, 14:20 \xB7 \u043F\u0440\u0438\u0447\u0438\u043D\u0430: \xAB\u043D\u0435 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442\xBB" }),
+      /* @__PURE__ */ jsx(PdBubble, { kind: "sys", children: "\u041E\u0442\u043A\u0440\u044B\u0442\u043E \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435 \xB7 12 \u0438\u044E\u043D\u044F, 14:20 \xB7 \u043F\u0440\u0438\u0447\u0438\u043D\u0430: \xAB\u043D\u0435 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442\xBB" }),
       /* @__PURE__ */ jsxs("div", { style: { alignSelf: "flex-end", maxWidth: "78%" }, children: [
         /* @__PURE__ */ jsx("img", { src: IMG3("1583228858294-6745cb25969e"), alt: "", style: { width: 140, borderRadius: 14, display: "block", marginBottom: 4, marginLeft: "auto" } }),
         /* @__PURE__ */ jsx(PdBubble, { kind: "out", time: "14:21", children: "\u0411\u0443\u043A\u0435\u0442 \u0437\u0430\u0432\u044F\u043B \u043A \u0432\u0435\u0447\u0435\u0440\u0443, \u043B\u0435\u043F\u0435\u0441\u0442\u043A\u0438 \u043E\u0441\u044B\u043F\u0430\u043B\u0438\u0441\u044C" })
@@ -84,16 +76,14 @@ function DealDisputed() {
     /* @__PURE__ */ jsx(ChatInput, {})
   ] });
 }
-function DealReleased() {
+function DealDone() {
   const footer = /* @__PURE__ */ jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsx(PdBtn, { variant: "primary", block: true, lg: true, icon: Ic.star, children: "\u041E\u0446\u0435\u043D\u0438\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430" }) });
   return /* @__PURE__ */ jsxs(PdScreen, { title: "\u0421\u0434\u0435\u043B\u043A\u0430", center: true, footer, children: [
-    /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px 4px" }, children: /* @__PURE__ */ jsx(PdStepper, { status: "released" }) }),
+    /* @__PURE__ */ jsx("div", { style: { padding: "14px 16px 4px" }, children: /* @__PURE__ */ jsx(PdStepper, { status: "done" }) }),
     /* @__PURE__ */ jsx(DealMini, { status: "\u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E" }),
     /* @__PURE__ */ jsx("div", { style: { padding: "16px" }, children: /* @__PURE__ */ jsxs(PdNotice, { kind: "ok", icon: I.check, children: [
       /* @__PURE__ */ jsx("b", { children: "\u0413\u043E\u0442\u043E\u0432\u043E!" }),
-      " \u0412\u044B \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u043B\u0438 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435. ",
-      pdMoney(900),
-      " \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u044B \u0410\u043D\u0435, \u0447\u0435\u043A \u043F\u0440\u0438\u0434\u0451\u0442 \u043D\u0430 e-mail."
+      " \u0412\u044B \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u043B\u0438 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u0430. \u0420\u0430\u0441\u0441\u043A\u0430\u0436\u0438\u0442\u0435, \u043A\u0430\u043A \u0432\u0441\u0451 \u043F\u0440\u043E\u0448\u043B\u043E \u2014 \u044D\u0442\u043E \u043F\u043E\u043C\u043E\u0436\u0435\u0442 \u0434\u0440\u0443\u0433\u0438\u043C \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F\u043C."
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "pd-empty", style: { height: "auto", padding: "10px 30px 24px" }, children: [
       /* @__PURE__ */ jsx("div", { className: "glyph", style: { color: "var(--pd-like)" }, children: I.heartline({ className: "pd-i28", fill: "var(--pd-like)", stroke: "var(--pd-like)" }) }),
@@ -110,11 +100,11 @@ function PaymentFailed() {
   return /* @__PURE__ */ jsxs(PdScreen, { title: "\u041E\u043F\u043B\u0430\u0442\u0430", center: true, footer, children: [
     /* @__PURE__ */ jsxs("div", { className: "pd-empty", style: { height: "auto", paddingTop: 54 }, children: [
       /* @__PURE__ */ jsx("div", { className: "glyph", style: { color: "var(--pd-danger)", background: "var(--pd-danger-soft)" }, children: I.alert({ className: "pd-i28", fill: "none", stroke: "currentColor" }) }),
-      /* @__PURE__ */ jsx("h3", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043D\u0435 \u043F\u0440\u043E\u0448\u043B\u0430" }),
-      /* @__PURE__ */ jsx("p", { children: "\u0411\u0430\u043D\u043A \u043E\u0442\u043A\u043B\u043E\u043D\u0438\u043B \u043F\u043B\u0430\u0442\u0451\u0436. \u0421 \u0432\u0430\u0448\u0435\u0439 \u043A\u0430\u0440\u0442\u044B \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u0441\u043F\u0438\u0441\u0430\u043D\u043E, \u0431\u0443\u043A\u0435\u0442 \u0432\u0441\u0451 \u0435\u0449\u0451 \u0437\u0430\u0440\u0435\u0437\u0435\u0440\u0432\u0438\u0440\u043E\u0432\u0430\u043D \u0437\u0430 \u0432\u0430\u043C\u0438." })
+      /* @__PURE__ */ jsx("h3", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435" }),
+      /* @__PURE__ */ jsx("p", { children: "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u0441 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u043E\u043C \u0432 \u0447\u0430\u0442\u0435 \u0438 \u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0440\u044F\u0434\u043E\u043C \u2014 \u043E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0446\u0432\u0435\u0442\u044B." })
     ] }),
     /* @__PURE__ */ jsxs("div", { style: { padding: "4px 16px" }, children: [
-      /* @__PURE__ */ jsx(PdNotice, { kind: "ok", icon: I.shield, children: "\u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437 \u043A\u0430\u0440\u0442\u043E\u0439 \u0438\u043B\u0438 \u0447\u0435\u0440\u0435\u0437 \u0421\u0411\u041F." }),
+      /* @__PURE__ */ jsx(PdNotice, { kind: "ok", icon: I.shield, children: "\u041F\u043B\u0430\u0442\u0438\u0442\u0435 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443 \u043D\u0430 \u043C\u0435\u0441\u0442\u0435 \u2014 \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u043C. \u041F\u043B\u043E\u0449\u0430\u0434\u043A\u0430 \u0434\u0435\u043D\u044C\u0433\u0438 \u043D\u0435 \u0434\u0435\u0440\u0436\u0438\u0442." }),
       /* @__PURE__ */ jsx("div", { style: { marginTop: 12 }, children: /* @__PURE__ */ jsx(PdInput, { icon: I.wallet, value: "\u041A\u0430\u0440\u0442\u0430 \u2022\u2022\u2022\u2022 4416" }) })
     ] })
   ] });
@@ -135,7 +125,7 @@ function ReviewForm() {
   ] });
 }
 var NOTIFS = [
-  { ic: I.check, unread: true, t: "\u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u043B \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435", s: "\u0421\u0434\u0435\u043B\u043A\u0430 \xAB\u0411\u0443\u043A\u0435\u0442 M \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438\xBB \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0430 \xB7 900 \u20BD \u0432 \u043F\u0443\u0442\u0438", tm: "5 \u043C\u0438\u043D" },
+  { ic: I.check, unread: true, t: "\u0421\u0434\u0435\u043B\u043A\u0430 \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0430", s: "\xAB\u0411\u0443\u043A\u0435\u0442 M \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438\xBB \xB7 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u043B \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435", tm: "5 \u043C\u0438\u043D" },
   { ic: I.heartline, unread: true, t: "\u0412\u0430\u0448 \u0431\u0443\u043A\u0435\u0442 \u0437\u0430\u043B\u0430\u0439\u043A\u0430\u043B\u0438", s: "\u0423\u0436\u0435 47 \u043B\u0430\u0439\u043A\u043E\u0432, \u043E\u043D \u0432 \u0442\u043E\u043F\u0435 \xAB\u0421\u0430\u043C\u044B\u0435 \u0437\u0430\u043B\u0430\u0439\u043A\u0430\u043D\u043D\u044B\u0435\xBB", tm: "1 \u0447" },
   { ic: I.shield, unread: false, t: "\u041E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u0440\u043E\u0448\u043B\u043E \u043C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044E", s: "\xAB\u041F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B\xBB \u043E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043D\u043E \u0432 \u043B\u0435\u043D\u0442\u0435 \u041C\u043E\u0441\u043A\u0432\u044B", tm: "3 \u0447" },
   { ic: Ic.star, unread: false, t: "\u041D\u043E\u0432\u044B\u0439 \u043E\u0442\u0437\u044B\u0432 \u043E\u0442 \u041C\u0430\u0440\u0438\u043D\u044B", s: "\xAB\u0411\u0443\u043A\u0435\u0442 \u0431\u044B\u043B \u0441\u0432\u0435\u0436\u0438\u0439, \u043A\u0430\u043A \u043D\u0430 \u0444\u043E\u0442\u043E\xBB \xB7 5 \u2605", tm: "\u0432\u0447\u0435\u0440\u0430" }
@@ -263,15 +253,12 @@ function ListingDesktop() {
           ] })
         ] }),
         /* @__PURE__ */ jsx("div", { style: { margin: "16px 0" }, children: /* @__PURE__ */ jsxs(PdNotice, { kind: "ok", icon: I.shield, children: [
-          /* @__PURE__ */ jsx("b", { children: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430." }),
-          " \u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u044D\u0441\u043A\u0440\u043E\u0443. \u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u043F\u043E\u043B\u0443\u0447\u0438\u0442 \u0438\u0445 \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F."
+          /* @__PURE__ */ jsx("b", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435." }),
+          " \u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u0432 \u0447\u0430\u0442\u0435 \u0438 \u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0440\u044F\u0434\u043E\u043C \u2014 \u043F\u043B\u0430\u0442\u0438\u0442\u0435, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0446\u0432\u0435\u0442\u044B."
         ] }) }),
         /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 10 }, children: [
           /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", style: { flex: 1 }, children: "\u041F\u0440\u0435\u0434\u043B\u043E\u0436\u0438\u0442\u044C \u0446\u0435\u043D\u0443" }),
-          /* @__PURE__ */ jsxs(PdBtn, { variant: "primary", icon: I.cart, style: { flex: 1.4 }, children: [
-            "\u041A\u0443\u043F\u0438\u0442\u044C \xB7 ",
-            pdMoney(990)
-          ] })
+          /* @__PURE__ */ jsx(PdBtn, { variant: "primary", icon: I.send, style: { flex: 1.4 }, children: "\u041D\u0430\u043F\u0438\u0441\u0430\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443" })
         ] })
       ] })
     ] })
@@ -304,7 +291,7 @@ function ProfileDesktop() {
           ] }),
           /* @__PURE__ */ jsxs("span", { children: [
             /* @__PURE__ */ jsx("b", { children: "97%" }),
-            " \u0441\u0434\u0435\u043B\u043E\u043A \u0431\u0435\u0437 \u0441\u043F\u043E\u0440\u0430"
+            " \u0441\u0434\u0435\u043B\u043E\u043A \u0431\u0435\u0437 \u0436\u0430\u043B\u043E\u0431"
           ] })
         ] })
       ] }),
@@ -340,23 +327,19 @@ function DealDesktop() {
           ] }),
           /* @__PURE__ */ jsxs("div", { style: { textAlign: "right" }, children: [
             /* @__PURE__ */ jsx("div", { className: "pd-price", style: { fontSize: 20 }, children: pdMoney(990) }),
-            /* @__PURE__ */ jsx("div", { style: { fontSize: 12, color: "var(--pd-muted)" }, children: "\u0432 \u044D\u0441\u043A\u0440\u043E\u0443" })
+            /* @__PURE__ */ jsx("div", { style: { fontSize: 12, color: "var(--pd-muted)" }, children: "\u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u043B\u0438\u0441\u044C" })
           ] })
         ] }),
-        /* @__PURE__ */ jsx(PdStepper, { status: "paid_held" }),
+        /* @__PURE__ */ jsx(PdStepper, { status: "meeting" }),
         /* @__PURE__ */ jsx("div", { style: { margin: "16px 0" }, children: /* @__PURE__ */ jsxs(PdNotice, { kind: "ok", icon: I.shield, children: [
-          /* @__PURE__ */ jsx("b", { children: "\u0414\u0435\u043D\u044C\u0433\u0438 \u0432 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438." }),
-          " \u0410\u043D\u044F \u043F\u043E\u043B\u0443\u0447\u0438\u0442 ",
-          pdMoney(900),
-          " \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F. \u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F ",
-          pdMoney(90),
-          "."
+          /* @__PURE__ */ jsx("b", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435." }),
+          " \u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u043E \u0432\u0440\u0435\u043C\u0435\u043D\u0438, \u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0438 \u0440\u0430\u0441\u043F\u043B\u0430\u0442\u0438\u0442\u0435\u0441\u044C \u043D\u0430 \u043C\u0435\u0441\u0442\u0435."
         ] }) }),
         /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", border: "1px solid var(--pd-border)", borderRadius: 13 }, children: [
           wic(I.walk, "pd-i20 "),
           /* @__PURE__ */ jsxs("div", { style: { flex: 1 }, children: [
             /* @__PURE__ */ jsx("div", { style: { fontWeight: 600, fontSize: 13.5 }, children: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \xB7 \u043C. \u041C\u0430\u044F\u043A\u043E\u0432\u0441\u043A\u0430\u044F" }),
-            /* @__PURE__ */ jsx("div", { style: { fontSize: 12, color: "var(--pd-muted)" }, children: "\u0414\u0432\u043E\u0440, \u0422\u0432\u0435\u0440\u0441\u043A\u0430\u044F 12, \u043F\u043E\u0441\u043B\u0435 \u043E\u043F\u043B\u0430\u0442\u044B" })
+            /* @__PURE__ */ jsx("div", { style: { fontSize: 12, color: "var(--pd-muted)" }, children: "\u0414\u0432\u043E\u0440, \u0422\u0432\u0435\u0440\u0441\u043A\u0430\u044F 12, \u043F\u043E\u0441\u043B\u0435 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0451\u043D\u043D\u043E\u0441\u0442\u0438" })
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 10, marginTop: 16 }, children: [
@@ -367,11 +350,7 @@ function DealDesktop() {
       /* @__PURE__ */ jsxs("div", { className: "pdw-chatcard", children: [
         /* @__PURE__ */ jsx("div", { style: { padding: "13px 16px", borderBottom: "1px solid var(--pd-border)", fontWeight: 700, fontSize: 14 }, children: "\u0427\u0430\u0442 \u0441\u0434\u0435\u043B\u043A\u0438 \xB7 \u0410\u043D\u044F" }),
         /* @__PURE__ */ jsxs("div", { className: "pd-chat", children: [
-          /* @__PURE__ */ jsxs(PdBubble, { kind: "sys", children: [
-            "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u043E\u0448\u043B\u0430 \xB7 ",
-            pdMoney(990),
-            " \u0432 \u044D\u0441\u043A\u0440\u043E\u0443"
-          ] }),
+          /* @__PURE__ */ jsx(PdBubble, { kind: "sys", children: "\u0427\u0430\u0442 \u0441\u0434\u0435\u043B\u043A\u0438 \u043E\u0442\u043A\u0440\u044B\u0442 \xB7 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u043E \u0432\u0441\u0442\u0440\u0435\u0447\u0435" }),
           /* @__PURE__ */ jsx(PdBubble, { kind: "in", time: "17:58", children: "\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435! \u041C\u043E\u0436\u043D\u043E \u0437\u0430\u0431\u0440\u0430\u0442\u044C \u0441\u0435\u0433\u043E\u0434\u043D\u044F \u043F\u043E\u0441\u043B\u0435 18:00 \u{1F338}" }),
           /* @__PURE__ */ jsx(PdBubble, { kind: "out", time: "18:01", children: "\u041E\u0442\u043B\u0438\u0447\u043D\u043E, \u0431\u0443\u0434\u0443 \u043A 18:30" }),
           /* @__PURE__ */ jsx(PdBubble, { kind: "in", time: "18:02", children: "\u0414\u0432\u043E\u0440 \u0434\u043E\u043C\u0430 \u043F\u043E \u0422\u0432\u0435\u0440\u0441\u043A\u043E\u0439, 12. \u041D\u0430\u043F\u0438\u0448\u0443, \u043A\u0430\u043A \u0432\u044B\u0439\u0434\u0443" })
@@ -410,7 +389,7 @@ function SellDesktop() {
         /* @__PURE__ */ jsx(PdField, { label: "\u0426\u0435\u043D\u0430", hint: "\u041F\u043E\u0445\u043E\u0436\u0438\u0435: 700\u20131 300 \u20BD.", children: /* @__PURE__ */ jsx(PdInput, { prefix: "\u20BD", value: "990" }) })
       ] }),
       /* @__PURE__ */ jsx(PdField, { label: "\u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C", children: /* @__PURE__ */ jsx(PdSeg, { value: "today", options: [{ k: "today", label: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F" }, { k: "d1_2", label: "1\u20132 \u0434\u043D\u044F" }, { k: "d3_plus", label: "3+ \u0434\u043D\u044F" }] }) }),
-      /* @__PURE__ */ jsx(PdField, { label: "\u0420\u0430\u0439\u043E\u043D", hint: "\u0422\u043E\u0447\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u0432\u0438\u0434\u0435\u043D \u0442\u043E\u043B\u044C\u043A\u043E \u043F\u043E\u0441\u043B\u0435 \u043E\u043F\u043B\u0430\u0442\u044B.", children: /* @__PURE__ */ jsx(PdInput, { icon: Ic.pin, value: "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438" }) }),
+      /* @__PURE__ */ jsx(PdField, { label: "\u0420\u0430\u0439\u043E\u043D", hint: "\u0422\u043E\u0447\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u0432\u0438\u0434\u0435\u043D \u043F\u043E\u0441\u043B\u0435 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0451\u043D\u043D\u043E\u0441\u0442\u0438.", children: /* @__PURE__ */ jsx(PdInput, { icon: Ic.pin, value: "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438" }) }),
       /* @__PURE__ */ jsx(PdField, { label: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435", opt: "\u043D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E", counter: "84 / 600", children: /* @__PURE__ */ jsx(PdInput, { textarea: true, rows: 3, value: "\u041F\u043E\u0434\u0430\u0440\u0438\u043B\u0438 \u0443\u0442\u0440\u043E\u043C, \u043F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B \u0438 \u044D\u0432\u043A\u0430\u043B\u0438\u043F\u0442. \u041E\u0447\u0435\u043D\u044C \u0441\u0432\u0435\u0436\u0438\u0435, \u0441\u0442\u043E\u044F\u0442 \u0432 \u0432\u043E\u0434\u0435." }) }),
       /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(PdBtn, { variant: "primary", lg: true, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) })
     ] })
@@ -418,7 +397,7 @@ function SellDesktop() {
 }
 function NotificationsDesktop() {
   const N = [
-    { ic: I.check, unread: true, t: "\u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u043B \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435", s: "\u0421\u0434\u0435\u043B\u043A\u0430 \xAB\u0411\u0443\u043A\u0435\u0442 M \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438\xBB \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0430 \xB7 900 \u20BD \u0432 \u043F\u0443\u0442\u0438", tm: "5 \u043C\u0438\u043D" },
+    { ic: I.check, unread: true, t: "\u0421\u0434\u0435\u043B\u043A\u0430 \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0430", s: "\xAB\u0411\u0443\u043A\u0435\u0442 M \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438\xBB \xB7 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u043B \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u0435", tm: "5 \u043C\u0438\u043D" },
     { ic: I.heartline, unread: true, t: "\u0412\u0430\u0448 \u0431\u0443\u043A\u0435\u0442 \u0437\u0430\u043B\u0430\u0439\u043A\u0430\u043B\u0438", s: "\u0423\u0436\u0435 47 \u043B\u0430\u0439\u043A\u043E\u0432, \u043E\u043D \u0432 \u0442\u043E\u043F\u0435 \xAB\u0421\u0430\u043C\u044B\u0435 \u0437\u0430\u043B\u0430\u0439\u043A\u0430\u043D\u043D\u044B\u0435\xBB", tm: "1 \u0447" },
     { ic: Ic.search, unread: false, t: "\u041F\u043E\u0445\u043E\u0436\u0438\u0439 \u0431\u0443\u043A\u0435\u0442 \u0440\u044F\u0434\u043E\u043C", s: "\u041F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B \u0432 \u041F\u0430\u0442\u0440\u0438\u043A\u0430\u0445 \u0437\u0430 890 \u20BD", tm: "3 \u0447" },
     { ic: Ic.star, unread: false, t: "\u041D\u043E\u0432\u044B\u0439 \u043E\u0442\u0437\u044B\u0432 \u043E\u0442 \u041C\u0430\u0440\u0438\u043D\u044B", s: "\xAB\u0411\u0443\u043A\u0435\u0442 \u0431\u044B\u043B \u0441\u0432\u0435\u0436\u0438\u0439, \u043A\u0430\u043A \u043D\u0430 \u0444\u043E\u0442\u043E\xBB \xB7 5 \u2605", tm: "\u0432\u0447\u0435\u0440\u0430" }
@@ -463,4 +442,4 @@ function SearchDesktop() {
   ] }) });
 }
 
-export { DealDesktop, DealDisputed, DealPaidHeld, DealReleased, ListingDesktop, Notifications, NotificationsDesktop, NotificationsEmpty, Offline, PaymentFailed, ProfileDesktop, ReviewForm, SearchDesktop, SellDesktop };
+export { DealActive, DealDesktop, DealDone, DealProblem, ListingDesktop, Notifications, NotificationsDesktop, NotificationsEmpty, Offline, PaymentFailed, ProfileDesktop, ReviewForm, SearchDesktop, SellDesktop };

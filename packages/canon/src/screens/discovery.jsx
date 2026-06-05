@@ -77,7 +77,7 @@ function ListingBody({ sold }) {
 
       {sold
         ? <PdNotice kind="info" icon={PdI.info}>Этот букет уже купили. Посмотрите другие свежие букеты рядом, их добавляют каждый день.</PdNotice>
-        : <PdNotice kind="ok" icon={PdI.shield}><b>Безопасная сделка.</b> Деньги в эскроу ЮKassa. Продавец получит их только после того, как вы подтвердите получение.</PdNotice>}
+        : <PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом — платите, когда увидели цветы.</PdNotice>}
 
       {/* seller */}
       <div style={{display:'flex',alignItems:'center',gap:11,padding:'14px 0',marginTop:6,borderTop:'1px solid var(--pd-border)',borderBottom:'1px solid var(--pd-border)'}}>
@@ -101,7 +101,7 @@ function ListingBody({ sold }) {
             <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца — обычно двор или метро поблизости</div>
           </div>
         </div>
-        <p style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:8}}>Точный адрес появится в чате после оплаты. Двор или станцию выбирает продавец.</p>
+        <p style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:8}}>Точный адрес появится в чате, когда договоритесь о встрече. Двор или станцию выбирает продавец.</p>
       </div>
 
       <div style={{marginTop:18}}>
@@ -116,7 +116,7 @@ function Listing() {
     <div className="pd-footerbar">
       <div style={{display:'flex',gap:10}}>
         <PdBtn variant="secondary" style={{flex:1}}>Предложить цену</PdBtn>
-        <PdBtn variant="primary" icon={PdI.cart} style={{flex:1.4}}>Купить · {pdMoney(LISTING.price)}</PdBtn>
+        <PdBtn variant="primary" icon={PdI.send} style={{flex:1.4}}>Написать продавцу</PdBtn>
       </div>
     </div>
   );
@@ -182,7 +182,7 @@ function Profile() {
           <div className="stat"><span><b>12</b> объявлений</span><span><b>с 2025</b> на площадке</span></div>
         </div>
       </div>
-      <div style={{padding:'0 16px'}}><PdNotice kind="ok" icon={PdI.shield}>Проверенный продавец · 97% сделок без спора. Деньги в защищённой сделке.</PdNotice></div>
+      <div style={{padding:'0 16px'}}><PdNotice kind="ok" icon={PdI.shield}>Проверенный продавец · 97% сделок без жалоб. Реальные отзывы и рейтинг.</PdNotice></div>
       <PdSectionHead title="Активные объявления" sub="3 свежих букета" />
       <div className="pd-grid">
         {PD_FRESH.slice(0,2).map(d=><div className="pd-rise" key={d.id}><PdCard d={d} variant="grid"/></div>)}

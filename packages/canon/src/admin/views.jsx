@@ -136,7 +136,7 @@ function AdminUserDrill() {
           </div>
           <div className="pda-dsec"><h4>Активность</h4>
             <div className="pda-kv"><span className="k">Объявлений</span><span className="v">23 (4 активных)</span></div>
-            <div className="pda-kv"><span className="k">Сделок</span><span className="v">57 завершено · 1 спор</span></div>
+            <div className="pda-kv"><span className="k">Сделок</span><span className="v">57 завершено · 1 жалоба</span></div>
             <div className="pda-kv"><span className="k">Рейтинг</span><span className="v">4.9 · 57 отзывов</span></div>
           </div>
           <div className="pda-dsec"><h4>IP и устройства</h4>
@@ -209,35 +209,35 @@ function AdminListings({ state='loaded' }) {
 // СДЕЛКИ + ConfirmDestructiveModal
 // ════════════════════════════════════════════════════════════════════════
 const DEALS = [
-  ['#10482','Марина → Аня','Москва',990,99,'paid_held','03.06 14:02'],
-  ['#10481','Катя → Лена','Москва',1190,119,'released','03.06 12:20'],
-  ['#10478','Соня → Юля','СПб',850,85,'disputed','02.06 19:41'],
-  ['#10475','Вера → Ольга','Казань',590,59,'refunded','02.06 10:08'],
-  ['#10470','Лиза → Ника','Москва',1450,145,'created','01.06 21:15'],
+  ['#10482','Марина → Аня','Москва',990,99,'meeting','03.06 14:02'],
+  ['#10481','Катя → Лена','Москва',1190,119,'done','03.06 12:20'],
+  ['#10478','Соня → Юля','СПб',850,85,'problem','02.06 19:41'],
+  ['#10475','Вера → Ольга','Казань',590,59,'cancelled','02.06 10:08'],
+  ['#10470','Лиза → Ника','Москва',1450,145,'agreed','01.06 21:15'],
   ['#10468','Ира → Поля','Уфа',720,72,'cancelled','01.06 16:33'],
 ];
-const DEAL_ST = {created:'создана',paid_held:'в эскроу',released:'завершена',disputed:'спор',refunded:'возврат',cancelled:'отменена'};
+const DEAL_ST = {agreed:'новая',meeting:'идёт',done:'завершена',problem:'жалоба',cancelled:'отменена'};
 function AdminDeals({ state='loaded', overlay }) {
   const top = <div className="pda-srch" style={{marginLeft:0}}>{vic(PdIc.search,'pd-i16')}Поиск по сделке, участнику или ID</div>;
   return (
     <AdminShell active="deals" title="Сделки" top={top} overlay={overlay}>
       <div className="pda-fbar">
-        {Object.entries(DEAL_ST).map(([k,v],i)=><Sel key={k} v={v} on={k==='disputed'}/>)}
-        <span className="pda-count">GMV за период: 3,24 млн ₽</span>
+        {Object.entries(DEAL_ST).map(([k,v],i)=><Sel key={k} v={v} on={k==='problem'}/>)}
+        <span className="pda-count">Сделок за период: 1 284</span>
       </div>
       <div className="pda-tablewrap">
         <table className="pda-table">
-          <thead><tr><Th sort>ID</Th><Th>Участники</Th><Th>Город</Th><Th sort num>Сумма</Th><Th num>Комиссия</Th><Th sort>Статус</Th><Th>Создана</Th><th style={{width:160}}></th></tr></thead>
+          <thead><tr><Th sort>ID</Th><Th>Участники</Th><Th>Город</Th><Th sort num>Сумма</Th><Th sort>Статус</Th><Th>Создана</Th><th style={{width:160}}></th></tr></thead>
           <tbody>
-            {state==='loading' && <SkRows cols={8}/>}
+            {state==='loading' && <SkRows cols={7}/>}
             {state==='loaded' && DEALS.map((d,i)=>(
               <tr key={i} className="clickable">
                 <td style={{fontWeight:700}}>{d[0]}</td><td>{d[1]}</td><td>{d[2]}</td>
-                <td className="num" style={{fontWeight:700}}>{pdMoney(d[3])}</td><td className="num" style={{color:'var(--pd-muted)'}}>{pdMoney(d[4])}</td>
+                <td className="num" style={{fontWeight:700}}>{pdMoney(d[3])}</td>
                 <td><span className={`pda-badge ${d[5]}`}>{DEAL_ST[d[5]]}</span></td>
                 <td style={{color:'var(--pd-muted)'}}>{d[6]}</td>
-                <td>{['paid_held','created','disputed'].includes(d[5])
-                  ? <div style={{display:'flex',gap:6}}><button className="pda-mini-act warn">Заморозить</button><button className="pda-mini-act danger">Отменить…</button></div>
+                <td>{['meeting','agreed','problem'].includes(d[5])
+                  ? <button className="pda-mini-act danger">Отменить…</button>
                   : <button className="pda-mini-act">Детали</button>}</td>
               </tr>
             ))}
@@ -258,7 +258,7 @@ function AdminDealConfirm({ phase='confirm' }) {
       <div className="pda-modal-scrim"><div className="pda-modal success">
         <div className="pda-modal-ok"><div className="gl">{vic(PdI.check,'pd-i28')}</div>
           <h3 style={{marginBottom:6}}>Сделка отменена</h3>
-          <p style={{color:'var(--pd-muted)',fontSize:13.5,lineHeight:1.5}}>Возврат 990 ₽ запущен, средства вернутся покупателю по правилам эквайринга. Запись добавлена в audit-log.</p>
+          <p style={{color:'var(--pd-muted)',fontSize:13.5,lineHeight:1.5}}>Сделка снята, обе стороны получат уведомление. Запись добавлена в audit-log.</p>
         </div>
         <div className="mf" style={{paddingTop:0}}><PdBtn variant="secondary" block>Закрыть</PdBtn></div>
       </div></div>
@@ -268,11 +268,11 @@ function AdminDealConfirm({ phase='confirm' }) {
     modal = (
       <div className="pda-modal-scrim"><div className="pda-modal">
         <div className="mh"><div className="gl danger">{vic(PdI.alert,'pd-i24')}</div>
-          <div><h3>Отменить сделку #10482?</h3><p>Марина → Аня · 990 ₽. Сделка в эскроу. Отмена запустит возврат покупателю. Действие необратимо.</p></div></div>
+          <div><h3>Отменить сделку #10482?</h3><p>Марина → Аня · 990 ₽. Отмена снимет сделку, обе стороны получат уведомление. Действие необратимо.</p></div></div>
         <div className="mb">
           <label className="fl">Причина отмены <span style={{color:'var(--pd-danger)'}}>*</span> · попадёт в audit-log</label>
           <textarea rows={3} defaultValue="Продавец недоступен 48 ч, букет неактуален. Обращение покупателя #1902.">{}</textarea>
-          <div className="pda-4eyes">{vic(PdI.shield,'pd-i16')}Денежная операция: нужно подтверждение второго оператора (4-eyes).</div>
+          <div className="pda-4eyes">{vic(PdI.shield,'pd-i16')}Действие фиксируется в audit-log.</div>
         </div>
         <div className="mf">
           <PdBtn variant="ghost" block disabled={inflight}>Отмена</PdBtn>
@@ -281,7 +281,7 @@ function AdminDealConfirm({ phase='confirm' }) {
       </div></div>
     );
   }
-  return <AdminDeals state="loaded" overlay={<>{modal}{phase==='success'&&<AdminToast>Сделка #10482 отменена · возврат запущен</AdminToast>}</>}/>;
+  return <AdminDeals state="loaded" overlay={<>{modal}{phase==='success'&&<AdminToast>Сделка #10482 отменена</AdminToast>}</>}/>;
 }
 
 // ════════════════════════════════════════════════════════════════════════
@@ -289,44 +289,44 @@ function AdminDealConfirm({ phase='confirm' }) {
 // ════════════════════════════════════════════════════════════════════════
 function AdminFinance({ state='loaded' }) {
   const top = <div className="pda-period" style={{marginLeft:'auto'}}><button>День</button><button>Неделя</button><button className="on">Месяц</button><button>Период</button></div>;
-  const ledger = [
-    ['Эквайринг (вход)','+3 240 000','ok'],['Выплаты продавцам','−2 856 000','ok'],
-    ['Комиссия площадки','+318 400','ok'],['Заморожено (споры)','−54 600','warn'],['Возвраты','−11 000','ok'],
+  const byStatus = [
+    ['Завершено','1 142','ok'],['Идёт сейчас','86','ok'],['Жалобы','3','warn'],['Отменено','41','ok'],
   ];
   return (
     <AdminShell active="fin" title="Финансы" top={top}>
       {state==='loading' ? <div className="pda-finrow">{[0,1,2].map(i=><div className="pda-finbig" key={i}><div className="pda-sk" style={{width:'50%',height:14}}/><div className="pda-sk" style={{width:'70%',height:30,marginTop:12}}/></div>)}</div> : <>
       <div className="pda-finrow">
-        <div className="pda-finbig accent"><div className="lab">Оборот (GMV) за месяц</div><div className="val">3,24 млн ₽</div><div className="sub">↑ 14% к прошлому месяцу</div></div>
-        <div className="pda-finbig"><div className="lab">Заработок на комиссии</div><div className="val">318 400 ₽</div><div className="sub">10% от GMV · ↑ 12%</div></div>
-        <div className="pda-finbig"><div className="lab">Выплачено продавцам</div><div className="val">2,86 млн ₽</div><div className="sub">1 142 выплаты</div></div>
+        <div className="pda-finbig accent"><div className="lab">Оборот сделок за месяц</div><div className="val">3,24 млн ₽</div><div className="sub">оценка по завершённым · ↑ 14%</div></div>
+        <div className="pda-finbig"><div className="lab">Завершённых сделок</div><div className="val">1 142</div><div className="sub">за месяц · ↑ 12%</div></div>
+        <div className="pda-finbig"><div className="lab">Средний чек</div><div className="val">1 040 ₽</div><div className="sub">медиана 950 ₽</div></div>
+      </div>
+      <div className="pda-panel" style={{display:'flex',alignItems:'flex-start',gap:12,background:'var(--pd-warn-soft)',border:'none'}}>
+        {vic(PdI.info,'pd-i20')}<div style={{fontSize:13.5,color:'#7a5a16',lineHeight:1.5}}>Платежи проходят между пользователями напрямую — площадка их не обрабатывает и не хранит. Комиссия, выплаты и сверка появятся после подключения монетизации.</div>
       </div>
       <div className="pda-row2">
         <div className="pda-panel">
-          <h3>Оборот и комиссия по месяцам</h3><div className="psub">₽ · разделители разрядов</div>
+          <h3>Оборот сделок по месяцам</h3><div className="psub">₽ · оценка по завершённым</div>
           <div className="pda-bars">
-            {['Янв','Фев','Мар','Апр','Май','Июн'].map((m,i)=>{const g=[55,62,70,80,88,100][i],c=[50,57,64,73,80,92][i];return(
-              <div className="b" key={m}><div className="bset"><div className="bar" style={{height:c+'%',background:'var(--pd-surface-3)'}}/><div className="bar" style={{height:g+'%',background:'var(--pd-primary)'}}/></div><div className="t">{m}</div></div>
+            {['Янв','Фев','Мар','Апр','Май','Июн'].map((m,i)=>{const g=[55,62,70,80,88,100][i];return(
+              <div className="b" key={m}><div className="bset"><div className="bar" style={{height:g+'%',background:'var(--pd-primary)'}}/></div><div className="t">{m}</div></div>
             );})}
           </div>
           <div style={{display:'flex',gap:16,marginTop:14,fontSize:12,color:'var(--pd-muted)'}}>
-            <span style={{display:'inline-flex',alignItems:'center',gap:6}}><i style={{width:10,height:10,borderRadius:3,background:'var(--pd-primary)'}}/>GMV</span>
-            <span style={{display:'inline-flex',alignItems:'center',gap:6}}><i style={{width:10,height:10,borderRadius:3,background:'var(--pd-surface-3)'}}/>Выплаты</span>
+            <span style={{display:'inline-flex',alignItems:'center',gap:6}}><i style={{width:10,height:10,borderRadius:3,background:'var(--pd-primary)'}}/>Оборот сделок</span>
           </div>
         </div>
         <div className="pda-panel">
-          <h3>Сверка ledger</h3><div className="psub">Двойная запись · расхождения</div>
+          <h3>Сделки по статусам</h3><div className="psub">за текущий месяц</div>
           <div style={{display:'flex',flexDirection:'column',gap:0}}>
-            {ledger.map(([n,v,st],i)=>(
+            {byStatus.map(([n,v,st],i)=>(
               <div className="pda-kv" key={i} style={{borderBottom:'1px solid var(--pd-border)',padding:'10px 0'}}>
-                <span className="k">{n}</span><span className="v" style={{color:v[0]==='−'?'var(--pd-danger)':'var(--pd-text)'}}>{v} ₽</span></div>
+                <span className="k">{n}</span><span className="v" style={{color:st==='warn'?'var(--pd-warn)':'var(--pd-text)'}}>{v}</span></div>
             ))}
           </div>
-          <div style={{marginTop:14,display:'flex',alignItems:'center',gap:10}}><span className="pda-recon ok">{vic(PdI.check,'pd-i13')}Сходится</span><span style={{fontSize:12,color:'var(--pd-muted)'}}>расхождение 0,00 ₽ на 03.06 15:00</span></div>
         </div>
       </div>
       <div className="pda-panel" style={{display:'flex',alignItems:'center',gap:14}}>
-        <div><h3 style={{marginBottom:2}}>Экспорт за период</h3><div className="psub" style={{margin:0}}>CSV / XLSX · проводки, комиссия, выплаты, возвраты</div></div>
+        <div><h3 style={{marginBottom:2}}>Экспорт за период</h3><div className="psub" style={{margin:0}}>CSV / XLSX · сделки, статусы, города, суммы</div></div>
         <div style={{marginLeft:'auto',display:'flex',gap:9}}><PdBtn variant="secondary">Экспорт CSV</PdBtn><PdBtn variant="secondary">Экспорт XLSX</PdBtn></div>
       </div>
       </>}
@@ -342,7 +342,7 @@ function AdminFraud({ state='loaded' }) {
   const signals = [
     {lvl:'hi',sc:92,ttl:'Мульти-аккаунты по одному IP',tags:['IP-кластер','3 аккаунта'],desc:'На IP 2.18.··.41: Соня Л., Юля В. и ещё 1 аккаунт. Взаимные лайки и отзывы между связанными аккаунтами.'},
     {lvl:'hi',sc:88,ttl:'Накрутка отзывов (self-dealing)',tags:['Отзывы','граф сделок'],desc:'Цепочка сделок по кругу между 3 аккаунтами с положительными отзывами без реальных выплат на внешние карты.'},
-    {lvl:'md',sc:64,ttl:'Концентрация выплат на одну карту',tags:['Выплаты','···7781'],desc:'5 разных продавцов выводят средства на одну карту ···7781 за последние 14 дней.'},
+    {lvl:'md',sc:64,ttl:'Повторные жалобы на продавца',tags:['Жалобы','3 за 14д'],desc:'На одного продавца 3 жалобы за 14 дней — паттерн на одну карту ···7781 за последние 14 дней.'},
     {lvl:'md',sc:57,ttl:'Переиспользование фото',tags:['Фото','perceptual hash'],desc:'Одинаковые фото букета в 4 активных объявлениях разных продавцов (совпадение хэша 98%).'},
     {lvl:'lo',sc:34,ttl:'Аномалия цены',tags:['Цена'],desc:'Букет за 120 ₽ при медиане категории 950 ₽, возможная приманка.'},
   ];
@@ -394,7 +394,7 @@ function AdminReports({ state='loaded' }) {
     ['#R-877','Отзыв','«…» к сделке #10478','Недостоверный отзыв','Соня Л.','new','3 ч назад'],
     ['#R-870','Объявление','Свежие розы 25 шт','Несоответствие фото','Марина К.','resolved','вчера'],
   ];
-  const st={new:['новая','disputed'],review:['в работе','held'],resolved:['решена','released']};
+  const st={new:['новая','problem'],review:['в работе','held'],resolved:['решена','done']};
   const top = <div className="pda-srch" style={{marginLeft:0}}>{vic(PdIc.search,'pd-i16')}Поиск по жалобам</div>;
   return (
     <AdminShell active="reports" title="Жалобы пользователей" top={top}>
@@ -404,7 +404,7 @@ function AdminReports({ state='loaded' }) {
         <table className="pda-table">
           <thead><tr><Th>ID</Th><Th>На что</Th><Th>Объект</Th><Th>Причина</Th><Th>Заявитель</Th><Th sort>Статус</Th><Th>Когда</Th><th style={{width:150}}></th></tr></thead>
           <tbody>
-            {state==='loading' && <SkRows cols={8}/>}
+            {state==='loading' && <SkRows cols={7}/>}
             {state==='empty' ? null : state==='loaded' && reps.map((r,i)=>(
               <tr key={i} className="clickable">
                 <td style={{fontWeight:700}}>{r[0]}</td><td>{r[1]}</td><td style={{maxWidth:180,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r[2]}</td>

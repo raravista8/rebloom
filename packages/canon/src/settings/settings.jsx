@@ -153,11 +153,11 @@ function SettingsPayments({ plat='ios' }) {
         <SRow icon={S.card} title="СБП" sub="Оплата по QR или телефону" chev/>
         <SRow icon={PdIc.plus} title="Добавить способ оплаты" chev={false}/>
       </Group>
-      <Group head="Выплаты за продажи">
-        <SRow icon={PdI.wallet} title="Карта для выплат" value="···· 7781" chev/>
-        <SRow icon={S.doc} title="Чеки и история" sub="Платежи и возвраты"/>
+      <Group head="Реквизиты для перевода">
+        <SRow icon={PdI.wallet} title="Карта для переводов" value="···· 7781" chev/>
+        <SRow icon={S.doc} title="История сделок" sub="Завершённые и активные"/>
       </Group>
-      <div style={{padding:'4px 18px 0'}}><PdNotice kind="ok">Деньги покупателя держатся в эскроу и переходят вам после подтверждения получения.</PdNotice></div>
+      <div style={{padding:'4px 18px 0'}}><PdNotice kind="ok">Оплата проходит напрямую при встрече — наличными или переводом продавцу. «Передарим» не хранит ваши деньги.</PdNotice></div>
     </SetShell>
   );
 }
@@ -170,7 +170,7 @@ function SettingsNotifications({ plat='ios' }) {
   return (
     <SetShell plat={plat} title="Уведомления">
       <Group head="Сделки">
-        {row(PdI.wallet,'Статусы сделок','Оплата, эскроу, спор, возврат',true)}
+        {row(PdI.wallet,'Статусы сделок','Договорённость, встреча, завершение',true)}
         {row(PdI.bell,'Сообщения в чате',null,true)}
         {row(PdIc.star,'Новые отзывы',null,true)}
       </Group>
@@ -244,10 +244,10 @@ function SettingsSelfEmployed({ plat='ios' }) {
         <div className="pds-confirm" style={{padding:'10px 0 8px'}}>
           <div className="glyph" style={{background:'var(--pd-fresh-soft)',color:'var(--pd-fresh)'}}>{sic(S.briefcase,'pd-i28')}</div>
           <h2>Чеки и налоги легально</h2>
-          <p>Вы продаёте часто. Оформите самозанятость, чтобы чеки покупателям формировались сами, а о налогах можно было не думать. Это не обязательно и не мешает продавать.</p>
+          <p>Вы продаёте часто. Оформите самозанятость, чтобы выдавать чеки покупателям и не думать о налогах. Это не обязательно и не мешает продавать.</p>
         </div>
         <div className="pds-keeplist">
-          <div className="li">{sic(PdI.check,'pd-i16 ')}<span>Чек покупателю формируется сам после сделки</span></div>
+          <div className="li">{sic(PdI.check,'pd-i16 ')}<span>Чек покупателю оформляется в пару касаний после сделки</span></div>
           <div className="li">{sic(PdI.check,'pd-i16')}<span>Налог 4% рассчитывается автоматически</span></div>
           <div className="li">{sic(PdI.check,'pd-i16')}<span>Привязка через ФНС за пару минут, без визитов</span></div>
         </div>
@@ -362,7 +362,7 @@ const DESKBODY = {
     <h1 className="pdss-h1">Уведомления</h1>
     <p className="pdss-sub">Что и куда присылать. Важные уведомления о сделках отключить нельзя.</p>
     <div className="pdss-block"><div className="bh">Сделки</div><div style={{height:6}}/>
-      {dRow(PdI.wallet,'Статусы сделок','Оплата, эскроу, спор, возврат',<Switch on/>)}
+      {dRow(PdI.wallet,'Статусы сделок','Договорённость, встреча, завершение',<Switch on/>)}
       {dRow(PdI.bell,'Сообщения в чате',null,<Switch on/>)}
       {dRow(PdIc.star,'Новые отзывы',null,<Switch on/>)}
     </div>
@@ -384,13 +384,13 @@ const DESKBODY = {
   </>),
   payments: () => (<>
     <h1 className="pdss-h1">Платежи и выплаты</h1>
-    <p className="pdss-sub">Карты для оплаты покупок и получения выплат за продажи.</p>
+    <p className="pdss-sub">Карта для переводов и история сделок.</p>
     <div className="pdss-block"><div className="bh">Оплата покупок</div><div style={{height:6}}/>
       {dRow(null,'Visa ···· 4242','Основная карта',<span className="pds-pill ok">по умолчанию</span>,{mark:{c:'#1a1f71',t:'··'}})}
       {dRow(S.card,'СБП','Оплата по QR или телефону',<span className="pd-link" style={{fontSize:13}}>Настроить</span>)}
     </div>
-    <div className="pdss-block"><div className="bh">Выплаты за продажи</div><div style={{height:6}}/>
-      {dRow(PdI.wallet,'Карта для выплат','···· 7781',<span className="pd-link" style={{fontSize:13}}>Изменить</span>)}
+    <div className="pdss-block"><div className="bh">Реквизиты для перевода</div><div style={{height:6}}/>
+      {dRow(PdI.wallet,'Карта для переводов','···· 7781',<span className="pd-link" style={{fontSize:13}}>Изменить</span>)}
     </div>
   </>),
   privacy: () => (<>
@@ -411,7 +411,7 @@ const DESKBODY = {
       <div style={{display:'flex',gap:16,alignItems:'flex-start'}}>
         <span className="ic" style={{width:44,height:44,borderRadius:12,background:'var(--pd-fresh-soft)',color:'var(--pd-fresh)',display:'flex',alignItems:'center',justifyContent:'center',flex:'none'}}>{sic(S.briefcase,'pd-i24')}</span>
         <div><div style={{fontWeight:700,fontSize:16}}>Оформите за пару минут</div>
-          <p style={{color:'var(--pd-muted)',fontSize:13.5,lineHeight:1.55,margin:'6px 0 16px'}}>Привязка через ФНС, чек формируется сам после сделки, налог 4% считается автоматически. Обычные продажи не блокирует.</p>
+          <p style={{color:'var(--pd-muted)',fontSize:13.5,lineHeight:1.55,margin:'6px 0 16px'}}>Привязка через ФНС, чек оформляется в пару касаний после сделки, налог 4% считается автоматически. Обычные продажи не блокирует.</p>
           <PdBtn variant="primary" lg>Оформить через ФНС</PdBtn></div>
       </div>
     </div>
