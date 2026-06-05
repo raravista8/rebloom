@@ -17,7 +17,21 @@ services:
   db:
     image: postgres:16
     restart: unless-stopped
-    command: ["postgres", "-c", "max_connections=100"]
+    # Tuned for the single box (4 vCPU / 8 GB). shared_buffers ~25% RAM,
+    # effective_cache_size ~50% (the OS page cache holds the rest). max_connections
+    # 200 covers 3 api workers × (writer+reader) pools + scheduler with headroom.
+    command:
+      - postgres
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=2GB"
+      - "-c"
+      - "effective_cache_size=4GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=256MB"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-rebloom_app}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
@@ -53,6 +67,9 @@ services:
         BUILD_VERSION: ${BUILD_VERSION:-dev}
         BUILD_TIME: ${BUILD_TIME:-unknown}
     restart: unless-stopped
+    # Use the cores: 3 uvicorn worker processes (leave ~1 vCPU for db/caddy/web).
+    # Cross-worker realtime fan-out goes through Redis pub/sub, so multi-worker is safe.
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "3"]
     env_file: [../.env]
     environment:
       APP_ENV: prod
