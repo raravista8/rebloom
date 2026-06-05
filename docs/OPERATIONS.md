@@ -95,6 +95,7 @@ Infra — `docker compose config`. Plus `gitleaks` and the security-review gate.
 - **`ruff format --check`** is a separate gate from `ruff check` — run `poetry run ruff format` on every touched backend file (hand-written migrations especially), not just `ruff check`.
 - **Bandit version can differ local↔CI** (CI pinned newer, e.g. 1.9.4): CI flags things local misses — e.g. `urllib.request.urlopen` → **B310** (Medium/High). Suppress real false-positives with `# nosec <CODE>` (a bandit directive); ruff's `# noqa` does nothing for bandit, and ruff's `S`-rules aren't enabled so `# noqa: S310` is itself an unused-directive error. Don't trust a local `bandit` pass alone.
 - **Visual baselines are the `mobile-360` project** — desktop-only changes (gated behind `useIsDesktop`/container-queries) don't move them. Run a fresh server (`CI=1 npm run test:visual`) — a stale reused `next start` can mask real changes.
+- **`next lint` is cached → local can pass while CI fails.** ESLint caches per-file results (`.next/cache/eslint`); unchanged files aren't re-linted, so a rule that depends on the *route graph* (e.g. `@next/next/no-html-link-for-pages`) won't re-fire locally after you add a route — but CI runs cache-cold and flags it. Adding a **root-level dynamic segment** (`app/(public)/[city]/page.tsx`) makes that rule treat pre-existing `<a href="/legal/…">` links as page links and error. Fix = use `<Link>` for internal nav (the rule's intent); verify locally with `rm -rf web/.next/cache/eslint && npm run lint` before pushing, not a warm `next lint`.
 
 ---
 
