@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PdBtn, PdNotice, PdAvatar, PdStars, PdFreshness } from '@/components/canon';
-import { IconShield, IconInfo, IconCart, IconWalk, IconTruck, IconPin, IconSend, IconFlag } from '@/components/icons';
+import { IconShield, IconInfo, IconCart, IconWalk, IconTruck, IconPin, IconSend, IconFlag, IconBack } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import PhotoGallery from '@/components/feed/PhotoGallery';
 import LikeButton from '@/components/feed/LikeButton';
@@ -38,6 +38,7 @@ export default function ListingDetail({ id }: { id: string }) {
   const [listing, setListing] = useState<Listing | null>(null);
   const [buying, setBuying] = useState(false);
   const [buyErr, setBuyErr] = useState<string | undefined>();
+  const [photoIdx, setPhotoIdx] = useState(0); // desktop gallery selection
 
   const load = useCallback(async () => {
     setStatus('loading');
@@ -138,8 +139,108 @@ export default function ListingDetail({ id }: { id: string }) {
     </div>
   );
 
+  // ─────────── DESKTOP (≥1024px): canon two-column detail (gallery + sticky buy) ───────────
+  const photos = listing.photos;
+  const hero = photos[Math.min(photoIdx, photos.length - 1)] ?? photos[0];
+  const desktop = (
+    <div className="pdw-detailwrap">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+        <button className="pdw-back" onClick={() => router.back()}>
+          <IconBack className="pd-i18" /> Назад к ленте
+        </button>
+        <HeaderActions listingId={id} />
+      </div>
+      <div className="pdw-2col">
+        <div className="pdw-gallery">
+          <div className="hero" style={{ position: 'relative' }}>
+            {hero && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={hero.full_url || hero.card_url} alt="Букет" />
+            )}
+            {sold && (
+              <div style={{ position: 'absolute', inset: 0, background: 'rgba(35,32,27,.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ background: '#fff', color: 'var(--pd-text)', fontWeight: 700, fontSize: 15, padding: '10px 18px', borderRadius: 999 }}>Уже продано</span>
+              </div>
+            )}
+          </div>
+          {photos.length > 1 && (
+            <div className="pdw-thumbs">
+              {photos.map((p, i) => (
+                <button key={i} type="button" className={`t${i === photoIdx ? ' on' : ''}`} onClick={() => setPhotoIdx(i)} aria-label={`Фото ${i + 1}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={p.card_url || p.full_url} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <aside>
+          <div className="pdw-buy">
+            <div className="pd-price-row" style={{ marginBottom: 12 }}>
+              <span className="price">{formatPriceKopecks(listing.price_kopecks)}</span>
+              <LikeButton listingId={listing.id} liked={listing.liked} count={listing.like_count} big />
+            </div>
+            <div className="pd-chiprow" style={{ marginBottom: 14 }}>
+              <PdFreshness kind={listing.freshness} />
+              <span className="pd-chip" style={{ pointerEvents: 'none' }}>Размер {listing.size} · {SIZE_COUNT[listing.size]} шт.</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 13.5, marginBottom: 14 }}>
+              <IconPin className="pd-i16" />
+              {cityName(listing.city_id)}
+            </div>
+
+            {sold ? (
+              <PdNotice kind="info" icon={IconInfo}>Этот букет уже купили. Посмотрите другие свежие букеты рядом — их добавляют каждый день.</PdNotice>
+            ) : (
+              <PdNotice kind="ok" icon={IconShield}>
+                <b>Безопасная сделка.</b> Деньги в эскроу ЮKassa — продавец получит их только после того, как вы подтвердите получение.
+              </PdNotice>
+            )}
+
+            {sold ? (
+              <div style={{ marginTop: 16 }}>
+                <Link href="/"><PdBtn variant="secondary" block>Смотреть свежие букеты</PdBtn></Link>
+              </div>
+            ) : (
+              <>
+                {buyErr && <div style={{ margin: '12px 0' }}><PdNotice kind="danger">{buyErr}</PdNotice></div>}
+                <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+                  <Link href={`/l/${id}/chat`} style={{ flex: 1 }}>
+                    <PdBtn variant="secondary" block>Предложить цену</PdBtn>
+                  </Link>
+                  <PdBtn variant="primary" icon={IconCart} loading={buying} disabled={buying} onClick={buy} style={{ flex: 1.4 }}>
+                    Купить · {formatPriceKopecks(listing.price_kopecks)}
+                  </PdBtn>
+                </div>
+                <p style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 12 }}>
+                  Самовывоз. Точный адрес появится в чате после оплаты — двор или станцию выбирает продавец.
+                </p>
+              </>
+            )}
+          </div>
+
+          <Link
+            href={`/u/${listing.seller.id}`}
+            className="pdw-card"
+            style={{ display: 'flex', alignItems: 'center', gap: 11, marginTop: 16, textDecoration: 'none', color: 'inherit' }}
+          >
+            <PdAvatar seller={{ n: listing.seller.display_name }} size={44} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 700, fontSize: 15 }}>{listing.seller.display_name}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 12.5, marginTop: 2 }}>
+                <PdStars value={Math.round(listing.seller.seller_rating)} /> {listing.seller.seller_rating.toFixed(1)}
+                {listing.seller.deals_count != null && ` · ${listing.seller.deals_count} сделок`}
+              </div>
+            </div>
+          </Link>
+        </aside>
+      </div>
+    </div>
+  );
+
   return (
-    <ScreenChrome title="Букет" action={<HeaderActions listingId={id} />} footer={footer}>
+    <ScreenChrome title="Букет" action={<HeaderActions listingId={id} />} footer={footer} desktop={desktop}>
       <div style={{ position: 'relative' }}>
         <PhotoGallery photos={listing.photos} />
         {sold && (
