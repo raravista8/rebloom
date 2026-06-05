@@ -40,10 +40,10 @@ function AuthShell({ onBack, foot, children }: { onBack: () => void; foot?: Reac
         <aside className="pad-aside">
           <div className="pad-brand"><Mark size={26} />Передарим</div>
           <div className="pad-hl">Свежие букеты со скидкой и вторая жизнь подаренным цветам.</div>
-          <p className="pad-hlsub">Тысячи букетов в вашем городе. Деньги в защищённой сделке, отзывы взаимные.</p>
+          <p className="pad-hlsub">Тысячи букетов в вашем городе. Оплата при встрече, отзывы взаимные.</p>
           <div className="pad-points">
             <div className="pad-pt"><span className="ic"><IconCheck className="pd-i16" /></span>Публикация букета за 2 минуты</div>
-            <div className="pad-pt"><span className="ic"><IconShield className="pd-i16" /></span>Деньги в эскроу до подтверждения</div>
+            <div className="pad-pt"><span className="ic"><IconShield className="pd-i16" /></span>Оплата при встрече, без предоплаты</div>
             <div className="pad-pt"><span className="ic"><IconCheck className="pd-i16" /></span>Рейтинги и реальные отзывы</div>
           </div>
         </aside>

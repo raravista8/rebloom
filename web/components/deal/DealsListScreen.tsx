@@ -11,20 +11,18 @@ import { formatPriceKopecks, formatDate } from '@/lib/format';
 import type { DealView, Paginated } from '@/lib/types';
 
 const STATUS_LABEL: Record<string, string> = {
-  created: 'ожидает оплаты',
-  paid_held: 'в эскроу',
-  released: 'завершено',
-  refunded: 'возврат',
-  disputed: 'спор',
+  agreed: 'договорились',
+  meeting: 'встреча',
+  done: 'завершено',
+  problem: 'жалоба',
   cancelled: 'отменено',
 };
 const STATUS_COLOR: Record<string, string> = {
-  paid_held: 'var(--pd-primary)',
-  released: 'var(--pd-fresh)',
-  disputed: 'var(--pd-warn)',
-  refunded: 'var(--pd-muted)',
+  meeting: 'var(--pd-primary)',
+  done: 'var(--pd-fresh)',
+  problem: 'var(--pd-warn)',
   cancelled: 'var(--pd-muted)',
-  created: 'var(--pd-muted)',
+  agreed: 'var(--pd-muted)',
 };
 
 export default function DealsListScreen() {
@@ -78,7 +76,7 @@ export default function DealsListScreen() {
                   <div style={{ width: 46, height: 46, borderRadius: 11, background: 'var(--pd-surface-2)', flex: 'none' }} />
                 )}
                 <div className="mid">
-                  <div className="ttl">Букет · {formatPriceKopecks(d.amount_kopecks)}</div>
+                  <div className="ttl">Букет{d.listing.price_kopecks != null ? ` · ${formatPriceKopecks(d.listing.price_kopecks)}` : ''}</div>
                   <div className="sub">
                     {d.role === 'buyer' ? 'Покупка' : 'Продажа'}
                     {d.created_at ? ` · ${formatDate(d.created_at)}` : ''}

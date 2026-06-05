@@ -87,7 +87,7 @@ export default function ProfileScreen({ id }: { id: string }) {
 
       <div style={{ padding: '0 16px' }}>
         <PdNotice kind="ok" icon={IconShield}>
-          {trusted ? 'Проверенный продавец. ' : ''}Деньги в защищённой сделке — продавец получит их только после подтверждения получения.
+          {trusted ? 'Проверенный продавец. ' : ''}Оплата при встрече — вы платите продавцу, только когда забрали букет.
         </PdNotice>
       </div>
 

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: 'Передарим — вторая жизнь подаренных букетов',
   description:
-    'C2C-маркетплейс ресейла подаренных букетов: свежие цветы дешевле флориста, безопасная сделка через эскроу.',
+    'C2C-маркетплейс ресейла подаренных букетов: свежие цветы дешевле флориста, оплата при встрече, самовывоз рядом.',
   applicationName: 'Передарим',
   // «Соцветие» favicon set shipped with @rebloom/canon 0.2.0 (copied to public/).
   icons: {

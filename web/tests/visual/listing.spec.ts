@@ -27,13 +27,12 @@ function stub(route: Route, body: unknown, ok = true, status = 200) {
   });
 }
 
-test('loaded: price, escrow notice, buy CTA', async ({ page }) => {
+test('loaded: price, pay-at-meeting notice, write-seller CTA', async ({ page }) => {
   await page.route('**/api/listings/l1', (r) => stub(r, detail()));
   await page.goto('/l/l1');
-  await expect(page.getByText('Безопасная сделка.')).toBeVisible();
+  await expect(page.getByText('Оплата при встрече.')).toBeVisible();
   await expect(page.getByText('Размер M · 7–15 шт.')).toBeVisible();
-  await expect(page.getByRole('button', { name: /Купить · 1 900 ₽/ })).toBeEnabled();
-  await expect(page.getByRole('button', { name: 'Предложить цену' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Написать продавцу · 1 900 ₽/ })).toBeEnabled();
 });
 
 test('sold: overlay + "смотреть свежие"', async ({ page }) => {

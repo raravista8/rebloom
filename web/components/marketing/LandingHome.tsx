@@ -85,7 +85,7 @@ function Hero({ heroImg, liveCount }: { heroImg?: string; liveCount: number }) {
           <div className="pdl-trust">
             <span className="t"><Tag />В 2–3 раза дешевле</span>
             <span className="sep" />
-            <span className="t"><Shield />Деньги под защитой эскроу</span>
+            <span className="t"><Shield />Оплата при встрече</span>
             <span className="sep" />
             <span className="t"><Pin />Рядом с домом</span>
           </div>
@@ -188,13 +188,13 @@ function How() {
         </div>
         <div className="pdl-steps">
           <div className="pdl-step"><span className="pdl-seller-tag">продавец</span><div className="pdl-stepn">1</div><h3>Получили букет</h3><p>Вам подарили цветы, но дома их уже некуда ставить, а они ещё свежие и живые.</p></div>
-          <div className="pdl-step"><span className="pdl-seller-tag">продавец</span><div className="pdl-stepn">2</div><h3>Выставили за полцены</h3><p>Сфотографировали, указали свежесть и район. Публикация бесплатна, сервис берёт всего 5% комиссии и только когда букет продан.</p></div>
-          <div className="pdl-step"><span className="pdl-seller-tag">покупатель</span><div className="pdl-stepn">3</div><h3>Кто-то рядом забрал</h3><p>Покупатель оплачивает через безопасную сделку и забирает букет рядом с вами. Деньги приходят вам.</p></div>
+          <div className="pdl-step"><span className="pdl-seller-tag">продавец</span><div className="pdl-stepn">2</div><h3>Выставили за полцены</h3><p>Сфотографировали, указали свежесть и район. Публикация бесплатна — площадка денег не удерживает.</p></div>
+          <div className="pdl-step"><span className="pdl-seller-tag">покупатель</span><div className="pdl-stepn">3</div><h3>Кто-то рядом забрал</h3><p>Покупатель пишет, договаривается о встрече и забирает букет рядом с вами. Оплата — при встрече.</p></div>
         </div>
         <div className="pdl-vals">
           <div className="pdl-val"><div className="ic"><Tag /></div><div><b>В 2–3 раза дешевле</b><span>свежие букеты по-честному</span></div></div>
-          <div className="pdl-val"><div className="ic g"><Shield /></div><div><b>Безопасная сделка</b><span>деньги под защитой эскроу</span></div></div>
-          <div className="pdl-val"><div className="ic gold"><Pin /></div><div><b>Рядом с вами</b><span>самовывоз или доставка по городу</span></div></div>
+          <div className="pdl-val"><div className="ic g"><Shield /></div><div><b>Спокойная сделка</b><span>оплата при встрече, без предоплаты</span></div></div>
+          <div className="pdl-val"><div className="ic gold"><Pin /></div><div><b>Рядом с вами</b><span>самовывоз у дома или метро</span></div></div>
         </div>
       </div>
     </section>
@@ -238,14 +238,14 @@ function Escrow() {
     <section className="pdl-sec pdl-escrow" id="safety">
       <div className="pdl-in">
         <div className="pdl-sechead l">
-          <p className="pdl-kicker"><Shield style={{ width: 14, height: 14 }} />Безопасная сделка</p>
-          <h2 className="pdl-h2">Деньги придут продавцу только после того, как вы забрали букет</h2>
-          <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому деньги покупателя замораживаются и ждут, пока букет не окажется у него в руках.</p>
+          <p className="pdl-kicker"><Shield style={{ width: 14, height: 14 }} />Спокойная сделка</p>
+          <h2 className="pdl-h2">Вы платите только когда забрали букет — при встрече</h2>
+          <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому предоплаты нет: договариваетесь в чате и платите наличными или переводом прямо при встрече.</p>
         </div>
         <div className="pdl-escrow-grid">
-          <div className="pdl-eflow"><span className="en">1</span><div><h4>Покупатель платит</h4><p>Деньги списываются и замораживаются на счёте сервиса, а не у продавца.</p></div></div>
-          <div className="pdl-eflow"><span className="en">2</span><div><h4>Забирает букет</h4><p>Самовывоз или доставка по городу. Покупатель видит, что цветы свежие.</p></div></div>
-          <div className="pdl-eflow"><span className="en">3</span><div><h4>Деньги уходят продавцу</h4><p>Только после подтверждения получения, за вычетом 5% комиссии сервиса. До этого деньги под защитой.</p></div></div>
+          <div className="pdl-eflow"><span className="en">1</span><div><h4>Договорились в чате</h4><p>Покупатель пишет продавцу, договаривается о месте и времени самовывоза рядом.</p></div></div>
+          <div className="pdl-eflow"><span className="en">2</span><div><h4>Встретились и забрали</h4><p>Самовывоз у дома или метро. Покупатель видит, что цветы свежие, и забирает букет.</p></div></div>
+          <div className="pdl-eflow"><span className="en">3</span><div><h4>Оплата при встрече</h4><p>Наличными или переводом — напрямую продавцу, без предоплаты. Площадка денег не касается.</p></div></div>
         </div>
         <div className="pdl-esafe">
           <HeartHands />
@@ -265,7 +265,7 @@ function Objections() {
         </div>
         <div className="pdl-obj">
           <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…букет уже подвявший?</h3><p>У каждого букета стоит дата и метка свежести, а на фото видно состояние. Берёте только то, что куплено сегодня или вчера, и платите соответственно.</p></div>
-          <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…продавец не отдаст после оплаты?</h3><p>Не сможет. Деньги заморожены и уйдут ему только после того, как вы забрали букет. Не забрали, вернём оплату.</p></div>
+          <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…вдруг обманут с оплатой?</h3><p>Предоплаты нет. Вы платите наличными или переводом только при встрече — когда букет уже у вас в руках. Не подошёл, просто не платите.</p></div>
           <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…неловко продавать подарок?</h3><p>Вы не выбрасываете и не наживаетесь. Вы отдаёте красивое тому, кому оно нужно, и возвращаете часть денег. Это бережно, а не стыдно.</p></div>
         </div>
       </div>
@@ -303,7 +303,7 @@ function Final() {
           <div className="pdl-finalc seller">
             <span className="role">Вам подарили букет</span>
             <h3>Подарите ему вторую жизнь</h3>
-            <p>Не выбрасывайте красивое и живое. Выставьте за минуту и верните часть денег, букет достанется кому-то рядом. Публикация бесплатна, комиссия сервиса всего 5% с продажи.</p>
+            <p>Не выбрасывайте красивое и живое. Выставьте за минуту и верните часть денег, букет достанется кому-то рядом. Публикация бесплатна, оплата — при встрече.</p>
             <Link href="/sell" style={{ textDecoration: 'none' }}><PdBtn variant="primary" lg icon={IconPlus}>Опубликовать букет</PdBtn></Link>
           </div>
           <div className="pdl-finalc buyer">

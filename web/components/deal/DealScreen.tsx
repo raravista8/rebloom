@@ -1,12 +1,12 @@
 'use client';
-// Сделка — the escrow journey. GET /api/deals/{id}; status-driven UI + deal chat.
-// Buyer confirms receipt (POST /confirm-receipt → released) or opens a dispute.
-// Exact pickup address is revealed only after paid_held (T-13). Mirrors canon's
-// Deal* screens. States loading/loaded/not_found/error.
+// Сделка — no-escrow «оплата при встрече» (ADR-0013). GET /api/deals/{id}; status-driven
+// UI + deal chat. agreed → meeting → done (+ problem, cancelled). Seller shares the
+// pickup point (→ meeting); buyer confirms receipt (→ done); either party reports a
+// problem or cancels. The platform processes no payment — people pay at the meeting.
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { PdStepper, PdNotice, PdBtn } from '@/components/canon';
-import { IconShield, IconCheck, IconWalk, IconInfo } from '@/components/icons';
+import { PdStepper, PdNotice, PdBtn, PdField } from '@/components/canon';
+import { IconCheck, IconWalk, IconInfo, IconPin } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import DealChat from '@/components/deal/DealChat';
 import { api, ApiError } from '@/lib/api';
@@ -14,11 +14,10 @@ import { formatPriceKopecks } from '@/lib/format';
 import type { DealView, DealStatus } from '@/lib/types';
 
 const STATUS_LABEL: Record<DealStatus, string> = {
-  created: 'ожидает оплаты',
-  paid_held: 'в эскроу',
-  released: 'завершено',
-  refunded: 'возврат',
-  disputed: 'заморожено',
+  agreed: 'договорились',
+  meeting: 'встреча',
+  done: 'завершено',
+  problem: 'жалоба',
   cancelled: 'отменено',
 };
 
@@ -43,13 +42,16 @@ function DealMini({ deal }: { deal: DealView }) {
         <div style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 2 }}>{meta}</div>
       </div>
       <div style={{ textAlign: 'right' }}>
-        <div className="pd-price" style={{ fontSize: 16 }}>{formatPriceKopecks(deal.amount_kopecks)}</div>
+        {deal.listing.price_kopecks != null && (
+          <div className="pd-price" style={{ fontSize: 16 }}>{formatPriceKopecks(deal.listing.price_kopecks)}</div>
+        )}
         <div style={{ fontSize: 11, color: 'var(--pd-muted)' }}>{STATUS_LABEL[deal.status]}</div>
       </div>
     </div>
   );
 }
 
+// Revealed pickup address (after the seller shared the point → meeting, T-13).
 function DeliveryCard({ dealId }: { dealId: string }) {
   const [address, setAddress] = useState<string | null>(null);
   useEffect(() => {
@@ -69,9 +71,51 @@ function DeliveryCard({ dealId }: { dealId: string }) {
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600, fontSize: 13.5 }}>Самовывоз</div>
           <div style={{ fontSize: 12, color: 'var(--pd-muted)' }}>
-            {address ?? 'Точный адрес появится в чате — его укажет продавец.'}
+            {address ?? 'Точное место появится здесь, когда продавец им поделится.'}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Seller shares the pickup point (address) → meeting.
+function SharePointForm({ dealId, onDone }: { dealId: string; onDone: (d: DealView) => void }) {
+  const [address, setAddress] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | undefined>();
+  const submit = useCallback(async () => {
+    if (!address.trim()) {
+      setErr('Укажите место встречи');
+      return;
+    }
+    setBusy(true);
+    setErr(undefined);
+    try {
+      onDone(await api.post<DealView>(`/deals/${dealId}/share-point`, { address: address.trim() }));
+    } catch {
+      setErr('Не удалось отправить. Попробуйте ещё раз.');
+    } finally {
+      setBusy(false);
+    }
+  }, [address, dealId, onDone]);
+  return (
+    <div style={{ padding: '4px 16px 12px' }}>
+      <PdField label="Место встречи для самовывоза" error={err}>
+        <div className="pd-input">
+          <input
+            value={address}
+            maxLength={400}
+            placeholder="Двор, подъезд или станция метро рядом"
+            onChange={(e) => setAddress(e.target.value)}
+            aria-label="Место встречи"
+          />
+        </div>
+      </PdField>
+      <div style={{ marginTop: 10 }}>
+        <PdBtn variant="primary" icon={IconPin} block loading={busy} disabled={busy} onClick={submit}>
+          Поделиться местом встречи
+        </PdBtn>
       </div>
     </div>
   );
@@ -80,7 +124,7 @@ function DeliveryCard({ dealId }: { dealId: string }) {
 export default function DealScreen({ id }: { id: string }) {
   const [deal, setDeal] = useState<DealView | null>(null);
   const [phase, setPhase] = useState<'loading' | 'loaded' | 'not_found' | 'error'>('loading');
-  const [confirming, setConfirming] = useState(false);
+  const [acting, setActing] = useState(false);
 
   const load = useCallback(async () => {
     setPhase('loading');
@@ -97,13 +141,24 @@ export default function DealScreen({ id }: { id: string }) {
   }, [load]);
 
   const confirmReceipt = useCallback(async () => {
-    setConfirming(true);
+    setActing(true);
     try {
       setDeal(await api.post<DealView>(`/deals/${id}/confirm-receipt`));
     } catch {
-      /* keep current state; money stays held (fail-secure) */
+      /* keep current state */
     } finally {
-      setConfirming(false);
+      setActing(false);
+    }
+  }, [id]);
+
+  const cancelDeal = useCallback(async () => {
+    setActing(true);
+    try {
+      setDeal(await api.post<DealView>(`/deals/${id}/cancel`, {}));
+    } catch {
+      /* keep current state */
+    } finally {
+      setActing(false);
     }
   }, [id]);
 
@@ -143,24 +198,29 @@ export default function DealScreen({ id }: { id: string }) {
 
   const { status } = deal;
   const isBuyer = deal.role === 'buyer';
-  const sellerAmount = deal.amount_kopecks - deal.commission_kopecks;
-  const cpName = deal.counterparty.display_name ?? (isBuyer ? 'Продавец' : 'Покупатель');
+  const open = status === 'agreed' || status === 'meeting';
 
   let footer: React.ReactNode = null;
-  if (status === 'paid_held' && isBuyer) {
+  if (open && isBuyer) {
     footer = (
       <div className="pd-footerbar">
         <div style={{ display: 'flex', gap: 10 }}>
           <Link href={`/deal/${id}/dispute/new`} style={{ flex: 1 }}>
             <PdBtn variant="secondary" block>Проблема</PdBtn>
           </Link>
-          <PdBtn variant="primary" icon={IconCheck} loading={confirming} disabled={confirming} onClick={confirmReceipt} style={{ flex: 1.5 }}>
+          <PdBtn variant="primary" icon={IconCheck} loading={acting} disabled={acting} onClick={confirmReceipt} style={{ flex: 1.5 }}>
             Подтвердить получение
           </PdBtn>
         </div>
       </div>
     );
-  } else if (status === 'released') {
+  } else if (status === 'meeting' && !isBuyer) {
+    footer = (
+      <div className="pd-footerbar">
+        <Link href={`/deal/${id}/dispute/new`}><PdBtn variant="secondary" block>Проблема со сделкой</PdBtn></Link>
+      </div>
+    );
+  } else if (status === 'done') {
     footer = (
       <div className="pd-footerbar">
         <Link href={`/deal/${id}/review`}>
@@ -168,13 +228,7 @@ export default function DealScreen({ id }: { id: string }) {
         </Link>
       </div>
     );
-  } else if (status === 'paid_held' && !isBuyer) {
-    footer = (
-      <div className="pd-footerbar">
-        <Link href={`/deal/${id}/dispute/new`}><PdBtn variant="secondary" block>Открыть спор</PdBtn></Link>
-      </div>
-    );
-  } else if (status === 'refunded' || status === 'cancelled') {
+  } else if (status === 'cancelled') {
     footer = (
       <div className="pd-footerbar">
         <Link href="/"><PdBtn variant="secondary" block>Смотреть свежие букеты</PdBtn></Link>
@@ -182,39 +236,56 @@ export default function DealScreen({ id }: { id: string }) {
     );
   }
 
-  const stepperStatus = status === 'refunded' || status === 'cancelled' ? 'disputed' : status;
-  const hasChat = status === 'paid_held' || status === 'disputed';
+  const hasChat = open || status === 'problem';
 
   return (
-    <ScreenChrome title={status === 'disputed' ? 'Спор по сделке' : 'Сделка'} footer={footer}>
-      {status !== 'cancelled' && status !== 'refunded' && (
-        <div style={{ padding: '14px 16px 4px' }}><PdStepper status={stepperStatus} /></div>
+    <ScreenChrome title={status === 'problem' ? 'Жалоба по сделке' : 'Сделка'} footer={footer}>
+      {status !== 'cancelled' && (
+        <div style={{ padding: '14px 16px 4px' }}><PdStepper status={status} /></div>
       )}
       <DealMini deal={deal} />
 
       <div style={{ padding: '14px 16px' }}>
-        {status === 'paid_held' && (
-          <PdNotice kind="ok" icon={IconShield}>
-            <b>Деньги в безопасности.</b> {cpName} получит {formatPriceKopecks(sellerAmount)} после того, как
-            покупатель подтвердит получение. Комиссия площадки {formatPriceKopecks(deal.commission_kopecks)}.
+        {status === 'agreed' && (
+          <PdNotice kind="info" icon={IconInfo}>
+            <b>Договоритесь о встрече в чате.</b> Оплата — при встрече, наличными или переводом. Площадка денег не удерживает.
           </PdNotice>
         )}
-        {status === 'disputed' && (
+        {status === 'meeting' && (
+          <PdNotice kind="ok" icon={IconWalk}>
+            <b>Встреча назначена.</b> Заберите букет и оплатите продавцу при встрече. После — нажмите «Подтвердить получение».
+          </PdNotice>
+        )}
+        {status === 'problem' && (
           <PdNotice kind="warn" icon={IconInfo}>
-            <b>На рассмотрении.</b> Деньги заморожены. Поддержка ответит в течение 24 часов. Добавьте детали и фото в чат.
+            <b>Жалоба на рассмотрении.</b> Поддержка ответит в течение 24 часов. Добавьте детали и фото в чат.
           </PdNotice>
         )}
-        {status === 'released' && (
+        {status === 'done' && (
           <PdNotice kind="ok" icon={IconCheck}>
-            <b>Готово!</b> Получение подтверждено. {formatPriceKopecks(sellerAmount)} отправлены {cpName}, чек придёт на e-mail.
+            <b>Готово!</b> Вы забрали букет. Спасибо! Оставьте отзыв {isBuyer ? 'продавцу' : 'покупателю'}.
           </PdNotice>
         )}
-        {status === 'refunded' && <PdNotice kind="info" icon={IconInfo}><b>Возврат оформлен.</b> Деньги вернутся на вашу карту в срок банка.</PdNotice>}
-        {status === 'cancelled' && <PdNotice kind="info" icon={IconInfo}>Сделка отменена, букет снова доступен другим покупателям.</PdNotice>}
-        {status === 'created' && <PdNotice kind="info" icon={IconInfo}>Ожидаем оплату. Букет зарезервирован за вами 30 минут.</PdNotice>}
+        {status === 'cancelled' && (
+          <PdNotice kind="info" icon={IconInfo}>Сделка отменена, букет снова доступен другим покупателям.</PdNotice>
+        )}
       </div>
 
-      {status === 'paid_held' && deal.delivery_method === 'self_pickup' && <DeliveryCard dealId={id} />}
+      {status === 'agreed' && !isBuyer && <SharePointForm dealId={id} onDone={setDeal} />}
+      {status === 'meeting' && deal.delivery_method === 'self_pickup' && <DeliveryCard dealId={id} />}
+
+      {open && (
+        <div style={{ padding: '0 16px 8px', textAlign: 'center' }}>
+          <button
+            type="button"
+            onClick={cancelDeal}
+            disabled={acting}
+            style={{ background: 'none', border: 'none', color: 'var(--pd-muted)', fontSize: 13, textDecoration: 'underline', cursor: 'pointer' }}
+          >
+            Отменить сделку
+          </button>
+        </div>
+      )}
 
       {hasChat && <DealChat dealId={id} />}
     </ScreenChrome>

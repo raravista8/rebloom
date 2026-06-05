@@ -9,8 +9,6 @@ function deal(status: string, over: Record<string, unknown> = {}) {
     listing: { id: 'l1', photo_thumb_url: PHOTO, price_kopecks: 99000 },
     role: 'buyer',
     counterparty: { id: 's1', display_name: 'Аня', seller_rating: 4.9 },
-    amount_kopecks: 99000,
-    commission_kopecks: 9900,
     delivery_method: 'self_pickup',
     created_at: '2026-06-04T15:00:00Z',
     ...over,
@@ -25,25 +23,25 @@ function msg(id: string, body: string, mine: boolean, held = false) {
   return { id, sender_id: mine ? 'me' : 's1', body, held, mine, created_at: '2026-06-04T15:01:00Z' };
 }
 
-test('paid_held: escrow notice + chat + address + confirm CTA', async ({ page }) => {
-  await page.route('**/api/deals/d1', (r) => json(r, deal('paid_held')));
+test('meeting: pay-at-meeting notice + chat + address + confirm CTA', async ({ page }) => {
+  await page.route('**/api/deals/d1', (r) => json(r, deal('meeting')));
   await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [msg('m1', 'Можно забрать после 18:00 🌸', false)], next_cursor: null }));
   await page.route('**/api/deals/d1/delivery', (r) => json(r, { revealed: true, address: 'Двор, Тверская 12' }));
   await page.goto('/deal/d1');
-  await expect(page.getByText('Деньги в безопасности.')).toBeVisible();
+  await expect(page.getByText('Встреча назначена.')).toBeVisible();
   await expect(page.getByText('Можно забрать после 18:00 🌸')).toBeVisible();
   await expect(page.getByText('Двор, Тверская 12')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Подтвердить получение' })).toBeEnabled();
 });
 
-test('confirm receipt → released + review CTA', async ({ page }) => {
+test('confirm receipt → done + review CTA', async ({ page }) => {
   let confirmed = false;
-  await page.route('**/api/deals/d1', (r) => json(r, deal(confirmed ? 'released' : 'paid_held')));
+  await page.route('**/api/deals/d1', (r) => json(r, deal(confirmed ? 'done' : 'meeting')));
   await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [], next_cursor: null }));
   await page.route('**/api/deals/d1/delivery', (r) => json(r, { revealed: true, address: 'Двор' }));
   await page.route('**/api/deals/d1/confirm-receipt', (r) => {
     confirmed = true;
-    return json(r, deal('released'));
+    return json(r, deal('done'));
   });
   await page.goto('/deal/d1');
   await page.getByRole('button', { name: 'Подтвердить получение' }).click();
@@ -51,10 +49,10 @@ test('confirm receipt → released + review CTA', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Оценить продавца' })).toBeVisible();
 });
 
-test('disputed: frozen notice + chat input', async ({ page }) => {
-  await page.route('**/api/deals/d1', (r) => json(r, deal('disputed')));
+test('problem: report notice + chat input', async ({ page }) => {
+  await page.route('**/api/deals/d1', (r) => json(r, deal('problem')));
   await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [msg('s1', 'Поддержка подключилась', false)], next_cursor: null }));
   await page.goto('/deal/d1');
-  await expect(page.getByText('На рассмотрении.')).toBeVisible();
+  await expect(page.getByText('Жалоба на рассмотрении.')).toBeVisible();
   await expect(page.getByPlaceholder('Сообщение…')).toBeVisible();
 });

@@ -1,7 +1,7 @@
 'use client';
-// Открыть спор (FLOW-1 steps 1–2). Reason + details + evidence photos →
-// POST /api/deals/{id}/dispute {reason, photo_ids[]}. Funds freeze (handled
-// server-side). Reason is a single free string (combined category + details).
+// Сообщить о проблеме по сделке (FLOW-1). Reason + details + evidence photos →
+// POST /api/deals/{id}/report {reason, photo_ids[]}. Deal → problem; support reviews.
+// No-escrow (ADR-0013): no money is frozen — support warns/limits/blocks.
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PdField, PdBtn, PdNotice } from '@/components/canon';
@@ -38,12 +38,12 @@ export default function DisputeForm({ id }: { id: string }) {
     const composed = details.trim() ? `${label} — ${details.trim()}` : label;
     setSubmitting(true);
     try {
-      await api.post(`/deals/${id}/dispute`, { reason: composed, photo_ids: photoIds });
+      await api.post(`/deals/${id}/report`, { reason: composed, photo_ids: photoIds });
       router.replace(`/deal/${id}`);
     } catch (e) {
       if (e instanceof ApiError && e.code === 'content_blocked') setErr('В описании есть запрещённые слова или контакты. Поправьте, пожалуйста.');
       else if (e instanceof ApiError && e.code === 'unauthorized') router.replace('/login');
-      else setErr(e instanceof ApiError ? e.message : 'Не удалось открыть спор');
+      else setErr(e instanceof ApiError ? e.message : 'Не удалось отправить жалобу');
     } finally {
       setSubmitting(false);
     }
@@ -53,16 +53,16 @@ export default function DisputeForm({ id }: { id: string }) {
     <div className="pd-footerbar">
       {err && <div style={{ marginBottom: 8 }}><PdNotice kind="danger">{err}</PdNotice></div>}
       <PdBtn variant="primary" block lg loading={submitting} disabled={submitting} onClick={submit}>
-        Открыть спор
+        Отправить жалобу
       </PdBtn>
     </div>
   );
 
   return (
-    <ScreenChrome title="Открыть спор" footer={footer}>
+    <ScreenChrome title="Сообщить о проблеме" footer={footer}>
       <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 20 }}>
         <PdNotice kind="info" icon={IconInfo}>
-          Пока идёт спор, деньги заморожены и в безопасности. Поддержка разберётся в течение 24 часов.
+          Опишите, что пошло не так. Поддержка разберётся в течение 24 часов и при необходимости ограничит другую сторону.
         </PdNotice>
 
         <PdField label="Что случилось?" error={reasonErr}>
