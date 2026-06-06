@@ -1,21 +1,15 @@
-# WHAT CHANGED — canon 0.6.0 (basis for the CHANGELOG section)
+# WHAT CHANGED — canon 0.6.1 (basis for the CHANGELOG section)
 
-1. **Settings: «Способы оплаты» (payments) + «Самозанятость» (self-employment) removed.** The platform handles no money in the current model (pay-on-meeting, peer-to-peer), so a payouts/receipts surface was dangling. Removed from the hub, mobile screens, desktop nav + panes, and module exports. Hub «Аккаунт» is now **Профиль · Способы входа**. `web/` drops `/settings/payments` and `/settings/self-employed`.
+Landing-only patch (`./marketing` · `PdLanding`).
 
-2. **Landing hero re-led on the C2C story.** It under-communicated that real people resell their own gifted bouquets. Eyebrow «Люди передаривают свои букеты»; **H1 «Свежие букеты _напрямую от людей_, в 2–3 раза дешевле магазина»**; lede now spells out the mechanic. New premium hero photo (`hero-lacybird.png`); price proof **17 200 ₽ → от 4 500 ₽ (−74%)**; live-count «128 букетов от людей рядом». An interim seller-avatar row was added then removed per review.
+1. **Mobile hero reworked.** Stacked «text → photo below» felt like a bouquet dumped at the bottom; a full-bleed photo-background overlay overlapped. Final solution: on narrow containers the **photo is a bounded banner on top** (`order:-1`, `aspect-ratio:16/9`), with the price tag + live-count chips contained inside the card, and the dark text block below. Scoped to `@container pdl (max-width:899.98px)` — the **desktop side-by-side hero is unchanged**.
 
-3. **Hero composition fix.** `text-wrap:balance` + desktop H1 `60→50px` + wider text column (`1.16fr`) + top-aligned image (`align-self:start`) + «2–3» `nowrap` — eliminates one-word-per-line ragging.
+2. **Header city selector.** Guest nav gains a tappable «📍 Москва ▾» so the visitor sees their city immediately and can switch it. On mobile it replaces «Войти» (which moves under the hamburger); on desktop both show. `web/` wires the real picker + persisted geo.
 
-4. **SEO geo hero mirrors the landing, city-substituted.** «Свежие букеты _напрямую от людей_ в {городе}, в 2–3 раза дешевле магазина» + matching intro. `PdSeoMeta` **H1** synced; **Title/Description stay as the keyword snippet** (Title ≠ H1 on purpose). SEO H1/Title keep dashes (snippet format).
-
-5. **Admin polish.** Жалоба action **«Решить» → «Разобрать»** (desktop + mobile); Finance plashka reworded («Платежи **идут**… напрямую, площадка их не обрабатывает»); Overview KPI «Оборот сделок» gains an **«оценка по завершённым»** caption to match Finance (platform can't see payments → turnover is an estimate).
-
-6. **Copy pass.** Interface text de-em-dashed across client app + admin (connector «—» → comma/colon); city normalized to Москва. SEO H1/Title intentionally keep dashes.
+3. **Trust trimmed.** «Рядом с домом» removed from the hero trust chips **and** the «Как это работает» advantages (duplicated the headline; pickup is covered elsewhere). Both now: «В 2–3 раза дешевле · Оплата при встрече».
 
 ---
 
-**Authoritative source:** everything was authored in the design prototypes — `reference/prototypes/*`
-(+ `reference/prototypes/img/hero-lacybird.png`) is byte-current. `src/*` and `dist/canon.css` are
-re-converted from them. Note: `src/marketing/seo.jsx` had pre-existing copy drift in a few
-safe-deal/rules sentences — trust `reference/prototypes/pd-seo.jsx` there. Rebuild `dist/*.js` via
-`npm run build`.
+**Authoritative:** `reference/prototypes/pd-land.{jsx,css}` are byte-current. `src/marketing/landing.jsx`,
+`dist/canon.css` and `src/styles/canon.css` re-synced. Rebuild `dist/*.js` via `npm run build`.
+Landing-scoped — nothing else changed since 0.6.0.

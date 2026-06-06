@@ -30,6 +30,7 @@ const Pin = (p: IP) => <svg {...S(p)}><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c
 const Search = (p: IP) => <svg {...S(p)}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" /></svg>;
 const Bell = (p: IP) => <svg {...S(p)}><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" /><path d="M10 19a2 2 0 0 0 4 0" /></svg>;
 const Chev = (p: IP) => <svg {...S(p)}><path d="m6 9 6 6 6-6" /></svg>;
+const Menu = (p: IP) => <svg {...S(p)}><path d="M4 7h16M4 12h16M4 17h16" /></svg>;
 const Star = (p: IP) => <svg {...p} viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9z" /></svg>;
 const HeartHands = (p: IP) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" /></svg>;
 const Arrow = () => <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>;
@@ -61,8 +62,10 @@ function Nav() {
           <a href="#app">Приложение</a>
         </nav>
         <div className="pdl-navright">
+          <Link href="/city" className="pdl-nav-city" style={{ textDecoration: 'none' }}><Pin className="pin" />Москва<Chev /></Link>
           <Link href="/login" className="pdl-nav-login" style={{ textDecoration: 'none' }}>Войти</Link>
           <span className="pdl-nav-cta"><Link href="/sell" style={{ textDecoration: 'none' }}><PdBtn variant="primary" icon={IconPlus}>Опубликовать букет</PdBtn></Link></span>
+          <Link href="/login" className="pdl-nav-burger" aria-label="Меню"><Menu /></Link>
         </div>
       </div>
     </header>
@@ -86,8 +89,6 @@ function Hero({ heroImg, liveCount }: { heroImg?: string; liveCount: number }) {
             <span className="t"><Tag />В 2–3 раза дешевле</span>
             <span className="sep" />
             <span className="t"><Shield />Оплата при встрече</span>
-            <span className="sep" />
-            <span className="t"><Pin />Рядом с домом</span>
           </div>
         </div>
         <div className="pdl-herovis">
@@ -194,7 +195,6 @@ function How() {
         <div className="pdl-vals">
           <div className="pdl-val"><div className="ic"><Tag /></div><div><b>В 2–3 раза дешевле</b><span>свежие букеты по-честному</span></div></div>
           <div className="pdl-val"><div className="ic g"><Shield /></div><div><b>Спокойная сделка</b><span>оплата при встрече, без предоплаты</span></div></div>
-          <div className="pdl-val"><div className="ic gold"><Pin /></div><div><b>Рядом с вами</b><span>самовывоз у дома или метро</span></div></div>
         </div>
       </div>
     </section>

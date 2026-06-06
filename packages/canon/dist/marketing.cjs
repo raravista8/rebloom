@@ -1,6 +1,6 @@
 'use strict';
 
-var chunkMHEP2IIR_cjs = require('./chunk-MHEP2IIR.cjs');
+var chunkCY5BZNDY_cjs = require('./chunk-CY5BZNDY.cjs');
 require('./chunk-GT5S3QFQ.cjs');
 require('./chunk-75ZPJI57.cjs');
 
@@ -8,41 +8,41 @@ require('./chunk-75ZPJI57.cjs');
 
 Object.defineProperty(exports, "PD_GEO_CITIES", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.CITIES_FULL; }
+  get: function () { return chunkCY5BZNDY_cjs.CITIES_FULL; }
 });
 Object.defineProperty(exports, "PdBlogArticle", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdBlogArticle; }
+  get: function () { return chunkCY5BZNDY_cjs.PdBlogArticle; }
 });
 Object.defineProperty(exports, "PdBlogIndex", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdBlogIndex; }
+  get: function () { return chunkCY5BZNDY_cjs.PdBlogIndex; }
 });
 Object.defineProperty(exports, "PdGeoPage", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdGeoPage; }
+  get: function () { return chunkCY5BZNDY_cjs.PdGeoPage; }
 });
 Object.defineProperty(exports, "PdLanding", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdLanding; }
+  get: function () { return chunkCY5BZNDY_cjs.PdLanding; }
 });
 Object.defineProperty(exports, "PdLandingFooter", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdLandingFooter; }
+  get: function () { return chunkCY5BZNDY_cjs.PdLandingFooter; }
 });
 Object.defineProperty(exports, "PdLandingNav", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdLandingNav; }
+  get: function () { return chunkCY5BZNDY_cjs.PdLandingNav; }
 });
 Object.defineProperty(exports, "PdSafeDeal", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdSafeDeal; }
+  get: function () { return chunkCY5BZNDY_cjs.PdSafeDeal; }
 });
 Object.defineProperty(exports, "PdSeoMeta", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.PdSeoMeta; }
+  get: function () { return chunkCY5BZNDY_cjs.PdSeoMeta; }
 });
 Object.defineProperty(exports, "nbsp", {
   enumerable: true,
-  get: function () { return chunkMHEP2IIR_cjs.nbsp; }
+  get: function () { return chunkCY5BZNDY_cjs.nbsp; }
 });
