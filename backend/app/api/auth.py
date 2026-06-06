@@ -35,7 +35,7 @@ router = APIRouter(tags=["auth"])
 def get_otp_service() -> OtpService:
     settings = get_settings()
     store = RedisOtpStore(redis_client)
-    sms = ConsoleSmsSender(reveal_code=settings.app_env == "local")
+    sms = ConsoleSmsSender(reveal_code=settings.app_env == "local" or settings.sms_reveal_otp)
     return OtpService(store, sms, settings.app_secret_key)
 
 

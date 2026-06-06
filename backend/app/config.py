@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     app_secret_key: str = "dev-insecure-change-me"
     app_base_url: str = "http://localhost:8000"
     log_level: str = "INFO"
+    # Staging affordance: log the plaintext OTP when no real SMS provider is wired
+    # (so a test box without SMS is still loginnable). The code stays random,
+    # single-use and rate-limited — only its visibility to log-holders changes.
+    # Default off; NEVER enable on a box with real users. APP_ENV=local also reveals.
+    sms_reveal_otp: bool = False
 
     # ── Postgres (writer + optional read-replica) ──
     database_url: str = "postgresql+psycopg://rebloom_app:rebloom@localhost:5432/rebloom"
