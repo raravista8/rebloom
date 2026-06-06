@@ -8,6 +8,42 @@ hover/focus/validation states**.
 
 ---
 
+## 0·6·2 — READ FIRST (the hero that never reached prod + desktop city picker)
+
+> **Why this is at the top.** 0.6.0 rewrote the landing hero, but prod **kept rendering the old hero**
+> (eyebrow «Вторая жизнь букетов», H1 «…дешевле цветочного магазина», no photo, «от 690 ₽ / −60%»). Cause:
+> `web/` was built off the **meta-contract table (§8.3), whose H1 was still the pre-0.6.0 string**, so the
+> visible hero copy/photo/price were never re-vendored. The component was right; the contract wasn't. §8.3 is
+> now fixed. **Before shipping, diff every field below against the live page — these are the exact values
+> that must appear.**
+
+### 0.1 Hero fields — canonical values (component `PdLanding` → `Hero`, classes `pdl-*`)
+
+| Field | Class | Must read exactly |
+|---|---|---|
+| Eyebrow | `.pdl-kicker` | **Люди передаривают свои букеты** (leaf icon) — *not* «Вторая жизнь букетов» |
+| H1 | `.pdl-h1` | **Свежие букеты *напрямую от людей*, в 2–3 раза дешевле магазина** (`напрямую от людей` in `<em>`; «2–3 раза» nowrap) — *not* «…дешевле цветочного магазина» |
+| Lede / subtitle | `.pdl-lead` | **«Букет подарили, он порадовал и уже не нужен.»** (bold lead-in) + «Вместо мусорки свежие цветы за полцены находят нового хозяина. Выставьте свой за минуту или заберите чужой.» |
+| Photo | `.pdl-herophoto img` | real bouquet `hero-lacybird.png` (wire the CDN asset) — prod was rendering an **empty card** |
+| Price tag | `.pdl-pricetag` | old **«17 200 ₽ в цветочной»** → new **«от 4 500 ₽»**, badge **«−74% дешевле»** — *not* «2 490 ₽ → от 690 ₽ / −60%» |
+| Live count | `.pdl-livecount` | «128 букетов от людей рядом» |
+
+These are **content the component already ships** — you are not re-typing them, you are making sure your build
+renders `PdLanding` (and `generateMetadata`) instead of a stale hand-written hero. If any of the above shows the
+old value in prod, the page is **not** on canon ≥0.6.0.
+
+### 0.2 Desktop city picker (`NavCity` + `.pdl-citymenu`)
+
+The header city selector «📍 Москва ▾» is a **desktop popover**, not the mobile full-screen «Город» page prod
+fell back to. Canon ships: anchored dropdown under the trigger, the **10 cities** with live counts +
+checkmark on the active city (no search — they all fit), open/close on the trigger (second click closes),
+outside-click + `Esc` to dismiss. It sits **immediately after the brand in both header states** (guest +
+authorized). In `web/`: replace the static `CITY_LIST` with the real dictionary (`PD_GEO_CITIES`, §8.2),
+persist the choice (cookie/geo), and route selection to `/[city]`. Keep it a popover on desktop; the mobile
+full-screen list stays for narrow viewports only.
+
+---
+
 ## 0. What's new in 0.2.0 (vendor these first)
 
 | Area | New / changed | Source |
@@ -290,7 +326,7 @@ type CityData = { id:string; nom:string; loc:string; gen:string; count:number; m
 ### 8.3 Meta contract (`generateMetadata` per page)
 | Page | Title | Description / H1 |
 |---|---|---|
-| `/` | `Свежие букеты в 2–3 раза дешевле магазина \| Передарим` | H1: «Свежие букеты в 2–3 раза дешевле цветочного магазина» |
+| `/` | `Свежие букеты в 2–3 раза дешевле магазина \| Передарим` | H1: «Свежие букеты напрямую от людей, в 2–3 раза дешевле магазина» (eyebrow «Люди передаривают свои букеты»; lede/photo/price per §0.1). **Title intentionally ≠ H1** — Title keeps the keyword snippet, H1 carries the C2C message. |
 | `/[city]` | `Дешёвые свежие букеты в {loc} — самовывоз рядом \| Передарим` | H1: «Дешёвые свежие букеты в {loc} — самовывоз рядом» |
 | `/bezopasnaya-sdelka` | `Безопасная сделка — оплата при встрече \| Передарим` | H1: «Платите за букет, только когда забрали егоко после того, как вы забрали букет» |
 | `/blog` | `Блог «Передарима» — что делать с подаренным букетом \| Передарим` | H1: «Что делать с букетом, который уже подарили» |

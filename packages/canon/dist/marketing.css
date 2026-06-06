@@ -3477,6 +3477,108 @@
 .pdl-nav-city .pin {
   color: var(--pd-primary,#CF5638);
 }
+.pdl-nav-city:hover {
+  border-color: var(--pd-border-strong,#D8CDBD);
+}
+.pdl-nav-city.open {
+  border-color: var(--pd-primary,#CF5638);
+  background: #fff;
+}
+.pdl-nav-city .chev {
+  transition: transform .18s ease;
+  color: #A99F92;
+}
+.pdl-nav-city .chev.up {
+  transform: rotate(180deg);
+}
+.pdl-citywrap {
+  position: relative;
+  display: inline-flex;
+}
+.pdl-citymenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 330px;
+  max-width: 86vw;
+  background: #fff;
+  border: 1px solid var(--pd-border,#EAE2D7);
+  border-radius: 18px;
+  box-shadow: 0 20px 52px rgba(40, 30, 20, .20);
+  padding: 8px;
+  z-index: 60;
+  opacity: 1;
+  transform-origin: top left;
+  animation: pdl-citypop .16s ease;
+}
+.pdl-citymenu.r {
+  left: auto;
+  right: 0;
+  transform-origin: top right;
+}
+@keyframes pdl-citypop {
+  from {
+    transform: translateY(-6px) scale(.985);
+  }
+}
+.pdl-citymenu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.pdl-cityrow {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 7px 11px;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 11px;
+  text-align: left;
+  color: var(--pd-text,#23201B);
+}
+.pdl-cityrow:hover {
+  background: var(--pd-surface-2,#F3EEE6);
+}
+.pdl-cityrow .pin {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--pd-primary-soft,#F8E5DC);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pd-primary,#CF5638);
+}
+.pdl-cityrow .pin svg {
+  width: 17px;
+  height: 17px;
+}
+.pdl-cityrow .nm {
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.pdl-cityrow .ct {
+  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #A99F92;
+}
+.pdl-cityrow .ck {
+  margin-left: 8px;
+  color: var(--pd-primary,#CF5638);
+  display: flex;
+}
+.pdl-cityrow .ck svg {
+  width: 18px;
+  height: 18px;
+}
+.pdl-cityrow.on .nm {
+  color: var(--pd-primary,#CF5638);
+}
 .pdl-nav-search {
   display: flex;
   align-items: center;
@@ -3527,6 +3629,9 @@
 .pdl-nav-ava {
   width: 40px;
   height: 40px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   border-radius: 50%;
   flex: none;
   display: flex;
