@@ -18,6 +18,14 @@ Area rules for the single web frontend. This web build IS the iOS/Android app (w
 - `lib/` — api client (`{ok,data}` envelope) generated/typed from `docs/handoff/API_CONTRACT.md` (→ OpenAPI), session, formatting (MSK in UI)
 - `tests/visual/` — Playwright pixel-diff baselines
 
+## SEO / metadata (indexable pages) — learned the hard way (2026-06 audit)
+- **Meta description = ONE tight sentence, ≤~160 chars.** No colon/keyword lists, no 2–3-sentence pile-ups: Yandex rejects long/keystuffed descriptions and instead shows a sentence pulled from the page **body** (a sibling project got an off-message body sentence shown this way). Therefore:
+- **First-screen body copy must itself be snippet-safe** — the hero H1 + first paragraph must read on-brand and accurate **out of context**, because an engine may use them regardless of the meta.
+- **No money/escrow copy anywhere** (ADR-0013 — the platform touches no money): say «оплата при встрече»; NEVER «защита денег / удержание средств / эскроу / комиссия / предоплата». Applies to meta, OG, **and** body.
+- **Unique description per page** — don't reuse one across routes. The 10 geo pages use a single `city.loc` template → 10 distinct strings (identical descriptions across pages are a duplicate-content / over-optimization signal).
+- **Each indexable page**: self-referential `canonical` + `openGraph` + present in `app/sitemap.ts`. **Private/auth routes** (`/sell /deal /deals /me /settings /admin /notifications /login`) → in `app/robots.ts` disallow AND absent from the sitemap (a new auth route must be added to both).
+- Canon-owned body copy (SEO pages imported wholesale: `PdGeoPage`/`PdSafeDeal`/`PdBlog*`) is fixed via Claude Design, not here — `docs/handoff/CLAUDE_DESIGN_PROMPT.md`.
+
 ## Device features (via Capacitor, used by the same UI)
 Camera (photograph bouquet), geolocation (pickup), push (deal status), share — feature-detect; on plain web degrade gracefully.
 
