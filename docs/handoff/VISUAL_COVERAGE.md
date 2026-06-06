@@ -5,7 +5,7 @@
 > Legend: 🔵 spec only · 🟢 canon-import + visual ≤2% · 🟡 hand-rolled (justify) · 🔴 missing/broken
 
 ## Screens
-| Screen | Mobile (360) | Mobile (414) | Desktop | Visual baseline | Status |
+| Screen | Mobile (375) | Mobile (414) | Desktop | Visual baseline | Status |
 |---|---|---|---|---|---|
 | Главная / витрина | 🔵 | 🔵 | 🔵 | — | spec |
 | Карточка букета | 🔵 | 🔵 | 🔵 | — | spec |
