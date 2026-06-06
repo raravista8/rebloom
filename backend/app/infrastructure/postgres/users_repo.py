@@ -7,13 +7,18 @@ must not miss a just-created user due to replication lag.
 
 from __future__ import annotations
 
+import logging
 import uuid
 
+from cryptography.exceptions import InvalidTag
 from sqlalchemy import select
 
 from app.core.users.schemas import UserView
+from app.infrastructure.crypto import build_field_cipher
 from app.infrastructure.postgres.engine import writer_session
 from app.infrastructure.postgres.models import User
+
+_log = logging.getLogger("rebloom.auth")
 
 
 def _to_view(user: User) -> UserView:
@@ -29,7 +34,15 @@ def _to_view(user: User) -> UserView:
 
 
 class PostgresUserRepository:
-    """Implements :class:`app.core.users.ports.UserRepository`."""
+    """Implements :class:`app.core.users.ports.UserRepository`.
+
+    The admin 2FA seed (``totp_secret``) is held AES-256-GCM-encrypted at rest
+    (ADR-0012, SECURITY T-10), reusing the same PII field cipher as the deal
+    pickup address: encrypted on write, decrypted on read.
+    """
+
+    def __init__(self) -> None:
+        self._cipher = build_field_cipher()
 
     def get_or_create_by_phone(self, phone: str) -> UserView:
         with writer_session() as session:
@@ -56,4 +69,27 @@ class PostgresUserRepository:
             return None
         with writer_session() as session:
             user = session.get(User, pk)
-            return user.totp_secret if user is not None else None
+            if user is None or not user.totp_secret:  # no admin / no 2FA seed set
+                return None
+            try:
+                return self._cipher.decrypt(user.totp_secret)
+            except (ValueError, InvalidTag):
+                # Legacy/seeded plaintext seed (written before encryption-at-rest),
+                # or an unreadable ciphertext. Return it as-is: a real base32 seed
+                # still verifies (and is re-encrypted on the next set_totp_secret);
+                # an unreadable value yields a bad seed → TOTP verify fails safely.
+                _log.warning("totp_secret not decryptable; treating as legacy plaintext")
+                return user.totp_secret
+
+    def set_totp_secret(self, user_id: str, secret: str | None) -> bool:
+        """Persist the admin 2FA seed encrypted at rest. ``None``/empty clears it."""
+        try:
+            pk = uuid.UUID(user_id)
+        except ValueError:
+            return False
+        with writer_session() as session:
+            user = session.get(User, pk)
+            if user is None:
+                return False
+            user.totp_secret = self._cipher.encrypt(secret) if secret else None
+            return True

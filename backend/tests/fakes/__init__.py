@@ -132,6 +132,15 @@ class FakeUserRepository:
     def get_totp_secret(self, user_id: str) -> str | None:
         return self._secrets.get(user_id)
 
+    def set_totp_secret(self, user_id: str, secret: str | None) -> bool:
+        if user_id not in self._by_id:
+            return False
+        if secret:
+            self._secrets[user_id] = secret
+        else:
+            self._secrets.pop(user_id, None)
+        return True
+
     def make_admin(self, user_id: str, secret: str) -> None:
         """Test helper: promote a user to admin + set their TOTP secret."""
         view = self._by_id.get(user_id)
