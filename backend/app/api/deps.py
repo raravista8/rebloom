@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Annotated
 
 from fastapi import Depends, HTTPException, Request
 
+from app.config import get_settings
 from app.core.auth.session import SessionService
 
 if TYPE_CHECKING:
@@ -69,9 +70,21 @@ def require_user(user: CurrentUserDep) -> UserView:
 RequireUserDep = Annotated[UserView, Depends(require_user)]
 
 
-def require_admin(user: RequireUserDep) -> UserView:
-    """RBAC: admin role required (SECURITY §5)."""
+def _client_ip(request: Request) -> str:
+    """Real client IP behind the Caddy edge (one trusted proxy → leftmost X-Forwarded-For)."""
+    xff = request.headers.get("x-forwarded-for")
+    if xff:
+        return xff.split(",")[0].strip()
+    return request.client.host if request.client else ""
+
+
+def require_admin(request: Request, user: RequireUserDep) -> UserView:
+    """RBAC: admin role required (SECURITY §5) + optional /admin IP allowlist (OPERATIONS §6).
+    Empty allowlist = allow any (default); set ADMIN_IP_ALLOWLIST to restrict."""
     if "admin" not in user.roles:
+        raise HTTPException(status_code=403, detail="forbidden")
+    allow = get_settings().admin_ip_allowset
+    if allow and _client_ip(request) not in allow:
         raise HTTPException(status_code=403, detail="forbidden")
     return user
 

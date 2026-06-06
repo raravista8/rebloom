@@ -40,6 +40,25 @@ class Settings(BaseSettings):
     # single-use and rate-limited — only its visibility to log-holders changes.
     # Default off; NEVER enable on a box with real users. APP_ENV=local also reveals.
     sms_reveal_otp: bool = False
+    # Hard-guard: in prod, `sms_reveal_otp` ALONE does nothing — revealing the OTP on a
+    # prod box also requires this explicit acknowledgement, so a stray SMS_REVEAL_OTP=true
+    # in a real deploy can't silently leak login codes. Both must be removed at launch.
+    sms_reveal_otp_allow_prod: bool = False
+    # Admin IP allowlist (OPERATIONS §6): comma-separated client IPs permitted on /admin.
+    # Empty = allow any (the dev/default). Enforced on top of session + TOTP 2FA + RBAC.
+    admin_ip_allowlist: str = ""
+
+    @property
+    def otp_reveal_active(self) -> bool:
+        """Whether ConsoleSmsSender should log the plaintext OTP. In prod the reveal
+        needs the extra `sms_reveal_otp_allow_prod` ack (SECURITY: auth-secret-in-logs)."""
+        if self.app_env == "local":
+            return True
+        return self.sms_reveal_otp and (self.app_env != "prod" or self.sms_reveal_otp_allow_prod)
+
+    @property
+    def admin_ip_allowset(self) -> frozenset[str]:
+        return frozenset(ip.strip() for ip in self.admin_ip_allowlist.split(",") if ip.strip())
 
     # ── Postgres (writer + optional read-replica) ──
     database_url: str = "postgresql+psycopg://rebloom_app:rebloom@localhost:5432/rebloom"

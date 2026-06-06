@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Request, Response
@@ -35,7 +36,13 @@ router = APIRouter(tags=["auth"])
 def get_otp_service() -> OtpService:
     settings = get_settings()
     store = RedisOtpStore(redis_client)
-    sms = ConsoleSmsSender(reveal_code=settings.app_env == "local" or settings.sms_reveal_otp)
+    reveal = settings.otp_reveal_active
+    if reveal and settings.app_env == "prod":
+        logging.getLogger("rebloom.auth").warning(
+            "OTP REVEAL ACTIVE in prod (SMS_REVEAL_OTP + allow_prod) — login codes are "
+            "logged in cleartext; MUST be disabled before real users (SECURITY A07/A09)."
+        )
+    sms = ConsoleSmsSender(reveal_code=reveal)
     return OtpService(store, sms, settings.app_secret_key)
 
 
