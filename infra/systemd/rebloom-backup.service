@@ -14,8 +14,10 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-# Runs as the deploy user that owns /opt/rebloom and is in the docker group.
-User=deploy
+# The single box currently runs as root (no separate deploy user yet). When a
+# `deploy` user is created (recommended — add it to the `docker` group and let it
+# own /opt/rebloom), switch this to User=deploy.
+User=root
 WorkingDirectory=/opt/rebloom
 # BACKUP_ENC_KEY / BACKUP_REMOTE / BACKUP_KEEP_DAYS come from /opt/rebloom/.env,
 # which backup.sh sources itself. Keep .env at 0600, owned by deploy.
