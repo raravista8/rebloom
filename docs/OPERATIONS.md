@@ -71,6 +71,8 @@ $C up -d --no-deps web
   $C up -d --no-deps --force-recreate api scheduler
   ```
 - **`/version` reports the `api` build, not `web`.** A web-only deploy leaves `git_sha` on the api commit — verify web by the image-created timestamp (`docker image inspect rebloom-web:latest --format '{{.Created}}'`) and/or grepping the served bundle (`curl … | grep <marker>`), not `/version`.
+- **The `api` build must ALSO pass `--build-arg BUILD_VERSION=$SHA --build-arg BUILD_TIME=$TS`.** The §2 web recipe passes them; the api one-shot (`$C build api`) does NOT — so as of 2026-06 prod `/version` returns `{"git_sha":"dev","built_at":"unknown"}` and you cannot confirm which commit is live. Mirror the web recipe's args on the api build to restore the deploy stamp.
+- **`NEXT_PUBLIC_YM_COUNTER_ID` (Yandex Metrica) is baked at `next build`** via a compose `web` build-arg substituted from `.env` (`${NEXT_PUBLIC_YM_COUNTER_ID:-}`). Activate by setting it in `/opt/rebloom/.env` + rebuilding `web`; every later web rebuild then auto-bakes it. Verify on prod by grepping the served root-layout chunk — `afterInteractive` injects the tag client-side, so it is **NOT** in the SSR HTML: `curl -s https://<domain>/_next/static/chunks/app/layout-*.js | grep <id>`.
 - **A new top-level `import` in backend app code must be a MAIN dependency**, not `[tool.poetry.group.dev]` — the prod image installs main deps only, so e.g. `import httpx` (dev-only, used by TestClient) crash-loops the api with `ModuleNotFoundError`. Use stdlib (`urllib`) for runtime HTTP, or promote the lib to a main dep via ADR. Catch it before deploy: `grep -rn "^import \|^from " app/ | <check against main deps>`.
 
 ### Verify a deploy
@@ -111,6 +113,7 @@ Infra — `docker compose config`. Plus `gitleaks` and the security-review gate.
 - **Caddy is bind-mounted** — after `git pull`, reload config atomically:
   `$C exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile`.
   - **Gotcha:** the Caddyfile is a *single-file* bind mount (`./Caddyfile:/etc/caddy/Caddyfile`). `git pull` replaces the file via rename → new inode → the container keeps the **old** inode, so `caddy reload` re-reads the stale file. After a Caddyfile change you must **`$C up -d --no-deps --force-recreate caddy`** (re-binds the current inode), not just reload. (Bitten tuning the `/media` cache header.)
+- **Security headers live at the Caddy edge** (one global `header {}` block → applies to web + api uniformly): HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options: SAMEORIGIN`, `-Server`, `-X-Powered-By`, and **`Content-Security-Policy-Report-Only`** (SECURITY A02). CSP ships **Report-Only first** (logs violations, blocks nothing) — its allowlist covers Yandex Metrica/Webvisor (`mc.yandex.ru`, `*.yandex.ru`), the Unsplash img proxy, and Next's inline runtime (`'unsafe-inline'`). **To enforce:** rename the header `Content-Security-Policy-Report-Only` → `Content-Security-Policy` and tighten `script-src` (drop `'unsafe-inline'` via nonce/hash) — but first confirm zero real violations in browser consoles (no report collector is wired yet; add a `report-uri`/`report-to` endpoint if you want central telemetry). Verify: `curl -skI https://<domain>/ | grep -i 'content-security\|x-frame\|x-powered'`.
 
 ---
 
