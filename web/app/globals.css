@@ -107,3 +107,25 @@ body {
 .pds .pdl-foot {
   display: none;
 }
+
+/* Mobile burger drawer (canon 0.7.0 `.pdl-drawer`). Canon contains it to a fixed-height
+ * device frame; its closed panel is parked off-screen-right (`translateX(100%)`). On web's
+ * SCROLLING document roots (which don't clip), that off-screen panel — even
+ * `visibility:hidden` — extends `scrollWidth` → a horizontal scrollbar / overflow-guard
+ * failure on every page that mounts the drawer. Clip it: the panel is only ever inside
+ * these bounds when open, so this is invisible open and kills the leak when closed. (The
+ * landing drawer is portaled to <body> with position:fixed; this covers it and the canon
+ * SEO shells alike.) */
+.pdl-drawer {
+  overflow: hidden;
+}
+
+/* The canon SEO shells (`.pds`/`.pdc` — PdGeoPage/PdSafeDeal/PdBlog*, imported wholesale)
+ * render the 0.7.0 burger → canon PdMobileMenu, whose guest links are hard-coded preview
+ * `.html` paths (no route prop) → 404 on web. Hide the burger on those pages until canon
+ * exposes link props; the home landing uses web's own MobileMenu (real routes) under `.pdl`
+ * and is unaffected. Round-trip: add route props to PdMobileMenu, then drop this rule. */
+.pds .pdl-nav-burger,
+.pdc .pdl-nav-burger {
+  display: none;
+}

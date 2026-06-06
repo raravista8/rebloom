@@ -7,6 +7,7 @@ declare function PdLanding({ platform, auth }: {
 declare namespace PdLanding {
     export { LandingNav as _navComp };
     export { Footer as _footComp };
+    export { MobileMenu as _menuComp };
 }
 declare function PdLandingNav({ auth, desk }: {
     auth?: boolean | undefined;
@@ -15,13 +16,18 @@ declare function PdLandingNav({ auth, desk }: {
 declare function PdLandingFooter({ desk }: {
     desk: any;
 }): React.JSX.Element;
-
 declare function LandingNav({ auth, desk }: {
     auth?: boolean | undefined;
     desk?: boolean | undefined;
 }): React.JSX.Element;
 declare function Footer({ desk }: {
     desk: any;
+}): React.JSX.Element;
+declare function MobileMenu({ open, auth, city: cityProp, onClose }: {
+    open: any;
+    auth?: boolean | undefined;
+    city?: string | undefined;
+    onClose: any;
 }): React.JSX.Element;
 
 declare function nbsp(s: any): any;

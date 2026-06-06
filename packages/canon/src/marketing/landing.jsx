@@ -58,7 +58,6 @@ const PdLanding = (function () {
   const Check = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>;
 
   // ── десктопный выбор города: поповер под кнопкой (НЕ полноэкранный мобильный список) ──
-  // web/: заменить статичный CITY_LIST на реальный справочник + persisted geo (см. HANDOFF §8.2).
   const CITY_LIST = [
     { id: 'msk', name: 'Москва', count: 128 },
     { id: 'spb', name: 'Санкт-Петербург', count: 86 },
@@ -121,12 +120,121 @@ const PdLanding = (function () {
     );
   }
 
+  // ── МОБИЛЬНОЕ МЕНЮ (drawer) ─────────────────────────────────────────
+  // Раскрытое состояние бургера: правый sheet + scrim. Контейнер .pdl имеет
+  // container-type:inline-size → служит containing block для position:fixed,
+  // поэтому шит покрывает ровно рамку устройства, а не весь документ.
+  const Grid = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.7"/><rect x="13" y="4" width="7" height="7" rx="1.7"/><rect x="4" y="13" width="7" height="7" rx="1.7"/><rect x="13" y="13" width="7" height="7" rx="1.7"/></svg>;
+  const Steps = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor" stroke="none"/></svg>;
+  const Phone = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/></svg>;
+  const Heart = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z"/></svg>;
+  const Chat = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M20 11.5a7.5 7.5 0 0 1-10.9 6.7L4.5 19.5l1.3-4.1A7.5 7.5 0 1 1 20 11.5Z"/></svg>;
+  const Gear = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.2M12 19.3v2.2M21.5 12h-2.2M4.7 12H2.5M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6M18.7 18.7l-1.6-1.6M6.9 6.9 5.3 5.3"/></svg>;
+  const Close = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>;
+  const ChevR = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 6 6 6-6 6"/></svg>;
+  const User = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M5.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></svg>;
+
+  const GUEST_LINKS = [
+    { icon: Grid, label: 'Каталог букетов', sub: 'Свежие букеты рядом', href: 'Передарим · Каталог букетов.html' },
+    { icon: Steps, label: 'Как это работает', sub: 'Три простых шага', href: 'Передарим · Лендинг peredarim.ru.html#how' },
+    { icon: Shield, label: 'Безопасная сделка', sub: 'Оплата при встрече', href: 'Передарим · SEO-страницы.html' },
+    { icon: Phone, label: 'Приложение', sub: 'iOS · Android · RuStore', href: 'Передарим · Лендинг peredarim.ru.html#app' },
+  ];
+  const AUTH_LINKS = [
+    { icon: Grid, label: 'Каталог букетов', href: '#catalog' },
+    { icon: Heart, label: 'Избранное', badge: '12', href: '#' },
+    { icon: Tag, label: 'Мои букеты', href: '#' },
+    { icon: Chat, label: 'Сделки и чат', badge: '2', href: '#' },
+    { icon: Bell, label: 'Уведомления', dot: true, href: '#' },
+    { icon: Gear, label: 'Настройки', href: '#' },
+  ];
+
+  function MobileMenu({ open, auth = false, city: cityProp = 'Москва', onClose }) {
+    const [city, setCity] = React.useState(cityProp);
+    const [cityOpen, setCityOpen] = React.useState(false);
+    const closeRef = React.useRef(null);
+    React.useEffect(() => {
+      if (!open) { setCityOpen(false); return; }
+      const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+      document.addEventListener('keydown', onKey);
+      const t = setTimeout(() => { try { closeRef.current && closeRef.current.focus(); } catch (e) {} }, 80);
+      return () => { document.removeEventListener('keydown', onKey); clearTimeout(t); };
+    }, [open]);
+    const cityCount = (CITY_LIST.find((c) => c.name === city) || {}).count;
+    const links = auth ? AUTH_LINKS : GUEST_LINKS;
+    return (
+      <div className={'pdl-drawer' + (open ? ' open' : '')} aria-hidden={!open}>
+        <div className="pdl-drawer-scrim" onClick={onClose} />
+        <aside className="pdl-drawer-panel" role="dialog" aria-modal="true" aria-label="Меню">
+          <header className="pdl-drawer-top">
+            <span className="pdl-brand"><Mark size={23} />Передарим</span>
+            <button className="pdl-drawer-x" ref={closeRef} onClick={onClose} aria-label="Закрыть меню"><Close /></button>
+          </header>
+
+          <div className="pdl-drawer-body">
+            {auth && (
+              <a className="pdl-drawer-prof" href="#" onClick={(e) => { e.preventDefault(); onClose(); }}>
+                <span className="av">М</span>
+                <span className="who"><b>Мария</b><span>Профиль и отзывы</span></span>
+                <span className="rt"><Star />4,9</span>
+                <ChevR className="go" />
+              </a>
+            )}
+
+            <div className={'pdl-drawer-city' + (cityOpen ? ' on' : '')}>
+              <button className="head" onClick={() => setCityOpen((o) => !o)} aria-expanded={cityOpen}>
+                <span className="pin"><Pin /></span>
+                <span className="tx"><b>{city}</b><span>{cityCount} свежих букетов рядом</span></span>
+                <Chev className={'chev' + (cityOpen ? ' up' : '')} />
+              </button>
+              {cityOpen && (
+                <div className="list">
+                  {CITY_LIST.map((c) => (
+                    <button key={c.id} className={'crow' + (c.name === city ? ' on' : '')} onClick={() => { setCity(c.name); setCityOpen(false); }}>
+                      <span className="nm">{c.name}</span>
+                      <span className="ct">{c.count}</span>
+                      {c.name === city && <Check className="ck" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <nav className="pdl-drawer-nav">
+              {links.map((l) => {
+                const Icon = l.icon;
+                return (
+                  <a key={l.label} className="pdl-drawer-row" href={l.href} onClick={onClose}>
+                    <span className="ic"><Icon /></span>
+                    <span className="tx"><b>{l.label}</b>{l.sub && <span>{l.sub}</span>}</span>
+                    {l.badge != null && <span className="bdg">{l.badge}</span>}
+                    {l.dot && <span className="dot" />}
+                    <ChevR className="go" />
+                  </a>
+                );
+              })}
+            </nav>
+          </div>
+
+          <footer className="pdl-drawer-foot">
+            <Btn variant="primary" block lg icon={Ic && Ic.plus} onClick={onClose}>Опубликовать букет</Btn>
+            {auth ? (
+              <button className="pdl-drawer-text danger" onClick={onClose}><User />Выйти из аккаунта</button>
+            ) : (
+              <p className="pdl-drawer-note">Уже с нами? <button className="lnk" onClick={onClose}>Войти</button></p>
+            )}
+          </footer>
+        </aside>
+      </div>
+    );
+  }
+
   // ── HERO ───────────────────────────────────────────────────────────
   function Hero({ desk }) {
     const text = (
       <div className="pdl-herotext">
         <p className="pdl-kicker"><Leaf className="lf" />Люди передаривают свои букеты</p>
-        {/* H1 — ведём ОБЕ аудитории, выгода покупателя в заголовке, идея — в лиде */}
+        {/* H1 — сначала C2C-идея («от людей рядом»), выгода покупателя рядом */}
         <h1 className="pdl-h1">Свежие букеты <em>напрямую от людей</em>, <span style={{whiteSpace:'nowrap'}}>в 2–3 раза</span> дешевле магазина</h1>
         <p className="pdl-lead"><b>Букет подарили, он порадовал и уже не нужен.</b> Вместо мусорки свежие цветы за полцены находят нового хозяина. Выставьте свой за минуту или заберите чужой.</p>
         <div className="pdl-cta">
@@ -254,14 +362,14 @@ const PdLanding = (function () {
       <section className="pdl-sec pdl-escrow" id="safety">
         <div className="pdl-in">
           <div className="pdl-sechead l">
-            <p className="pdl-kicker"><Shield style={{ width: 14, height: 14 }} />Безопасная сделка</p>
+            <p className="pdl-kicker"><Shield style={{ width: 14, height: 14 }} />Спокойная сделка</p>
             <h2 className="pdl-h2">Покупатель ничего не платит вперёд, оплата при встрече</h2>
             <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому деньги никуда не уходят заранее: вы платите, только когда увидели букет вживую.</p>
           </div>
           <div className="pdl-escrow-grid">
             <div className="pdl-eflow"><span className="en">1</span><div><h4>Написали и договорились</h4><p>Покупатель пишет продавцу в чате и договаривается о времени и месте встречи.</p></div></div>
-            <div className="pdl-eflow"><span className="en">2</span><div><h4>Встретились и проверили</h4><p>Самовывоз рядом, у дома или метро. Покупатель видит букет вживую.</p></div></div>
-            <div className="pdl-eflow"><span className="en">3</span><div><h4>Оплата при встрече</h4><p>Расплачиваетесь на месте, наличными или переводом продавцу. Никаких предоплат.</p></div></div>
+            <div className="pdl-eflow"><span className="en">2</span><div><h4>Встретились и проверили</h4><p>Самовывоз рядом, у дома или метро. Покупатель видит букет вживую и убеждается, что цветы свежие.</p></div></div>
+            <div className="pdl-eflow"><span className="en">3</span><div><h4>Оплата при встрече</h4><p>Понравился букет, расплачиваетесь на месте: наличными или переводом продавцу. Никаких предоплат.</p></div></div>
           </div>
           <div className="pdl-esafe">
             <p className="pdl-esafe-h"><HeartHands /><b>Доверие держится на отзывах</b></p>
@@ -283,7 +391,7 @@ const PdLanding = (function () {
           </div>
           <div className="pdl-obj">
             <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…букет уже подвявший?</h3><p>У каждого букета стоит дата и метка свежести, а на фото видно состояние. Берёте только то, что куплено сегодня или вчера, и платите соответственно.</p></div>
-            <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…продавец не придёт на встречу?</h3><p>Вы ничего не платите вперёд: оплата только при встрече, когда увидели букет. Рейтинг и отзывы показывают надёжных продавцов.</p></div>
+            <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…продавец не придёт на встречу?</h3><p>Вы ничего не платите вперёд: оплата только при встрече, когда увидели букет. А рейтинг и отзывы показывают надёжных продавцов.</p></div>
             <div className="pdl-objc"><h3 className="pdl-objq"><span className="qm">?</span>…неловко продавать подарок?</h3><p>Вы не выбрасываете и не наживаетесь. Вы отдаёте красивое тому, кому оно нужно, и возвращаете часть денег. Это бережно, а не стыдно.</p></div>
           </div>
         </div>
@@ -325,7 +433,7 @@ const PdLanding = (function () {
             <div className="pdl-finalc seller">
               <span className="role">Вам подарили букет</span>
               <h3>Подарите ему вторую жизнь</h3>
-              <p>Не выбрасывайте красивое и живое. Выставьте за минуту и верните часть денег, букет достанется кому-то рядом. Публикация бесплатная.</p>
+              <p>Не выбрасывайте красивое и живое. Выставьте за минуту и верните часть денег, букет достанется кому-то рядом. Публикация бесплатна, комиссия сервиса всего 5% с продажи.</p>
               <Btn variant="onbrand" lg icon={Ic && Ic.plus}>Опубликовать букет</Btn>
             </div>
             <div className="pdl-finalc buyer">
@@ -379,8 +487,8 @@ const PdLanding = (function () {
   const REVIEWS = [
     { q: 'Забрала пионы за 690 ₽ в соседнем дворе, в магазине такие же по 2 000. Свежие, простояли восемь дней.', n: 'Алина', city: 'Москва', role: 'buyer', c: '#CF5638' },
     { q: 'Подарили огромный букет на юбилей, а дома ставить некуда. Выставила за полцены, забрали через час. Приятно, что не выбросила.', n: 'Ольга', city: 'Санкт-Петербург', role: 'seller', c: '#5B8C68' },
-    { q: 'Боялся развода, но договорились в чате, встретились у метро, заплатил, когда увидел букет. Всё честно.', n: 'Тимур', city: 'Казань', role: 'buyer', c: '#C98A1E' },
-    { q: 'Опубликовать вышло реально за минуту с телефона. Покупатель забрал в тот же вечер.', n: 'Марина', city: 'Москва', role: 'seller', c: '#23201B' },
+    { q: 'Никакой предоплаты: договорились в чате, встретились у метро и я заплатил уже на месте, когда увидел букет. Всё честно.', n: 'Тимур', city: 'Казань', role: 'buyer', c: '#C98A1E' },
+    { q: 'Опубликовала за минуту с телефона. Покупатель забрал букет в тот же вечер и расплатился при встрече, наличными.', n: 'Марина', city: 'Москва', role: 'seller', c: '#23201B' },
     { q: 'Взял букет к свиданию за треть цены. Никто и не догадался, что он «передаренный».', n: 'Артём', city: 'Екатеринбург', role: 'buyer', c: '#5B8C68' },
     { q: 'Сначала было неловко продавать подарок. Но кому-то он по-настоящему пригодился, это куда приятнее мусорки.', n: 'Юлия', city: 'Москва', role: 'seller', c: '#CF5638' },
   ];
@@ -412,13 +520,15 @@ const PdLanding = (function () {
 
   // ── NAV (два состояния: гость / авторизован) ───────────────────────
   function Nav({ desk, auth }) {
+    const [menu, setMenu] = React.useState(false);
     if (auth) {
       return (
+        <>
         <header className="pdl-nav">
           <div className="pdl-nav-in">
             <span className="pdl-brand"><Mark size={24} />Передарим</span>
             <div className="pdl-nav-mid">
-              <button className="pdl-nav-city"><Pin className="pin" />Москва<Chev /></button>
+              <NavCity align="l" />
               <div className="pdl-nav-search"><Search /><span>Поиск свежих букетов в Москве</span></div>
             </div>
             <div className="pdl-navright">
@@ -426,17 +536,21 @@ const PdLanding = (function () {
               <button className="pdl-nav-icon pdl-nav-fav" aria-label="Избранное"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z"/></svg></button>
               <button className="pdl-nav-ava" aria-label="Профиль">М</button>
               <span className="pdl-nav-cta"><Btn variant="primary" icon={Ic && Ic.plus}>Опубликовать букет</Btn></span>
-              <button className="pdl-nav-burger" aria-label="Меню"><Menu /></button>
+              <button className="pdl-nav-burger" aria-label="Меню" aria-expanded={menu} onClick={() => setMenu(true)}><Menu /></button>
             </div>
           </div>
         </header>
+        <MobileMenu open={menu} auth onClose={() => setMenu(false)} />
+        </>
       );
     }
     // гость
     return (
+      <>
       <header className="pdl-nav">
         <div className="pdl-nav-in">
           <span className="pdl-brand"><Mark size={24} />Передарим</span>
+          <NavCity align="l" />
           <nav className="pdl-navlinks">
             <a href="Передарим · Каталог букетов.html">Каталог</a>
             <a href="#how">Как работает</a>
@@ -444,13 +558,14 @@ const PdLanding = (function () {
             <a href="#app">Приложение</a>
           </nav>
           <div className="pdl-navright">
-            <button className="pdl-nav-city" onClick={(e) => e.preventDefault()}><Pin className="pin" />Москва<Chev /></button>
             <button className="pdl-nav-login">Войти</button>
             <span className="pdl-nav-cta"><Btn variant="primary" icon={Ic && Ic.plus}>Опубликовать букет</Btn></span>
-            <button className="pdl-nav-burger" aria-label="Меню"><Menu /></button>
+            <button className="pdl-nav-burger" aria-label="Меню" aria-expanded={menu} onClick={() => setMenu(true)}><Menu /></button>
           </div>
         </div>
       </header>
+      <MobileMenu open={menu} onClose={() => setMenu(false)} />
+      </>
     );
   }
 
@@ -484,9 +599,11 @@ const PdLanding = (function () {
   };
   PdLandingComp._navComp = LandingNav;
   PdLandingComp._footComp = Footer;
+  PdLandingComp._menuComp = MobileMenu;
   return PdLandingComp;
 })();
 
 const PdLandingNav = PdLanding._navComp;
 const PdLandingFooter = PdLanding._footComp;
-export { PdLanding, PdLandingNav, PdLandingFooter };
+const PdMobileMenu = PdLanding._menuComp;
+export { PdLanding, PdLandingNav, PdLandingFooter, PdMobileMenu };
