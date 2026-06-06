@@ -123,7 +123,7 @@ const priceOk = (k: Sel['price'], kop: number) => {
   const r = kop / 100;
   return k === 'any' || (k === 'lt1k' ? r < 1000 : k === '1k2k' ? r >= 1000 && r <= 2000 : r > 2000);
 };
-const ratingOk = (k: Sel['rating'], v: number) => k === 'any' || (k === '45' ? v >= 4.5 : k === '48' ? v >= 4.8 : v >= 5);
+const ratingOk = (k: Sel['rating'], v: number | null) => k === 'any' || (v != null && (k === '45' ? v >= 4.5 : k === '48' ? v >= 4.8 : v >= 5));
 
 function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status: 'loading' | 'ready' | 'error'; cityId: string; reload: () => void }) {
   const [sel, setSel] = useState<Sel>({ price: 'any', fresh: 'any', rating: 'any' });

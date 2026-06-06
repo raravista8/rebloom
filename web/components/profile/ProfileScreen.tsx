@@ -67,17 +67,17 @@ export default function ProfileScreen({ id }: { id: string }) {
   }
 
   const { user, reviews, active_listings } = data;
-  const trusted = user.seller_rating >= 4.5 && user.deals_count >= 5;
+  const trusted = (user.seller_rating ?? 0) >= 4.5 && user.deals_count >= 5;
 
   return (
     <ScreenChrome title="Профиль" action={action}>
       <div className="pd-prof">
-        <PdAvatar seller={{ n: user.display_name }} size={64} />
+        <PdAvatar seller={{ n: user.display_name || 'Продавец' }} size={64} />
         <div>
           <h2>{user.display_name}</h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-            <PdStars value={Math.round(user.seller_rating)} />
-            <b style={{ fontSize: 14 }}>{user.seller_rating.toFixed(1)}</b>
+            <PdStars value={Math.round(user.seller_rating ?? 0)} />
+            <b style={{ fontSize: 14 }}>{user.seller_rating != null ? user.seller_rating.toFixed(1) : '—'}</b>
             <span style={{ color: 'var(--pd-muted)', fontSize: 13 }}>
               · {user.deals_count} {plural(user.deals_count, 'сделка', 'сделки', 'сделок')}
             </span>
@@ -114,7 +114,7 @@ export default function ProfileScreen({ id }: { id: string }) {
           <h2 className="pd-sectitle">Отзывы</h2>
           <p className="pd-secsub">
             {reviews.length} {plural(reviews.length, 'отзыв', 'отзыва', 'отзывов')}
-            {reviews.length > 0 && ` · ${user.seller_rating.toFixed(1)} ★`}
+            {reviews.length > 0 && user.seller_rating != null && ` · ${user.seller_rating.toFixed(1)} ★`}
           </p>
         </div>
       </div>

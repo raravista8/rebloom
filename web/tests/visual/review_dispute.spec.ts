@@ -18,7 +18,7 @@ function json(route: Route, data: unknown) {
 }
 
 test('review: validation then submit → спасибо', async ({ page }) => {
-  await page.route('**/api/deals/d1', (r) => json(r, deal('done')));
+  await page.route('**/api/deals/d1', (r) => json(r, { deal: deal('done') }));
   await page.route('**/api/deals/d1/review', (r) => json(r, { id: 'r1', score: 5, text: 'ok' }));
   await page.goto('/deal/d1/review');
   await expect(page.getByText('Оцените Аня')).toBeVisible();
@@ -30,9 +30,9 @@ test('review: validation then submit → спасибо', async ({ page }) => {
 });
 
 test('report: reason required, then submit → back to deal', async ({ page }) => {
-  await page.route('**/api/deals/d1/report', (r) => json(r, deal('problem')));
-  await page.route('**/api/deals/d1', (r) => json(r, deal('problem')));
-  await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [], next_cursor: null }));
+  await page.route('**/api/deals/d1/report', (r) => json(r, { deal: deal('problem') }));
+  await page.route('**/api/deals/d1', (r) => json(r, { deal: deal('problem') }));
+  await page.route('**/api/deals/d1/messages', (r) => json(r, { messages: [], next_cursor: null }));
   await page.goto('/deal/d1/dispute/new');
   await page.getByRole('button', { name: 'Отправить жалобу' }).click();
   await expect(page.getByText('Выберите причину')).toBeVisible();

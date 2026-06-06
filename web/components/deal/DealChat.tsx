@@ -8,7 +8,7 @@ import { PdBubble } from '@/components/canon';
 import { IconSend } from '@/components/icons';
 import { api, ApiError } from '@/lib/api';
 import { formatTime } from '@/lib/format';
-import type { ChatMessage, Paginated } from '@/lib/types';
+import type { ChatMessage } from '@/lib/types';
 
 export default function DealChat({ dealId }: { dealId: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -26,8 +26,8 @@ export default function DealChat({ dealId }: { dealId: string }) {
   useEffect(() => {
     let alive = true;
     api
-      .get<Paginated<ChatMessage>>(`/deals/${dealId}/messages`)
-      .then((p) => alive && setMessages(p.items))
+      .get<{ messages: ChatMessage[]; next_cursor: string | null }>(`/deals/${dealId}/messages`)
+      .then((p) => alive && setMessages(p.messages))
       .catch(() => {});
     return () => {
       alive = false;

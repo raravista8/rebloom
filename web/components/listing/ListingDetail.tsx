@@ -219,11 +219,11 @@ export default function ListingDetail({ id }: { id: string }) {
             className="pdw-card"
             style={{ display: 'flex', alignItems: 'center', gap: 11, marginTop: 16, textDecoration: 'none', color: 'inherit' }}
           >
-            <PdAvatar seller={{ n: listing.seller.display_name }} size={44} />
+            <PdAvatar seller={{ n: listing.seller.display_name || 'Продавец' }} size={44} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, fontSize: 15 }}>{listing.seller.display_name}</div>
+              <div style={{ fontWeight: 700, fontSize: 15 }}>{listing.seller.display_name || 'Продавец'}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 12.5, marginTop: 2 }}>
-                <PdStars value={Math.round(listing.seller.seller_rating)} /> {listing.seller.seller_rating.toFixed(1)}
+                {listing.seller.seller_rating != null ? <><PdStars value={Math.round(listing.seller.seller_rating)} /> {listing.seller.seller_rating.toFixed(1)}</> : <span>Новый продавец</span>}
                 {listing.seller.deals_count != null && ` · ${listing.seller.deals_count} сделок`}
               </div>
             </div>
@@ -274,11 +274,11 @@ export default function ListingDetail({ id }: { id: string }) {
           href={`/u/${listing.seller.id}`}
           style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '14px 0', marginTop: 6, borderTop: '1px solid var(--pd-border)', borderBottom: '1px solid var(--pd-border)', textDecoration: 'none', color: 'inherit' }}
         >
-          <PdAvatar seller={{ n: listing.seller.display_name }} size={44} />
+          <PdAvatar seller={{ n: listing.seller.display_name || 'Продавец' }} size={44} />
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 700, fontSize: 15 }}>{listing.seller.display_name}</div>
+            <div style={{ fontWeight: 700, fontSize: 15 }}>{listing.seller.display_name || 'Продавец'}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 12.5, marginTop: 2 }}>
-              <PdStars value={Math.round(listing.seller.seller_rating)} /> {listing.seller.seller_rating.toFixed(1)}
+              {listing.seller.seller_rating != null ? <><PdStars value={Math.round(listing.seller.seller_rating)} /> {listing.seller.seller_rating.toFixed(1)}</> : <span>Новый продавец</span>}
               {listing.seller.deals_count != null && ` · ${listing.seller.deals_count} сделок`}
             </div>
           </div>

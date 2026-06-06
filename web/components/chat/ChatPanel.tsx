@@ -9,7 +9,7 @@ import { PdBubble } from '@/components/canon';
 import { IconSend } from '@/components/icons';
 import { api, ApiError } from '@/lib/api';
 import { formatTime } from '@/lib/format';
-import type { ChatMessage, Paginated } from '@/lib/types';
+import type { ChatMessage } from '@/lib/types';
 
 export default function ChatPanel({
   loadPath,
@@ -37,8 +37,8 @@ export default function ChatPanel({
   useEffect(() => {
     let alive = true;
     api
-      .get<Paginated<ChatMessage>>(loadPath)
-      .then((p) => alive && setMessages(p.items))
+      .get<{ messages: ChatMessage[]; next_cursor: string | null }>(loadPath)
+      .then((p) => alive && setMessages(p.messages))
       .catch(() => {})
       .finally(() => alive && setLoaded(true));
     return () => {

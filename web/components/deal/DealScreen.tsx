@@ -92,7 +92,7 @@ function SharePointForm({ dealId, onDone }: { dealId: string; onDone: (d: DealVi
     setBusy(true);
     setErr(undefined);
     try {
-      onDone(await api.post<DealView>(`/deals/${dealId}/share-point`, { address: address.trim() }));
+      onDone((await api.post<{ deal: DealView }>(`/deals/${dealId}/share-point`, { address: address.trim() })).deal);
     } catch {
       setErr('Не удалось отправить. Попробуйте ещё раз.');
     } finally {
@@ -129,7 +129,7 @@ export default function DealScreen({ id }: { id: string }) {
   const load = useCallback(async () => {
     setPhase('loading');
     try {
-      setDeal(await api.get<DealView>(`/deals/${id}`));
+      setDeal((await api.get<{ deal: DealView }>(`/deals/${id}`)).deal);
       setPhase('loaded');
     } catch (e) {
       setPhase(e instanceof ApiError && (e.code === 'not_found' || e.code === 'forbidden') ? 'not_found' : 'error');
@@ -143,7 +143,7 @@ export default function DealScreen({ id }: { id: string }) {
   const confirmReceipt = useCallback(async () => {
     setActing(true);
     try {
-      setDeal(await api.post<DealView>(`/deals/${id}/confirm-receipt`));
+      setDeal((await api.post<{ deal: DealView }>(`/deals/${id}/confirm-receipt`)).deal);
     } catch {
       /* keep current state */
     } finally {
@@ -154,7 +154,7 @@ export default function DealScreen({ id }: { id: string }) {
   const cancelDeal = useCallback(async () => {
     setActing(true);
     try {
-      setDeal(await api.post<DealView>(`/deals/${id}/cancel`, {}));
+      setDeal((await api.post<{ deal: DealView }>(`/deals/${id}/cancel`, {})).deal);
     } catch {
       /* keep current state */
     } finally {

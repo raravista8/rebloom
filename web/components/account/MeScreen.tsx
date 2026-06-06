@@ -80,15 +80,15 @@ export default function MeScreen() {
     <ScreenChrome title="Профиль" back={false} tab>
       {user && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '18px 16px' }}>
-          <PdAvatar seller={{ n: user.display_name }} size={56} />
+          <PdAvatar seller={{ n: user.display_name || 'Профиль' }} size={56} />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontWeight: 700, fontSize: 18 }}>{user.display_name}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 13, marginTop: 3 }}>
               <IconPin className="pd-i13" />
               {cityName(user.city_id)}
               <span style={{ margin: '0 2px' }}>·</span>
-              <PdStars value={Math.round(user.seller_rating)} />
-              <b style={{ color: 'var(--pd-text)' }}>{user.seller_rating.toFixed(1)}</b>
+              <PdStars value={Math.round(user.seller_rating ?? 0)} />
+              <b style={{ color: 'var(--pd-text)' }}>{user.seller_rating != null ? user.seller_rating.toFixed(1) : '—'}</b>
               <span>· {user.deals_count} сделок</span>
             </div>
           </div>
