@@ -23,8 +23,8 @@ export default defineConfig({
     {
       // Functional/DOM specs run mobile-first; they own the admin desktop cases
       // inline via test.use(). `desktop.spec.ts` is for the desktop project only.
-      name: 'mobile-360',
-      use: { ...devices['Pixel 5'], viewport: { width: 360, height: 800 } },
+      name: 'mobile-375',
+      use: { ...devices['Pixel 5'], viewport: { width: 375, height: 800 } },
       testIgnore: '**/desktop.spec.ts',
     },
     {

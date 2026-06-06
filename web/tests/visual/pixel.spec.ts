@@ -1,7 +1,7 @@
 import { test, expect, type Route } from '@playwright/test';
 
 // REAL pixel-diff regression (toHaveScreenshot ≤2%, animations disabled, reduced
-// motion). Runs in BOTH projects → mobile-360 + desktop-1280 baselines per screen,
+// motion). Runs in BOTH projects → mobile-375 + desktop-1280 baselines per screen,
 // so any layout change (clamp, clip, mobile-tree-on-desktop, spacing) fails CI.
 // Baselines are generated on Linux by the `visual-baselines` workflow (macOS↔Linux
 // font rendering differs) — never commit locally-generated PNGs.

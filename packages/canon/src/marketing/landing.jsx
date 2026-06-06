@@ -84,8 +84,6 @@ const PdLanding = (function () {
           <span className="t"><Tag />В 2–3 раза дешевле</span>
           <span className="sep" />
           <span className="t"><Shield />Оплата при встрече</span>
-          <span className="sep" />
-          <span className="t"><Pin />Рядом с домом</span>
         </div>
       </div>
     );
@@ -93,6 +91,7 @@ const PdLanding = (function () {
       <div className="pdl-herovis">
         <div className="pdl-herophoto">
           <img src={HERO_IMG} alt="Свежий букет роз и гортензий" loading="lazy" />
+          <span className="pdl-heroscrim" aria-hidden="true" />
           <span className="pdl-livecount"><span className="pdl-livedot" />128 букетов от людей рядом</span>
           <div className="pdl-pricetag">
             <div><div className="old">17 200 ₽ в цветочной</div><div className="new">от 4 500 ₽</div></div>
@@ -187,7 +186,6 @@ const PdLanding = (function () {
           <div className="pdl-vals">
             <div className="pdl-val"><div className="ic"><Tag /></div><div><b>В 2–3 раза дешевле</b><span>свежие букеты по-честному</span></div></div>
             <div className="pdl-val"><div className="ic g"><Shield /></div><div><b>Оплата при встрече</b><span>платите, когда забрали букет</span></div></div>
-            <div className="pdl-val"><div className="ic gold"><Pin /></div><div><b>Рядом с домом</b><span>самовывоз у дома или метро</span></div></div>
           </div>
         </div>
       </section>
@@ -391,6 +389,7 @@ const PdLanding = (function () {
             <a href="#app">Приложение</a>
           </nav>
           <div className="pdl-navright">
+            <button className="pdl-nav-city" onClick={(e) => e.preventDefault()}><Pin className="pin" />Москва<Chev /></button>
             <button className="pdl-nav-login">Войти</button>
             <span className="pdl-nav-cta"><Btn variant="primary" icon={Ic && Ic.plus}>Опубликовать букет</Btn></span>
             <button className="pdl-nav-burger" aria-label="Меню"><Menu /></button>

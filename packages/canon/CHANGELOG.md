@@ -2,6 +2,19 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.6.1] — 2026-06-05 — Landing hero: mobile layout, header city selector, trust trim
+
+Landing-only patch (`./marketing` · `PdLanding`). `reference/prototypes/pd-land.{jsx,css}` are byte-current; `src/marketing/landing.jsx` + `dist/canon.css` re-synced — rebuild `dist/*.js` via `npm run build`.
+
+### Changed — marketing landing
+- **Mobile hero reworked.** The old stacked «text → photo below» read as a disjointed «bouquet at the bottom», and a tried full-bleed-photo-background overlay overlapped badly. Final: on narrow containers the **photo is a bounded banner on top** (`order:-1`, `aspect-ratio:16/9`, price tag + live-count chips contained inside the card), with the dark text block below. Scoped to `@container pdl (max-width:899.98px)` so the **desktop side-by-side hero is untouched**. (Inert `.pdl-heroscrim` span kept, `display:none`.)
+- **Header city selector.** Guest nav gains a tappable «📍 Москва ▾» (`.pdl-nav-city`) so a visitor sees their city in the first seconds and can switch it. On **mobile** it sits where «Войти» was; **«Войти» moves under the hamburger** (`.pdl-nav-login` now `display:none` on mobile, shown on `.pdl--desk` + container ≥900). `web/` wires the real city picker + persisted geo.
+- **Trust trimmed.** Removed «Рядом с домом» from the hero trust chips **and** the «Как это работает» advantages — both now read «В 2–3 раза дешевле · Оплата при встрече» (pickup is covered elsewhere; the chip duplicated the headline).
+
+### Notes for the consumer
+- `dist/canon.css` + `src/styles/canon.css` updated (mobile-hero container block, `.pdl-nav-login` visibility, `.pdl-heroscrim` base). No token changes.
+- Patch is landing-scoped — no other surface touched since 0.6.0.
+
 ## [0.6.0] — 2026-06-05 — C2C-forward landing hero + settings без денег + copy pass
 
 **Source of truth synced:** all changes were authored in the design prototypes; `reference/prototypes/*`

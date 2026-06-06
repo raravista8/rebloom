@@ -1,4 +1,4 @@
-# @rebloom/canon — v0.6.0
+# @rebloom/canon — v0.6.1
 
 Versioned UI canon for **Передарим** (code-name `rebloom`): the client app + operator admin.
 Authored in Claude Design, consumed by Claude Code in `web/`. This package is the **single source of truth** for the product UI — what's drawn and reviewed here is what `web/` (and the Capacitor iOS/Android wrappers) render. Manual JSX re-implementation in `web/` is forbidden (`CANON_PACKAGE_TZ.md §1`, §10).
