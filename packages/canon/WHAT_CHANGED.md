@@ -1,43 +1,46 @@
-# WHAT CHANGED — canon 0.6.2 (basis for the CHANGELOG section)
+# WHAT CHANGED — canon 0.6.3 (basis for the CHANGELOG section)
 
-Landing-only patch (`./marketing` · `PdLanding`). **Read `CLAUDE_CODE_HANDOFF.md §0` first** — it lists the
-hero fields prod silently dropped after 0.6.0 and how to verify them.
+Landing-only patch (`./marketing` · `PdLanding`). Pure presentation pass on the **lower landing**
+(how-it-works → escrow → objections → app → final CTA) plus a real spacing-cascade fix. No structural
+or route changes; no token changes.
 
-## ⚠️ Why this version exists
-After 0.6.0 shipped the new C2C hero, **prod still rendered the OLD hero** (eyebrow «Вторая жизнь букетов»,
-H1 «…дешевле цветочного магазина», no photo, price «от 690 ₽ / −60%»). Root cause: the hero copy lives in the
-**component**, but the `web/` build was driven off the **meta-contract table in the handoff (§8.3), which still
-carried the pre-0.6.0 H1** — so the visible H1/eyebrow/lede/price/photo were never re-vendored. 0.6.2 fixes the
-contract and adds an explicit hero-field checklist so this can't silently regress again.
+## ⚠️ The fix that explains all the «padding» complaints
+The global reset **`.pd-root p, .pd-root h1, .pd-root h2 { margin:0 }`** has specificity `(0,0,1,1)` and
+**outranks** the single-class `.pdl-h2` / `.pdl-sub` / `.pdl-h1` / `.pdl-lead` `(0,0,1,0)`. So every
+kicker→heading→subtitle gap was actually `0` and the only separation was line-leading — earlier margin
+tweaks on those classes were silently dead. Re-asserted with **two-class selectors that win** and unified
+to a consistent **14px** gap everywhere (`.pdl-sechead .pdl-h2/.pdl-sub`, `.pdl-app-in .pdl-h2/.pdl-sub`,
+new `.pdl-hero .pdl-h1/.pdl-lead`).
 
 ## Changes
 
-1. **Hero fields re-asserted (no visual change vs 0.6.0 — this is a vendoring fix).** Canonical hero is:
-   eyebrow «Люди передаривают свои букеты», H1 «Свежие букеты *напрямую от людей*, в 2–3 раза дешевле
-   магазина», lede «Букет подарили, он порадовал и уже не нужен…», photo `hero-lacybird.png`, price tag
-   `17 200 ₽ в цветочной → от 4 500 ₽`, badge `−74%`, live-count «128 букетов от людей рядом». **§8.3 meta H1
-   corrected** to match the component.
+1. **«Как это работает» steps** — bigger cards/badges/type; a **connector chevron** threads 1→2→3 into a
+   journey; the **buyer** step (3) flips its badge/tag from terracotta to fresh-green; role tags are pills;
+   hover lift. Copy: step-1 body → «Вам подарили букет, он порадовал и уже не нужен.»
 
-2. **Desktop city selector is now a real popover.** The header «📍 Москва ▾» opens an anchored dropdown
-   (`.pdl-citymenu`: the full list of all 10 cities with live counts + checkmark on the current one — no search,
-   all rows fit without scrolling) — **not** the mobile full-screen «Город» page that prod was falling back to
-   on desktop. `NavCity` owns the open/close + selection; the open/close ref sits on the wrapper so a second
-   click on the trigger reliably closes it; also closes on outside-click / Esc. `web/` wires the real city
-   dictionary + persisted geo.
+2. **Escrow (dark) block** — warm terracotta radial glow on the dark field; flow items restacked
+   (badge-on-top) with enlarged gold badges + connector chevron + hover; **trust note redesigned** from an
+   icon-left card (read as a 4th step on mobile, broken optical vertical) into a captioned gold-tint callout
+   with the heart inline above the heading. *(markup change: `.pdl-esafe` → `.pdl-esafe-h` heading row + body)*
 
-3. **City selector placed consistently.** It now sits **immediately after the brand** in *both* header states
-   (guest + authorized). Previously the guest header put it on the right, next to «Войти» — the two states
-   disagreed. One position now.
+3. **Objections «А вдруг…»** — «?» token moved above the question (full-width, `text-wrap:balance`) to kill
+   the ragged breaks beside the inline badge; circular badge; bigger type + padding; hover lift.
 
-4. **Authorized-header CTA unified to «Опубликовать букет».** The landing header preview used «Продать букет»
-   (the in-app verb) while everything else on the marketing surface says «Опубликовать букет». On the landing
-   the brand voice wins; the **in-app** authenticated surfaces (feed/catalog/sell) keep «Продать букет».
+4. **Final split CTA** — buttons pinned to the bottom so both align; **buyer card** white → (green, rejected
+   as clashing) → **warm oat/sand `#ECE4D6`** pairing cleanly with the terracotta seller; deeper seller
+   gradient + shadow; one-line eyebrow labels; bigger body; hover lift.
 
-5. **Avatar ring fixed.** `.pdl-nav-ava` is a `<button>` and never reset its UA border → a dark ring around the
-   terracotta avatar. Added `border:none; padding:0; cursor:pointer`.
+5. **Catalog filters on mobile** — stack the bar: each label on its own line above its chips
+   (`.pdl-flabel{ flex-basis:100% }`); `.pdl--desk` restores the inline row.
+
+6. **Reviews copy** — gender fix: buyer card «Взяла…» → «**Взял**…», Вера → **Артём** (Екатеринбург);
+   seller card Никита → **Юлия** (Москва).
+
+7. **Section-header spacing fix** — see the call-out above; 14px heading→subtitle gap unified across
+   catalog / how / escrow / reviews / objections heads, the app block, and the hero.
 
 ---
 
 **Authoritative:** `reference/prototypes/pd-land.{jsx,css}` are byte-current. `src/marketing/landing.jsx`,
 `dist/canon.css` and `src/styles/canon.css` re-synced. Rebuild `dist/*.js` via `npm run build`.
-Landing-scoped — nothing else changed since 0.6.1.
+Landing-scoped — nothing else changed since 0.6.2.
