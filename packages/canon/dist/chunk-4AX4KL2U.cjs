@@ -75,11 +75,205 @@ var PdLanding = (function() {
   const Chev2 = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "m6 9 6 6 6-6" }) });
   const Menu2 = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M4 7h16M4 12h16M4 17h16" }) });
   const Star = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "currentColor", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9z" }) });
+  const Check = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "m5 12.5 4.5 4.5L19 7" }) });
+  const CITY_LIST = [
+    { id: "msk", name: "\u041C\u043E\u0441\u043A\u0432\u0430", count: 128 },
+    { id: "spb", name: "\u0421\u0430\u043D\u043A\u0442-\u041F\u0435\u0442\u0435\u0440\u0431\u0443\u0440\u0433", count: 86 },
+    { id: "kzn", name: "\u041A\u0430\u0437\u0430\u043D\u044C", count: 41 },
+    { id: "ekb", name: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0431\u0443\u0440\u0433", count: 33 },
+    { id: "nsk", name: "\u041D\u043E\u0432\u043E\u0441\u0438\u0431\u0438\u0440\u0441\u043A", count: 27 },
+    { id: "nn", name: "\u041D\u0438\u0436\u043D\u0438\u0439 \u041D\u043E\u0432\u0433\u043E\u0440\u043E\u0434", count: 22 },
+    { id: "sam", name: "\u0421\u0430\u043C\u0430\u0440\u0430", count: 19 },
+    { id: "chel", name: "\u0427\u0435\u043B\u044F\u0431\u0438\u043D\u0441\u043A", count: 18 },
+    { id: "krs", name: "\u041A\u0440\u0430\u0441\u043D\u043E\u044F\u0440\u0441\u043A", count: 16 },
+    { id: "ufa", name: "\u0423\u0444\u0430", count: 14 }
+  ];
+  function CityMenu({ value, onPick, align }) {
+    return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdl-citymenu" + (align === "r" ? " r" : ""), role: "dialog", "aria-label": "\u0412\u044B\u0431\u043E\u0440 \u0433\u043E\u0440\u043E\u0434\u0430", children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdl-citymenu-list", children: CITY_LIST.map((c) => /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-cityrow" + (c.name === value ? " on" : ""), onClick: () => onPick(c.name), children: [
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pin", children: /* @__PURE__ */ jsxRuntime.jsx(Pin2, {}) }),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "nm", children: c.name }),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ct", children: c.count }),
+      c.name === value && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ck", children: /* @__PURE__ */ jsxRuntime.jsx(Check, {}) })
+    ] }, c.id)) }) });
+  }
+  function NavCity({ align }) {
+    const [open, setOpen] = React__default.default.useState(false);
+    const [city, setCity] = React__default.default.useState("\u041C\u043E\u0441\u043A\u0432\u0430");
+    const wrapRef = React__default.default.useRef(null);
+    React__default.default.useEffect(() => {
+      if (!open) return;
+      const onDoc = (e) => {
+        if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+      };
+      const onKey = (e) => {
+        if (e.key === "Escape") setOpen(false);
+      };
+      document.addEventListener("mousedown", onDoc);
+      document.addEventListener("keydown", onKey);
+      return () => {
+        document.removeEventListener("mousedown", onDoc);
+        document.removeEventListener("keydown", onKey);
+      };
+    }, [open]);
+    return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-citywrap", ref: wrapRef, children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-nav-city" + (open ? " open" : ""), onClick: () => setOpen((o) => !o), "aria-haspopup": "dialog", "aria-expanded": open, children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Pin2, { className: "pin" }),
+        city,
+        /* @__PURE__ */ jsxRuntime.jsx(Chev2, { className: "chev" + (open ? " up" : "") })
+      ] }),
+      open && /* @__PURE__ */ jsxRuntime.jsx(CityMenu, { value: city, align, onPick: (n) => {
+        setCity(n);
+        setOpen(false);
+      } })
+    ] });
+  }
   function CityChips({ cls }) {
     return /* @__PURE__ */ jsxRuntime.jsx("div", { className: cls, children: CITIES.map((c, i) => /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-citychip" + (i === 0 ? " on" : ""), children: [
       c.name,
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "n", children: c.count })
     ] }, c.id)) });
+  }
+  const Grid = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("rect", { x: "4", y: "4", width: "7", height: "7", rx: "1.7" }),
+    /* @__PURE__ */ jsxRuntime.jsx("rect", { x: "13", y: "4", width: "7", height: "7", rx: "1.7" }),
+    /* @__PURE__ */ jsxRuntime.jsx("rect", { x: "4", y: "13", width: "7", height: "7", rx: "1.7" }),
+    /* @__PURE__ */ jsxRuntime.jsx("rect", { x: "13", y: "13", width: "7", height: "7", rx: "1.7" })
+  ] });
+  const Steps = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M9 6h11M9 12h11M9 18h11" }),
+    /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "4.5", cy: "6", r: "1.3", fill: "currentColor", stroke: "none" }),
+    /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "4.5", cy: "12", r: "1.3", fill: "currentColor", stroke: "none" }),
+    /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "4.5", cy: "18", r: "1.3", fill: "currentColor", stroke: "none" })
+  ] });
+  const Phone = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("rect", { x: "7", y: "2.5", width: "10", height: "19", rx: "2.6" }),
+    /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M11 18.5h2" })
+  ] });
+  const Heart = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" }) });
+  const Chat = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M20 11.5a7.5 7.5 0 0 1-10.9 6.7L4.5 19.5l1.3-4.1A7.5 7.5 0 1 1 20 11.5Z" }) });
+  const Gear = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "12", cy: "12", r: "3" }),
+    /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M12 2.5v2.2M12 19.3v2.2M21.5 12h-2.2M4.7 12H2.5M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6M18.7 18.7l-1.6-1.6M6.9 6.9 5.3 5.3" })
+  ] });
+  const Close = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M6 6l12 12M18 6 6 18" }) });
+  const ChevR = (p) => /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "m9 6 6 6-6 6" }) });
+  const User = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "12", cy: "8.5", r: "3.6" }),
+    /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M5.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" })
+  ] });
+  const GUEST_LINKS = [
+    { icon: Grid, label: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0431\u0443\u043A\u0435\u0442\u043E\u0432", sub: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C", href: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C \xB7 \u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0431\u0443\u043A\u0435\u0442\u043E\u0432.html" },
+    { icon: Steps, label: "\u041A\u0430\u043A \u044D\u0442\u043E \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442", sub: "\u0422\u0440\u0438 \u043F\u0440\u043E\u0441\u0442\u044B\u0445 \u0448\u0430\u0433\u0430", href: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C \xB7 \u041B\u0435\u043D\u0434\u0438\u043D\u0433 peredarim.ru.html#how" },
+    { icon: Shield2, label: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430", sub: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435", href: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C \xB7 SEO-\u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B.html" },
+    { icon: Phone, label: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", sub: "iOS \xB7 Android \xB7 RuStore", href: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C \xB7 \u041B\u0435\u043D\u0434\u0438\u043D\u0433 peredarim.ru.html#app" }
+  ];
+  const AUTH_LINKS = [
+    { icon: Grid, label: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0431\u0443\u043A\u0435\u0442\u043E\u0432", href: "#catalog" },
+    { icon: Heart, label: "\u0418\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435", badge: "12", href: "#" },
+    { icon: Tag2, label: "\u041C\u043E\u0438 \u0431\u0443\u043A\u0435\u0442\u044B", href: "#" },
+    { icon: Chat, label: "\u0421\u0434\u0435\u043B\u043A\u0438 \u0438 \u0447\u0430\u0442", badge: "2", href: "#" },
+    { icon: Bell, label: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", dot: true, href: "#" },
+    { icon: Gear, label: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438", href: "#" }
+  ];
+  function MobileMenu({ open, auth = false, city: cityProp = "\u041C\u043E\u0441\u043A\u0432\u0430", onClose }) {
+    const [city, setCity] = React__default.default.useState(cityProp);
+    const [cityOpen, setCityOpen] = React__default.default.useState(false);
+    const closeRef = React__default.default.useRef(null);
+    React__default.default.useEffect(() => {
+      if (!open) {
+        setCityOpen(false);
+        return;
+      }
+      const onKey = (e) => {
+        if (e.key === "Escape") onClose();
+      };
+      document.addEventListener("keydown", onKey);
+      const t = setTimeout(() => {
+        try {
+          closeRef.current && closeRef.current.focus();
+        } catch (e) {
+        }
+      }, 80);
+      return () => {
+        document.removeEventListener("keydown", onKey);
+        clearTimeout(t);
+      };
+    }, [open]);
+    const cityCount = (CITY_LIST.find((c) => c.name === city) || {}).count;
+    const links = auth ? AUTH_LINKS : GUEST_LINKS;
+    return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-drawer" + (open ? " open" : ""), "aria-hidden": !open, children: [
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdl-drawer-scrim", onClick: onClose }),
+      /* @__PURE__ */ jsxRuntime.jsxs("aside", { className: "pdl-drawer-panel", role: "dialog", "aria-modal": "true", "aria-label": "\u041C\u0435\u043D\u044E", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("header", { className: "pdl-drawer-top", children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pdl-brand", children: [
+            /* @__PURE__ */ jsxRuntime.jsx(Mark, { size: 23 }),
+            "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
+          ] }),
+          /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-drawer-x", ref: closeRef, onClick: onClose, "aria-label": "\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u043C\u0435\u043D\u044E", children: /* @__PURE__ */ jsxRuntime.jsx(Close, {}) })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-drawer-body", children: [
+          auth && /* @__PURE__ */ jsxRuntime.jsxs("a", { className: "pdl-drawer-prof", href: "#", onClick: (e) => {
+            e.preventDefault();
+            onClose();
+          }, children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "av", children: "\u041C" }),
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "who", children: [
+              /* @__PURE__ */ jsxRuntime.jsx("b", { children: "\u041C\u0430\u0440\u0438\u044F" }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C \u0438 \u043E\u0442\u0437\u044B\u0432\u044B" })
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "rt", children: [
+              /* @__PURE__ */ jsxRuntime.jsx(Star, {}),
+              "4,9"
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsx(ChevR, { className: "go" })
+          ] }),
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-drawer-city" + (cityOpen ? " on" : ""), children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "head", onClick: () => setCityOpen((o) => !o), "aria-expanded": cityOpen, children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pin", children: /* @__PURE__ */ jsxRuntime.jsx(Pin2, {}) }),
+              /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "tx", children: [
+                /* @__PURE__ */ jsxRuntime.jsx("b", { children: city }),
+                /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
+                  cityCount,
+                  " \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0440\u044F\u0434\u043E\u043C"
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntime.jsx(Chev2, { className: "chev" + (cityOpen ? " up" : "") })
+            ] }),
+            cityOpen && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "list", children: CITY_LIST.map((c) => /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "crow" + (c.name === city ? " on" : ""), onClick: () => {
+              setCity(c.name);
+              setCityOpen(false);
+            }, children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "nm", children: c.name }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ct", children: c.count }),
+              c.name === city && /* @__PURE__ */ jsxRuntime.jsx(Check, { className: "ck" })
+            ] }, c.id)) })
+          ] }),
+          /* @__PURE__ */ jsxRuntime.jsx("nav", { className: "pdl-drawer-nav", children: links.map((l) => {
+            const Icon = l.icon;
+            return /* @__PURE__ */ jsxRuntime.jsxs("a", { className: "pdl-drawer-row", href: l.href, onClick: onClose, children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: /* @__PURE__ */ jsxRuntime.jsx(Icon, {}) }),
+              /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "tx", children: [
+                /* @__PURE__ */ jsxRuntime.jsx("b", { children: l.label }),
+                l.sub && /* @__PURE__ */ jsxRuntime.jsx("span", { children: l.sub })
+              ] }),
+              l.badge != null && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "bdg", children: l.badge }),
+              l.dot && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "dot" }),
+              /* @__PURE__ */ jsxRuntime.jsx(ChevR, { className: "go" })
+            ] }, l.label);
+          }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("footer", { className: "pdl-drawer-foot", children: [
+          /* @__PURE__ */ jsxRuntime.jsx(Btn2, { variant: "primary", block: true, lg: true, icon: Ic2 && Ic2.plus, onClick: onClose, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }),
+          auth ? /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-drawer-text danger", onClick: onClose, children: [
+            /* @__PURE__ */ jsxRuntime.jsx(User, {}),
+            "\u0412\u044B\u0439\u0442\u0438 \u0438\u0437 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u0430"
+          ] }) : /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pdl-drawer-note", children: [
+            "\u0423\u0436\u0435 \u0441 \u043D\u0430\u043C\u0438? ",
+            /* @__PURE__ */ jsxRuntime.jsx("button", { className: "lnk", onClick: onClose, children: "\u0412\u043E\u0439\u0442\u0438" })
+          ] })
+        ] })
+      ] })
+    ] });
   }
   function Hero({ desk }) {
     const text = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-herotext", children: [
@@ -245,7 +439,7 @@ var PdLanding = (function() {
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-sechead l", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pdl-kicker", children: [
           /* @__PURE__ */ jsxRuntime.jsx(Shield2, { style: { width: 14, height: 14 } }),
-          "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430"
+          "\u0421\u043F\u043E\u043A\u043E\u0439\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430"
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pdl-h2", children: "\u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043F\u043B\u0430\u0442\u0438\u0442 \u0432\u043F\u0435\u0440\u0451\u0434, \u043E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435" }),
         /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdl-sub", children: "\u0413\u043B\u0430\u0432\u043D\u044B\u0439 \u0441\u0442\u0440\u0430\u0445 \u0432 \u0441\u0434\u0435\u043B\u043A\u0430\u0445 \u043C\u0435\u0436\u0434\u0443 \u043D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u0446\u0430\u043C\u0438 \u2014 \u043E\u0431\u043C\u0430\u043D. \u041F\u043E\u044D\u0442\u043E\u043C\u0443 \u0434\u0435\u043D\u044C\u0433\u0438 \u043D\u0438\u043A\u0443\u0434\u0430 \u043D\u0435 \u0443\u0445\u043E\u0434\u044F\u0442 \u0437\u0430\u0440\u0430\u043D\u0435\u0435: \u0432\u044B \u043F\u043B\u0430\u0442\u0438\u0442\u0435, \u0442\u043E\u043B\u044C\u043A\u043E \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0431\u0443\u043A\u0435\u0442 \u0432\u0436\u0438\u0432\u0443\u044E." })
@@ -262,14 +456,14 @@ var PdLanding = (function() {
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "en", children: "2" }),
           /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
             /* @__PURE__ */ jsxRuntime.jsx("h4", { children: "\u0412\u0441\u0442\u0440\u0435\u0442\u0438\u043B\u0438\u0441\u044C \u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u0438\u043B\u0438" }),
-            /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0440\u044F\u0434\u043E\u043C, \u0443 \u0434\u043E\u043C\u0430 \u0438\u043B\u0438 \u043C\u0435\u0442\u0440\u043E. \u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u0432\u0438\u0434\u0438\u0442 \u0431\u0443\u043A\u0435\u0442 \u0432\u0436\u0438\u0432\u0443\u044E." })
+            /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0440\u044F\u0434\u043E\u043C, \u0443 \u0434\u043E\u043C\u0430 \u0438\u043B\u0438 \u043C\u0435\u0442\u0440\u043E. \u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u0432\u0438\u0434\u0438\u0442 \u0431\u0443\u043A\u0435\u0442 \u0432\u0436\u0438\u0432\u0443\u044E \u0438 \u0443\u0431\u0435\u0436\u0434\u0430\u0435\u0442\u0441\u044F, \u0447\u0442\u043E \u0446\u0432\u0435\u0442\u044B \u0441\u0432\u0435\u0436\u0438\u0435." })
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-eflow", children: [
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "en", children: "3" }),
           /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
             /* @__PURE__ */ jsxRuntime.jsx("h4", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435" }),
-            /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0420\u0430\u0441\u043F\u043B\u0430\u0447\u0438\u0432\u0430\u0435\u0442\u0435\u0441\u044C \u043D\u0430 \u043C\u0435\u0441\u0442\u0435, \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u043C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443. \u041D\u0438\u043A\u0430\u043A\u0438\u0445 \u043F\u0440\u0435\u0434\u043E\u043F\u043B\u0430\u0442." })
+            /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u041F\u043E\u043D\u0440\u0430\u0432\u0438\u043B\u0441\u044F \u0431\u0443\u043A\u0435\u0442, \u0440\u0430\u0441\u043F\u043B\u0430\u0447\u0438\u0432\u0430\u0435\u0442\u0435\u0441\u044C \u043D\u0430 \u043C\u0435\u0441\u0442\u0435: \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u043C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443. \u041D\u0438\u043A\u0430\u043A\u0438\u0445 \u043F\u0440\u0435\u0434\u043E\u043F\u043B\u0430\u0442." })
           ] })
         ] })
       ] }),
@@ -304,7 +498,7 @@ var PdLanding = (function() {
             /* @__PURE__ */ jsxRuntime.jsx("span", { className: "qm", children: "?" }),
             "\u2026\u043F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u043D\u0435 \u043F\u0440\u0438\u0434\u0451\u0442 \u043D\u0430 \u0432\u0441\u0442\u0440\u0435\u0447\u0443?"
           ] }),
-          /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0412\u044B \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043F\u043B\u0430\u0442\u0438\u0442\u0435 \u0432\u043F\u0435\u0440\u0451\u0434: \u043E\u043F\u043B\u0430\u0442\u0430 \u0442\u043E\u043B\u044C\u043A\u043E \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0431\u0443\u043A\u0435\u0442. \u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0438 \u043E\u0442\u0437\u044B\u0432\u044B \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u044E\u0442 \u043D\u0430\u0434\u0451\u0436\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u043E\u0432." })
+          /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0412\u044B \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043F\u043B\u0430\u0442\u0438\u0442\u0435 \u0432\u043F\u0435\u0440\u0451\u0434: \u043E\u043F\u043B\u0430\u0442\u0430 \u0442\u043E\u043B\u044C\u043A\u043E \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0431\u0443\u043A\u0435\u0442. \u0410 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 \u0438 \u043E\u0442\u0437\u044B\u0432\u044B \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u044E\u0442 \u043D\u0430\u0434\u0451\u0436\u043D\u044B\u0445 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u043E\u0432." })
         ] }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-objc", children: [
           /* @__PURE__ */ jsxRuntime.jsxs("h3", { className: "pdl-objq", children: [
@@ -340,7 +534,7 @@ var PdLanding = (function() {
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-finalc seller", children: [
         /* @__PURE__ */ jsxRuntime.jsx("span", { className: "role", children: "\u0412\u0430\u043C \u043F\u043E\u0434\u0430\u0440\u0438\u043B\u0438 \u0431\u0443\u043A\u0435\u0442" }),
         /* @__PURE__ */ jsxRuntime.jsx("h3", { children: "\u041F\u043E\u0434\u0430\u0440\u0438\u0442\u0435 \u0435\u043C\u0443 \u0432\u0442\u043E\u0440\u0443\u044E \u0436\u0438\u0437\u043D\u044C" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u041D\u0435 \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0439\u0442\u0435 \u043A\u0440\u0430\u0441\u0438\u0432\u043E\u0435 \u0438 \u0436\u0438\u0432\u043E\u0435. \u0412\u044B\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u0437\u0430 \u043C\u0438\u043D\u0443\u0442\u0443 \u0438 \u0432\u0435\u0440\u043D\u0438\u0442\u0435 \u0447\u0430\u0441\u0442\u044C \u0434\u0435\u043D\u0435\u0433, \u0431\u0443\u043A\u0435\u0442 \u0434\u043E\u0441\u0442\u0430\u043D\u0435\u0442\u0441\u044F \u043A\u043E\u043C\u0443-\u0442\u043E \u0440\u044F\u0434\u043E\u043C. \u041F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F \u0431\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u0430\u044F." }),
+        /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u041D\u0435 \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0439\u0442\u0435 \u043A\u0440\u0430\u0441\u0438\u0432\u043E\u0435 \u0438 \u0436\u0438\u0432\u043E\u0435. \u0412\u044B\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u0437\u0430 \u043C\u0438\u043D\u0443\u0442\u0443 \u0438 \u0432\u0435\u0440\u043D\u0438\u0442\u0435 \u0447\u0430\u0441\u0442\u044C \u0434\u0435\u043D\u0435\u0433, \u0431\u0443\u043A\u0435\u0442 \u0434\u043E\u0441\u0442\u0430\u043D\u0435\u0442\u0441\u044F \u043A\u043E\u043C\u0443-\u0442\u043E \u0440\u044F\u0434\u043E\u043C. \u041F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F \u0431\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u0430, \u043A\u043E\u043C\u0438\u0441\u0441\u0438\u044F \u0441\u0435\u0440\u0432\u0438\u0441\u0430 \u0432\u0441\u0435\u0433\u043E 5% \u0441 \u043F\u0440\u043E\u0434\u0430\u0436\u0438." }),
         /* @__PURE__ */ jsxRuntime.jsx(Btn2, { variant: "onbrand", lg: true, icon: Ic2 && Ic2.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-finalc buyer", children: [
@@ -385,8 +579,8 @@ var PdLanding = (function() {
   const REVIEWS = [
     { q: "\u0417\u0430\u0431\u0440\u0430\u043B\u0430 \u043F\u0438\u043E\u043D\u044B \u0437\u0430 690 \u20BD \u0432 \u0441\u043E\u0441\u0435\u0434\u043D\u0435\u043C \u0434\u0432\u043E\u0440\u0435, \u0432 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0435 \u0442\u0430\u043A\u0438\u0435 \u0436\u0435 \u043F\u043E 2 000. \u0421\u0432\u0435\u0436\u0438\u0435, \u043F\u0440\u043E\u0441\u0442\u043E\u044F\u043B\u0438 \u0432\u043E\u0441\u0435\u043C\u044C \u0434\u043D\u0435\u0439.", n: "\u0410\u043B\u0438\u043D\u0430", city: "\u041C\u043E\u0441\u043A\u0432\u0430", role: "buyer", c: "#CF5638" },
     { q: "\u041F\u043E\u0434\u0430\u0440\u0438\u043B\u0438 \u043E\u0433\u0440\u043E\u043C\u043D\u044B\u0439 \u0431\u0443\u043A\u0435\u0442 \u043D\u0430 \u044E\u0431\u0438\u043B\u0435\u0439, \u0430 \u0434\u043E\u043C\u0430 \u0441\u0442\u0430\u0432\u0438\u0442\u044C \u043D\u0435\u043A\u0443\u0434\u0430. \u0412\u044B\u0441\u0442\u0430\u0432\u0438\u043B\u0430 \u0437\u0430 \u043F\u043E\u043B\u0446\u0435\u043D\u044B, \u0437\u0430\u0431\u0440\u0430\u043B\u0438 \u0447\u0435\u0440\u0435\u0437 \u0447\u0430\u0441. \u041F\u0440\u0438\u044F\u0442\u043D\u043E, \u0447\u0442\u043E \u043D\u0435 \u0432\u044B\u0431\u0440\u043E\u0441\u0438\u043B\u0430.", n: "\u041E\u043B\u044C\u0433\u0430", city: "\u0421\u0430\u043D\u043A\u0442-\u041F\u0435\u0442\u0435\u0440\u0431\u0443\u0440\u0433", role: "seller", c: "#5B8C68" },
-    { q: "\u0411\u043E\u044F\u043B\u0441\u044F \u0440\u0430\u0437\u0432\u043E\u0434\u0430, \u043D\u043E \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u043B\u0438\u0441\u044C \u0432 \u0447\u0430\u0442\u0435, \u0432\u0441\u0442\u0440\u0435\u0442\u0438\u043B\u0438\u0441\u044C \u0443 \u043C\u0435\u0442\u0440\u043E, \u0437\u0430\u043F\u043B\u0430\u0442\u0438\u043B, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B \u0431\u0443\u043A\u0435\u0442. \u0412\u0441\u0451 \u0447\u0435\u0441\u0442\u043D\u043E.", n: "\u0422\u0438\u043C\u0443\u0440", city: "\u041A\u0430\u0437\u0430\u043D\u044C", role: "buyer", c: "#C98A1E" },
-    { q: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0432\u044B\u0448\u043B\u043E \u0440\u0435\u0430\u043B\u044C\u043D\u043E \u0437\u0430 \u043C\u0438\u043D\u0443\u0442\u0443 \u0441 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430. \u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u0437\u0430\u0431\u0440\u0430\u043B \u0432 \u0442\u043E\u0442 \u0436\u0435 \u0432\u0435\u0447\u0435\u0440.", n: "\u041C\u0430\u0440\u0438\u043D\u0430", city: "\u041C\u043E\u0441\u043A\u0432\u0430", role: "seller", c: "#23201B" },
+    { q: "\u041D\u0438\u043A\u0430\u043A\u043E\u0439 \u043F\u0440\u0435\u0434\u043E\u043F\u043B\u0430\u0442\u044B: \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u043B\u0438\u0441\u044C \u0432 \u0447\u0430\u0442\u0435, \u0432\u0441\u0442\u0440\u0435\u0442\u0438\u043B\u0438\u0441\u044C \u0443 \u043C\u0435\u0442\u0440\u043E \u0438 \u044F \u0437\u0430\u043F\u043B\u0430\u0442\u0438\u043B \u0443\u0436\u0435 \u043D\u0430 \u043C\u0435\u0441\u0442\u0435, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B \u0431\u0443\u043A\u0435\u0442. \u0412\u0441\u0451 \u0447\u0435\u0441\u0442\u043D\u043E.", n: "\u0422\u0438\u043C\u0443\u0440", city: "\u041A\u0430\u0437\u0430\u043D\u044C", role: "buyer", c: "#C98A1E" },
+    { q: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043B\u0430 \u0437\u0430 \u043C\u0438\u043D\u0443\u0442\u0443 \u0441 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430. \u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u0437\u0430\u0431\u0440\u0430\u043B \u0431\u0443\u043A\u0435\u0442 \u0432 \u0442\u043E\u0442 \u0436\u0435 \u0432\u0435\u0447\u0435\u0440 \u0438 \u0440\u0430\u0441\u043F\u043B\u0430\u0442\u0438\u043B\u0441\u044F \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438.", n: "\u041C\u0430\u0440\u0438\u043D\u0430", city: "\u041C\u043E\u0441\u043A\u0432\u0430", role: "seller", c: "#23201B" },
     { q: "\u0412\u0437\u044F\u043B \u0431\u0443\u043A\u0435\u0442 \u043A \u0441\u0432\u0438\u0434\u0430\u043D\u0438\u044E \u0437\u0430 \u0442\u0440\u0435\u0442\u044C \u0446\u0435\u043D\u044B. \u041D\u0438\u043A\u0442\u043E \u0438 \u043D\u0435 \u0434\u043E\u0433\u0430\u0434\u0430\u043B\u0441\u044F, \u0447\u0442\u043E \u043E\u043D \xAB\u043F\u0435\u0440\u0435\u0434\u0430\u0440\u0435\u043D\u043D\u044B\u0439\xBB.", n: "\u0410\u0440\u0442\u0451\u043C", city: "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0431\u0443\u0440\u0433", role: "buyer", c: "#5B8C68" },
     { q: "\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u0431\u044B\u043B\u043E \u043D\u0435\u043B\u043E\u0432\u043A\u043E \u043F\u0440\u043E\u0434\u0430\u0432\u0430\u0442\u044C \u043F\u043E\u0434\u0430\u0440\u043E\u043A. \u041D\u043E \u043A\u043E\u043C\u0443-\u0442\u043E \u043E\u043D \u043F\u043E-\u043D\u0430\u0441\u0442\u043E\u044F\u0449\u0435\u043C\u0443 \u043F\u0440\u0438\u0433\u043E\u0434\u0438\u043B\u0441\u044F, \u044D\u0442\u043E \u043A\u0443\u0434\u0430 \u043F\u0440\u0438\u044F\u0442\u043D\u0435\u0435 \u043C\u0443\u0441\u043E\u0440\u043A\u0438.", n: "\u042E\u043B\u0438\u044F", city: "\u041C\u043E\u0441\u043A\u0432\u0430", role: "seller", c: "#CF5638" }
   ];
@@ -418,54 +612,53 @@ var PdLanding = (function() {
     ] }) });
   }
   function Nav({ desk, auth }) {
+    const [menu, setMenu] = React__default.default.useState(false);
     if (auth) {
-      return /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdl-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-in", children: [
+      return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdl-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-in", children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pdl-brand", children: [
+            /* @__PURE__ */ jsxRuntime.jsx(Mark, { size: 24 }),
+            "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
+          ] }),
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-mid", children: [
+            /* @__PURE__ */ jsxRuntime.jsx(NavCity, { align: "l" }),
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-search", children: [
+              /* @__PURE__ */ jsxRuntime.jsx(Search2, {}),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041F\u043E\u0438\u0441\u043A \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 \u041C\u043E\u0441\u043A\u0432\u0435" })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-navright", children: [
+            /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-icon", "aria-label": "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: /* @__PURE__ */ jsxRuntime.jsx(Bell, {}) }),
+            /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-icon pdl-nav-fav", "aria-label": "\u0418\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435", children: /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" }) }) }),
+            /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-ava", "aria-label": "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", children: "\u041C" }),
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsxRuntime.jsx(Btn2, { variant: "primary", icon: Ic2 && Ic2.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
+            /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", "aria-expanded": menu, onClick: () => setMenu(true), children: /* @__PURE__ */ jsxRuntime.jsx(Menu2, {}) })
+          ] })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntime.jsx(MobileMenu, { open: menu, auth: true, onClose: () => setMenu(false) })
+      ] });
+    }
+    return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdl-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-in", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pdl-brand", children: [
           /* @__PURE__ */ jsxRuntime.jsx(Mark, { size: 24 }),
           "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
         ] }),
-        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-mid", children: [
-          /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-nav-city", children: [
-            /* @__PURE__ */ jsxRuntime.jsx(Pin2, { className: "pin" }),
-            "\u041C\u043E\u0441\u043A\u0432\u0430",
-            /* @__PURE__ */ jsxRuntime.jsx(Chev2, {})
-          ] }),
-          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-search", children: [
-            /* @__PURE__ */ jsxRuntime.jsx(Search2, {}),
-            /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041F\u043E\u0438\u0441\u043A \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 \u041C\u043E\u0441\u043A\u0432\u0435" })
-          ] })
+        /* @__PURE__ */ jsxRuntime.jsx(NavCity, { align: "l" }),
+        /* @__PURE__ */ jsxRuntime.jsxs("nav", { className: "pdl-navlinks", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("a", { href: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C \xB7 \u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0431\u0443\u043A\u0435\u0442\u043E\u0432.html", children: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433" }),
+          /* @__PURE__ */ jsxRuntime.jsx("a", { href: "#how", children: "\u041A\u0430\u043A \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442" }),
+          /* @__PURE__ */ jsxRuntime.jsx("a", { href: "#safety", children: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C" }),
+          /* @__PURE__ */ jsxRuntime.jsx("a", { href: "#app", children: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435" })
         ] }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-navright", children: [
-          /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-icon", "aria-label": "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: /* @__PURE__ */ jsxRuntime.jsx(Bell, {}) }),
-          /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-icon pdl-nav-fav", "aria-label": "\u0418\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435", children: /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" }) }) }),
-          /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-ava", "aria-label": "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", children: "\u041C" }),
+          /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-login", children: "\u0412\u043E\u0439\u0442\u0438" }),
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsxRuntime.jsx(Btn2, { variant: "primary", icon: Ic2 && Ic2.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
-          /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", children: /* @__PURE__ */ jsxRuntime.jsx(Menu2, {}) })
+          /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", "aria-expanded": menu, onClick: () => setMenu(true), children: /* @__PURE__ */ jsxRuntime.jsx(Menu2, {}) })
         ] })
-      ] }) });
-    }
-    return /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdl-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-in", children: [
-      /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pdl-brand", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(Mark, { size: 24 }),
-        "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
-      ] }),
-      /* @__PURE__ */ jsxRuntime.jsxs("nav", { className: "pdl-navlinks", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("a", { href: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C \xB7 \u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0431\u0443\u043A\u0435\u0442\u043E\u0432.html", children: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433" }),
-        /* @__PURE__ */ jsxRuntime.jsx("a", { href: "#how", children: "\u041A\u0430\u043A \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442" }),
-        /* @__PURE__ */ jsxRuntime.jsx("a", { href: "#safety", children: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u044C" }),
-        /* @__PURE__ */ jsxRuntime.jsx("a", { href: "#app", children: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435" })
-      ] }),
-      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-navright", children: [
-        /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-nav-city", onClick: (e) => e.preventDefault(), children: [
-          /* @__PURE__ */ jsxRuntime.jsx(Pin2, { className: "pin" }),
-          "\u041C\u043E\u0441\u043A\u0432\u0430",
-          /* @__PURE__ */ jsxRuntime.jsx(Chev2, {})
-        ] }),
-        /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-login", children: "\u0412\u043E\u0439\u0442\u0438" }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsxRuntime.jsx(Btn2, { variant: "primary", icon: Ic2 && Ic2.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
-        /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", children: /* @__PURE__ */ jsxRuntime.jsx(Menu2, {}) })
-      ] })
-    ] }) });
+      ] }) }),
+      /* @__PURE__ */ jsxRuntime.jsx(MobileMenu, { open: menu, onClose: () => setMenu(false) })
+    ] });
   }
   function LandingNav({ auth = false, desk = true }) {
     return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-root pd-web pdl" + (desk ? " pdl--desk" : ""), "data-pd-theme": "a", style: { minHeight: 0 }, children: /* @__PURE__ */ jsxRuntime.jsx(Nav, { desk, auth }) });
@@ -489,10 +682,12 @@ var PdLanding = (function() {
   };
   PdLandingComp._navComp = LandingNav;
   PdLandingComp._footComp = Footer2;
+  PdLandingComp._menuComp = MobileMenu;
   return PdLandingComp;
 })();
 var PdLandingNav = PdLanding._navComp;
 var PdLandingFooter = PdLanding._footComp;
+var PdMobileMenu = PdLanding._menuComp;
 var Btn = chunkGT5S3QFQ_cjs.PdBtn;
 var Card2 = chunkGT5S3QFQ_cjs.Card;
 var Footer = PdLandingFooter;
@@ -641,31 +836,35 @@ var OCCASIONS = [
   "\u0426\u0432\u0435\u0442\u044B \u0441\u0435\u0431\u0435 \u0434\u043E\u043C\u043E\u0439"
 ];
 function SeoNav({ cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityIn = "\u041C\u043E\u0441\u043A\u0432\u0435" }) {
-  return /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdl-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-in", children: [
-    /* @__PURE__ */ jsxRuntime.jsxs("a", { href: LAND, className: "pdl-brand", style: { textDecoration: "none" }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(Mark2, { size: 24 }),
-      "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
-    ] }),
-    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-mid", children: [
-      /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-nav-city", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(Pin, { className: "pin", style: { width: 16, height: 16 } }),
-        cityNom,
-        /* @__PURE__ */ jsxRuntime.jsx(Chev, { style: { width: 14, height: 14 } })
+  const [menu, setMenu] = React__default.default.useState(false);
+  return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdl-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-in", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("a", { href: LAND, className: "pdl-brand", style: { textDecoration: "none" }, children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Mark2, { size: 24 }),
+        "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-search", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(Search, { style: { width: 18, height: 18 } }),
-        /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
-          "\u041F\u043E\u0438\u0441\u043A \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 ",
-          cityIn
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-mid", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdl-nav-city", children: [
+          /* @__PURE__ */ jsxRuntime.jsx(Pin, { className: "pin", style: { width: 16, height: 16 } }),
+          cityNom,
+          /* @__PURE__ */ jsxRuntime.jsx(Chev, { style: { width: 14, height: 14 } })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-search", children: [
+          /* @__PURE__ */ jsxRuntime.jsx(Search, { style: { width: 18, height: 18 } }),
+          /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
+            "\u041F\u043E\u0438\u0441\u043A \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 ",
+            cityIn
+          ] })
         ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-navright", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-login", children: "\u0412\u043E\u0439\u0442\u0438" }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsxRuntime.jsx(Btn, { variant: "primary", icon: Plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
+        /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", "aria-expanded": menu, onClick: () => setMenu(true), children: /* @__PURE__ */ jsxRuntime.jsx(Menu, {}) })
       ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-navright", children: [
-      /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-login", children: "\u0412\u043E\u0439\u0442\u0438" }),
-      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsxRuntime.jsx(Btn, { variant: "primary", icon: Plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
-      /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", children: /* @__PURE__ */ jsxRuntime.jsx(Menu, {}) })
-    ] })
-  ] }) });
+    ] }) }),
+    PdMobileMenu && /* @__PURE__ */ jsxRuntime.jsx(PdMobileMenu, { open: menu, city: cityNom, onClose: () => setMenu(false) })
+  ] });
 }
 function Shell({ desk, cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityIn = "\u041C\u043E\u0441\u043A\u0432\u0435", children }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-root pd-web pds pdl" + (desk ? " pds--desk pdl--desk" : ""), "data-pd-theme": "a", children: [

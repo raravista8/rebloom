@@ -4,7 +4,7 @@ import React from "react";
 import "../styles/canon.css";
 import { PdCard, PD_FRESH, PD_LIKED } from "../feed/feed";
 import { PdBtn } from "../primitives/kit";
-import { PdLandingFooter } from "./landing";
+import { PdLandingFooter, PdMobileMenu } from "./landing";
 
 // pd-seo.jsx — SEO-страницы «Передарим»: гео-лендинг города, «Безопасная сделка», блог.
 // Под ядро peredarim.ru: перехват «дешёвые/свежие цветы рядом», самовывоз-only, гео ×10.
@@ -82,7 +82,9 @@ const OCCASIONS = [
 
 // ── shared guest nav ──────────────────────────────────────────────
 function SeoNav({ cityNom = 'Москва', cityIn = 'Москве' }) {
+  const [menu, setMenu] = React.useState(false);
   return (
+    <>
     <header className="pdl-nav">
       <div className="pdl-nav-in">
         <a href={LAND} className="pdl-brand" style={{ textDecoration: 'none' }}><Mark size={24} />Передарим</a>
@@ -93,10 +95,12 @@ function SeoNav({ cityNom = 'Москва', cityIn = 'Москве' }) {
         <div className="pdl-navright">
           <button className="pdl-nav-login">Войти</button>
           <span className="pdl-nav-cta"><Btn variant="primary" icon={Plus}>Опубликовать букет</Btn></span>
-          <button className="pdl-nav-burger" aria-label="Меню"><Menu /></button>
+          <button className="pdl-nav-burger" aria-label="Меню" aria-expanded={menu} onClick={() => setMenu(true)}><Menu /></button>
         </div>
       </div>
     </header>
+    {PdMobileMenu && <PdMobileMenu open={menu} city={cityNom} onClose={() => setMenu(false)} />}
+    </>
   );
 }
 

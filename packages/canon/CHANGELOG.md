@@ -2,6 +2,32 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.7.0] — 2026-06-06 — Mobile burger menu (drawer): guest + authorized · new component `PdMobileMenu`
+
+Adds the previously-missing **expanded burger state**. Before this, `.pdl-nav-burger` shipped as a dead trigger — visible on mobile, no panel behind it, so the whole site nav was unreachable on a phone. Now there's a real right-side **drawer** with two content sets (guest / authorized), reused by both the marketing landing (`./marketing` · `PdLanding`) and the SEO pages (`PdGeoPage` / `PdSafeDeal` / blog). New public export **`PdMobileMenu`** from `./marketing`. See **`BURGER_MENU.md`** for the full guest/auth logic, anatomy, and route map.
+
+### Added — `PdMobileMenu` drawer (`src/marketing/landing.jsx`)
+- **Right-anchored sheet + scrim.** `width:min(88%,360px)`, slides in over a dimmed backdrop. Open via burger tap; close via the ✕, a scrim tap, or **Esc**. Focus moves to the close button on open. Honors `prefers-reduced-motion` (no transform/opacity transition).
+- **Containment.** `.pdl` now carries `position:relative`; the drawer is `position:absolute; inset:0` against it, so the sheet covers exactly the **app/viewport frame** — not the full (taller) scroll document. (Earlier `position:fixed` resolved against the layout viewport and escaped framed/scaled contexts.)
+- **Guest content:** inline-expanding city picker → site nav (Каталог букетов / Как это работает / Безопасная сделка / Приложение) → footer with the primary CTA «Опубликовать букет» + «Войти».
+- **Authorized content:** profile row (avatar · «Профиль и отзывы» · rating) → city picker → account sections (Каталог букетов · Избранное `12` · Мои букеты · Сделки и чат `2` · Уведомления • · Настройки) → footer with the CTA + «Выйти из аккаунта». **No search field** in the drawer (search lives in the top bar).
+- **Wiring:** `Nav` (landing, both `auth` states) and `SeoNav` (SEO pages) hold a `menu` boolean, render the burger with `aria-expanded` + `onClick`, and mount `<PdMobileMenu>` as a **sibling of `<header>`** (not inside the sticky nav) so absolute containment resolves against `.pdl`.
+
+### Changed — burger links are now route-absolute (`landing.jsx`)
+- Guest drawer links no longer use bare in-page anchors (`#how` / `#safety` / `#app`) — those 404'd when the burger was opened on a non-landing page (catalog / SEO). They now point at absolute targets: **Как это работает → landing `#how`**, **Приложение → landing `#app`**, **Безопасная сделка → the dedicated SafeDeal page** (`PdSafeDeal`, was an in-landing anchor), **Каталог букетов → catalog**. (In `reference/prototypes/*` these are the `.html` preview filenames; in `web/` map to `/`, `/#how`, `/#app`, `/bezopasnaya-sdelka`, `/catalog`.)
+- Vocabulary aligned to the **website** lexicon: the first drawer item is **«Каталог букетов»** in *both* guest and authorized states (an earlier draft labeled the authorized one «Лента», which matched neither the site’s «Каталог» nor the app’s «Главная»).
+
+### Changed — reviews copy: kill residual escrow-era phrasing (`landing.jsx`)
+- Two testimonials still leaned on the pre-pivot online-payment model. Rewritten to be unmistakably **pay-on-meeting / no-prepayment**:
+  - **Тимур (покупатель):** → «Никакой предоплаты: договорились в чате, встретились у метро и я заплатил уже на месте, когда увидел букет. Всё честно.»
+  - **Марина (продавец):** → «Опубликовала за минуту с телефона. Покупатель забрал букет в тот же вечер и расплатился при встрече, наличными.»
+
+### CSS (`src/styles/canon.css` + `dist/canon.css`)
+- New block after the `.pdl-nav-burger` rules: `.pdl{position:relative}`, `.pdl-drawer` / `-scrim` / `-panel` / `-top` / `-x` / `-body` / `-prof` / `-city` (+ inline list) / `-nav` / `-row` (icon · text · badge · dot · chevron) / `-foot` / `-note` / `-text`, plus a `prefers-reduced-motion` guard. Burger trigger stays `display:none` ≥900px, so the drawer is mobile-only. **No token changes.**
+
+### Notes for the consumer
+- New export `PdMobileMenu` (`./marketing`). Rebuild `dist/*.js` via `npm run build`. `reference/prototypes/pd-land.{jsx,css}` and `pd-seo.jsx` are byte-current with the design source. Design-system tab gains a «Мобильное меню · бургер» specimen (guest + authorized, live).
+
 ## [0.6.3] — 2026-06-06 — Landing visual polish: steps / escrow / objections / final CTA + section-header spacing fix
 
 Landing-only patch (`./marketing` · `PdLanding`). `reference/prototypes/pd-land.{jsx,css}` are byte-current; `src/marketing/landing.jsx` + `dist/canon.css` + `src/styles/canon.css` re-synced — rebuild `dist/*.js` via `npm run build`. Pure presentation pass on the lower landing (how-it-works → escrow → objections → app → final CTA) plus a real spacing-cascade fix; **no structural/route changes**.

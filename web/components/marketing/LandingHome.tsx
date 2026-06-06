@@ -10,6 +10,7 @@ import { IconPlus } from '@/components/icons';
 import BouquetCard from '@/components/feed/BouquetCard';
 import SiteFooter from '@/components/marketing/SiteFooter';
 import NavCity from '@/components/marketing/NavCity';
+import MobileMenu from '@/components/marketing/MobileMenu';
 import { api, ApiError } from '@/lib/api';
 import { cityName } from '@/lib/cities';
 import type { ListingCard, Paginated } from '@/lib/types';
@@ -50,7 +51,9 @@ const STORES = [
 
 /* ── NAV (guest) — real routes ── */
 function Nav() {
+  const [menu, setMenu] = useState(false);
   return (
+    <>
     <header className="pdl-nav">
       <div className="pdl-nav-in">
         <Link href="/" className="pdl-brand" style={{ textDecoration: 'none', color: 'inherit' }}><Mark size={24} />Передарим</Link>
@@ -64,10 +67,12 @@ function Nav() {
         <div className="pdl-navright">
           <Link href="/login" className="pdl-nav-login" style={{ textDecoration: 'none' }}>Войти</Link>
           <span className="pdl-nav-cta"><Link href="/sell" style={{ textDecoration: 'none' }}><PdBtn variant="primary" icon={IconPlus}>Опубликовать букет</PdBtn></Link></span>
-          <Link href="/login" className="pdl-nav-burger" aria-label="Меню"><Menu /></Link>
+          <button className="pdl-nav-burger" aria-label="Меню" aria-expanded={menu} onClick={() => setMenu(true)}><Menu /></button>
         </div>
       </div>
     </header>
+    <MobileMenu open={menu} onClose={() => setMenu(false)} />
+    </>
   );
 }
 
@@ -199,8 +204,8 @@ function How() {
 const REVIEWS = [
   { q: 'Забрала пионы за 690 ₽ в соседнем дворе, в магазине такие же по 2 000. Свежие, простояли восемь дней.', n: 'Алина', city: 'Москва', role: 'buyer', c: '#CF5638' },
   { q: 'Подарили огромный букет на юбилей, а дома ставить некуда. Выставила за полцены, забрали через час. Приятно, что не выбросила.', n: 'Ольга', city: 'Санкт-Петербург', role: 'seller', c: '#5B8C68' },
-  { q: 'Боялся развода, но деньги списались и висели, пока я не забрал букет. Продавец отдал, всё честно.', n: 'Тимур', city: 'Казань', role: 'buyer', c: '#C98A1E' },
-  { q: 'Опубликовать вышло реально за минуту с телефона. Выплата пришла на карту в тот же вечер.', n: 'Марина', city: 'Москва', role: 'seller', c: '#23201B' },
+  { q: 'Никакой предоплаты: договорились в чате, встретились у метро и я заплатил уже на месте, когда увидел букет. Всё честно.', n: 'Тимур', city: 'Казань', role: 'buyer', c: '#C98A1E' },
+  { q: 'Опубликовала за минуту с телефона. Покупатель забрал букет в тот же вечер и расплатился при встрече, наличными.', n: 'Марина', city: 'Москва', role: 'seller', c: '#23201B' },
   { q: 'Взял букет к свиданию за треть цены. Никто и не догадался, что он «передаренный».', n: 'Артём', city: 'Екатеринбург', role: 'buyer', c: '#5B8C68' },
   { q: 'Сначала было неловко продавать подарок. Но кому-то он по-настоящему пригодился, это куда приятнее мусорки.', n: 'Юлия', city: 'Москва', role: 'seller', c: '#CF5638' },
 ];

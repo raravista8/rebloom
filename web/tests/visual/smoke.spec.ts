@@ -6,7 +6,8 @@ import { test, expect } from '@playwright/test';
 test('home renders the landing shell (brand + hero + catalog)', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.pdl')).toBeVisible();
-  await expect(page.locator('.pdl-brand')).toBeVisible();
+  // scope to the nav: the burger drawer (portaled to <body>) also carries a `.pdl-brand`
+  await expect(page.locator('.pdl-nav .pdl-brand')).toBeVisible();
   await expect(page.locator('#catalog')).toBeVisible();
   await expect(page.locator('#safety')).toBeVisible();
 });
