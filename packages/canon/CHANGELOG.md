@@ -2,6 +2,43 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.6.3] — 2026-06-06 — Landing visual polish: steps / escrow / objections / final CTA + section-header spacing fix
+
+Landing-only patch (`./marketing` · `PdLanding`). `reference/prototypes/pd-land.{jsx,css}` are byte-current; `src/marketing/landing.jsx` + `dist/canon.css` + `src/styles/canon.css` re-synced — rebuild `dist/*.js` via `npm run build`. Pure presentation pass on the lower landing (how-it-works → escrow → objections → app → final CTA) plus a real spacing-cascade fix; **no structural/route changes**.
+
+### Fixed — section-header spacing was silently a no-op (root cause of every «паддинг тесный»)
+- The global reset **`.pd-root p, .pd-root h1, .pd-root h2 { margin:0 }`** has specificity `(0,0,1,1)` and therefore **outranks** the single-class `.pdl-h2` / `.pdl-sub` / `.pdl-h1` / `.pdl-lead` `(0,0,1,0)`. Result: every kicker→heading→subtitle gap resolved to `0` and the only visible separation was line-leading — so prior margin tweaks on those classes never took effect.
+- Re-asserted the rhythm with **two-class selectors that win the cascade**: `.pdl-sechead .pdl-h2` + `.pdl-sechead .pdl-sub` (14px), `.pdl-app-in .pdl-h2` + `.pdl-app-in .pdl-sub` (14px), and new `.pdl-hero .pdl-h1` + `.pdl-hero .pdl-lead` (14px). One consistent **14px** heading→subtitle gap across catalog / how / escrow / reviews / objections section heads, the app block, and the hero. `.pdl-h2` base `line-height 1.1→1.14` for multi-line mobile headings.
+
+### Changed — «Как это работает» steps (`.pdl-step`)
+- Bigger cards (desk padding `30→38px`, radius `18→20`), bigger number badge (`42→58px` desk, radius `18`, font `27`), bigger `h3` (`19→24px` desk) and body (`14.5→16px` desk).
+- Reads as a journey now: a **connector chevron** threads cards 1→2→3 (`.pdl-step:not(:last-child)::after`, pinned to the badge row at `top:67px`).
+- **Role colour-coding** — seller steps keep terracotta badge/tag; the **buyer** step (3) flips to fresh-green (`.pdl-step:last-child .pdl-stepn` / `.pdl-seller-tag`). Role tags are now pills, seller = terracotta, buyer = green (were uniform green squares).
+- Hover lift (`translateY(-4px)` + soft shadow).
+- Copy: step-1 body → «Вам подарили букет, он порадовал и уже не нужен.» (`landing.jsx`).
+
+### Changed — escrow (dark) block (`.pdl-escrow` / `.pdl-eflow` / `.pdl-esafe`)
+- **Warm radial glow** on the dark field (terracotta 16% from top-right) instead of flat ink, for depth.
+- Flow items **restacked vertically** (badge on top, like the steps); badges enlarged (`32→46px`, radius `14`, font `20`, gold + drop glow), `h4` `15.5→19px`, body `13.5→15px`; gold connector chevron threads 1→2→3; hover lift.
+- **Trust note redesigned.** Previously an icon-left card that, when stacked on mobile, read as a 4th numbered step and broke the optical vertical (heart centred against tall multi-line text). Now a **captioned callout**: heart inline with the bold heading on the first line (`.pdl-esafe-h`), body below at the same left edge; surface is a faint **gold tint** (was green-tinted, then frosted), icon `28→22px`. **Markup change** in `landing.jsx`: `.pdl-esafe` now contains `<p class="pdl-esafe-h"><HeartHands/><b>…</b></p>` + a separate `<p>` body.
+
+### Changed — objections «А вдруг…» (`.pdl-objc`)
+- The «?» token moved **above** the question (column layout) so each heading gets the full card width and wraps evenly (`text-wrap:balance`) — fixes the ragged hanging-indent breaks beside the inline badge. Badge is now a `38px` circle. Bigger question (`16.5→19.5px` desk) and body (`14.5→16.5px` desk), more padding, hover lift.
+
+### Changed — final split CTA (`.pdl-finalc`)
+- Cards are flex columns with the button **pinned to the bottom** (`.pdl-finalc > :last-child{ margin-top:auto }`) so both CTAs align regardless of copy length.
+- **Buyer card recoloured** white → (green, rejected as clashing with its terracotta button) → **warm oat/sand `#ECE4D6`**, so it pairs cohesively with the terracotta seller card. Seller card gets a deeper gradient + drop shadow. Eyebrow labels `12→13px`, forced one line (`white-space:nowrap`); body `15→16.5px` desk. Hover lift on both.
+
+### Changed — catalog filters on mobile (`.pdl-filters`)
+- On narrow containers the bar **stacks**: each group’s label sits on its own line above its chips (`.pdl-flabel{ flex-basis:100% }`), groups stacked vertically — no more chips wrapping raggedly under the labels. `.pdl--desk` restores the single inline row.
+
+### Changed — reviews copy (`landing.jsx`)
+- Fixed two gender mismatches: the buyer card «Взяла… к свиданию» → masculine «**Взял**…», author Вера → **Артём** (Екатеринбург); the seller card author Никита → **Юлия** (Москва).
+
+### Notes for the consumer
+- `dist/canon.css` + `src/styles/canon.css` updated across the whole landing block (steps, escrow + esafe, objections, final CTA, filters, section-header / hero / app spacing). `src/marketing/landing.jsx` updated (esafe markup, step-1 copy, two review entries).
+- **No token changes.** Patch is landing-scoped — no other surface touched since 0.6.2.
+
 ## [0.6.2] — 2026-06-06 — Hero vendoring fix + desktop city popover + header consistency
 
 Landing-only patch (`./marketing` · `PdLanding`). `reference/prototypes/pd-land.{jsx,css}` are byte-current; `src/marketing/landing.jsx` + `dist/canon.css` + `src/styles/canon.css` re-synced — rebuild `dist/*.js` via `npm run build`. **`CLAUDE_CODE_HANDOFF.md §0` is the acceptance checklist for this version — read it before vendoring.**
