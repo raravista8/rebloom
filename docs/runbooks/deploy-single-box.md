@@ -58,16 +58,19 @@ Caddy provisions TLS on first request to `https://$PUBLIC_DOMAIN`.
 
 ## 4. Backups (MANDATORY — money is here)
 
-Set up `rclone` once (`rclone config` → an off-box target on a **different** provider/region, e.g. `selectel:rebloom-backups`). Then host cron:
+> Full procedure (rclone setup, timer install, restore-verification, retention): **`backup-restore.md`**.
 
-```cron
-# /etc/cron.d/rebloom-backup  — every 6h
-0 */6 * * * deploy cd /opt/rebloom && bash infra/scripts/backup.sh >> /var/log/rebloom-backup.log 2>&1
+Set up `rclone` once (`rclone config` → an off-box target on a **different** provider/region, e.g. `selectel:rebloom-backups`), put `BACKUP_REMOTE`/`BACKUP_ENC_KEY` in `.env`, then install the **systemd timer** (daily, catch-up after downtime):
+
+```bash
+sudo cp infra/systemd/rebloom-backup.{service,timer} /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now rebloom-backup.timer
+sudo systemctl start rebloom-backup.service   # fire one now; journalctl -u rebloom-backup.service
 ```
 
 `backup.sh` = `pg_dump | gzip | openssl aes-256 | rclone copy` + prune older than `BACKUP_KEEP_DAYS`. Photos live in the `photos` volume — add it to the same off-box sync if you want them durable (`rclone sync /var/lib/docker/volumes/rebloom_photos/_data selectel:rebloom-photos`), or accept re-upload-on-loss for MVP.
 
-**Restore drill (quarterly, non-negotiable):** on a scratch box, `bash infra/scripts/restore.sh` then check the ledger reconciles (OPERATIONS §5) before trusting it. An untested backup is not a backup.
+**Restore drill (quarterly, non-negotiable):** `bash infra/scripts/restore.sh` restores the latest backup into a **throwaway** DB (`rebloom_verify`, never live), then compare row counts vs prod and drop it (`backup-restore.md §3`). An untested backup is not a backup.
 
 ## 5. Deploy an update
 
