@@ -2,13 +2,16 @@
 // Header city selector (canon 0.6.2 §0.2 — ported, web does the real wiring).
 // DESKTOP: anchored popover under «📍 Москва ▾» — the 10 launch cities with counts +
 // a checkmark on the active one, second-click/outside-click/Esc to close, pick →
-// persist (cookie) + route to /[slug]. MOBILE (<1024): the trigger is a plain link to
-// the full-screen /city list (canon keeps the popover desktop-only).
+// set the feed-city cookie + refresh the page content. It does NOT route to the
+// /[slug] geo page — those are SEO/crawler landing pages, not in-app navigation;
+// switching the city just re-scopes the live catalog. MOBILE (<1024): the trigger is
+// a plain link to the full-screen /city list (canon keeps the popover desktop-only).
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import useIsDesktop from '@/lib/useIsDesktop';
-import { GEO_CITIES } from '@/lib/geoCities';
+import { GEO_CITIES, SLUG_TO_CITY_ID } from '@/lib/geoCities';
+import { setCityClient } from '@/lib/city-client';
 
 type IP = { className?: string };
 const sv = (p: IP) => ({ ...p, fill: 'none', stroke: 'currentColor', strokeWidth: 1.9, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, viewBox: '0 0 24 24' });
@@ -53,8 +56,11 @@ export default function NavCity({ initialSlug = 'moskva' }: { initialSlug?: stri
   const pick = (s: string) => {
     setSlug(s);
     setOpen(false);
-    document.cookie = `pd_city=${s}; path=/; max-age=31536000; samesite=lax`;
-    router.push(`/${s}`);
+    // Re-scope the live catalog to the chosen city: write the feed-city cookie
+    // (`city` = backend id, mapped from the SEO slug) and refresh the server render —
+    // the home stays at `/`, no navigation to the /[slug] SEO page.
+    setCityClient(SLUG_TO_CITY_ID[s] ?? s);
+    router.refresh();
   };
 
   return (
