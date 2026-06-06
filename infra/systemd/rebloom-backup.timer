@@ -1,0 +1,18 @@
+# Schedule for rebloom-backup.service — daily, catch-up if the box was off.
+#
+# Persistent=true means: if the VPS was down at the scheduled time (reboot,
+# maintenance), the backup fires once on next boot instead of silently skipping
+# a day. RandomizedDelaySec spreads load off the exact midnight tick.
+# Install: see docs/runbooks/backup-restore.md.
+[Unit]
+Description=Daily off-box encrypted Postgres backup for Rebloom
+Documentation=file:/opt/rebloom/docs/runbooks/backup-restore.md
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=15min
+Unit=rebloom-backup.service
+
+[Install]
+WantedBy=timers.target
