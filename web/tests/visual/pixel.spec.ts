@@ -39,6 +39,11 @@ test('home landing', async ({ page }) => {
 
 test('listing detail', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
+  // Logged-in viewer → WebChrome shows the авторизованный toolbar (this is the
+  // baselined state). A guest sees «Войти» instead — guarded in desktop.spec.ts.
+  await page.route('**/api/me', (r) =>
+    ok(r, { id: 'u', display_name: 'Аня', phone_masked: 'x', city_id: 'msk', roles: ['buyer'], seller_rating: 5, deals_count: 0 }),
+  );
   await page.route('**/api/listings/l1', (r) =>
     ok(r, {
       id: 'l1', photos: [{ card_url: PHOTO, full_url: PHOTO }, { card_url: PHOTO, full_url: PHOTO }],

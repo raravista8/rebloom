@@ -62,6 +62,28 @@ test('listing: two-column detail, price/title not clipped', async ({ page }) => 
   await expectNoHorizontalOverflow(page);
 });
 
+// Regression: WebChrome must reflect auth state. A guest (no session → /api/me 401)
+// must NOT see the logged-in toolbar (notifications/deals/profile-avatar) — it showed
+// the авторизованный chrome unconditionally before, so a guest looked "logged in".
+test('listing as guest: WebChrome shows «Войти», not the logged-in toolbar', async ({ page }) => {
+  await page.route('**/api/me', (r) =>
+    r.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ ok: false, error: 'unauthorized' }) }),
+  );
+  await page.route('**/api/listings/l1', (r) =>
+    ok(r, {
+      id: 'l1', photos: [{ card_url: PHOTO, full_url: PHOTO }],
+      size: 'M', freshness: 'today', price_kopecks: 190000, city_id: 'msk', status: 'active',
+      like_count: 8, liked: false, seller: { id: 's1', display_name: 'Аня', seller_rating: 4.9, deals_count: 12 },
+    }),
+  );
+  await page.goto('/l/l1');
+  const nav = page.locator('.pdw-nav');
+  await expect(nav.getByRole('link', { name: 'Войти' })).toBeVisible();
+  await expect(nav.locator('.pdw-avatar')).toHaveCount(0); // no profile avatar for a guest
+  await expect(nav.locator('a[href="/notifications"]')).toHaveCount(0); // no bell/deals
+  await expect(nav.locator('.pdw-cta')).toHaveCount(1); // «Продать букет» stays (bounces to /login)
+});
+
 test('deal: desktop chrome renders, no overflow', async ({ page }) => {
   await page.route('**/api/deals/d1', (r) =>
     ok(r, { deal: { id: 'd1', status: 'meeting', listing: { id: 'l1', photo_thumb_url: PHOTO, price_kopecks: 99000 }, role: 'buyer', counterparty: { id: 's1', display_name: 'Аня', seller_rating: 4.9 }, delivery_method: 'self_pickup', created_at: '2026-06-04T15:00:00Z' } }),
