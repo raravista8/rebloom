@@ -36,11 +36,10 @@ body {
  * notifications, settings, …). Auth (.pd-root.pa, login) stays a centred card on a
  * neutral surround — the conventional desktop auth pattern. Admin (.pda-app) is its
  * own desktop-first shell. */
-/* canon's desktop auth aside (.pad) ships a broken relative hero <img>; the aside
- * already carries its own terracotta gradient, so hide the placeholder image. */
-.pad-photo {
-  display: none;
-}
+/* canon 0.8.1 fixed the desktop auth aside photo (.pad-aside .pad-photo → full
+ * opacity, terracotta moved to a semi-transparent ::after overlay), so the old
+ * `.pad-photo{display:none}` consumer override is removed — it was masking the now
+ * working hero (the aside renders /img/hero-lacybird.png under the tint). */
 
 @media (min-width: 1024px) {
   body {
