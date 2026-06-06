@@ -141,7 +141,7 @@ function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status
         <div className="pdl-sechead l">
           <p className="pdl-kicker"><Leaf className="lf" />Живой каталог</p>
           <h2 className="pdl-h2">Свежие букеты рядом, прямо сейчас</h2>
-          <p className="pdl-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы.</p>
+          <p className="pdl-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
         </div>
         <div className="pdl-catbar">
           <span className="pdl-catcount"><span className="d" />{filtered.length} свежих букетов в {cityName(cityId)}</span>
@@ -241,7 +241,7 @@ function Escrow() {
         <div className="pdl-sechead l">
           <p className="pdl-kicker"><Shield style={{ width: 14, height: 14 }} />Спокойная сделка</p>
           <h2 className="pdl-h2">Вы платите только когда забрали букет — при встрече</h2>
-          <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому предоплаты нет: договариваетесь в чате и платите наличными или переводом прямо при встрече.</p>
+          <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому предоплаты нет: договариваетесь в чате и платите наличными или переводом прямо при встрече</p>
         </div>
         <div className="pdl-escrow-grid">
           <div className="pdl-eflow"><span className="en">1</span><div><h4>Договорились в чате</h4><p>Покупатель пишет продавцу, договаривается о месте и времени самовывоза рядом.</p></div></div>
@@ -281,7 +281,7 @@ function AppSec() {
           <div>
             <p className="pdl-kicker"><Leaf className="lf" />Приложение</p>
             <h2 className="pdl-h2">Узнавайте о свежих букетах рядом первыми</h2>
-            <p className="pdl-sub">Свежий букет по соседству живёт считанные часы. Включите push, и приложение сообщит, как только рядом появится подходящий, пока его не забрали.</p>
+            <p className="pdl-sub">Свежий букет по соседству живёт считанные часы. Включите push, и приложение сообщит, как только рядом появится подходящий, пока его не забрали</p>
           </div>
           <div className="pdl-badges">
             {STORES.map((s) => (

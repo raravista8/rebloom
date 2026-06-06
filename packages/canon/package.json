@@ -1,7 +1,7 @@
 {
   "name": "@rebloom/canon",
-  "version": "0.7.0",
-  "description": "Передарим client + operator-admin + public SEO/marketing UI canon — no-escrow «оплата при встрече» (agreed→meeting→done/problem/cancelled), pickup-only; C2C-forward landing hero (mobile photo-banner + desktop city popover NavCity); settings without money (payments/self-employment removed); tokens, motion, primitives, feed, marketing+SEO, catalog, listing, deal, OAuth auth, settings, admin.",
+  "version": "0.8.0",
+  "description": "Передарим UI canon — no-escrow «оплата при встрече» (agreed→meeting→done/problem/cancelled), pickup-only; C2C-forward landing hero (mobile photo-banner + desktop city popover NavCity); settings without money (payments/self-employment removed); tokens, motion, primitives, feed, marketing+SEO, catalog, listing, deal, OAuth auth, settings, admin. (0.8.0: login photo, OTP system-keyboard autofill, PdNotice text-wrap, no-trailing-period titles — design-source changes shipped docs-only; canon-CSS fixes applied web-side in globals.css pending a complete src/dist re-export).",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
