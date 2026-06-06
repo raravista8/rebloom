@@ -13,6 +13,17 @@ test('login opens at the chooser with ID buttons + phone', async ({ page }) => {
   await expect(page.locator('[data-provider="phone"]')).toBeVisible();
 });
 
+test('already signed in → /login redirects away (no chooser for a logged-in user)', async ({ page }) => {
+  const json = (body: unknown) => ({ status: 200, contentType: 'application/json', body: JSON.stringify(body) });
+  await page.route('**/api/me', (r) =>
+    r.fulfill(json({ ok: true, data: { id: 'u', display_name: 'Аня', phone_masked: 'x', city_id: 'msk', roles: ['buyer'], seller_rating: 5, deals_count: 0 } })),
+  );
+  await page.route('**/api/feed**', (r) => r.fulfill(json({ ok: true, data: { items: [], next_cursor: null } })));
+  await page.goto('/login?next=/');
+  await page.waitForURL((url) => !url.pathname.startsWith('/login'), { timeout: 5000 }); // redirected
+  await expect(page.locator('.pa, .pad')).toHaveCount(0); // login chooser never shown
+});
+
 test.describe('desktop', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
   // Regression guard: the canon desktop auth split (.pad) must span the full width.

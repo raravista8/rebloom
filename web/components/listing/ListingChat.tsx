@@ -41,7 +41,7 @@ export default function ListingChat({ id }: { id: string }) {
       )}
       <div style={{ padding: '12px 16px' }}>
         <PdNotice kind="ok" icon={IconShield}>
-          Договоритесь о цене и встрече. Оплата и адрес — внутри безопасной сделки, после нажатия «Купить».
+          Договоритесь о цене и встрече. Оплата — при встрече, наличными или переводом; точное место продавец пришлёт в сделке.
         </PdNotice>
       </div>
       <ChatPanel

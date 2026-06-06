@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { AuthChooser, AuthDesktopChooser } from '@rebloom/canon/auth';
 import { PdField, PdBtn, PdNotice } from '@/components/canon';
 import useIsDesktop from '@/lib/useIsDesktop';
+import useMe from '@/lib/useMe';
 import { api, ApiError, messageForCode } from '@/lib/api';
 import { reachGoal } from '@/lib/ym';
 import type { User } from '@/lib/types';
@@ -76,9 +77,23 @@ function mmss(total: number): string {
   return `${m}:${String(total % 60).padStart(2, '0')}`;
 }
 
+// Where to land after login: the `?next=` middleware appends when it bounces a guest off
+// a gated route. Same-origin paths only (no `//` protocol-relative → no open redirect).
+function safeNext(): string {
+  if (typeof window === 'undefined') return '/';
+  const n = new URLSearchParams(window.location.search).get('next');
+  return n && n.startsWith('/') && !n.startsWith('//') ? n : '/';
+}
+
 export default function LoginFlow() {
   const router = useRouter();
   const isDesktop = useIsDesktop();
+  // Already signed in (e.g. tapped «Войти» from a nav while logged in) → bounce to the
+  // intended page instead of showing the login chooser to a logged-in user.
+  const { authed } = useMe();
+  useEffect(() => {
+    if (authed === true) router.replace(safeNext());
+  }, [authed, router]);
   const [step, setStep] = useState<Step>('chooser');
   const [oauthMsg, setOauthMsg] = useState<string | undefined>();
 
@@ -169,7 +184,7 @@ export default function LoginFlow() {
         }
       }
       reachGoal('registration');
-      router.replace('/');
+      router.replace(safeNext());
     } catch (e) {
       if (e instanceof ApiError && e.code === 'otp_locked') {
         const retry = Number((e.data?.retry_after_sec as number) ?? 3600);
@@ -189,6 +204,11 @@ export default function LoginFlow() {
   useEffect(() => {
     if (step === 'otp') otpInputRef.current?.focus();
   }, [step]);
+
+  // Already signed in (known) → render nothing while the effect above redirects, so a
+  // logged-in user never sees the chooser. While auth is unknown (null) or a guest
+  // (false), render the chooser immediately — don't make a guest wait on /api/me.
+  if (authed === true) return null;
 
   // ── CHOOSER (canon components, OAuth-first) ──
   if (step === 'chooser') {
