@@ -44,6 +44,20 @@ def test_totp_secret_ciphertext_at_rest_and_roundtrip() -> None:
     assert verify_totp(decrypted, generate_totp(SEED)) is True
 
 
+def test_get_totp_secret_reads_legacy_plaintext_seed() -> None:
+    # A seed written before encryption-at-rest (or seeded straight into the DB) sits
+    # in the column as plaintext. decrypt-on-read must DEGRADE GRACEFULLY — return it
+    # as-is so a pre-existing admin's 2FA keeps working — not raise on the bad token.
+    users = PostgresUserRepository()
+    user_id = users.get_or_create_by_phone(_phone()).id
+    with writer_session() as session:
+        session.get(User, uuid.UUID(user_id)).totp_secret = SEED  # plaintext, NOT encrypted
+
+    got = users.get_totp_secret(user_id)
+    assert got == SEED
+    assert verify_totp(got, generate_totp(SEED)) is True
+
+
 def test_get_totp_secret_none_when_unset() -> None:
     users = PostgresUserRepository()
     user_id = users.get_or_create_by_phone(_phone()).id

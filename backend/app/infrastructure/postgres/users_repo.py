@@ -7,14 +7,18 @@ must not miss a just-created user due to replication lag.
 
 from __future__ import annotations
 
+import logging
 import uuid
 
+from cryptography.exceptions import InvalidTag
 from sqlalchemy import select
 
 from app.core.users.schemas import UserView
 from app.infrastructure.crypto import build_field_cipher
 from app.infrastructure.postgres.engine import writer_session
 from app.infrastructure.postgres.models import User
+
+_log = logging.getLogger("rebloom.auth")
 
 
 def _to_view(user: User) -> UserView:
@@ -67,7 +71,15 @@ class PostgresUserRepository:
             user = session.get(User, pk)
             if user is None or not user.totp_secret:  # no admin / no 2FA seed set
                 return None
-            return self._cipher.decrypt(user.totp_secret)
+            try:
+                return self._cipher.decrypt(user.totp_secret)
+            except (ValueError, InvalidTag):
+                # Legacy/seeded plaintext seed (written before encryption-at-rest),
+                # or an unreadable ciphertext. Return it as-is: a real base32 seed
+                # still verifies (and is re-encrypted on the next set_totp_secret);
+                # an unreadable value yields a bad seed → TOTP verify fails safely.
+                _log.warning("totp_secret not decryptable; treating as legacy plaintext")
+                return user.totp_secret
 
     def set_totp_secret(self, user_id: str, secret: str | None) -> bool:
         """Persist the admin 2FA seed encrypted at rest. ``None``/empty clears it."""
