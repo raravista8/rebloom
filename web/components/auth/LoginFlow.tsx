@@ -38,9 +38,11 @@ function AuthShell({ onBack, foot, children }: { onBack: () => void; foot?: Reac
     return (
       <div className="pd-root pad pa pa--desktop" data-pd-theme="a">
         <aside className="pad-aside">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="pad-photo" src="/hero-lacybird.png" alt="" />
           <div className="pad-brand"><Mark size={26} />Передарим</div>
-          <div className="pad-hl">Свежие букеты со скидкой и вторая жизнь подаренным цветам.</div>
-          <p className="pad-hlsub">Тысячи букетов в вашем городе. Оплата при встрече, отзывы взаимные.</p>
+          <div className="pad-hl">Свежие букеты со скидкой и вторая жизнь подаренным цветам</div>
+          <p className="pad-hlsub">Тысячи букетов в вашем городе. Оплата при встрече, отзывы взаимные</p>
           <div className="pad-points">
             <div className="pad-pt"><span className="ic"><IconCheck className="pd-i16" /></span>Публикация букета за 2 минуты</div>
             <div className="pad-pt"><span className="ic"><IconShield className="pd-i16" /></span>Оплата при встрече, без предоплаты</div>
@@ -209,7 +211,7 @@ export default function LoginFlow() {
       <AuthShell onBack={() => setStep('chooser')} foot={foot}>
         <div style={{ textAlign: 'center', margin: '8px 0 24px' }}>
           <h2 className="pa-h2">Вход по телефону</h2>
-          <p className="pa-sub">Пришлём код подтверждения по SMS.</p>
+          <p className="pa-sub">Пришлём код подтверждения по SMS</p>
         </div>
         <PdField label="Номер телефона" hint={phoneErr ? undefined : 'Например, +7 999 124-58-03'} error={phoneErr}>
           <div className={`pd-input${phoneErr ? ' pd-input--invalid' : ''}`}>
