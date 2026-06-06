@@ -12,7 +12,7 @@ import SiteFooter from '@/components/marketing/SiteFooter';
 import NavCity from '@/components/marketing/NavCity';
 import MobileMenu from '@/components/marketing/MobileMenu';
 import { api, ApiError } from '@/lib/api';
-import { cityName } from '@/lib/cities';
+import { cityPrepositional } from '@/lib/cities';
 import type { ListingCard, Paginated } from '@/lib/types';
 
 /* ── «Соцветие» mark + line icons (presentation SVG, copied from canon source) ── */
@@ -144,7 +144,7 @@ function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status
           <p className="pdl-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
         </div>
         <div className="pdl-catbar">
-          <span className="pdl-catcount"><span className="d" />{filtered.length} свежих букетов в {cityName(cityId)}</span>
+          <span className="pdl-catcount"><span className="d" />{filtered.length} свежих букетов в {cityPrepositional(cityId)}</span>
         </div>
         <div className="pdl-filters">
           {Object.entries(FILTERS).map(([k, g]) => (
@@ -164,7 +164,7 @@ function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status
         ) : status === 'error' ? (
           <p className="pdl-catnote">Не удалось загрузить каталог. <button className="pd-link" onClick={reload}>Повторить</button></p>
         ) : shown.length === 0 ? (
-          <p className="pdl-catnote">{pool.length === 0 ? `В ${cityName(cityId)} пока нет букетов — будьте первым.` : 'По этим фильтрам ничего нет, смягчите цену или свежесть.'}</p>
+          <p className="pdl-catnote">{pool.length === 0 ? `В ${cityPrepositional(cityId)} пока нет букетов — будьте первым.` : 'По этим фильтрам ничего нет, смягчите цену или свежесть.'}</p>
         ) : (
           <div className="pdl-catgrid">
             {shown.map((l) => <div className="pd-rise" key={l.id}><BouquetCard listing={l} variant="grid" /></div>)}

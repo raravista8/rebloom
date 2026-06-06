@@ -8,6 +8,13 @@ All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`
 >
 > Companion deep-dives in this package: **`OTP_KEYBOARD_AUTOFILL.md`** (keyboard-raise + SMS AutoFill logic, mock-vs-prod) and **`VISUAL_TEXT_CHANGES_0.8.0.md`** (every visual/text change, screen-by-screen).
 
+### Post-review prod fixes (CSS, folded into this package)
+Two desktop issues surfaced on прод after the auth-polish set and are fixed here in `src/styles/canon.css` **and** prebuilt `dist/canon.css`:
+
+- **Login aside — background photo invisible.** `img/hero-lacybird.png` is a bouquet on a light‑gray backdrop; at the old `.pad-aside .pad-photo{opacity:.16}` over the terracotta gradient it washed out to nothing. Now the photo renders at **full opacity** (`z-index:0`) with the terracotta as a **semi-transparent overlay on top** — `.pad-aside::after{background:linear-gradient(155deg,rgba(196,80,50,.86),rgba(150,52,34,.96));z-index:1}` — so the bouquet reads as a rich tinted texture and the white headline (z-index:2) stays legible. The `<img class="pad-photo">` element is kept (asset path resolves page-relative, same convention as every other canon image); ship `hero-lacybird.png` at the login route.
+- **Desktop catalog filter stacked vertically.** The inline filter row was gated only on the JS `.pdl--desk` modifier, which прод wasn't applying → groups stacked. Moved the row layout into the existing **`@container pdl (min-width:900px)`** block (`.pdl-filters{flex-direction:row;flex-wrap:wrap}` + `.pdl-flabel{flex-basis:auto}`), so it's driven by the `.pdl` **container width**, not the platform class — correct on прод desktop regardless of the modifier, and still stacks in narrow mobile frames. The old `.pdl--desk .pdl-filters` rule is kept (harmless).
+  - ⚠️ Separately: прод renders «0 свежих букетов в **Москва**» / «В **Москва** пока нет» — the city isn't declined. Canon hardcodes the locative («в Москве»); `web/` is interpolating a nominative variable. **web/ fix:** feed a pre-declined locative (see the city справочник, `seo.jsx` `CITIES_FULL[].loc`), don't decline algorithmically.
+
 ### Now actually in source (was docs-only in 0.8.0)
 All of the following previously lived only in prose; 0.8.1 lands them in `src/` and (for CSS) in the prebuilt `dist/canon.css`:
 
