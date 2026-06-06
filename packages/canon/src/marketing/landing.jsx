@@ -55,6 +55,61 @@ const PdLanding = (function () {
   const Chev = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>;
   const Menu = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>;
   const Star = (p) => <svg viewBox="0 0 24 24" {...p} fill="currentColor"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9z"/></svg>;
+  const Check = (p) => <svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>;
+
+  // ── десктопный выбор города: поповер под кнопкой (НЕ полноэкранный мобильный список) ──
+  // web/: заменить статичный CITY_LIST на реальный справочник + persisted geo (см. HANDOFF §8.2).
+  const CITY_LIST = [
+    { id: 'msk', name: 'Москва', count: 128 },
+    { id: 'spb', name: 'Санкт-Петербург', count: 86 },
+    { id: 'kzn', name: 'Казань', count: 41 },
+    { id: 'ekb', name: 'Екатеринбург', count: 33 },
+    { id: 'nsk', name: 'Новосибирск', count: 27 },
+    { id: 'nn', name: 'Нижний Новгород', count: 22 },
+    { id: 'sam', name: 'Самара', count: 19 },
+    { id: 'chel', name: 'Челябинск', count: 18 },
+    { id: 'krs', name: 'Красноярск', count: 16 },
+    { id: 'ufa', name: 'Уфа', count: 14 },
+  ];
+
+  function CityMenu({ value, onPick, align }) {
+    return (
+      <div className={'pdl-citymenu' + (align === 'r' ? ' r' : '')} role="dialog" aria-label="Выбор города">
+        <div className="pdl-citymenu-list">
+          {CITY_LIST.map((c) => (
+            <button key={c.id} className={'pdl-cityrow' + (c.name === value ? ' on' : '')} onClick={() => onPick(c.name)}>
+              <span className="pin"><Pin /></span>
+              <span className="nm">{c.name}</span>
+              <span className="ct">{c.count}</span>
+              {c.name === value && <span className="ck"><Check /></span>}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function NavCity({ align }) {
+    const [open, setOpen] = React.useState(false);
+    const [city, setCity] = React.useState('Москва');
+    const wrapRef = React.useRef(null);
+    React.useEffect(() => {
+      if (!open) return;
+      const onDoc = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
+      const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+      document.addEventListener('mousedown', onDoc);
+      document.addEventListener('keydown', onKey);
+      return () => { document.removeEventListener('mousedown', onDoc); document.removeEventListener('keydown', onKey); };
+    }, [open]);
+    return (
+      <div className="pdl-citywrap" ref={wrapRef}>
+        <button className={'pdl-nav-city' + (open ? ' open' : '')} onClick={() => setOpen((o) => !o)} aria-haspopup="dialog" aria-expanded={open}>
+          <Pin className="pin" />{city}<Chev className={'chev' + (open ? ' up' : '')} />
+        </button>
+        {open && <CityMenu value={city} align={align} onPick={(n) => { setCity(n); setOpen(false); }} />}
+      </div>
+    );
+  }
 
   function CityChips({ cls }) {
     return (
@@ -370,7 +425,7 @@ const PdLanding = (function () {
               <button className="pdl-nav-icon" aria-label="Уведомления"><Bell /></button>
               <button className="pdl-nav-icon pdl-nav-fav" aria-label="Избранное"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z"/></svg></button>
               <button className="pdl-nav-ava" aria-label="Профиль">М</button>
-              <span className="pdl-nav-cta"><Btn variant="primary" icon={Ic && Ic.plus}>Продать букет</Btn></span>
+              <span className="pdl-nav-cta"><Btn variant="primary" icon={Ic && Ic.plus}>Опубликовать букет</Btn></span>
               <button className="pdl-nav-burger" aria-label="Меню"><Menu /></button>
             </div>
           </div>

@@ -9,6 +9,7 @@ import { PdBtn } from '@/components/canon';
 import { IconPlus } from '@/components/icons';
 import BouquetCard from '@/components/feed/BouquetCard';
 import SiteFooter from '@/components/marketing/SiteFooter';
+import NavCity from '@/components/marketing/NavCity';
 import { api, ApiError } from '@/lib/api';
 import { cityName } from '@/lib/cities';
 import type { ListingCard, Paginated } from '@/lib/types';
@@ -26,10 +27,8 @@ const S = (p: IP) => ({ ...p, fill: 'none', stroke: 'currentColor', strokeWidth:
 const Leaf = (p: IP) => <svg {...p} viewBox="0 0 24 24"><path d="M5 19c0-7 5-12 14-13 0 9-5 13-11 13-1.5 0-3 .5-3 .5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><path d="M5 19c2-4 5-6 9-7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
 const Tag = (p: IP) => <svg {...S(p)}><path d="M20 12 12 20l-8-8V4h8z" /><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor" stroke="none" /></svg>;
 const Shield = (p: IP) => <svg {...S(p)}><path d="M12 3 5 6v5c0 4.2 2.9 7.5 7 9 4.1-1.5 7-4.8 7-9V6z" /><path d="m9.2 12 1.9 1.9 3.7-3.7" /></svg>;
-const Pin = (p: IP) => <svg {...S(p)}><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg>;
 const Search = (p: IP) => <svg {...S(p)}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" /></svg>;
 const Bell = (p: IP) => <svg {...S(p)}><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" /><path d="M10 19a2 2 0 0 0 4 0" /></svg>;
-const Chev = (p: IP) => <svg {...S(p)}><path d="m6 9 6 6 6-6" /></svg>;
 const Menu = (p: IP) => <svg {...S(p)}><path d="M4 7h16M4 12h16M4 17h16" /></svg>;
 const Star = (p: IP) => <svg {...p} viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9z" /></svg>;
 const HeartHands = (p: IP) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" /></svg>;
@@ -55,6 +54,7 @@ function Nav() {
     <header className="pdl-nav">
       <div className="pdl-nav-in">
         <Link href="/" className="pdl-brand" style={{ textDecoration: 'none', color: 'inherit' }}><Mark size={24} />Передарим</Link>
+        <NavCity />
         <nav className="pdl-navlinks">
           <a href="#catalog">Каталог</a>
           <a href="#how">Как работает</a>
@@ -62,7 +62,6 @@ function Nav() {
           <a href="#app">Приложение</a>
         </nav>
         <div className="pdl-navright">
-          <Link href="/city" className="pdl-nav-city" style={{ textDecoration: 'none' }}><Pin className="pin" />Москва<Chev /></Link>
           <Link href="/login" className="pdl-nav-login" style={{ textDecoration: 'none' }}>Войти</Link>
           <span className="pdl-nav-cta"><Link href="/sell" style={{ textDecoration: 'none' }}><PdBtn variant="primary" icon={IconPlus}>Опубликовать букет</PdBtn></Link></span>
           <Link href="/login" className="pdl-nav-burger" aria-label="Меню"><Menu /></Link>
@@ -72,15 +71,16 @@ function Nav() {
   );
 }
 
-/* ── HERO — real hero photo from the live feed ── */
-function Hero({ heroImg, liveCount }: { heroImg?: string; liveCount: number }) {
+/* ── HERO — canonical static hero (canon 0.6.2 §0.1). Static photo/price/count by
+   design: a live-feed image rendered an empty card pre-launch (READ FIRST diagnosis). ── */
+function Hero() {
   return (
     <section className="pdl-hero">
       <div className="pdl-hero-in">
         <div className="pdl-herotext">
-          <p className="pdl-kicker"><Leaf className="lf" />Вторая жизнь букетов</p>
-          <h1 className="pdl-h1">Свежие букеты <em>в 2–3 раза дешевле</em> цветочного магазина</h1>
-          <p className="pdl-lead">Кому-то подарили цветы, а они ещё свежие. Вместо мусорного ведра букет находит новый дом. Вы передаёте свой букет дальше или забираете чужой за полцены.</p>
+          <p className="pdl-kicker"><Leaf className="lf" />Люди передаривают свои букеты</p>
+          <h1 className="pdl-h1">Свежие букеты <em>напрямую от людей</em>, <span style={{ whiteSpace: 'nowrap' }}>в 2–3 раза</span> дешевле магазина</h1>
+          <p className="pdl-lead"><b>Букет подарили, он порадовал и уже не нужен.</b> Вместо мусорки свежие цветы за полцены находят нового хозяина. Выставьте свой за минуту или заберите чужой.</p>
           <div className="pdl-cta">
             <Link href="/sell" style={{ textDecoration: 'none' }}><PdBtn variant="primary" lg icon={IconPlus}>Опубликовать букет</PdBtn></Link>
             <a href="#catalog" style={{ textDecoration: 'none' }}><PdBtn variant="secondary" lg>Смотреть букеты</PdBtn></a>
@@ -93,16 +93,12 @@ function Hero({ heroImg, liveCount }: { heroImg?: string; liveCount: number }) {
         </div>
         <div className="pdl-herovis">
           <div className="pdl-herophoto">
-            {heroImg ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={heroImg} alt="Свежий букет" loading="lazy" />
-            ) : (
-              <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, var(--pd-surface-2), var(--pd-surface-3))' }} />
-            )}
-            <span className="pdl-livecount"><span className="pdl-livedot" />{liveCount} свежих букетов сейчас</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/hero-lacybird.png" alt="Свежий букет роз и гортензий" loading="lazy" />
+            <span className="pdl-livecount"><span className="pdl-livedot" />128 букетов от людей рядом</span>
             <div className="pdl-pricetag">
-              <div><div className="old">2 490 ₽ в цветочной</div><div className="new">от 690 ₽</div></div>
-              <div className="save"><b>−60%</b><span>дешевле</span></div>
+              <div><div className="old">17 200 ₽ в цветочной</div><div className="new">от 4 500 ₽</div></div>
+              <div className="save"><b>−74%</b><span>дешевле</span></div>
             </div>
           </div>
         </div>
@@ -347,7 +343,7 @@ export default function LandingHome({ cityId }: { cityId: string }) {
     <div className="pd-root pd-web pdl" data-pd-theme="a">
       <Nav />
       <main className="pd-scroll pdw-scroll">
-        <Hero heroImg={pool[0]?.photo_thumb_url} liveCount={pool.length} />
+        <Hero />
         <Catalog pool={pool} status={status} cityId={cityId} reload={load} />
         <How />
         <Reviews />

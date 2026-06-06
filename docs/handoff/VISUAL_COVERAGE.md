@@ -1,7 +1,7 @@
 # VISUAL_COVERAGE — live tracker (canon-import vs hand-rolled)
 
 > Per-screen / per-component status across viewports. Update on every canon vendoring (`CANON_PACKAGE_TZ.md §9`) and every UI task (CLAUDE.md UI DoD).
-> Сейчас: canon `0.6.1` вендорен и рендерится в `web/` (Next.js 15 + Playwright-харнесс поднят, smoke зелёный). Экраны постепенно подключаются к API; per-screen pixel-baselines добавляются по мере готовности (T2.2). 0.6.1 — лендинг-only: мобильный фото-баннер-герой (16:9), хедер-чип города «📍 Москва ▾», убрана плашка «Рядом с домом». CSS доезжает пакетом; JSX-правки портированы вручную в `LandingHome.tsx` (web хэндроллит лендинг, не импортит canon `PdLanding`).
+> Сейчас: canon `0.6.2` вендорен и рендерится в `web/` (Next.js 15 + Playwright-харнесс поднят, smoke зелёный). Экраны постепенно подключаются к API; per-screen pixel-baselines добавляются по мере готовности (T2.2). 0.6.2 — лендинг-only: **синхронизирован герой** (бровь «Люди передаривают свои букеты», H1 «…напрямую от людей…», статичное фото `hero-lacybird.png`, ценник «17 200 ₽ → от 4 500 ₽ / −74%», «128 букетов рядом») — раньше прод рендерил старый герой, т.к. `LandingHome.tsx` строился по устаревшей мета-таблице §8.3; **десктопный поповер выбора города** (`NavCity` — port canon-референса, Esc/клик-вне, → /[slug]). CSS доезжает пакетом; JSX-правки портированы вручную в `LandingHome.tsx` (web хэндроллит лендинг, не импортит canon `PdLanding`).
 > Legend: 🔵 spec only · 🟢 canon-import + visual ≤2% · 🟡 hand-rolled (justify) · 🔴 missing/broken
 
 ## Screens

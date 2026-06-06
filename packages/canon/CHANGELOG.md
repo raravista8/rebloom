@@ -2,6 +2,28 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.6.2] — 2026-06-06 — Hero vendoring fix + desktop city popover + header consistency
+
+Landing-only patch (`./marketing` · `PdLanding`). `reference/prototypes/pd-land.{jsx,css}` are byte-current; `src/marketing/landing.jsx` + `dist/canon.css` + `src/styles/canon.css` re-synced — rebuild `dist/*.js` via `npm run build`. **`CLAUDE_CODE_HANDOFF.md §0` is the acceptance checklist for this version — read it before vendoring.**
+
+### Fixed — hero never reached prod (the reason for this version)
+- **Hero contract corrected.** 0.6.0 changed the hero in the component, but prod kept rendering the **old** hero (eyebrow «Вторая жизнь букетов», H1 «…дешевле цветочного магазина», no photo, «от 690 ₽ / −60%»). The `web/` build followed the **meta-contract table (§8.3), whose H1 was still the pre-0.6.0 string**, so eyebrow / H1 / lede / photo / price tag were never re-vendored. **§8.3 H1 is now synced to the component** and §0 lists every hero field with its canonical value so this can't silently regress.
+- No visual change to the canon hero itself — the canonical values are exactly those authored in 0.6.0 (eyebrow «Люди передаривают свои букеты»; H1 «Свежие букеты *напрямую от людей*, в 2–3 раза дешевле магазина»; lede «Букет подарили…»; photo `hero-lacybird.png`; price `17 200 ₽ → от 4 500 ₽`, badge `−74%`; live-count «128 букетов от людей рядом»).
+
+### Added — desktop city picker
+- **`.pdl-citymenu` popover.** The header «📍 Москва ▾» (`.pdl-nav-city`) now opens an anchored desktop dropdown: the full list of all 10 cities with live counts + checkmark on the current city (no search field — all rows fit without scrolling). Replaces the **mobile full-screen «Город» page** that prod was rendering on desktop. New `NavCity` wrapper owns open/close + selection; the outside-click/Esc ref sits on the wrapper (button + menu) so a **second click on the trigger reliably closes** it; `align` (`l`/`r`) flips the anchor edge. `web/` wires the real city dictionary + persisted geo (see HANDOFF §8.2). Entrance animation animates **transform only** (no opacity) so SSR / paused-frame renders are never invisible.
+
+### Changed — header consistency
+- **City selector position unified.** Now sits immediately after the brand in **both** guest and authorized headers (the guest header previously placed it on the right by «Войти»). One position across states.
+- **Authorized-header CTA → «Опубликовать букет».** The landing header preview used the in-app verb «Продать букет» while the rest of the marketing surface says «Опубликовать букет»; on the landing the brand voice wins. **In-app** authenticated surfaces (feed/catalog/sell) intentionally keep «Продать букет».
+
+### Fixed — avatar ring
+- **`.pdl-nav-ava`** is a `<button>` that never reset its UA border, leaving a dark ring around the terracotta avatar. Added `border:none; padding:0; cursor:pointer`.
+
+### Notes for the consumer
+- `dist/canon.css` + `src/styles/canon.css` updated (`.pdl-citymenu*`, `.pdl-cityrow*`, `.pdl-nav-city` hover/open/chev, `.pdl-nav-ava` border reset). No token changes.
+- Patch is landing-scoped — no other surface touched since 0.6.1.
+
 ## [0.6.1] — 2026-06-05 — Landing hero: mobile layout, header city selector, trust trim
 
 Landing-only patch (`./marketing` · `PdLanding`). `reference/prototypes/pd-land.{jsx,css}` are byte-current; `src/marketing/landing.jsx` + `dist/canon.css` re-synced — rebuild `dist/*.js` via `npm run build`.

@@ -1,5 +1,5 @@
 import { PD_FRESH, PD_LIKED, PdBtn, Ic, Card } from './chunk-SNT6I4NE.mjs';
-import React2 from 'react';
+import React from 'react';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 
 var PETAL = "M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z";
@@ -140,11 +140,11 @@ var PdLanding = (function() {
     rating: { label: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430", opts: [["45", "4,5+"], ["48", "4,8+"], ["5", "5,0"]] }
   };
   function Catalog({ desk }) {
-    const [sel, setSel] = React2.useState({ price: "any", fresh: "any", rating: "any" });
+    const [sel, setSel] = React.useState({ price: "any", fresh: "any", rating: "any" });
     const toggle = (k, v) => setSel((s) => ({ ...s, [k]: s[k] === v ? "any" : v }));
     const reset = () => setSel({ price: "any", fresh: "any", rating: "any" });
     const activeN = Object.values(sel).filter((v) => v !== "any").length;
-    const filtered = React2.useMemo(() => C_POOL.filter(
+    const filtered = React.useMemo(() => C_POOL.filter(
       (d) => C_PRICE[sel.price](d.price) && (sel.fresh === "any" || d.fresh === sel.fresh) && C_RATING[sel.rating](d.seller.r)
     ), [sel]);
     const shown = filtered.slice(0, 8);
@@ -433,7 +433,7 @@ var PdLanding = (function() {
           /* @__PURE__ */ jsx("button", { className: "pdl-nav-icon", "aria-label": "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: /* @__PURE__ */ jsx(Bell, {}) }),
           /* @__PURE__ */ jsx("button", { className: "pdl-nav-icon pdl-nav-fav", "aria-label": "\u0418\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435", children: /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsx("path", { d: "M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" }) }) }),
           /* @__PURE__ */ jsx("button", { className: "pdl-nav-ava", "aria-label": "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", children: "\u041C" }),
-          /* @__PURE__ */ jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsx(Btn2, { variant: "primary", icon: Ic2 && Ic2.plus, children: "\u041F\u0440\u043E\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
+          /* @__PURE__ */ jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsx(Btn2, { variant: "primary", icon: Ic2 && Ic2.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
           /* @__PURE__ */ jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", children: /* @__PURE__ */ jsx(Menu2, {}) })
         ] })
       ] }) });
@@ -706,10 +706,10 @@ function makeItems(cityNom, districts) {
 }
 var PRICE = { any: () => true, lt1k: (p) => p < 1e3, "1k2k": (p) => p >= 1e3 && p <= 2e3, gt2k: (p) => p > 2e3 };
 function GeoCatalog({ cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityLoc = "\u041C\u043E\u0441\u043A\u0432\u0435", districts }) {
-  const [price, setPrice] = React2.useState("any");
-  const [fresh, setFresh] = React2.useState("any");
-  const items = React2.useMemo(() => makeItems(cityNom, districts), [cityNom, districts]);
-  const shown = React2.useMemo(() => items.filter((d) => PRICE[price](d.price) && (fresh === "any" || d.fresh === fresh)), [items, price, fresh]);
+  const [price, setPrice] = React.useState("any");
+  const [fresh, setFresh] = React.useState("any");
+  const items = React.useMemo(() => makeItems(cityNom, districts), [cityNom, districts]);
+  const shown = React.useMemo(() => items.filter((d) => PRICE[price](d.price) && (fresh === "any" || d.fresh === fresh)), [items, price, fresh]);
   const Chip = ({ on, onClick, children }) => /* @__PURE__ */ jsx("button", { className: "pds-fchip" + (on ? " on" : ""), onClick, children });
   return /* @__PURE__ */ jsxs("div", { children: [
     /* @__PURE__ */ jsx("div", { className: "pds-catbar", children: /* @__PURE__ */ jsxs("span", { className: "pds-catcount", children: [

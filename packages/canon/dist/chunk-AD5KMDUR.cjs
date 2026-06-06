@@ -1,12 +1,12 @@
 'use strict';
 
 var chunkGT5S3QFQ_cjs = require('./chunk-GT5S3QFQ.cjs');
-var React2 = require('react');
+var React = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
-var React2__default = /*#__PURE__*/_interopDefault(React2);
+var React__default = /*#__PURE__*/_interopDefault(React);
 
 var PETAL = "M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z";
 var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { className, width: size, height: size, viewBox: "0 0 100 100", role: "img", "aria-label": title, style: { display: "block", flex: "none", ...style }, children: [
@@ -146,11 +146,11 @@ var PdLanding = (function() {
     rating: { label: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430", opts: [["45", "4,5+"], ["48", "4,8+"], ["5", "5,0"]] }
   };
   function Catalog({ desk }) {
-    const [sel, setSel] = React2__default.default.useState({ price: "any", fresh: "any", rating: "any" });
+    const [sel, setSel] = React__default.default.useState({ price: "any", fresh: "any", rating: "any" });
     const toggle = (k, v) => setSel((s) => ({ ...s, [k]: s[k] === v ? "any" : v }));
     const reset = () => setSel({ price: "any", fresh: "any", rating: "any" });
     const activeN = Object.values(sel).filter((v) => v !== "any").length;
-    const filtered = React2__default.default.useMemo(() => C_POOL.filter(
+    const filtered = React__default.default.useMemo(() => C_POOL.filter(
       (d) => C_PRICE[sel.price](d.price) && (sel.fresh === "any" || d.fresh === sel.fresh) && C_RATING[sel.rating](d.seller.r)
     ), [sel]);
     const shown = filtered.slice(0, 8);
@@ -439,7 +439,7 @@ var PdLanding = (function() {
           /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-icon", "aria-label": "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: /* @__PURE__ */ jsxRuntime.jsx(Bell, {}) }),
           /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-icon pdl-nav-fav", "aria-label": "\u0418\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435", children: /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M12 20.3C12 20.3 3.4 14.9 3.4 8.7 3.4 6 5.5 4 8 4 9.8 4 11.3 5 12 6.3 12.7 5 14.2 4 16 4 18.5 4 20.6 6 20.6 8.7 20.6 14.9 12 20.3 12 20.3Z" }) }) }),
           /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-ava", "aria-label": "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", children: "\u041C" }),
-          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsxRuntime.jsx(Btn2, { variant: "primary", icon: Ic2 && Ic2.plus, children: "\u041F\u0440\u043E\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdl-nav-cta", children: /* @__PURE__ */ jsxRuntime.jsx(Btn2, { variant: "primary", icon: Ic2 && Ic2.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) }),
           /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", children: /* @__PURE__ */ jsxRuntime.jsx(Menu2, {}) })
         ] })
       ] }) });
@@ -712,10 +712,10 @@ function makeItems(cityNom, districts) {
 }
 var PRICE = { any: () => true, lt1k: (p) => p < 1e3, "1k2k": (p) => p >= 1e3 && p <= 2e3, gt2k: (p) => p > 2e3 };
 function GeoCatalog({ cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityLoc = "\u041C\u043E\u0441\u043A\u0432\u0435", districts }) {
-  const [price, setPrice] = React2__default.default.useState("any");
-  const [fresh, setFresh] = React2__default.default.useState("any");
-  const items = React2__default.default.useMemo(() => makeItems(cityNom, districts), [cityNom, districts]);
-  const shown = React2__default.default.useMemo(() => items.filter((d) => PRICE[price](d.price) && (fresh === "any" || d.fresh === fresh)), [items, price, fresh]);
+  const [price, setPrice] = React__default.default.useState("any");
+  const [fresh, setFresh] = React__default.default.useState("any");
+  const items = React__default.default.useMemo(() => makeItems(cityNom, districts), [cityNom, districts]);
+  const shown = React__default.default.useMemo(() => items.filter((d) => PRICE[price](d.price) && (fresh === "any" || d.fresh === fresh)), [items, price, fresh]);
   const Chip = ({ on, onClick, children }) => /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pds-fchip" + (on ? " on" : ""), onClick, children });
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pds-catbar", children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pds-catcount", children: [
