@@ -24,7 +24,7 @@ export async function generateMetadata({
   const city = geoCityBySlug(slug);
   if (!city) return {};
   const title = `Дешёвые свежие букеты в ${city.loc} — самовывоз рядом | Передарим`;
-  const description = `Свежие букеты в ${city.loc} в 2–3 раза дешевле магазина. Самовывоз рядом с домом, безопасная сделка с защитой денег. Заберите букет за полцены или передайте свой.`;
+  const description = `Свежие букеты в ${city.loc} — в 2–3 раза дешевле магазина. Самовывоз рядом, оплата при встрече.`;
   const url = abs(`/${city.id}`);
   return {
     title,
