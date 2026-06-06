@@ -18,6 +18,10 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    // A dummy `session` cookie so middleware.ts (the server-side auth gate) lets the
+    // authed routes (/sell, /deal, /admin, …) render in the harness. Tests still mock
+    // the APIs; the gate only checks cookie presence. Public-route specs are unaffected.
+    storageState: './tests/visual/_session-state.json',
   },
   projects: [
     {
