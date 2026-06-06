@@ -11,18 +11,18 @@ export type FeedSection = 'fresh' | 'liked';
 
 export interface User {
   id: string;
-  display_name: string;
+  display_name: string | null;
   phone_masked: string;
   city_id: string;
   roles: string[];
-  seller_rating: number;
+  seller_rating: number | null;
   deals_count: number;
 }
 
 export interface ListingCardSeller {
   id: string;
-  display_name: string;
-  seller_rating: number;
+  display_name: string | null;
+  seller_rating: number | null;
 }
 
 export interface ListingCard {
@@ -92,9 +92,9 @@ export interface ChatMessage {
 // GET /api/users/{id} (API_CONTRACT §5)
 export interface PublicUser {
   id: string;
-  display_name: string;
+  display_name: string | null;
   city_id?: string;
-  seller_rating: number;
+  seller_rating: number | null;
   deals_count: number;
 }
 export interface ReviewItem {

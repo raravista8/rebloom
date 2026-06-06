@@ -39,10 +39,14 @@ export default function BouquetCard({
             <span className="pd-district">{cityName(listing.city_id)}</span>
           </div>
           <div className="pd-seller">
-            <PdAvatar seller={{ n: listing.seller.display_name }} size={21} />
-            <span className="pd-seller-n">{listing.seller.display_name}</span>
+            <PdAvatar seller={{ n: listing.seller.display_name || 'Продавец' }} size={21} />
+            <span className="pd-seller-n">{listing.seller.display_name || 'Продавец'}</span>
             <span className="pd-rating">
-              <IconStar className="pd-i13 pd-star" /> {listing.seller.seller_rating.toFixed(1)}
+              {listing.seller.seller_rating != null ? (
+                <><IconStar className="pd-i13 pd-star" /> {listing.seller.seller_rating.toFixed(1)}</>
+              ) : (
+                'Новый'
+              )}
             </span>
           </div>
         </div>

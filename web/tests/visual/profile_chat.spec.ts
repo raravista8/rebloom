@@ -40,7 +40,7 @@ test('listing chat: empty then send a message', async ({ page }) => {
   );
   await page.route('**/api/listings/l1/messages', (r) => {
     if (r.request().method() === 'POST') return json(r, { id: 'm1', sender_id: 'me', body: 'Здравствуйте! Букет ещё актуален?', held: false, mine: true, created_at: '2026-06-04T16:00:00Z' });
-    return json(r, { items: [], next_cursor: null });
+    return json(r, { messages: [], next_cursor: null });
   });
   await page.goto('/l/l1/chat');
   await expect(page.getByText('Напишите продавцу')).toBeVisible();

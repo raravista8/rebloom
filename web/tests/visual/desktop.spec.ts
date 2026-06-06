@@ -64,9 +64,9 @@ test('listing: two-column detail, price/title not clipped', async ({ page }) => 
 
 test('deal: desktop chrome renders, no overflow', async ({ page }) => {
   await page.route('**/api/deals/d1', (r) =>
-    ok(r, { id: 'd1', status: 'paid_held', listing: { id: 'l1', photo_thumb_url: PHOTO, price_kopecks: 99000 }, role: 'buyer', counterparty: { id: 's1', display_name: 'Аня', seller_rating: 4.9 }, amount_kopecks: 99000, commission_kopecks: 9900, delivery_method: 'self_pickup', created_at: '2026-06-04T15:00:00Z' }),
+    ok(r, { deal: { id: 'd1', status: 'meeting', listing: { id: 'l1', photo_thumb_url: PHOTO, price_kopecks: 99000 }, role: 'buyer', counterparty: { id: 's1', display_name: 'Аня', seller_rating: 4.9 }, delivery_method: 'self_pickup', created_at: '2026-06-04T15:00:00Z' } }),
   );
-  await page.route('**/api/deals/d1/messages', (r) => ok(r, { items: [], next_cursor: null }));
+  await page.route('**/api/deals/d1/messages', (r) => ok(r, { messages: [], next_cursor: null }));
   await page.route('**/api/deals/d1/delivery', (r) => ok(r, { revealed: false, address: null }));
   await page.goto('/deal/d1');
   await expect(page.locator('.pd-web')).toBeVisible();

@@ -24,8 +24,8 @@ function msg(id: string, body: string, mine: boolean, held = false) {
 }
 
 test('meeting: pay-at-meeting notice + chat + address + confirm CTA', async ({ page }) => {
-  await page.route('**/api/deals/d1', (r) => json(r, deal('meeting')));
-  await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [msg('m1', 'Можно забрать после 18:00 🌸', false)], next_cursor: null }));
+  await page.route('**/api/deals/d1', (r) => json(r, { deal: deal('meeting') }));
+  await page.route('**/api/deals/d1/messages', (r) => json(r, { messages: [msg('m1', 'Можно забрать после 18:00 🌸', false)], next_cursor: null }));
   await page.route('**/api/deals/d1/delivery', (r) => json(r, { revealed: true, address: 'Двор, Тверская 12' }));
   await page.goto('/deal/d1');
   await expect(page.getByText('Встреча назначена.')).toBeVisible();
@@ -36,12 +36,12 @@ test('meeting: pay-at-meeting notice + chat + address + confirm CTA', async ({ p
 
 test('confirm receipt → done + review CTA', async ({ page }) => {
   let confirmed = false;
-  await page.route('**/api/deals/d1', (r) => json(r, deal(confirmed ? 'done' : 'meeting')));
-  await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [], next_cursor: null }));
+  await page.route('**/api/deals/d1', (r) => json(r, { deal: deal(confirmed ? 'done' : 'meeting') }));
+  await page.route('**/api/deals/d1/messages', (r) => json(r, { messages: [], next_cursor: null }));
   await page.route('**/api/deals/d1/delivery', (r) => json(r, { revealed: true, address: 'Двор' }));
   await page.route('**/api/deals/d1/confirm-receipt', (r) => {
     confirmed = true;
-    return json(r, deal('done'));
+    return json(r, { deal: deal('done') });
   });
   await page.goto('/deal/d1');
   await page.getByRole('button', { name: 'Подтвердить получение' }).click();
@@ -50,8 +50,8 @@ test('confirm receipt → done + review CTA', async ({ page }) => {
 });
 
 test('problem: report notice + chat input', async ({ page }) => {
-  await page.route('**/api/deals/d1', (r) => json(r, deal('problem')));
-  await page.route('**/api/deals/d1/messages', (r) => json(r, { items: [msg('s1', 'Поддержка подключилась', false)], next_cursor: null }));
+  await page.route('**/api/deals/d1', (r) => json(r, { deal: deal('problem') }));
+  await page.route('**/api/deals/d1/messages', (r) => json(r, { messages: [msg('s1', 'Поддержка подключилась', false)], next_cursor: null }));
   await page.goto('/deal/d1');
   await expect(page.getByText('Жалоба на рассмотрении.')).toBeVisible();
   await expect(page.getByPlaceholder('Сообщение…')).toBeVisible();
