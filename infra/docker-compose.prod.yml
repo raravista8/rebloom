@@ -129,6 +129,10 @@ services:
     build:
       context: ..
       dockerfile: web/Dockerfile
+      args:
+        # NEXT_PUBLIC_* is baked at `next build`. Empty unless set in the VM .env →
+        # every web rebuild then auto-picks up the Yandex Metrica counter id.
+        NEXT_PUBLIC_YM_COUNTER_ID: ${NEXT_PUBLIC_YM_COUNTER_ID:-}
     restart: unless-stopped
     expose:
       - "3000"
