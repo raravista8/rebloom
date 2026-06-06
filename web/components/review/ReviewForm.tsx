@@ -9,6 +9,7 @@ import { PdField, PdBtn, PdNotice, PdAvatar } from '@/components/canon';
 import { IconStar, IconInfo, IconCheck } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import { api, ApiError } from '@/lib/api';
+import { reachGoal } from '@/lib/ym';
 import type { DealView } from '@/lib/types';
 
 function StarRating({ value, onChange }: { value: number; onChange: (n: number) => void }) {
@@ -66,6 +67,7 @@ export default function ReviewForm({ id }: { id: string }) {
     try {
       const res = await api.post<{ moderation_status?: string }>(`/deals/${id}/review`, { score, text: text.trim() });
       setDone(res.moderation_status === 'held' ? 'held' : 'sent');
+      reachGoal('review_left');
     } catch (e) {
       if (e instanceof ApiError && e.code === 'content_blocked') setTextErr('В тексте есть запрещённые слова или контакты. Поправьте, пожалуйста.');
       else if (e instanceof ApiError && e.code === 'unauthorized') router.replace('/login');

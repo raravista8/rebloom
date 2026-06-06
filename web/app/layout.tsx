@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Golos_Text } from 'next/font/google';
 import { SITE_URL } from '@/lib/site';
+import Metrica from '@/components/analytics/Metrica';
 // Token order: theme vars first, then canon component styles, then our overrides.
 import '@rebloom/canon/tokens/theme.css';
 import '@rebloom/canon/canon.css';
@@ -47,7 +48,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru" className={golos.variable}>
-      <body>{children}</body>
+      <body>{children}<Metrica /></body>
     </html>
   );
 }

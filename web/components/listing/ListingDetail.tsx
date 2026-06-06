@@ -12,6 +12,7 @@ import ScreenChrome from '@/components/shell/ScreenChrome';
 import PhotoGallery from '@/components/feed/PhotoGallery';
 import LikeButton from '@/components/feed/LikeButton';
 import { api, ApiError } from '@/lib/api';
+import { reachGoal } from '@/lib/ym';
 import { formatPriceKopecks } from '@/lib/format';
 import { cityName } from '@/lib/cities';
 import type { ListingDetail as Listing, Deal } from '@/lib/types';
@@ -66,6 +67,7 @@ export default function ListingDetail({ id }: { id: string }) {
         listing_id: id,
         delivery_method: 'self_pickup',
       });
+      reachGoal('deal_started');
       router.push(`/deal/${res.deal.id}`);
     } catch (e) {
       if (e instanceof ApiError) {
