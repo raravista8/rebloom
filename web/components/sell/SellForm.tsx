@@ -11,6 +11,7 @@ import { IconPin, IconInfo, IconCheck } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import PhotoUploader from '@/components/sell/PhotoUploader';
 import { api, ApiError } from '@/lib/api';
+import { reachGoal } from '@/lib/ym';
 import { cityName, DEFAULT_CITY } from '@/lib/cities';
 import type { Size, Freshness, ListingDetail } from '@/lib/types';
 
@@ -80,6 +81,7 @@ export default function SellForm() {
       });
       setCreated(listing);
       setPhase(listing.status === 'pending_review' ? 'pending' : 'success');
+      reachGoal('listing_published');
     } catch (e) {
       if (e instanceof ApiError) {
         if (e.code === 'unauthorized') router.replace('/login?next=%2Fsell');

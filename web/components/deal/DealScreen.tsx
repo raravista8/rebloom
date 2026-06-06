@@ -10,6 +10,7 @@ import { IconCheck, IconWalk, IconInfo, IconPin } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import DealChat from '@/components/deal/DealChat';
 import { api, ApiError } from '@/lib/api';
+import { reachGoal } from '@/lib/ym';
 import { formatPriceKopecks } from '@/lib/format';
 import type { DealView, DealStatus } from '@/lib/types';
 
@@ -144,6 +145,7 @@ export default function DealScreen({ id }: { id: string }) {
     setActing(true);
     try {
       setDeal((await api.post<{ deal: DealView }>(`/deals/${id}/confirm-receipt`)).deal);
+      reachGoal('deal_done');
     } catch {
       /* keep current state */
     } finally {

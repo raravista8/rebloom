@@ -11,6 +11,7 @@ import { AuthChooser, AuthDesktopChooser } from '@rebloom/canon/auth';
 import { PdField, PdBtn, PdNotice } from '@/components/canon';
 import useIsDesktop from '@/lib/useIsDesktop';
 import { api, ApiError, messageForCode } from '@/lib/api';
+import { reachGoal } from '@/lib/ym';
 import type { User } from '@/lib/types';
 import { phoneDigits, formatPhoneNational, phoneE164, POLICY_VERSION } from '@/lib/format';
 import { IconBack, IconCheck, IconLock, IconShield } from '@/components/icons';
@@ -167,6 +168,7 @@ export default function LoginFlow() {
           /* best-effort; login already succeeded */
         }
       }
+      reachGoal('registration');
       router.replace('/');
     } catch (e) {
       if (e instanceof ApiError && e.code === 'otp_locked') {
