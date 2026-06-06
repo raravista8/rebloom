@@ -2,6 +2,30 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.8.2] — 2026-06-06 — Fact-fix: SafeDeal «Почему так безопаснее» rewritten no-escrow (ADR-0013) — closes a prototype↔canon drift the SEO audit caught
+
+> **Why a release for a copy change.** The SEO-аудит (2026-06) flagged `/bezopasnaya-sdelka`: a search engine can ignore `<meta>` and surface a body paragraph as the snippet — and this body was **factually wrong**. The «Почему так безопаснее» section still carried **эскроу-проза** that describes a flow the MVP does not have (**ADR-0013**: платформа не держит, не проводит и не возвращает деньги — нет автозакрытия с релизом, нет денежного спора/возврата). The kicker: the **prototype was already fixed** in 0.8.1 (`reference/prototypes/pd-seo.jsx` shipped the no-escrow copy), but the **canonical `src/marketing/seo.jsx` — the file `web/` actually vendors — was never updated.** So прод kept serving stale escrow text. 0.8.2 syncs the canon source to the prototype.
+
+### Changed — `src/marketing/seo.jsx` · `PdSafeDeal` → секция «Почему так безопаснее»
+- **Kept** the two intro paragraphs (already correct: «когда платишь при встрече… продавец получает деньги только в обмен на букет… как на любой доске объявлений»; rating/reviews).
+- **Removed** both escrow H3 blocks and their lists — they described escrow / auto-release / refund / money-dispute, none of which exist:
+  - ~~«Когда деньги уходят продавцу»~~ (нажали «Подтвердить получение» → деньги; «прошёл срок ожидания… сделка закрывается автоматически»).
+  - ~~«Когда деньги возвращаются вам»~~ (возврат денег; «открываете спор с фото»; «Поддержка встаёт на вашу сторону по итогам разбора»).
+- **Replaced** with the no-escrow message, in two H3 blocks matching the prototype:
+  - **«Несколько простых правил»** — meet in a public place, check before paying, chat in-deal, don't send any prepay/deposit.
+  - **«Если что-то не так»** — seller no-show / didn't hand over / not-as-listed → **you simply don't pay; money never moves until the bouquet is in your hands, nothing to refund**; report misbehavior to support → warning / restriction / block + the listing is removed; rating & reviews stay with the seller and protect the next buyers.
+- **Terminology guardrails (ADR-0013).** «Подтвердить получение» exists as a deal step (moves the deal to `done` and opens reviews) but **does not release money** — copy no longer links it to money. No «деньги уходят/возвращаются», «срок ожидания», «спор» (в денежном смысле), «автозакрытие с релизом», «эскроу», «комиссия». No trailing periods on H2/H3.
+- The **FAQ** block on the same page was already correct (no money-escrow claims) — **untouched**.
+
+### Synced — prototype reference
+- `reference/prototypes/pd-seo.jsx` + `Передарим · SEO-страницы.html` re-vendored from Claude Design so the prototype and canon `src/` are byte-identical in this section (the «Если что-то не так» bullets were tightened to spell out «возвращать нечего» / «объявление снимем» / «берегут следующих покупателей»).
+
+### Baselines
+- Refreshed `/bezopasnaya-sdelka`: **`baselines/desk-09-safe-deal.png`** and **`baselines/mob-28-safe-deal.png`**. Text-only change inside the same layout → expect well under the **`npm run test:visual` ≤ 2%** gate after vendoring.
+
+### Unchanged
+- No CSS, token, build, or API changes. `dist/canon.css`, `tokens/`, the cjs build fix and `exports.*.require` → `.cjs` (from 0.8.1) carry over untouched. JS `dist/` bundles are produced by the consumer's build (`CANON_PACKAGE_TZ.md §9 step 4`).
+
 ## [0.8.1] — 2026-06-06 — FULL package of the auth-polish set (0.8.0 was docs-only) — folds every 0.8.0 change into `src/` + prebuilt `dist/canon.css`, ships assets, closes 0.7.0 burger-route debt, bakes in the cjs build fix
 
 > **Read first.** 0.8.0 shipped **docs-only** (4 `.md`, no `src/ dist/ tokens/ package.json`), so the consumer had to hand-apply the visible bits in `web/` with temporary overrides, and component-internal fixes stayed blocked. **0.8.1 is the real package** per `CANON_PACKAGE_TZ.md §3/§8`: `src/`, prebuilt `dist/canon.css`, `tokens/`, `package.json` (0.8.1), assets, baselines, docs. After vendoring, `web/` can delete its temp overrides (globals.css 0.8.0 block, the `next.config.mjs` photo rewrite, the SEO-burger hide).
