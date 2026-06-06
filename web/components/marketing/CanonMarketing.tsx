@@ -10,6 +10,7 @@
 // no hydration mismatch. Crawlers receive the full mobile HTML.
 import { PdGeoPage, PdSafeDeal, PdBlogIndex, PdBlogArticle } from '@rebloom/canon/marketing';
 import useIsDesktop from '@/lib/useIsDesktop';
+import { GUEST_MENU_LINKS } from '@/components/marketing/MobileMenu';
 import type { GeoCity } from '@/lib/geoCities';
 import type { BlogArticle } from '@/lib/blogArticles';
 
@@ -17,18 +18,22 @@ function usePlatform(): 'desktop' | 'web' {
   return useIsDesktop() ? 'desktop' : 'web';
 }
 
+// canon 0.8.1 made `menuLinks` a required prop on the SEO shells (Shell→SeoNav→
+// PdMobileMenu). Pass the real guest routes (shared with web's landing burger). The
+// burger trigger itself is still hidden on `.pds`/`.pdc` via globals.css until the
+// absolute-drawer containment is verified per-page — the links are wired and ready.
 export function GeoPageView({ data }: { data: GeoCity }) {
-  return <PdGeoPage data={data} platform={usePlatform()} />;
+  return <PdGeoPage data={data} platform={usePlatform()} menuLinks={GUEST_MENU_LINKS} />;
 }
 
 export function SafeDealView() {
-  return <PdSafeDeal platform={usePlatform()} />;
+  return <PdSafeDeal platform={usePlatform()} menuLinks={GUEST_MENU_LINKS} />;
 }
 
 export function BlogIndexView() {
-  return <PdBlogIndex platform={usePlatform()} />;
+  return <PdBlogIndex platform={usePlatform()} menuLinks={GUEST_MENU_LINKS} />;
 }
 
 export function BlogArticleView({ article }: { article: BlogArticle }) {
-  return <PdBlogArticle article={article} platform={usePlatform()} />;
+  return <PdBlogArticle article={article} platform={usePlatform()} menuLinks={GUEST_MENU_LINKS} />;
 }

@@ -16,11 +16,10 @@ const nextConfig = {
     const imageRewrites = [
       { source: '/img/av/:id.jpg', destination: `${UNS}/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&q=70&auto=format` },
       { source: '/blog/img/:id.jpg', destination: `${UNS}/photo-:id?w=1200&q=70&auto=format&fit=crop` },
-      // canon `AuthDesktopChooser` (imported wholesale) hard-codes its brand-aside photo
-      // as `img/1561181286-d3fee7d55364.jpg`; map it to the landing-hero asset so the
-      // login chooser matches the landing + the phone-step aside (canon 0.8.0 A1 intent).
-      // Must precede the generic `/img/:id.jpg` Unsplash rule. Drop on a canon dist re-export.
-      { source: '/img/1561181286-d3fee7d55364.jpg', destination: '/hero-lacybird.png' },
+      // canon 0.8.1 auth now points its login-aside photo at `img/hero-lacybird.png` and
+      // the T-ID mark at `img/oauth/tid.svg` — both shipped as web/public/img assets, so
+      // they resolve natively (the old 1561181286→hero rewrite is gone; that Unsplash id
+      // is again a real content photo via the generic rule below).
       { source: '/img/:id.jpg', destination: `${UNS}/photo-:id?w=900&q=70&auto=format&fit=crop` },
     ];
     // API/media proxy: dev only (Caddy serves these in prod).

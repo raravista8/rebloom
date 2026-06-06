@@ -26,6 +26,12 @@ export default defineConfig({
     'tailwind-preset':'tokens/tailwind-preset.ts',
   },
   format: ['esm', 'cjs'],
+  // §3 build fix (do NOT regress): under "type":"module", default cjs output is
+  // `.js` which Node then treats as ESM → require() breaks. Emit `.cjs` for cjs and
+  // point package.json exports.*.require at `./dist/X.cjs`.
+  outExtension({ format }) {
+    return { js: format === 'esm' ? '.mjs' : '.cjs' };
+  },
   dts: true,
   splitting: true,
   treeshake: true,
@@ -33,12 +39,6 @@ export default defineConfig({
   external: ['react', 'react-dom', 'framer-motion'],
   // Bundle + emit the canonical stylesheet alongside JS.
   loader: { '.css': 'css' },
-  // Force ESM→.mjs / CJS→.cjs so output matches package.json "exports"
-  // (import→.mjs, require→.cjs). The 0.2.0 delivery dropped this, which made tsup
-  // emit .js under "type":"module" and broke the exports map — restored here.
-  outExtension({ format }) {
-    return { js: format === 'esm' ? '.mjs' : '.cjs' };
-  },
   esbuildOptions(options) {
     options.charset = 'ascii'; // escape Cyrillic to \uXXXX (§5)
     options.jsx = 'automatic';

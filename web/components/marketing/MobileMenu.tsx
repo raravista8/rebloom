@@ -36,7 +36,9 @@ const Phone = (p: IP) => <svg {...sv(p)}><rect x="7" y="2.5" width="10" height="
 
 // Guest site menu → real web routes (BURGER_MENU §6). Landing anchors are absolute so
 // they work from any page (the burger also opens on /[city], /bezopasnaya-sdelka, …).
-const LINKS = [
+// Exported so the canon SEO shells (PdGeoPage/PdSafeDeal/PdBlog*, vendored 0.8.1) can
+// receive the same routes via their `menuLinks` prop — one source for the guest nav.
+export const GUEST_MENU_LINKS = [
   { icon: Grid, label: 'Каталог букетов', sub: 'Свежие букеты рядом', href: '/catalog' },
   { icon: Steps, label: 'Как это работает', sub: 'Три простых шага', href: '/#how' },
   { icon: Shield, label: 'Безопасная сделка', sub: 'Оплата при встрече', href: '/bezopasnaya-sdelka' },
@@ -99,7 +101,7 @@ export default function MobileMenu({ open, onClose, initialCity = 'Москва'
           </div>
 
           <nav className="pdl-drawer-nav">
-            {LINKS.map((l) => {
+            {GUEST_MENU_LINKS.map((l) => {
               const Icon = l.icon;
               return (
                 <Link key={l.label} className="pdl-drawer-row" href={l.href} onClick={onClose}>

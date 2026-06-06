@@ -81,7 +81,7 @@ const OCCASIONS = [
 ];
 
 // ── shared guest nav ──────────────────────────────────────────────
-function SeoNav({ cityNom = 'Москва', cityIn = 'Москве' }) {
+function SeoNav({ cityNom = 'Москва', cityIn = 'Москве', menuLinks }) {
   const [menu, setMenu] = React.useState(false);
   return (
     <>
@@ -99,15 +99,15 @@ function SeoNav({ cityNom = 'Москва', cityIn = 'Москве' }) {
         </div>
       </div>
     </header>
-    {PdMobileMenu && <PdMobileMenu open={menu} city={cityNom} onClose={() => setMenu(false)} />}
+    {PdMobileMenu && <PdMobileMenu open={menu} city={cityNom} links={menuLinks} onClose={() => setMenu(false)} />}
     </>
   );
 }
 
-function Shell({ desk, cityNom = 'Москва', cityIn = 'Москве', children }) {
+function Shell({ desk, cityNom = 'Москва', cityIn = 'Москве', menuLinks, children }) {
   return (
     <div className={'pd-root pd-web pds pdl' + (desk ? ' pds--desk pdl--desk' : '')} data-pd-theme="a">
-      <SeoNav cityNom={cityNom} cityIn={cityIn} />
+      <SeoNav cityNom={cityNom} cityIn={cityIn} menuLinks={menuLinks} />
       <main className="pd-scroll pdw-scroll">
         {children}
         {Footer ? <Footer desk={desk} /> : null}
@@ -172,13 +172,13 @@ function GeoCatalog({ cityNom = 'Москва', cityLoc = 'Москве', distri
 }
 
 // ── 1. ГЕО-СТРАНИЦА ГОРОДА ────────────────────────────────────────
-function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
+function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0], menuLinks }) {
   const desk = platform === 'desktop';
   const city = data.nom, cityLoc = data.loc, cityGen = data.gen, districts = data.districts, metro = data.metro;
   const nearMetro = metro ? ' или у метро' : '';
   const pickupShort = metro ? 'у дома или метро' : 'рядом с домом';
   return (
-    <Shell desk={desk} cityNom={city} cityIn={cityLoc}>
+    <Shell desk={desk} cityNom={city} cityIn={cityLoc} menuLinks={menuLinks}>
       <section className="pds-top">
         <div className="pds-in">
           <p className="pds-crumbs"><a href={LAND}>Главная</a> · {city}</p>
@@ -197,7 +197,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Свежие букеты рядом, прямо сейчас</h2>
-            <p className="pds-h2-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы.</p>
+            <p className="pds-h2-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
           </div>
           <GeoCatalog cityNom={city} cityLoc={cityLoc} districts={districts} />
         </div>
@@ -207,7 +207,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Букеты по районам {cityGen}</h2>
-            <p className="pds-h2-sub">Заберите букет в своём районе, рядом с домом{nearMetro}, без поездок через весь город.</p>
+            <p className="pds-h2-sub">Заберите букет в своём районе, рядом с домом{nearMetro}, без поездок через весь город</p>
           </div>
           <div className="pds-links">
             {districts.map(([n, c]) => (
@@ -221,7 +221,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Недорогие букеты под повод</h2>
-            <p className="pds-h2-sub">К свиданию, на день рождения или просто себе, подберите свежий букет за полцены.</p>
+            <p className="pds-h2-sub">К свиданию, на день рождения или просто себе, подберите свежий букет за полцены</p>
           </div>
           <div className="pds-chips">
             {OCCASIONS.map((o) => <a className="pds-chip" key={o} href="#" onClick={(e) => e.preventDefault()}>{o}</a>)}
@@ -247,7 +247,7 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Свежие букеты в других городах</h2>
-            <p className="pds-h2-sub">«Передарим» работает в 10 крупнейших городах России, выберите свой.</p>
+            <p className="pds-h2-sub">«Передарим» работает в 10 крупнейших городах России, выберите свой</p>
           </div>
           <div className="pds-links">
             {CITIES_FULL.map((c) => (
@@ -261,10 +261,10 @@ function PdGeoPage({ platform = 'desktop', data = CITIES_FULL[0] }) {
 }
 
 // ── 2. БЕЗОПАСНАЯ СДЕЛКА ──────────────────────────────────────────
-function PdSafeDeal({ platform = 'desktop' }) {
+function PdSafeDeal({ platform = 'desktop', menuLinks }) {
   const desk = platform === 'desktop';
   return (
-    <Shell desk={desk}>
+    <Shell desk={desk} menuLinks={menuLinks}>
       <section className="pds-top">
         <div className="pds-in">
           <p className="pds-crumbs"><a href={LAND}>Главная</a> · Безопасность · Безопасная сделка</p>
@@ -278,7 +278,7 @@ function PdSafeDeal({ platform = 'desktop' }) {
         <div className="pds-in">
           <div className="pds-sechead">
             <h2 className="pds-h2">Как проходит сделка</h2>
-            <p className="pds-h2-sub">Три шага, без предоплаты и посредников.</p>
+            <p className="pds-h2-sub">Три шага, без предоплаты и посредников</p>
           </div>
           <div className="pds-flow">
             <div className="pds-step"><span className="en">1</span><h4>Написали продавцу</h4><p>В карточке нажмите «Написать продавцу» и договоритесь о времени и месте встречи прямо в чате сделки.</p></div>
@@ -344,10 +344,10 @@ const ARTICLES = [
   { id: 'prodlit-zhizn-buketu', tag: 'Уход', img: '1561181286-d3fee7d55364', title: 'Как продлить жизнь срезанному букету', excerpt: 'Простые приёмы, от подрезки стеблей до воды и места: чтобы букет простоял на несколько дней дольше.', read: '6 мин' },
 ];
 
-function PdBlogIndex({ platform = 'desktop' }) {
+function PdBlogIndex({ platform = 'desktop', menuLinks }) {
   const desk = platform === 'desktop';
   return (
-    <Shell desk={desk}>
+    <Shell desk={desk} menuLinks={menuLinks}>
       <section className="pds-top">
         <div className="pds-in">
           <p className="pds-crumbs"><a href={LAND}>Главная</a> · Блог</p>
@@ -386,11 +386,11 @@ function PdBlogIndex({ platform = 'desktop' }) {
 }
 
 // одна открытая статья (шаблон)
-function PdBlogArticle({ platform = 'desktop', article = ARTICLES[0] }) {
+function PdBlogArticle({ platform = 'desktop', article = ARTICLES[0], menuLinks }) {
   const desk = platform === 'desktop';
   const a = article;
   return (
-    <Shell desk={desk}>
+    <Shell desk={desk} menuLinks={menuLinks}>
       <section className="pds-top">
         <div className="pds-in pds-art-head">
           <p className="pds-crumbs"><a href={LAND}>Главная</a> · <a href="/blog">Блог</a> · Подаренный букет</p>

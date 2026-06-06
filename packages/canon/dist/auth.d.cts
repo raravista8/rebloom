@@ -26,6 +26,10 @@ declare function AuthOtp({ plat, state }: {
     plat?: string | undefined;
     state?: string | undefined;
 }): React.JSX.Element;
+declare function AuthOtpFill({ plat, code }: {
+    plat?: string | undefined;
+    code?: string | undefined;
+}): React.JSX.Element;
 declare function AuthRegister({ plat, state }: {
     plat?: string | undefined;
     state?: string | undefined;
@@ -66,4 +70,4 @@ declare function AuthDesktopError({ offline }: {
 }): React.JSX.Element;
 declare function AuthDesktopBlocked(): React.JSX.Element;
 
-export { AuthBlocked, AuthChooser, AuthDesktopBlocked, AuthDesktopChooser, AuthDesktopError, AuthDesktopLink, AuthDesktopOAuth, AuthDesktopOtp, AuthDesktopPhone, AuthDesktopRegister, AuthDesktopWelcome, AuthError, AuthLink, AuthOAuthSheet, AuthOtp, AuthPhone, AuthRegister, AuthWelcome, OAuthBtn, OauthList };
+export { AuthBlocked, AuthChooser, AuthDesktopBlocked, AuthDesktopChooser, AuthDesktopError, AuthDesktopLink, AuthDesktopOAuth, AuthDesktopOtp, AuthDesktopPhone, AuthDesktopRegister, AuthDesktopWelcome, AuthError, AuthLink, AuthOAuthSheet, AuthOtp, AuthOtpFill, AuthPhone, AuthRegister, AuthWelcome, OAuthBtn, OauthList };

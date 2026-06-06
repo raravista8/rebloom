@@ -799,6 +799,7 @@
   font-size: 12.5px;
   color: var(--pd-muted);
   line-height: 1.5;
+  padding-top: 3px;
 }
 .pd-check .t a {
   color: var(--pd-primary);
@@ -883,6 +884,7 @@
   border-radius: 13px;
   font-size: 13px;
   line-height: 1.45;
+  text-wrap: pretty;
 }
 .pd-notice .ic {
   flex: none;
@@ -2197,8 +2199,18 @@
   font-size: 11px;
 }
 .pa-mk-tid {
-  background: #FFDD2D;
+  background: transparent;
   color: #222;
+}
+.pa-oauthbtn .mark.pa-mk-tid {
+  background: transparent;
+  width: auto;
+  border-radius: 0;
+}
+.pa-mk-tid .mkimg {
+  height: 26px;
+  width: auto;
+  display: block;
 }
 .pa-mk-apple {
   background: #111;
@@ -2227,12 +2239,13 @@
   height: 1px;
   background: var(--pd-border);
 }
-.pa-consent {
+.pa-consent,
+.pa .pa-consent {
   font-size: 12px;
   color: var(--pd-muted);
-  line-height: 1.55;
+  line-height: 1.7;
   text-align: center;
-  margin-top: 16px;
+  margin-top: 30px;
 }
 .pa-consent a {
   color: var(--pd-primary);

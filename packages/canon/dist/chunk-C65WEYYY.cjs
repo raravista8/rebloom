@@ -175,7 +175,7 @@ var PdLanding = (function() {
     { icon: Bell, label: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", dot: true, href: "#" },
     { icon: Gear, label: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438", href: "#" }
   ];
-  function MobileMenu({ open, auth = false, city: cityProp = "\u041C\u043E\u0441\u043A\u0432\u0430", onClose }) {
+  function MobileMenu({ open, auth = false, city: cityProp = "\u041C\u043E\u0441\u043A\u0432\u0430", onClose, links: linksProp }) {
     const [city, setCity] = React__default.default.useState(cityProp);
     const [cityOpen, setCityOpen] = React__default.default.useState(false);
     const closeRef = React__default.default.useRef(null);
@@ -200,7 +200,7 @@ var PdLanding = (function() {
       };
     }, [open]);
     const cityCount = (CITY_LIST.find((c) => c.name === city) || {}).count;
-    const links = auth ? AUTH_LINKS : GUEST_LINKS;
+    const links = linksProp || (auth ? AUTH_LINKS : GUEST_LINKS);
     return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-drawer" + (open ? " open" : ""), "aria-hidden": !open, children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdl-drawer-scrim", onClick: onClose }),
       /* @__PURE__ */ jsxRuntime.jsxs("aside", { className: "pdl-drawer-panel", role: "dialog", "aria-modal": "true", "aria-label": "\u041C\u0435\u043D\u044E", children: [
@@ -355,7 +355,7 @@ var PdLanding = (function() {
           "\u0416\u0438\u0432\u043E\u0439 \u043A\u0430\u0442\u0430\u043B\u043E\u0433"
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pdl-h2", children: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C, \u043F\u0440\u044F\u043C\u043E \u0441\u0435\u0439\u0447\u0430\u0441" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdl-sub", children: "\u041C\u0435\u0442\u043A\u0430 \xAB\u0421\u0435\u0433\u043E\u0434\u043D\u044F\xBB \u0437\u043D\u0430\u0447\u0438\u0442, \u0447\u0442\u043E \u0431\u0443\u043A\u0435\u0442 \u043A\u0443\u043F\u043B\u0435\u043D \u0441\u0435\u0433\u043E\u0434\u043D\u044F. \u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C \u0442\u0430\u0435\u0442, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043B\u0443\u0447\u0448\u0438\u0435 \u0440\u0430\u0437\u0431\u0438\u0440\u0430\u044E\u0442 \u0437\u0430 \u0447\u0430\u0441\u044B." })
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdl-sub", children: "\u041C\u0435\u0442\u043A\u0430 \xAB\u0421\u0435\u0433\u043E\u0434\u043D\u044F\xBB \u0437\u043D\u0430\u0447\u0438\u0442, \u0447\u0442\u043E \u0431\u0443\u043A\u0435\u0442 \u043A\u0443\u043F\u043B\u0435\u043D \u0441\u0435\u0433\u043E\u0434\u043D\u044F. \u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C \u0442\u0430\u0435\u0442, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043B\u0443\u0447\u0448\u0438\u0435 \u0440\u0430\u0437\u0431\u0438\u0440\u0430\u044E\u0442 \u0437\u0430 \u0447\u0430\u0441\u044B" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-catbar", children: [
         /* @__PURE__ */ jsxRuntime.jsx(CityChips, { cls: "pdl-cities" }),
@@ -442,7 +442,7 @@ var PdLanding = (function() {
           "\u0421\u043F\u043E\u043A\u043E\u0439\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430"
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pdl-h2", children: "\u041F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044C \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043F\u043B\u0430\u0442\u0438\u0442 \u0432\u043F\u0435\u0440\u0451\u0434, \u043E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdl-sub", children: "\u0413\u043B\u0430\u0432\u043D\u044B\u0439 \u0441\u0442\u0440\u0430\u0445 \u0432 \u0441\u0434\u0435\u043B\u043A\u0430\u0445 \u043C\u0435\u0436\u0434\u0443 \u043D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u0446\u0430\u043C\u0438 \u2014 \u043E\u0431\u043C\u0430\u043D. \u041F\u043E\u044D\u0442\u043E\u043C\u0443 \u0434\u0435\u043D\u044C\u0433\u0438 \u043D\u0438\u043A\u0443\u0434\u0430 \u043D\u0435 \u0443\u0445\u043E\u0434\u044F\u0442 \u0437\u0430\u0440\u0430\u043D\u0435\u0435: \u0432\u044B \u043F\u043B\u0430\u0442\u0438\u0442\u0435, \u0442\u043E\u043B\u044C\u043A\u043E \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0431\u0443\u043A\u0435\u0442 \u0432\u0436\u0438\u0432\u0443\u044E." })
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdl-sub", children: "\u0413\u043B\u0430\u0432\u043D\u044B\u0439 \u0441\u0442\u0440\u0430\u0445 \u0432 \u0441\u0434\u0435\u043B\u043A\u0430\u0445 \u043C\u0435\u0436\u0434\u0443 \u043D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u0446\u0430\u043C\u0438 \u2014 \u043E\u0431\u043C\u0430\u043D. \u041F\u043E\u044D\u0442\u043E\u043C\u0443 \u0434\u0435\u043D\u044C\u0433\u0438 \u043D\u0438\u043A\u0443\u0434\u0430 \u043D\u0435 \u0443\u0445\u043E\u0434\u044F\u0442 \u0437\u0430\u0440\u0430\u043D\u0435\u0435: \u0432\u044B \u043F\u043B\u0430\u0442\u0438\u0442\u0435, \u0442\u043E\u043B\u044C\u043A\u043E \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0431\u0443\u043A\u0435\u0442 \u0432\u0436\u0438\u0432\u0443\u044E" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-escrow-grid", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-eflow", children: [
@@ -518,7 +518,7 @@ var PdLanding = (function() {
           "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435"
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pdl-h2", children: "\u0423\u0437\u043D\u0430\u0432\u0430\u0439\u0442\u0435 \u043E \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u0430\u0445 \u0440\u044F\u0434\u043E\u043C \u043F\u0435\u0440\u0432\u044B\u043C\u0438" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdl-sub", children: "\u0421\u0432\u0435\u0436\u0438\u0439 \u0431\u0443\u043A\u0435\u0442 \u043F\u043E \u0441\u043E\u0441\u0435\u0434\u0441\u0442\u0432\u0443 \u0436\u0438\u0432\u0451\u0442 \u0441\u0447\u0438\u0442\u0430\u043D\u043D\u044B\u0435 \u0447\u0430\u0441\u044B. \u0412\u043A\u043B\u044E\u0447\u0438\u0442\u0435 push, \u0438 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0441\u043E\u043E\u0431\u0449\u0438\u0442, \u043A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u0440\u044F\u0434\u043E\u043C \u043F\u043E\u044F\u0432\u0438\u0442\u0441\u044F \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0438\u0439, \u043F\u043E\u043A\u0430 \u0435\u0433\u043E \u043D\u0435 \u0437\u0430\u0431\u0440\u0430\u043B\u0438." })
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdl-sub", children: "\u0421\u0432\u0435\u0436\u0438\u0439 \u0431\u0443\u043A\u0435\u0442 \u043F\u043E \u0441\u043E\u0441\u0435\u0434\u0441\u0442\u0432\u0443 \u0436\u0438\u0432\u0451\u0442 \u0441\u0447\u0438\u0442\u0430\u043D\u043D\u044B\u0435 \u0447\u0430\u0441\u044B. \u0412\u043A\u043B\u044E\u0447\u0438\u0442\u0435 push, \u0438 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0441\u043E\u043E\u0431\u0449\u0438\u0442, \u043A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u0440\u044F\u0434\u043E\u043C \u043F\u043E\u044F\u0432\u0438\u0442\u0441\u044F \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0438\u0439, \u043F\u043E\u043A\u0430 \u0435\u0433\u043E \u043D\u0435 \u0437\u0430\u0431\u0440\u0430\u043B\u0438" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdl-badges", children: STORES.map((s) => /* @__PURE__ */ jsxRuntime.jsxs("a", { className: "pdl-badge", href: "#", onClick: (e) => e.preventDefault(), children: [
         /* @__PURE__ */ jsxRuntime.jsx("span", { className: "glyph", children: s.glyph }),
@@ -835,7 +835,7 @@ var OCCASIONS = [
   "\u0411\u0443\u043A\u0435\u0442 \u0432 \u043F\u043E\u0434\u0430\u0440\u043E\u043A",
   "\u0426\u0432\u0435\u0442\u044B \u0441\u0435\u0431\u0435 \u0434\u043E\u043C\u043E\u0439"
 ];
-function SeoNav({ cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityIn = "\u041C\u043E\u0441\u043A\u0432\u0435" }) {
+function SeoNav({ cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityIn = "\u041C\u043E\u0441\u043A\u0432\u0435", menuLinks }) {
   const [menu, setMenu] = React__default.default.useState(false);
   return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdl-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdl-nav-in", children: [
@@ -863,12 +863,12 @@ function SeoNav({ cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityIn = "\u
         /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdl-nav-burger", "aria-label": "\u041C\u0435\u043D\u044E", "aria-expanded": menu, onClick: () => setMenu(true), children: /* @__PURE__ */ jsxRuntime.jsx(Menu, {}) })
       ] })
     ] }) }),
-    PdMobileMenu && /* @__PURE__ */ jsxRuntime.jsx(PdMobileMenu, { open: menu, city: cityNom, onClose: () => setMenu(false) })
+    PdMobileMenu && /* @__PURE__ */ jsxRuntime.jsx(PdMobileMenu, { open: menu, city: cityNom, links: menuLinks, onClose: () => setMenu(false) })
   ] });
 }
-function Shell({ desk, cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityIn = "\u041C\u043E\u0441\u043A\u0432\u0435", children }) {
+function Shell({ desk, cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityIn = "\u041C\u043E\u0441\u043A\u0432\u0435", menuLinks, children }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-root pd-web pds pdl" + (desk ? " pds--desk pdl--desk" : ""), "data-pd-theme": "a", children: [
-    /* @__PURE__ */ jsxRuntime.jsx(SeoNav, { cityNom, cityIn }),
+    /* @__PURE__ */ jsxRuntime.jsx(SeoNav, { cityNom, cityIn, menuLinks }),
     /* @__PURE__ */ jsxRuntime.jsxs("main", { className: "pd-scroll pdw-scroll", children: [
       children,
       Footer ? /* @__PURE__ */ jsxRuntime.jsx(Footer, { desk }) : null
@@ -936,12 +936,12 @@ function GeoCatalog({ cityNom = "\u041C\u043E\u0441\u043A\u0432\u0430", cityLoc 
     ] }) })
   ] });
 }
-function PdGeoPage({ platform = "desktop", data = CITIES_FULL[0] }) {
+function PdGeoPage({ platform = "desktop", data = CITIES_FULL[0], menuLinks }) {
   const desk = platform === "desktop";
   const city = data.nom, cityLoc = data.loc, cityGen = data.gen, districts = data.districts, metro = data.metro;
   const nearMetro = metro ? " \u0438\u043B\u0438 \u0443 \u043C\u0435\u0442\u0440\u043E" : "";
   const pickupShort = metro ? "\u0443 \u0434\u043E\u043C\u0430 \u0438\u043B\u0438 \u043C\u0435\u0442\u0440\u043E" : "\u0440\u044F\u0434\u043E\u043C \u0441 \u0434\u043E\u043C\u043E\u043C";
-  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, cityNom: city, cityIn: cityLoc, children: [
+  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, cityNom: city, cityIn: cityLoc, menuLinks, children: [
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-top", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pds-crumbs", children: [
         /* @__PURE__ */ jsxRuntime.jsx("a", { href: LAND, children: "\u0413\u043B\u0430\u0432\u043D\u0430\u044F" }),
@@ -983,7 +983,7 @@ function PdGeoPage({ platform = "desktop", data = CITIES_FULL[0] }) {
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-sec", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-sechead", children: [
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pds-h2", children: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C, \u043F\u0440\u044F\u043C\u043E \u0441\u0435\u0439\u0447\u0430\u0441" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\u041C\u0435\u0442\u043A\u0430 \xAB\u0421\u0435\u0433\u043E\u0434\u043D\u044F\xBB \u0437\u043D\u0430\u0447\u0438\u0442, \u0447\u0442\u043E \u0431\u0443\u043A\u0435\u0442 \u043A\u0443\u043F\u043B\u0435\u043D \u0441\u0435\u0433\u043E\u0434\u043D\u044F. \u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C \u0442\u0430\u0435\u0442, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043B\u0443\u0447\u0448\u0438\u0435 \u0440\u0430\u0437\u0431\u0438\u0440\u0430\u044E\u0442 \u0437\u0430 \u0447\u0430\u0441\u044B." })
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\u041C\u0435\u0442\u043A\u0430 \xAB\u0421\u0435\u0433\u043E\u0434\u043D\u044F\xBB \u0437\u043D\u0430\u0447\u0438\u0442, \u0447\u0442\u043E \u0431\u0443\u043A\u0435\u0442 \u043A\u0443\u043F\u043B\u0435\u043D \u0441\u0435\u0433\u043E\u0434\u043D\u044F. \u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C \u0442\u0430\u0435\u0442, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043B\u0443\u0447\u0448\u0438\u0435 \u0440\u0430\u0437\u0431\u0438\u0440\u0430\u044E\u0442 \u0437\u0430 \u0447\u0430\u0441\u044B" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx(GeoCatalog, { cityNom: city, cityLoc, districts })
     ] }) }),
@@ -996,7 +996,7 @@ function PdGeoPage({ platform = "desktop", data = CITIES_FULL[0] }) {
         /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pds-h2-sub", children: [
           "\u0417\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0432 \u0441\u0432\u043E\u0451\u043C \u0440\u0430\u0439\u043E\u043D\u0435, \u0440\u044F\u0434\u043E\u043C \u0441 \u0434\u043E\u043C\u043E\u043C",
           nearMetro,
-          ", \u0431\u0435\u0437 \u043F\u043E\u0435\u0437\u0434\u043E\u043A \u0447\u0435\u0440\u0435\u0437 \u0432\u0435\u0441\u044C \u0433\u043E\u0440\u043E\u0434."
+          ", \u0431\u0435\u0437 \u043F\u043E\u0435\u0437\u0434\u043E\u043A \u0447\u0435\u0440\u0435\u0437 \u0432\u0435\u0441\u044C \u0433\u043E\u0440\u043E\u0434"
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pds-links", children: districts.map(([n, c]) => /* @__PURE__ */ jsxRuntime.jsxs("a", { className: "pds-linkcard", href: "#", onClick: (e) => e.preventDefault(), children: [
@@ -1007,7 +1007,7 @@ function PdGeoPage({ platform = "desktop", data = CITIES_FULL[0] }) {
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-sec", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-sechead", children: [
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pds-h2", children: "\u041D\u0435\u0434\u043E\u0440\u043E\u0433\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u043F\u043E\u0434 \u043F\u043E\u0432\u043E\u0434" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\u041A \u0441\u0432\u0438\u0434\u0430\u043D\u0438\u044E, \u043D\u0430 \u0434\u0435\u043D\u044C \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F \u0438\u043B\u0438 \u043F\u0440\u043E\u0441\u0442\u043E \u0441\u0435\u0431\u0435, \u043F\u043E\u0434\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0432\u0435\u0436\u0438\u0439 \u0431\u0443\u043A\u0435\u0442 \u0437\u0430 \u043F\u043E\u043B\u0446\u0435\u043D\u044B." })
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\u041A \u0441\u0432\u0438\u0434\u0430\u043D\u0438\u044E, \u043D\u0430 \u0434\u0435\u043D\u044C \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F \u0438\u043B\u0438 \u043F\u0440\u043E\u0441\u0442\u043E \u0441\u0435\u0431\u0435, \u043F\u043E\u0434\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0432\u0435\u0436\u0438\u0439 \u0431\u0443\u043A\u0435\u0442 \u0437\u0430 \u043F\u043E\u043B\u0446\u0435\u043D\u044B" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pds-chips", children: OCCASIONS.map((o) => /* @__PURE__ */ jsxRuntime.jsx("a", { className: "pds-chip", href: "#", onClick: (e) => e.preventDefault(), children: o }, o)) })
     ] }) }),
@@ -1043,7 +1043,7 @@ function PdGeoPage({ platform = "desktop", data = CITIES_FULL[0] }) {
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-sec", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-sechead", children: [
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pds-h2", children: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0432 \u0434\u0440\u0443\u0433\u0438\u0445 \u0433\u043E\u0440\u043E\u0434\u0430\u0445" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\xAB\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C\xBB \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0432 10 \u043A\u0440\u0443\u043F\u043D\u0435\u0439\u0448\u0438\u0445 \u0433\u043E\u0440\u043E\u0434\u0430\u0445 \u0420\u043E\u0441\u0441\u0438\u0438, \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0432\u043E\u0439." })
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\xAB\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C\xBB \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u0432 10 \u043A\u0440\u0443\u043F\u043D\u0435\u0439\u0448\u0438\u0445 \u0433\u043E\u0440\u043E\u0434\u0430\u0445 \u0420\u043E\u0441\u0441\u0438\u0438, \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0432\u043E\u0439" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pds-links", children: CITIES_FULL.map((c) => /* @__PURE__ */ jsxRuntime.jsxs("a", { className: "pds-linkcard", href: "/" + c.id, style: c.id === data.id ? { borderColor: "var(--pd-primary)" } : null, children: [
         /* @__PURE__ */ jsxRuntime.jsx("b", { children: c.nom }),
@@ -1052,9 +1052,9 @@ function PdGeoPage({ platform = "desktop", data = CITIES_FULL[0] }) {
     ] }) })
   ] });
 }
-function PdSafeDeal({ platform = "desktop" }) {
+function PdSafeDeal({ platform = "desktop", menuLinks }) {
   const desk = platform === "desktop";
-  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, children: [
+  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, menuLinks, children: [
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-top", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pds-crumbs", children: [
         /* @__PURE__ */ jsxRuntime.jsx("a", { href: LAND, children: "\u0413\u043B\u0430\u0432\u043D\u0430\u044F" }),
@@ -1073,7 +1073,7 @@ function PdSafeDeal({ platform = "desktop" }) {
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-sec alt", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-sechead", children: [
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pds-h2", children: "\u041A\u0430\u043A \u043F\u0440\u043E\u0445\u043E\u0434\u0438\u0442 \u0441\u0434\u0435\u043B\u043A\u0430" }),
-        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\u0422\u0440\u0438 \u0448\u0430\u0433\u0430, \u0431\u0435\u0437 \u043F\u0440\u0435\u0434\u043E\u043F\u043B\u0430\u0442\u044B \u0438 \u043F\u043E\u0441\u0440\u0435\u0434\u043D\u0438\u043A\u043E\u0432." })
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pds-h2-sub", children: "\u0422\u0440\u0438 \u0448\u0430\u0433\u0430, \u0431\u0435\u0437 \u043F\u0440\u0435\u0434\u043E\u043F\u043B\u0430\u0442\u044B \u0438 \u043F\u043E\u0441\u0440\u0435\u0434\u043D\u0438\u043A\u043E\u0432" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-flow", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-step", children: [
@@ -1151,9 +1151,9 @@ var ARTICLES = [
   { id: "cvety-posle-prazdnika", tag: "\u0423\u0445\u043E\u0434", img: "1581938165093-050aeb5ef218", title: "\u0427\u0442\u043E \u0434\u0435\u043B\u0430\u0442\u044C \u0441 \u0446\u0432\u0435\u0442\u0430\u043C\u0438 \u043F\u043E\u0441\u043B\u0435 \u043F\u0440\u0430\u0437\u0434\u043D\u0438\u043A\u0430", excerpt: "\u0411\u043E\u043B\u044C\u0448\u043E\u0439 \u0431\u0443\u043A\u0435\u0442 \u043E\u0442\u0436\u0438\u043B \u0441\u0432\u043E\u0451 \u043D\u0430 \u0441\u0442\u043E\u043B\u0435, \u043D\u043E \u0446\u0432\u0435\u0442\u044B \u0435\u0449\u0451 \u0441\u0432\u0435\u0436\u0438\u0435. \u041A\u0430\u043A \u043D\u0435 \u0432\u044B\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u043A\u0440\u0430\u0441\u0438\u0432\u043E\u0435 \u0438 \u043A\u043E\u043C\u0443 \u043E\u043D\u043E \u043D\u0443\u0436\u043D\u043E.", read: "5 \u043C\u0438\u043D" },
   { id: "prodlit-zhizn-buketu", tag: "\u0423\u0445\u043E\u0434", img: "1561181286-d3fee7d55364", title: "\u041A\u0430\u043A \u043F\u0440\u043E\u0434\u043B\u0438\u0442\u044C \u0436\u0438\u0437\u043D\u044C \u0441\u0440\u0435\u0437\u0430\u043D\u043D\u043E\u043C\u0443 \u0431\u0443\u043A\u0435\u0442\u0443", excerpt: "\u041F\u0440\u043E\u0441\u0442\u044B\u0435 \u043F\u0440\u0438\u0451\u043C\u044B, \u043E\u0442 \u043F\u043E\u0434\u0440\u0435\u0437\u043A\u0438 \u0441\u0442\u0435\u0431\u043B\u0435\u0439 \u0434\u043E \u0432\u043E\u0434\u044B \u0438 \u043C\u0435\u0441\u0442\u0430: \u0447\u0442\u043E\u0431\u044B \u0431\u0443\u043A\u0435\u0442 \u043F\u0440\u043E\u0441\u0442\u043E\u044F\u043B \u043D\u0430 \u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0434\u043D\u0435\u0439 \u0434\u043E\u043B\u044C\u0448\u0435.", read: "6 \u043C\u0438\u043D" }
 ];
-function PdBlogIndex({ platform = "desktop" }) {
+function PdBlogIndex({ platform = "desktop", menuLinks }) {
   const desk = platform === "desktop";
-  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, children: [
+  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, menuLinks, children: [
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-top", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pds-crumbs", children: [
         /* @__PURE__ */ jsxRuntime.jsx("a", { href: LAND, children: "\u0413\u043B\u0430\u0432\u043D\u0430\u044F" }),
@@ -1190,10 +1190,10 @@ function PdBlogIndex({ platform = "desktop" }) {
     ] }) }) })
   ] });
 }
-function PdBlogArticle({ platform = "desktop", article = ARTICLES[0] }) {
+function PdBlogArticle({ platform = "desktop", article = ARTICLES[0], menuLinks }) {
   const desk = platform === "desktop";
   const a = article;
-  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, children: [
+  return /* @__PURE__ */ jsxRuntime.jsxs(Shell, { desk, menuLinks, children: [
     /* @__PURE__ */ jsxRuntime.jsx("section", { className: "pds-top", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-in pds-art-head", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pds-crumbs", children: [
         /* @__PURE__ */ jsxRuntime.jsx("a", { href: LAND, children: "\u0413\u043B\u0430\u0432\u043D\u0430\u044F" }),

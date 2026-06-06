@@ -121,29 +121,15 @@ body {
 }
 
 /* The canon SEO shells (`.pds`/`.pdc` — PdGeoPage/PdSafeDeal/PdBlog*, imported wholesale)
- * render the 0.7.0 burger → canon PdMobileMenu, whose guest links are hard-coded preview
- * `.html` paths (no route prop) → 404 on web. Hide the burger on those pages until canon
- * exposes link props; the home landing uses web's own MobileMenu (real routes) under `.pdl`
- * and is unaffected. Round-trip: add route props to PdMobileMenu, then drop this rule. */
+ * render the 0.7.0 burger → canon PdMobileMenu. canon 0.8.1 ADDED a `menuLinks` prop
+ * (Shell→SeoNav→PdMobileMenu), so route links are now wireable. Enabling is deferred:
+ * `.pds` is not a positioned containing block like `.pdl`, so the absolute drawer needs
+ * containment verification + per-page geometry baselines first. Keep hidden until then;
+ * the home landing uses web's own MobileMenu (real routes) under `.pdl` and is unaffected. */
 .pds .pdl-nav-burger,
 .pdc .pdl-nav-burger {
   display: none;
 }
 
-/* canon 0.8.0 fixes — the export shipped docs-only (no src/dist), so these documented
- * canon-CSS rules are applied here as consumer overrides (globals.css loads after
- * canon.css). Move them into canon.css on the next complete re-export.
- *  · A6 — consent spacing: the `.pa p{margin:0}` reset (0,0,1,1) outranked `.pa-consent`
- *    (0,0,1,0), so margin-top was always 0. Two-class `.pa .pa-consent` (0,0,2,0) wins.
- *  · A7 — consent checkbox first line optically centered against the 22px box.
- *  · C  — PdNotice text-wrap:pretty kills the hanging-orphan last line («Доступ ограничен»). */
-.pa .pa-consent {
-  margin-top: 30px;
-  line-height: 1.7;
-}
-.pd-check .t {
-  padding-top: 3px;
-}
-.pd-notice {
-  text-wrap: pretty;
-}
+/* canon 0.8.0 consent/notice fixes (A6 `.pa .pa-consent`, A7 `.pd-check .t`,
+ * C `.pd-notice text-wrap`) moved into canon.css in 0.8.1 — consumer overrides dropped. */
