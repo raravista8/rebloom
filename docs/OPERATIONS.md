@@ -167,3 +167,32 @@ Canon is vendored at `packages/canon/`. Claude Design ships new versions as a zi
 
 ## 9. Peak season runbook (8 марта / 14 февраля)
 Before: scale `api`/workers up, bump managed PG/Redis tier, enable read-replica, warm CDN, run load test (TESTING §5), raise anti-scam thresholds (SECURITY). During: watch SLO/online, moderation & dispute queues, payout anomalies. After: scale down, fraud post-mortem.
+
+
+## 10. Security hardening — landed & open (pre-launch checklist)
+
+> Pre-launch PII/ФЗ-152 hardening from the 2026-06 leak-readiness audit. Durable here so a
+> fresh session doesn't redo landed work and knows what's still owner-blocked. Cross-ref:
+> `SECURITY.md`, `docs/runbooks/data-breach.md`, `docs/runbooks/backup-restore.md`.
+
+### Landed (in code + on prod)
+- **Admin IP-allowlist wired** (`api/deps.py::require_admin`) — `ADMIN_IP_ALLOWLIST` (comma-sep, leftmost `X-Forwarded-For` behind Caddy) is now *enforced*; empty = allow any (current prod). Was previously inert config-drift. On top of session + TOTP 2FA + RBAC.
+- **OTP-reveal prod hard-guard** — on `APP_ENV=prod`, `SMS_REVEAL_OTP=true` ALONE no longer reveals; it also needs `SMS_REVEAL_OTP_ALLOW_PROD=true`. A loud WARNING logs while reveal is active. (`config.py::otp_reveal_active`.)
+- **`totp_secret` AES-256-GCM at rest** (admin 2FA seed; ADR-0012) — encrypt-on-write / graceful decrypt-on-read (legacy plaintext falls back, not raises). Migration `0021_totp_secret_widen` (64→256) applied on prod.
+- **SSH hardened on the box** — `fail2ban` active (sshd jail, ignoreip = admin IP), `PasswordAuthentication no` + `KbdInteractiveAuthentication no` (key-only; root already `without-password`). Old config backed up at `/root/sshd_config.bak.*`.
+- **Dev/CI compose ports bound to `127.0.0.1`** (`docker-compose.yml`: db/replica/redis/api) — Docker-DNAT no longer bypasses the host firewall. Prod (`docker-compose.prod.yml`) already has no host ports.
+- **Backup automation authored** — `infra/systemd/rebloom-backup.{service,timer}` (daily) + `infra/scripts/restore.sh` (refuses the live DB without an explicit flag) + `docs/runbooks/backup-restore.md`. **Installed-but-inert until creds (see below).**
+- **Breach runbook** — `docs/runbooks/data-breach.md` (РКН 24h/72h, containment, key rotation, restore).
+
+### ⚠️ Testing-only states LIVE on prod — REVERT before real users
+- **`SMS_REVEAL_OTP=true` + `SMS_REVEAL_OTP_ALLOW_PROD=true`** in `/opt/rebloom/.env` → OTP codes are printed to the api log (so owner can test login without a real SMS provider). Remove BOTH at launch.
+- **Demo seed** (test sellers / bouquets / reviews, `backend/scripts/seed_demo.py` + `seed_reviews.py`) is loaded on prod. Wipe before launch.
+
+### Open — needs the owner (NOT autonomously doable)
+- **Off-box backup creds** — `rclone` remote on a *different* region/provider + `BACKUP_REMOTE` / `BACKUP_ENC_KEY` (+ opt. `BACKUP_KEEP_DAYS`) in `/opt/rebloom/.env`. Until set, the timer runs but `backup.sh` exits non-zero ⇒ **NO working backups yet**. `BACKUP_ENC_KEY` must be stored OFF the box (password manager). Then: enable the timer (`systemctl enable --now rebloom-backup.timer`) + run the restore drill (`backup-restore.md §3`).
+- **`PermitRootLogin no` + a non-root `deploy` user** — deferred (lockout risk; root is currently key-only + fail2ban'd). When done, flip the backup unit `User=root` → `deploy` (in the `docker` group).
+- **Real SMS provider creds** — OTP is console-revealed until then.
+- **Disk-at-rest encryption** — LUKS, or move Postgres to managed (provider + downtime). Single-box ext4 is currently unencrypted at rest.
+
+### Deferred to scale-out (accepted single-box risk)
+- **Redis auth (`requirepass`)** + **Postgres TLS** — Redis/PG are internal-only on the single box (not internet-exposed; dev ports now localhost-bound). Revisit when they move to managed/multi-host (OPERATIONS §1 scale-out).
