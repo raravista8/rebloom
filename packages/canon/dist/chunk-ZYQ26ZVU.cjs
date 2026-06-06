@@ -41,7 +41,7 @@ var PROV = {
   ya: { mk: "pa-mk-ya", ch: "\u042F", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0441 \u042F\u043D\u0434\u0435\u043A\u0441 ID" },
   sber: { mk: "pa-mk-sber", ch: "\u0421", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0441\u043E \u0421\u0431\u0435\u0440 ID" },
   vk: { mk: "pa-mk-vk", ch: "VK", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 VK ID" },
-  tid: { mk: "pa-mk-tid", ch: "\u0422", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0441 T-ID" },
+  tid: { mk: "pa-mk-tid", img: "img/oauth/tid.svg", ch: "\u0422", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0441 T-ID" },
   apple: { mk: "pa-mk-apple", icon: A.apple, lbl: "\u0412\u043E\u0439\u0442\u0438 \u0441 Apple" },
   gos: { mk: "pa-mk-gos", ch: "\u0413\u0423", lbl: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 \u0413\u043E\u0441\u0443\u0441\u043B\u0443\u0433\u0438" },
   phone: { mk: "pa-mk-phone", icon: A.phone, lbl: "\u0412\u043E\u0439\u0442\u0438 \u043F\u043E \u043D\u043E\u043C\u0435\u0440\u0443 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430", tint: true }
@@ -58,13 +58,13 @@ function OAuthBtn({ k, primary, slot }) {
   const p = PROV[k];
   if (slot) return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `pa-oauthbtn pa-oauthbtn--slot${primary ? " pa-oauthbtn--primary" : ""}`, "data-provider": k, children: slot });
   return /* @__PURE__ */ jsxRuntime.jsxs("button", { className: `pa-oauthbtn${primary ? " pa-oauthbtn--primary" : ""}`, "data-provider": k, children: [
-    /* @__PURE__ */ jsxRuntime.jsx("span", { className: `mark ${p.mk}`, children: p.icon ? p.icon({ className: "pd-i18", style: { color: "inherit" } }) : p.ch }),
+    /* @__PURE__ */ jsxRuntime.jsx("span", { className: `mark ${p.mk}`, children: p.img ? /* @__PURE__ */ jsxRuntime.jsx("img", { src: p.img, alt: "", className: "mkimg" }) : p.icon ? p.icon({ className: "pd-i18", style: { color: "inherit" } }) : p.ch }),
     /* @__PURE__ */ jsxRuntime.jsx("span", { className: "lbl", children: p.lbl }),
     /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: ic(A.chevR, "pd-i16") })
   ] });
 }
 function OauthList({ plat, slots }) {
-  const list = plat === "ios" ? [["apple", true], ["ya", false], ["sber", false], ["vk", false], ["tid", false]] : [["ya", true], ["sber", false], ["vk", false], ["tid", false]];
+  const list = plat === "ios" ? [["apple", false], ["ya", false], ["sber", false], ["vk", false], ["tid", false]] : [["ya", false], ["sber", false], ["vk", false], ["tid", false]];
   return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-oauth", children: list.map(([k, pr]) => /* @__PURE__ */ jsxRuntime.jsx(OAuthBtn, { k, primary: pr, slot: slots && slots[k] }, k)) });
 }
 var Consent = () => /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pa-consent", children: [
@@ -96,10 +96,10 @@ function AuthChooser({ plat = "ios", slots }) {
     /* @__PURE__ */ jsxRuntime.jsx(Hero, { sub: /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
       "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439",
       /* @__PURE__ */ jsxRuntime.jsx("br", {}),
-      "\u0438 \u0432\u0442\u043E\u0440\u0430\u044F \u0436\u0438\u0437\u043D\u044C \u0434\u043B\u044F \u043F\u043E\u0434\u0430\u0440\u0435\u043D\u043D\u044B\u0445 \u0446\u0432\u0435\u0442\u043E\u0432."
+      "\u0438 \u0432\u0442\u043E\u0440\u0430\u044F \u0436\u0438\u0437\u043D\u044C \u0434\u043B\u044F \u043F\u043E\u0434\u0430\u0440\u0435\u043D\u043D\u044B\u0445 \u0446\u0432\u0435\u0442\u043E\u0432"
     ] }) }),
     /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat, slots }),
-    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-or", children: "\u0431\u044B\u0441\u0442\u0440\u0435\u0435 \u0432\u0441\u0435\u0433\u043E \u0447\u0435\u0440\u0435\u0437 \u0441\u0435\u0440\u0432\u0438\u0441" }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-or", children: "\u0438\u043B\u0438" }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-oauth", children: /* @__PURE__ */ jsxRuntime.jsx(OAuthBtn, { k: "phone" }) }),
     /* @__PURE__ */ jsxRuntime.jsx(Consent, {}),
     /* @__PURE__ */ jsxRuntime.jsx(TrustStrip, {})
@@ -166,7 +166,7 @@ function AuthOAuthSheet({ plat = "ios", prov = "ya", slots }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `pd-root pa pa--${plat}`, "data-pd-theme": "a", style: { position: "relative" }, children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-top" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-body", style: { filter: "blur(1.5px)", opacity: 0.5, pointerEvents: "none" }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(Hero, { sub: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439." }),
+      /* @__PURE__ */ jsxRuntime.jsx(Hero, { sub: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439" }),
       /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat, slots })
     ] }),
     overlay
@@ -177,7 +177,7 @@ function PhoneBody({ state = "rest", plat }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { textAlign: "center", margin: "8px 0 24px" }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u0412\u0445\u043E\u0434 \u043F\u043E \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443" }),
-      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u041F\u0440\u0438\u0448\u043B\u0451\u043C \u043A\u043E\u0434 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E SMS." })
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u041F\u0440\u0438\u0448\u043B\u0451\u043C \u043A\u043E\u0434 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E SMS" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx(
       chunkGT5S3QFQ_cjs.PdField,
@@ -241,6 +241,20 @@ function AuthOtp({ plat = "ios", state = "typing" }) {
   else foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkGT5S3QFQ_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438" }) });
   return /* @__PURE__ */ jsxRuntime.jsx(AuthShell, { plat, foot, children: /* @__PURE__ */ jsxRuntime.jsx(OtpBody, { state }) });
 }
+function AuthOtpFill({ plat = "ios", code = "4127" }) {
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `pd-root pa pa--${plat}`, "data-pd-theme": "a", style: { position: "relative" }, children: [
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-top", children: /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", children: ic(chunkGT5S3QFQ_cjs.I.back, "pd-i22") }) }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-body", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { textAlign: "center", margin: "10px 0 24px" }, children: [
+        /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434" }),
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u043B\u0438 \u043D\u0430 +7 999 124-58-03" })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkGT5S3QFQ_cjs.PdOtp, { value: code, cur: code.length }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { style: { textAlign: "center", color: "var(--pd-muted)", fontSize: 13, marginTop: 20 }, children: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u0434 \u0441\u043D\u043E\u0432\u0430 \u0447\u0435\u0440\u0435\u0437 0:42" }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { style: { textAlign: "center", marginTop: 8 }, children: /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-link", children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043D\u043E\u043C\u0435\u0440" }) })
+    ] })
+  ] });
+}
 function RegisterBody({ state = "rest", plat }) {
   const invalid = state === "invalid";
   return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
@@ -251,7 +265,7 @@ function RegisterBody({ state = "rest", plat }) {
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { textAlign: "center", margin: "6px 0 18px" }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u0414\u0430\u0432\u0430\u0439\u0442\u0435 \u043F\u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u043C\u0441\u044F" }),
-      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u0422\u0430\u043A \u0432\u0430\u0441 \u0443\u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438. \u042D\u0442\u043E \u0437\u0430\u0439\u043C\u0451\u0442 \u043C\u0438\u043D\u0443\u0442\u0443." })
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u0422\u0430\u043A \u0432\u0430\u0441 \u0443\u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438. \u042D\u0442\u043E \u0437\u0430\u0439\u043C\u0451\u0442 \u043C\u0438\u043D\u0443\u0442\u0443" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-avadd", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "ring", children: [
@@ -305,7 +319,7 @@ function WelcomeBody() {
     /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0413\u043E\u0442\u043E\u0432\u043E. \u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u041C\u043E\u0441\u043A\u0432\u044B \u0443\u0436\u0435 \u0436\u0434\u0443\u0442. \u0418\u043B\u0438 \u043F\u043E\u0434\u0430\u0440\u0438\u0442\u0435 \u0432\u0442\u043E\u0440\u0443\u044E \u0436\u0438\u0437\u043D\u044C \u0441\u0432\u043E\u0435\u043C\u0443." }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 300, marginTop: 6 }, children: [
       /* @__PURE__ */ jsxRuntime.jsx(chunkGT5S3QFQ_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkGT5S3QFQ_cjs.Ic.search, children: "\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C \u0431\u0443\u043A\u0435\u0442\u044B" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkGT5S3QFQ_cjs.PdBtn, { variant: "secondary", block: true, lg: true, icon: chunkGT5S3QFQ_cjs.Ic.plus, children: "\u041F\u0440\u043E\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkGT5S3QFQ_cjs.PdBtn, { variant: "secondary", block: true, lg: true, icon: chunkGT5S3QFQ_cjs.Ic.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" })
     ] })
   ] });
 }
@@ -340,13 +354,13 @@ function AuthBlocked({ plat = "ios" }) {
 function DeskShell({ children, popup }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-root pad pa pa--desktop", "data-pd-theme": "a", children: [
     /* @__PURE__ */ jsxRuntime.jsxs("aside", { className: "pad-aside", children: [
-      /* @__PURE__ */ jsxRuntime.jsx("img", { className: "pad-photo", src: "img/1561181286-d3fee7d55364.jpg", alt: "" }),
+      /* @__PURE__ */ jsxRuntime.jsx("img", { className: "pad-photo", src: "img/hero-lacybird.png", alt: "" }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pad-brand", children: [
         /* @__PURE__ */ jsxRuntime.jsx(Mark, { size: 26 }),
         "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pad-hl", children: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439 \u0438 \u0432\u0442\u043E\u0440\u0430\u044F \u0436\u0438\u0437\u043D\u044C \u043F\u043E\u0434\u0430\u0440\u0435\u043D\u043D\u044B\u043C \u0446\u0432\u0435\u0442\u0430\u043C." }),
-      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pad-hlsub", children: "\u0422\u044B\u0441\u044F\u0447\u0438 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 \u0432\u0430\u0448\u0435\u043C \u0433\u043E\u0440\u043E\u0434\u0435. \u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u043E\u0442\u0437\u044B\u0432\u044B \u0432\u0437\u0430\u0438\u043C\u043D\u044B\u0435." }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pad-hl", children: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0441\u043E \u0441\u043A\u0438\u0434\u043A\u043E\u0439 \u0438 \u0432\u0442\u043E\u0440\u0430\u044F \u0436\u0438\u0437\u043D\u044C \u043F\u043E\u0434\u0430\u0440\u0435\u043D\u043D\u044B\u043C \u0446\u0432\u0435\u0442\u0430\u043C" }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pad-hlsub", children: "\u0422\u044B\u0441\u044F\u0447\u0438 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 \u0432\u0430\u0448\u0435\u043C \u0433\u043E\u0440\u043E\u0434\u0435. \u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u043E\u0442\u0437\u044B\u0432\u044B \u0432\u0437\u0430\u0438\u043C\u043D\u044B\u0435" }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pad-points", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pad-pt", children: [
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: ic(A.spark, "pd-i16") }),
@@ -376,7 +390,7 @@ function AuthDesktopChooser({ slots }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-hero", style: { paddingTop: 0 }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pa-h2", style: { fontSize: 26 }, children: "\u0412\u0445\u043E\u0434 \u0438\u043B\u0438 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F" }),
-      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-tag", children: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0443\u0434\u043E\u0431\u043D\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431, \u0437\u0430 \u043F\u0430\u0440\u0443 \u0441\u0435\u043A\u0443\u043D\u0434." })
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-tag", children: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0443\u0434\u043E\u0431\u043D\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431, \u0437\u0430 \u043F\u0430\u0440\u0443 \u0441\u0435\u043A\u0443\u043D\u0434" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat: "desktop", slots }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-or", children: "\u0438\u043B\u0438" }),
@@ -401,7 +415,7 @@ function AuthDesktopOAuth({ prov = "ya", slots }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { popup, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-hero", style: { paddingTop: 0 }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pa-h2", style: { fontSize: 26 }, children: "\u0412\u0445\u043E\u0434 \u0438\u043B\u0438 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F" }),
-      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-tag", children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u0432\u0445\u043E\u0434 \u0432 \u043E\u0442\u043A\u0440\u044B\u0432\u0448\u0435\u043C\u0441\u044F \u043E\u043A\u043D\u0435." })
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-tag", children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u0432\u0445\u043E\u0434 \u0432 \u043E\u0442\u043A\u0440\u044B\u0432\u0448\u0435\u043C\u0441\u044F \u043E\u043A\u043D\u0435" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx(OauthList, { plat: "desktop", slots })
   ] });
@@ -496,6 +510,7 @@ exports.AuthError = AuthError;
 exports.AuthLink = AuthLink;
 exports.AuthOAuthSheet = AuthOAuthSheet;
 exports.AuthOtp = AuthOtp;
+exports.AuthOtpFill = AuthOtpFill;
 exports.AuthPhone = AuthPhone;
 exports.AuthRegister = AuthRegister;
 exports.AuthWelcome = AuthWelcome;

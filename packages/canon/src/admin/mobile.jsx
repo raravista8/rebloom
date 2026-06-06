@@ -123,7 +123,7 @@ function AdminMobileModReject() {
   const sheet = (
     <Sheet>
       <h3>Снять объявление с публикации</h3>
-      <p className="sub">Объявление сейчас живое. Причина уйдёт продавцу и в audit-log, он сможет отредактировать и обжаловать.</p>
+      <p className="sub">Объявление сейчас живое. Причина уйдёт продавцу и в audit-log, он сможет отредактировать и обжаловать</p>
       <div className="pdam-reasons">
         <label className="pdam-reason on"><span className="rb"/>Контакты в описании</label>
         <label className="pdam-reason"><span className="rb"/>Не цветы / не та категория</label>
@@ -170,7 +170,7 @@ function AdminMobileDealCancel() {
   const sheet = (
     <Sheet>
       <h3>Отменить сделку #10482?</h3>
-      <p className="sub">Марина → Аня · 990 ₽. Отмена снимет сделку, стороны получат уведомление. Необратимо.</p>
+      <p className="sub">Марина → Аня · 990 ₽. Отмена снимет сделку, стороны получат уведомление. Необратимо</p>
       <div className="pd-field" style={{textAlign:'left'}}><label className="pd-label">Причина отмены *</label></div>
       <textarea rows={3} defaultValue="Продавец недоступен 48 ч, букет неактуален. Обращение #1902.">{}</textarea>
       <div className="pdam-4eyes">{mic(PdI.shield,'pd-i16')}Действие фиксируется в audit-log.</div>
@@ -330,7 +330,7 @@ function AdminMobileBlock() {
   const sheet = (
     <Sheet>
       <h3>Заблокировать Екатерину Л.?</h3>
-      <p className="sub">Пользователь не сможет входить и публиковать. Активные сделки замораживаются. Причина попадёт в audit-log.</p>
+      <p className="sub">Пользователь не сможет входить и публиковать. Активные сделки замораживаются. Причина попадёт в audit-log</p>
       <div className="pdam-reasons">
         <label className="pdam-reason on"><span className="rb"/>Мошенничество / антифрод</label>
         <label className="pdam-reason"><span className="rb"/>Спам и накрутка</label>

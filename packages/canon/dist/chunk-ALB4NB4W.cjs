@@ -256,7 +256,7 @@ var dRow = (icon, title, sub, right, opts = {}) => /* @__PURE__ */ jsxRuntime.js
 var DESKBODY = {
   profile: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pdss-h1", children: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C" }),
-    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0422\u0430\u043A \u0432\u0430\u0441 \u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438 \u043D\u0430 \u0432\u0438\u0442\u0440\u0438\u043D\u0435 \u0438 \u0432 \u0441\u0434\u0435\u043B\u043A\u0430\u0445." }),
+    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0422\u0430\u043A \u0432\u0430\u0441 \u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438 \u043D\u0430 \u0432\u0438\u0442\u0440\u0438\u043D\u0435 \u0438 \u0432 \u0441\u0434\u0435\u043B\u043A\u0430\u0445" }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdss-block", style: { padding: "22px" }, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pds-avedit", style: { flexDirection: "row", gap: 18, padding: 0, alignItems: "center" }, children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "ring", style: { width: 78, height: 78 }, children: /* @__PURE__ */ jsxRuntime.jsx("img", { src: "img/av/w4.jpg", alt: "" }) }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
@@ -282,7 +282,7 @@ var DESKBODY = {
   ] }),
   logins: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pdss-h1", children: "\u0421\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430" }),
-    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B \u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u044B \u0434\u043B\u044F \u0431\u044B\u0441\u0442\u0440\u043E\u0433\u043E \u0432\u0445\u043E\u0434\u0430. \u0425\u043E\u0442\u044F \u0431\u044B \u043E\u0434\u0438\u043D \u0441\u043F\u043E\u0441\u043E\u0431 \u0434\u043E\u043B\u0436\u0435\u043D \u043E\u0441\u0442\u0430\u0432\u0430\u0442\u044C\u0441\u044F \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u043C." }),
+    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B \u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u044B \u0434\u043B\u044F \u0431\u044B\u0441\u0442\u0440\u043E\u0433\u043E \u0432\u0445\u043E\u0434\u0430. \u0425\u043E\u0442\u044F \u0431\u044B \u043E\u0434\u0438\u043D \u0441\u043F\u043E\u0441\u043E\u0431 \u0434\u043E\u043B\u0436\u0435\u043D \u043E\u0441\u0442\u0430\u0432\u0430\u0442\u044C\u0441\u044F \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u043C" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B" }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 6 } }),
@@ -300,7 +300,7 @@ var DESKBODY = {
   ] }),
   notif: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pdss-h1", children: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F" }),
-    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0427\u0442\u043E \u0438 \u043A\u0443\u0434\u0430 \u043F\u0440\u0438\u0441\u044B\u043B\u0430\u0442\u044C. \u0412\u0430\u0436\u043D\u044B\u0435 \u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F \u043E \u0441\u0434\u0435\u043B\u043A\u0430\u0445 \u043E\u0442\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043D\u0435\u043B\u044C\u0437\u044F." }),
+    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0427\u0442\u043E \u0438 \u043A\u0443\u0434\u0430 \u043F\u0440\u0438\u0441\u044B\u043B\u0430\u0442\u044C. \u0412\u0430\u0436\u043D\u044B\u0435 \u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F \u043E \u0441\u0434\u0435\u043B\u043A\u0430\u0445 \u043E\u0442\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043D\u0435\u043B\u044C\u0437\u044F" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u0421\u0434\u0435\u043B\u043A\u0438" }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 6 } }),
@@ -318,7 +318,7 @@ var DESKBODY = {
   ] }),
   security: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pdss-h1", children: "\u0421\u0435\u0441\u0441\u0438\u0438 \u0438 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430" }),
-    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0413\u0434\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D \u0432\u0445\u043E\u0434. \u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u0435 \u043D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u044B\u0435 \u0441\u0435\u0441\u0441\u0438\u0438, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043B\u043E\u0433\u0438\u0440\u0443\u0435\u0442\u0441\u044F." }),
+    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0413\u0434\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D \u0432\u0445\u043E\u0434. \u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u0435 \u043D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u044B\u0435 \u0441\u0435\u0441\u0441\u0438\u0438, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043B\u043E\u0433\u0438\u0440\u0443\u0435\u0442\u0441\u044F" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 8 } }),
       dRow(S.laptop, "Web \xB7 Chrome, macOS", "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 \u044D\u0442\u043E \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E \xB7 \u0442\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u043E", /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pds-pill ok", children: "\u0442\u0435\u043A\u0443\u0449\u0435\u0435" })),
@@ -329,7 +329,7 @@ var DESKBODY = {
   ] }),
   privacy: () => /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "pdss-h1", children: "\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C \u0438 \u0434\u0430\u043D\u043D\u044B\u0435" }),
-    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F \u043F\u043E 152-\u0424\u0417 \u0438 \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0432\u0430\u0448\u0438\u043C\u0438 \u0434\u0430\u043D\u043D\u044B\u043C\u0438." }),
+    /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pdss-sub", children: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F \u043F\u043E 152-\u0424\u0417 \u0438 \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0432\u0430\u0448\u0438\u043C\u0438 \u0434\u0430\u043D\u043D\u044B\u043C\u0438" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdss-block", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bh", children: "\u0421\u043E\u0433\u043B\u0430\u0441\u0438\u044F" }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: 6 } }),

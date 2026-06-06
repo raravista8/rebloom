@@ -44,7 +44,7 @@ const PROV = {
   ya:    { mk:'pa-mk-ya',   ch:'Я',  lbl:'Войти с Яндекс ID' },
   sber:  { mk:'pa-mk-sber', ch:'С',  lbl:'Войти со Сбер ID' },
   vk:    { mk:'pa-mk-vk',   ch:'VK', lbl:'Войти через VK ID' },
-  tid:   { mk:'pa-mk-tid',  ch:'Т',  lbl:'Войти с T-ID' },
+  tid:   { mk:'pa-mk-tid',  img:'img/oauth/tid.svg', ch:'Т',  lbl:'Войти с T-ID' },
   apple: { mk:'pa-mk-apple', icon:A.apple, lbl:'Войти с Apple' },
   gos:   { mk:'pa-mk-gos',  ch:'ГУ', lbl:'Войти через Госуслуги' },
   phone: { mk:'pa-mk-phone', icon:A.phone, lbl:'Войти по номеру телефона', tint:true },
@@ -66,7 +66,7 @@ function OAuthBtn({ k, primary, slot }) {
   );
   return (
     <button className={`pa-oauthbtn${primary?' pa-oauthbtn--primary':''}`} data-provider={k}>
-      <span className={`mark ${p.mk}`}>{p.icon ? p.icon({className:'pd-i18',style:{color:'inherit'}}) : p.ch}</span>
+      <span className={`mark ${p.mk}`}>{p.img ? <img src={p.img} alt="" className="mkimg"/> : p.icon ? p.icon({className:'pd-i18',style:{color:'inherit'}}) : p.ch}</span>
       <span className="lbl">{p.lbl}</span>
       <span className="chev">{ic(A.chevR,'pd-i16')}</span>
     </button>
@@ -76,8 +76,8 @@ function OAuthBtn({ k, primary, slot }) {
 // widgets keyed by provider, injected by web/ without forking the component.
 function OauthList({ plat, slots }) {
   const list = plat==='ios'
-    ? [['apple',true],['ya',false],['sber',false],['vk',false],['tid',false]]
-    : [['ya',true],['sber',false],['vk',false],['tid',false]];
+    ? [['apple',false],['ya',false],['sber',false],['vk',false],['tid',false]]
+    : [['ya',false],['sber',false],['vk',false],['tid',false]];
   return (
     <div className="pa-oauth">
       {list.map(([k,pr])=> <OAuthBtn key={k} k={k} primary={pr} slot={slots&&slots[k]}/>)}
@@ -118,9 +118,9 @@ const Hero = ({ title, sub, logo=true }) => (
 function AuthChooser({ plat='ios', slots }) {
   return (
     <AuthShell plat={plat} back={false}>
-      <Hero sub={<>Свежие букеты со скидкой<br/>и вторая жизнь для подаренных цветов.</>}/>
+      <Hero sub={<>Свежие букеты со скидкой<br/>и вторая жизнь для подаренных цветов</>}/>
       <OauthList plat={plat} slots={slots}/>
-      <div className="pa-or">быстрее всего через сервис</div>
+      <div className="pa-or">или</div>
       <div className="pa-oauth"><OAuthBtn k="phone"/></div>
       <Consent/>
       <TrustStrip/>
@@ -174,7 +174,7 @@ function AuthOAuthSheet({ plat='ios', prov='ya', slots }) {
     <div className={`pd-root pa pa--${plat}`} data-pd-theme="a" style={{position:'relative'}}>
       <div className="pa-top"/>
       <div className="pa-body" style={{filter:'blur(1.5px)',opacity:.5,pointerEvents:'none'}}>
-        <Hero sub="Свежие букеты со скидкой."/>
+        <Hero sub="Свежие букеты со скидкой"/>
         <OauthList plat={plat} slots={slots}/>
       </div>
       {overlay}
@@ -191,7 +191,7 @@ function PhoneBody({ state='rest', plat }) {
     <>
       <div style={{textAlign:'center',margin:'8px 0 24px'}}>
         <h2 className="pa-h2">Вход по телефону</h2>
-        <p className="pa-sub">Пришлём код подтверждения по SMS.</p>
+        <p className="pa-sub">Пришлём код подтверждения по SMS</p>
       </div>
       <PdField label="Номер телефона"
         hint={invalid?undefined:'Например, +7 999 124-58-03'}
@@ -247,6 +247,31 @@ function AuthOtp({ plat='ios', state='typing' }) {
   return <AuthShell plat={plat} foot={foot}><OtpBody state={state}/></AuthShell>;
 }
 
+// OTP with the system on-screen keyboard raised + SMS-code AutoFill suggestion.
+// Chrome-light: NO footer button (the OS keyboard occupies the bottom inset).
+// Use inside a device frame with the keyboard up:
+//   <IOSDevice keyboard kbdAutofill="4127"><AuthOtpFill plat="ios"/></IOSDevice>
+//   <AndroidDevice keyboard kbdAutofill="4127"><AuthOtpFill plat="android"/></AndroidDevice>
+// In прод you do NOT draw a keyboard — the OS does. See OTP_KEYBOARD_AUTOFILL.md:
+// the field carries autocomplete="one-time-code" + inputmode="numeric" (+ Android
+// WebOTP) and the platform raises the keyboard and offers «From Messages» itself.
+function AuthOtpFill({ plat='ios', code='4127' }) {
+  return (
+    <div className={`pd-root pa pa--${plat}`} data-pd-theme="a" style={{position:'relative'}}>
+      <div className="pa-top"><button className="pd-iconbtn">{ic(PdI.back,'pd-i22')}</button></div>
+      <div className="pa-body">
+        <div style={{textAlign:'center',margin:'10px 0 24px'}}>
+          <h2 className="pa-h2">Введите код</h2>
+          <p className="pa-sub">Отправили на +7 999 124-58-03</p>
+        </div>
+        <PdOtp value={code} cur={code.length}/>
+        <p style={{textAlign:'center',color:'var(--pd-muted)',fontSize:13,marginTop:20}}>Отправить код снова через 0:42</p>
+        <p style={{textAlign:'center',marginTop:8}}><button className="pd-link">Изменить номер</button></p>
+      </div>
+    </div>
+  );
+}
+
 // ════════════════════════════════════════════════════════════════════════
 // 5 · REGISTER / профиль нового пользователя
 // ════════════════════════════════════════════════════════════════════════
@@ -257,7 +282,7 @@ function RegisterBody({ state='rest', plat }) {
       <div className="pa-steps"><i/><i className="on"/><i/></div>
       <div style={{textAlign:'center',margin:'6px 0 18px'}}>
         <h2 className="pa-h2">Давайте познакомимся</h2>
-        <p className="pa-sub">Так вас увидят покупатели. Это займёт минуту.</p>
+        <p className="pa-sub">Так вас увидят покупатели. Это займёт минуту</p>
       </div>
       <div className="pa-avadd">
         <div className="ring">{ic(PdI.camera,'pd-i24')}<span className="cam">{ic(PdI.camera,'pd-i14')}</span></div>
@@ -316,7 +341,7 @@ function WelcomeBody() {
       <p>Готово. Свежие букеты Москвы уже ждут. Или подарите вторую жизнь своему.</p>
       <div style={{display:'flex',flexDirection:'column',gap:10,width:'100%',maxWidth:300,marginTop:6}}>
         <PdBtn variant="primary" block lg icon={PdIc.search}>Смотреть букеты</PdBtn>
-        <PdBtn variant="secondary" block lg icon={PdIc.plus}>Продать букет</PdBtn>
+        <PdBtn variant="secondary" block lg icon={PdIc.plus}>Опубликовать букет</PdBtn>
       </div>
     </div>
   );
@@ -373,10 +398,10 @@ function DeskShell({ children, popup }) {
   return (
     <div className="pd-root pad pa pa--desktop" data-pd-theme="a">
       <aside className="pad-aside">
-        <img className="pad-photo" src="img/1561181286-d3fee7d55364.jpg" alt=""/>
+        <img className="pad-photo" src="img/hero-lacybird.png" alt=""/>
         <div className="pad-brand"><Mark size={26}/>Передарим</div>
-        <div className="pad-hl">Свежие букеты со скидкой и вторая жизнь подаренным цветам.</div>
-        <p className="pad-hlsub">Тысячи букетов в вашем городе. Оплата при встрече, отзывы взаимные.</p>
+        <div className="pad-hl">Свежие букеты со скидкой и вторая жизнь подаренным цветам</div>
+        <p className="pad-hlsub">Тысячи букетов в вашем городе. Оплата при встрече, отзывы взаимные</p>
         <div className="pad-points">
           <div className="pad-pt"><span className="ic">{ic(A.spark,'pd-i16')}</span>Публикация букета за 2 минуты</div>
           <div className="pad-pt"><span className="ic">{ic(PdI.shield,'pd-i16')}</span>Оплата при встрече, без предоплаты</div>
@@ -396,7 +421,7 @@ function AuthDesktopChooser({ slots }) {
     <DeskShell>
       <div className="pa-hero" style={{paddingTop:0}}>
         <h1 className="pa-h2" style={{fontSize:26}}>Вход или регистрация</h1>
-        <p className="pa-tag">Выберите удобный способ, за пару секунд.</p>
+        <p className="pa-tag">Выберите удобный способ, за пару секунд</p>
       </div>
       <OauthList plat="desktop" slots={slots}/>
       <div className="pa-or">или</div>
@@ -416,7 +441,7 @@ function AuthDesktopOAuth({ prov='ya', slots }) {
   );
   return (
     <DeskShell popup={popup}>
-      <div className="pa-hero" style={{paddingTop:0}}><h1 className="pa-h2" style={{fontSize:26}}>Вход или регистрация</h1><p className="pa-tag">Подтвердите вход в открывшемся окне.</p></div>
+      <div className="pa-hero" style={{paddingTop:0}}><h1 className="pa-h2" style={{fontSize:26}}>Вход или регистрация</h1><p className="pa-tag">Подтвердите вход в открывшемся окне</p></div>
       <OauthList plat="desktop" slots={slots}/>
     </DeskShell>
   );
@@ -512,6 +537,7 @@ export {
   AuthOAuthSheet,
   AuthPhone,
   AuthOtp,
+  AuthOtpFill,
   AuthRegister,
   AuthLink,
   AuthWelcome,

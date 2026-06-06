@@ -23,15 +23,16 @@ declare function LandingNav({ auth, desk }: {
 declare function Footer({ desk }: {
     desk: any;
 }): React.JSX.Element;
-declare function MobileMenu({ open, auth, city: cityProp, onClose }: {
+declare function MobileMenu({ open, auth, city: cityProp, onClose, links: linksProp }: {
     open: any;
     auth?: boolean | undefined;
     city?: string | undefined;
     onClose: any;
+    links: any;
 }): React.JSX.Element;
 
 declare function nbsp(s: any): any;
-declare function PdGeoPage({ platform, data }: {
+declare function PdGeoPage({ platform, data, menuLinks }: {
     platform?: string | undefined;
     data?: {
         id: string;
@@ -42,14 +43,17 @@ declare function PdGeoPage({ platform, data }: {
         metro: boolean;
         districts: (string | number)[][];
     } | undefined;
+    menuLinks: any;
 }): React.JSX.Element;
-declare function PdSafeDeal({ platform }: {
+declare function PdSafeDeal({ platform, menuLinks }: {
     platform?: string | undefined;
+    menuLinks: any;
 }): React.JSX.Element;
-declare function PdBlogIndex({ platform }: {
+declare function PdBlogIndex({ platform, menuLinks }: {
     platform?: string | undefined;
+    menuLinks: any;
 }): React.JSX.Element;
-declare function PdBlogArticle({ platform, article }: {
+declare function PdBlogArticle({ platform, article, menuLinks }: {
     platform?: string | undefined;
     article?: {
         id: string;
@@ -59,6 +63,7 @@ declare function PdBlogArticle({ platform, article }: {
         excerpt: string;
         read: string;
     } | undefined;
+    menuLinks: any;
 }): React.JSX.Element;
 declare function PdSeoMeta({ url, title, description, h1, alt, label }: {
     url: any;

@@ -280,7 +280,7 @@ const dRow = (icon,title,sub,right,opts={}) => (
 const DESKBODY = {
   profile: () => (<>
     <h1 className="pdss-h1">Профиль</h1>
-    <p className="pdss-sub">Так вас видят покупатели на витрине и в сделках.</p>
+    <p className="pdss-sub">Так вас видят покупатели на витрине и в сделках</p>
     <div className="pdss-block" style={{padding:'22px'}}>
       <div className="pds-avedit" style={{flexDirection:'row',gap:18,padding:0,alignItems:'center'}}>
         <div className="ring" style={{width:78,height:78}}><img src="img/av/w4.jpg" alt=""/></div>
@@ -299,7 +299,7 @@ const DESKBODY = {
   </>),
   logins: () => (<>
     <h1 className="pdss-h1">Способы входа</h1>
-    <p className="pdss-sub">Контакты и сервисы для быстрого входа. Хотя бы один способ должен оставаться активным.</p>
+    <p className="pdss-sub">Контакты и сервисы для быстрого входа. Хотя бы один способ должен оставаться активным</p>
     <div className="pdss-block"><div className="bh">Контакты</div><div style={{height:6}}/>
       {dRow(S.device,'Телефон','+7 999 ···-58-03',<span className="pds-pill ok">основной</span>)}
       {dRow(S.mail,'Email','Не добавлен',<span className="pd-link" style={{fontSize:13}}>Добавить</span>)}
@@ -313,7 +313,7 @@ const DESKBODY = {
   </>),
   notif: () => (<>
     <h1 className="pdss-h1">Уведомления</h1>
-    <p className="pdss-sub">Что и куда присылать. Важные уведомления о сделках отключить нельзя.</p>
+    <p className="pdss-sub">Что и куда присылать. Важные уведомления о сделках отключить нельзя</p>
     <div className="pdss-block"><div className="bh">Сделки</div><div style={{height:6}}/>
       {dRow(PdI.wallet,'Статусы сделок','Договорённость, встреча, завершение',<Switch on/>)}
       {dRow(PdI.bell,'Сообщения в чате',null,<Switch on/>)}
@@ -327,7 +327,7 @@ const DESKBODY = {
   </>),
   security: () => (<>
     <h1 className="pdss-h1">Сессии и устройства</h1>
-    <p className="pdss-sub">Где выполнен вход. Завершите незнакомые сессии, действие логируется.</p>
+    <p className="pdss-sub">Где выполнен вход. Завершите незнакомые сессии, действие логируется</p>
     <div className="pdss-block"><div style={{height:8}}/>
       {dRow(S.laptop,'Web · Chrome, macOS','Москва · это устройство · только что',<span className="pds-pill ok">текущее</span>)}
       {dRow(S.device,'iPhone 15 · приложение','Москва · 2 часа назад',<span className="pd-link" style={{fontSize:13}}>Выйти</span>)}
@@ -337,7 +337,7 @@ const DESKBODY = {
   </>),
   privacy: () => (<>
     <h1 className="pdss-h1">Приватность и данные</h1>
-    <p className="pdss-sub">Согласия по 152-ФЗ и управление вашими данными.</p>
+    <p className="pdss-sub">Согласия по 152-ФЗ и управление вашими данными</p>
     <div className="pdss-block"><div className="bh">Согласия</div><div style={{height:6}}/>
       {dRow(PdI.shield,'Обработка персональных данных',null,<span className="pds-pill ok">дано</span>)}
       {dRow(PdIc.pin,'Геолокация','Показывать букеты рядом',<Switch on/>)}

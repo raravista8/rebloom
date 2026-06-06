@@ -149,7 +149,7 @@ const PdLanding = (function () {
     { icon: Gear, label: 'Настройки', href: '#' },
   ];
 
-  function MobileMenu({ open, auth = false, city: cityProp = 'Москва', onClose }) {
+  function MobileMenu({ open, auth = false, city: cityProp = 'Москва', onClose, links: linksProp }) {
     const [city, setCity] = React.useState(cityProp);
     const [cityOpen, setCityOpen] = React.useState(false);
     const closeRef = React.useRef(null);
@@ -161,7 +161,7 @@ const PdLanding = (function () {
       return () => { document.removeEventListener('keydown', onKey); clearTimeout(t); };
     }, [open]);
     const cityCount = (CITY_LIST.find((c) => c.name === city) || {}).count;
-    const links = auth ? AUTH_LINKS : GUEST_LINKS;
+    const links = linksProp || (auth ? AUTH_LINKS : GUEST_LINKS);
     return (
       <div className={'pdl-drawer' + (open ? ' open' : '')} aria-hidden={!open}>
         <div className="pdl-drawer-scrim" onClick={onClose} />
@@ -296,7 +296,7 @@ const PdLanding = (function () {
           <div className="pdl-sechead l">
             <p className="pdl-kicker"><Leaf className="lf" />Живой каталог</p>
             <h2 className="pdl-h2">Свежие букеты рядом, прямо сейчас</h2>
-            <p className="pdl-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы.</p>
+            <p className="pdl-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
           </div>
           <div className="pdl-catbar">
             <CityChips cls="pdl-cities" />
@@ -364,7 +364,7 @@ const PdLanding = (function () {
           <div className="pdl-sechead l">
             <p className="pdl-kicker"><Shield style={{ width: 14, height: 14 }} />Спокойная сделка</p>
             <h2 className="pdl-h2">Покупатель ничего не платит вперёд, оплата при встрече</h2>
-            <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому деньги никуда не уходят заранее: вы платите, только когда увидели букет вживую.</p>
+            <p className="pdl-sub">Главный страх в сделках между незнакомцами — обман. Поэтому деньги никуда не уходят заранее: вы платите, только когда увидели букет вживую</p>
           </div>
           <div className="pdl-escrow-grid">
             <div className="pdl-eflow"><span className="en">1</span><div><h4>Написали и договорились</h4><p>Покупатель пишет продавцу в чате и договаривается о времени и месте встречи.</p></div></div>
@@ -408,7 +408,7 @@ const PdLanding = (function () {
             <div>
               <p className="pdl-kicker"><Leaf className="lf" />Приложение</p>
               <h2 className="pdl-h2">Узнавайте о свежих букетах рядом первыми</h2>
-              <p className="pdl-sub">Свежий букет по соседству живёт считанные часы. Включите push, и приложение сообщит, как только рядом появится подходящий, пока его не забрали.</p>
+              <p className="pdl-sub">Свежий букет по соседству живёт считанные часы. Включите push, и приложение сообщит, как только рядом появится подходящий, пока его не забрали</p>
             </div>
             <div className="pdl-badges">
               {STORES.map((s) => (

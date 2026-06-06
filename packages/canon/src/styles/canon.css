@@ -151,7 +151,7 @@
 .pd-check{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
 .pd-check .box{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--pd-border-strong);background:var(--pd-surface);flex:none;display:flex;align-items:center;justify-content:center;color:#fff;margin-top:1px}
 .pd-check.on .box{background:var(--pd-primary);border-color:var(--pd-primary)}
-.pd-check .t{font-size:12.5px;color:var(--pd-muted);line-height:1.5}
+.pd-check .t{font-size:12.5px;color:var(--pd-muted);line-height:1.5;padding-top:3px}
 .pd-check .t a{color:var(--pd-primary);text-decoration:none}
 
 /* ── photo uploader ─────────────────────────────────────────────────── */
@@ -165,7 +165,7 @@
 .pd-upadd{aspect-ratio:1/1;border-radius:13px;border:1.5px dashed var(--pd-border-strong);background:var(--pd-surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--pd-muted);cursor:pointer;font-size:11.5px;font-weight:600}
 
 /* ── status banner / notice ─────────────────────────────────────────── */
-.pd-notice{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;font-size:13px;line-height:1.45}
+.pd-notice{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:13px;font-size:13px;line-height:1.45;text-wrap:pretty}
 .pd-notice .ic{flex:none;margin-top:1px}
 .pd-notice b{font-weight:700}
 .pd-notice--info{background:var(--pd-surface-2);color:var(--pd-text)}
@@ -429,7 +429,9 @@
 .pa-mk-ya{background:#FC3F1D}
 .pa-mk-sber{background:#21A038}
 .pa-mk-vk{background:#0077FF;font-size:11px}
-.pa-mk-tid{background:#FFDD2D;color:#222}
+.pa-mk-tid{background:transparent;color:#222}
+.pa-oauthbtn .mark.pa-mk-tid{background:transparent;width:auto;border-radius:0}
+.pa-mk-tid .mkimg{height:26px;width:auto;display:block}
 .pa-mk-apple{background:#111}
 .pa-mk-gos{background:#0561A8;font-size:10px}
 .pa-mk-phone{background:var(--pd-surface-3);color:var(--pd-text)}
@@ -438,7 +440,7 @@
 .pa-or{display:flex;align-items:center;gap:12px;color:var(--pd-faint);font-size:12.5px;font-weight:600;margin:18px 0}
 .pa-or::before,.pa-or::after{content:'';flex:1;height:1px;background:var(--pd-border)}
 
-.pa-consent{font-size:12px;color:var(--pd-muted);line-height:1.55;text-align:center;margin-top:16px}
+.pa-consent,.pa .pa-consent{font-size:12px;color:var(--pd-muted);line-height:1.7;text-align:center;margin-top:30px}
 .pa-consent a{color:var(--pd-primary);text-decoration:none}
 .pa-switch{text-align:center;font-size:13.5px;color:var(--pd-muted);margin-top:18px}
 .pa-switch button{border:none;background:none;color:var(--pd-primary);font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;padding:2px}
