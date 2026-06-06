@@ -49,7 +49,9 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     seller_rating: Mapped[float | None] = mapped_column(Numeric(3, 2))
     status: Mapped[str] = mapped_column(String(16), nullable=False, server_default=text("'active'"))
-    totp_secret: Mapped[str | None] = mapped_column(String(64))  # 🔒 admin 2FA seed
+    # 🔒 admin 2FA seed — stored AES-256-GCM-encrypted at rest (ADR-0012, T-10);
+    # widened to hold the base64 ciphertext (version+nonce+ct+tag), longer than the seed.
+    totp_secret: Mapped[str | None] = mapped_column(String(256))
     # DSR: set when the subject requests deletion (ФЗ-152); the retention job
     # anonymizes PII after the grace period (PRIVACY_152FZ.md §2-3).
     deletion_requested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
