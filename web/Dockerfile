@@ -14,6 +14,11 @@ RUN npm ci --install-links
 
 # App source, then production build.
 COPY web/ ./
+# Yandex Metrica counter id is a NEXT_PUBLIC_* var → Next inlines it into the client
+# bundle at build time, so it MUST be present here. Empty default → Metrica stays inert
+# (dev/CI builds send nothing). Set via compose build-arg from the VM .env on prod.
+ARG NEXT_PUBLIC_YM_COUNTER_ID=""
+ENV NEXT_PUBLIC_YM_COUNTER_ID=$NEXT_PUBLIC_YM_COUNTER_ID
 RUN npm run build
 
 ENV NODE_ENV=production \
