@@ -6,6 +6,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PdHeart } from '@/components/canon';
 import { api, ApiError } from '@/lib/api';
+import useMe from '@/lib/useMe';
+
+const loginNext = () =>
+  '/login?next=' + encodeURIComponent(window.location.pathname + window.location.search);
 
 export default function LikeButton({
   listingId,
@@ -19,6 +23,7 @@ export default function LikeButton({
   big?: boolean;
 }) {
   const router = useRouter();
+  const { authed } = useMe();
   const [liked, setLiked] = useState(liked0);
   const [count, setCount] = useState(count0);
   const [pop, setPop] = useState(false);
@@ -28,6 +33,11 @@ export default function LikeButton({
     e.stopPropagation();
     e.preventDefault();
     if (busy) return;
+    // Known guest → straight to login (no optimistic heart-fill flicker), and come back.
+    if (authed === false) {
+      router.push(loginNext());
+      return;
+    }
     const next = !liked;
     // optimistic
     setLiked(next);
@@ -47,7 +57,7 @@ export default function LikeButton({
       // revert
       setLiked(!next);
       setCount((n) => n - (next ? 1 : -1));
-      if (err instanceof ApiError && err.code === 'unauthorized') router.push('/login');
+      if (err instanceof ApiError && err.code === 'unauthorized') router.push(loginNext());
     } finally {
       setBusy(false);
     }

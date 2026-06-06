@@ -4,6 +4,7 @@
 // socket can't connect — API_CONTRACT §8). Held messages (contacts stripped) are
 // shown to their own sender, flagged. Mirrors canon's .pd-chat + ChatInput.
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { PdBubble } from '@/components/canon';
 import { IconSend } from '@/components/icons';
 import { api, ApiError } from '@/lib/api';
@@ -11,6 +12,7 @@ import { formatTime } from '@/lib/format';
 import type { ChatMessage } from '@/lib/types';
 
 export default function DealChat({ dealId }: { dealId: string }) {
+  const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
@@ -67,11 +69,17 @@ export default function DealChat({ dealId }: { dealId: string }) {
       upsert(m);
       setText('');
     } catch (e) {
+      // Session expired mid-screen → go to login (the route is gated, so a guest never
+      // reaches here normally). Consistent with the other forms.
+      if (e instanceof ApiError && e.code === 'unauthorized') {
+        router.push('/login');
+        return;
+      }
       setErr(e instanceof ApiError ? e.message : 'Не удалось отправить');
     } finally {
       setSending(false);
     }
-  }, [text, sending, dealId, upsert]);
+  }, [text, sending, dealId, upsert, router]);
 
   return (
     <>

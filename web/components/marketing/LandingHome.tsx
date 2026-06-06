@@ -171,7 +171,7 @@ function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status
           </div>
         )}
         <div className="pdl-catall">
-          <Link href="/search">Весь каталог букетов<Arrow /></Link>
+          <Link href="/catalog">Весь каталог букетов<Arrow /></Link>
         </div>
       </div>
     </section>
