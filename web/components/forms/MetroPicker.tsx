@@ -8,7 +8,7 @@
 //  • multi  (filters):      values=id[], onToggle(id|null) — null = clear all
 import { useEffect, useRef, useState } from 'react';
 import { IconCheck, IconChev, IconSearch } from '@/components/icons';
-import { stationsForCity, stationById, type MetroStation } from '@/lib/metro';
+import { useCityStations, stationById, type MetroStation } from '@/lib/metro';
 
 function Dots({ station, size = 9 }: { station?: MetroStation; size?: number }) {
   const lines = station?.lines.length ? station.lines : [{ name: '', color: '#A1A2A3' }];
@@ -30,7 +30,7 @@ export default function MetroPicker(props: Single | Multi) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const wrapRef = useRef<HTMLDivElement>(null);
-  const list = stationsForCity(cityId);
+  const list = useCityStations(cityId);
 
   useEffect(() => {
     if (!open) return;
@@ -80,7 +80,7 @@ export default function MetroPicker(props: Single | Multi) {
           </div>
           <div className="pd-mpick-list">
             {filtered.length === 0 ? (
-              <div className="pd-mpick-empty">Станция не найдена</div>
+              <div className="pd-mpick-empty">{list.length === 0 ? 'Загрузка станций…' : 'Станция не найдена'}</div>
             ) : (
               filtered.map((s) => (
                 <button

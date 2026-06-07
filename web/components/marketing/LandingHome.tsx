@@ -14,7 +14,7 @@ import NavCity from '@/components/marketing/NavCity';
 import MobileMenu from '@/components/marketing/MobileMenu';
 import { api, ApiError } from '@/lib/api';
 import { cityPrepositional } from '@/lib/cities';
-import { stationsForCity } from '@/lib/metro';
+import { cityHasMetro } from '@/lib/metro';
 import { FLOWERS } from '@/lib/flowers';
 import type { ListingCard, Paginated } from '@/lib/types';
 
@@ -141,7 +141,7 @@ function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status
     setMetros([]);
   };
   const activeN = Object.values(sel).filter((v) => v !== 'any').length + metros.length;
-  const hasMetro = stationsForCity(cityId).length > 0;
+  const hasMetro = cityHasMetro(cityId);
   const filtered = useMemo(
     () =>
       pool.filter(

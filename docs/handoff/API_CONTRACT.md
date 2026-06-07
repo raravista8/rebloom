@@ -30,7 +30,7 @@
 | POST | `/api/consent` | session | `{policy_version}` | `{accepted_at}` | FR-004 |
 
 `{provider}` ∈ `yandex | sber | vk | tid` (`apple` iOS-only, post-MVP). OAuth is **Authorization Code + PKCE, backend-mediated** (AUTH_HANDOFF §4.1): the verifier/secret never touch the client; `state` is single-use server-side (anti-CSRF/replay); `redirect_uri` must be on the backend allowlist. A provider with no configured credentials returns `oauth_failed` (button disabled).
-`user`: `{id, display_name, phone_masked, city_id, roles[], seller_rating, deals_count}` (OAuth-first users may have `phone_masked: ""` until linked).
+`user`: `{id, display_name, phone_masked, city_id, roles[], seller_rating, deals_count, created_at}` (OAuth-first users may have `phone_masked: ""` until linked). `created_at` is ISO-8601 UTC registration time (non-sensitive — the public profile renders «N месяцев на площадке»; may be `null` if unknown).
 Errors: `validation_error`, `otp_locked` (FR-003), `rate_limited`, `oauth_failed`, `not_found` (unknown provider).
 
 ## 3. Photos & listings
@@ -39,6 +39,7 @@ Errors: `validation_error`, `otp_locked` (FR-003), `rate_limited`, `oauth_failed
 | POST | `/api/photos` | session | `{content_type}` | `{photo_id, upload_url}` (direct-to-storage) | FR-011 |
 | POST | `/api/listings` | session(seller) | `{size, freshness, price_kopecks, city_id, geo?, metro_station_id?, flower_types?[], photo_ids[1..5], expires_in_h?}` | `listing` | FR-010 |
 | GET | `/api/listings/{id}` | optional | — | `listing` (detail) | — |
+| GET | `/api/geo/metro` | — | `?city_id` | `{stations: [{id, name, lines:[{name,color}]}]}` — full metro catalog for the city; `[]` for a no-metro city | FR-016 |
 | GET | `/api/feed` | optional | `?city_id&section=fresh\|liked&cursor&limit` | `{items: listing_card[], next_cursor, applied:{city_id, filters}}` | FR-016 |
 | GET | `/api/search` | optional | `?city_id&q&size?&freshness?&price_min?&price_max?&metro&flower&cursor&limit` | `{items: listing_card[], next_cursor, total, applied:{q, city_id, filters}, suggestions?:[{type,label,href}]}` | FR-016 |
 | POST | `/api/listings/{id}/like` | session | — | `{like_count, liked:true}` | FR-015 |
@@ -48,7 +49,7 @@ Errors: `validation_error`, `otp_locked` (FR-003), `rate_limited`, `oauth_failed
 
 `listing_card`: `{id, photo_thumb_url, size, freshness, price_kopecks, city_id, metro, flower_types[], like_count, liked, seller:{id,display_name,seller_rating}}`
 `listing` (detail) adds: `{photos:[{card_url,full_url}], status, freshness_score, expires_at, geo_coarse}`
-`metro` (resolved, `null` for no-metro cities): `{id, name, lines:[{name, color}]}` — one entry per line; **transfer hubs carry several** (multi-colour dots). The card shows the station (city is implied by the header/feed scope); the detail keeps both `city_id` and `metro`.
+`metro` (resolved, `null` for no-metro cities): `{id, name, lines:[{name, color}]}` — one entry per line; **transfer hubs carry several** (multi-colour dots). The card shows the station (city is implied by the header/feed scope); the detail keeps both `city_id` and `metro`. The full **catalog** of valid stations per city is served by `GET /api/geo/metro?city_id=` (same `{id,name,lines}` shape) — it backs the metro picker (publish form) and the metro filter (catalog/search); the web fetches it instead of mirroring the backend list.
 **Filter semantics (`/api/search`):** `metro` and `flower` are repeatable (`?metro=a&metro=b`) or comma-joined (`?metro=a,b`); within a group the match is **OR** (any of the selected), across groups it is **AND** (and with size/freshness/price). `total` is the count of ALL active listings matching the filters in the city (not just the page) — feeds «Показать N букетов». `next_cursor:null` = end-of-list.
 Errors: `validation_error` (incl. unknown `metro_station_id` or `flower_types` id), `moderation_pending` (FR-012), `forbidden` (not your listing).
 

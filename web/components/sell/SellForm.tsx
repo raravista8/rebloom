@@ -15,7 +15,7 @@ import FlowerPicker from '@/components/forms/FlowerPicker';
 import { api, ApiError } from '@/lib/api';
 import { reachGoal } from '@/lib/ym';
 import { cityName, DEFAULT_CITY } from '@/lib/cities';
-import { stationsForCity } from '@/lib/metro';
+import { cityHasMetro } from '@/lib/metro';
 import type { Size, Freshness, ListingDetail } from '@/lib/types';
 
 const SIZES: [Size, string][] = [['S', 'до 7'], ['M', '7–15'], ['L', '15–25'], ['XL', '25+']];
@@ -34,7 +34,7 @@ export default function SellForm() {
   const [flowerTypes, setFlowerTypes] = useState<string[]>([]);
   const [geo, setGeo] = useState('');
   const cityId = DEFAULT_CITY;
-  const hasMetro = stationsForCity(cityId).length > 0;
+  const hasMetro = cityHasMetro(cityId);
 
   const [photoErr, setPhotoErr] = useState<string | undefined>();
   const [priceErr, setPriceErr] = useState<string | undefined>();

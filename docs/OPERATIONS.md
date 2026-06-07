@@ -186,7 +186,7 @@ Before: scale `api`/workers up, bump managed PG/Redis tier, enable read-replica,
 
 ### ⚠️ Testing-only states LIVE on prod — REVERT before real users
 - **`SMS_REVEAL_OTP=true` + `SMS_REVEAL_OTP_ALLOW_PROD=true`** in `/opt/rebloom/.env` → OTP codes are printed to the api log (so owner can test login without a real SMS provider). Remove BOTH at launch.
-- **Demo seed** (test sellers / bouquets / reviews, `backend/scripts/seed_demo.py` + `seed_reviews.py`) is loaded on prod. Wipe before launch.
+- **Demo seed** (test sellers / bouquets / reviews, `backend/scripts/seed_demo.py` + `seed_reviews.py`) is loaded on prod. Wipe before launch. The demo listings are also **backfilled with metro station + flower types** via `backend/scripts/backfill_demo_metro.py` (idempotent; only touches `metro_station_id IS NULL`) so canon 0.9.0's metro/flower features show data — wiped with the rest of the demo seed.
 
 ### Open — needs the owner (NOT autonomously doable)
 - **Off-box backup creds** — `rclone` remote on a *different* region/provider + `BACKUP_REMOTE` / `BACKUP_ENC_KEY` (+ opt. `BACKUP_KEEP_DAYS`) in `/opt/rebloom/.env`. Until set, the timer runs but `backup.sh` exits non-zero ⇒ **NO working backups yet**. `BACKUP_ENC_KEY` must be stored OFF the box (password manager). Then: enable the timer (`systemctl enable --now rebloom-backup.timer`) + run the restore drill (`backup-restore.md §3`).

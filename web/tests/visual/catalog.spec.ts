@@ -27,6 +27,21 @@ function feedBody(items: unknown[], next_cursor: string | null = null) {
   return JSON.stringify({ ok: true, data: { items, next_cursor, applied: { city_id: 'msk' } } });
 }
 
+// Metro catalog now arrives via GET /api/geo/metro (lib/metro.ts) — mock it so the
+// picker/filters stay hermetic if a test opens «Все фильтры».
+test.beforeEach(async ({ page }) => {
+  await page.route('**/api/geo/metro**', (r: Route) =>
+    r.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        ok: true,
+        data: { stations: [{ id: 'msk-kurskaya', name: 'Курская', lines: [{ name: 'Кольцевая', color: '#894E35' }] }] },
+      }),
+    }),
+  );
+});
+
 test('browse-first: catalog grid renders immediately from /api/feed', async ({ page }) => {
   await page.route('**/api/feed**', (r: Route) =>
     r.fulfill({ status: 200, contentType: 'application/json', body: feedBody([card('f1', 99000), card('f2', 130000)]) }),

@@ -20,6 +20,7 @@ from app.api import (
     consent,
     deals,
     feed,
+    geo,
     health,
     listing_chat,
     listings,
@@ -85,6 +86,7 @@ def create_app() -> FastAPI:
     app.include_router(consent.router)
     app.include_router(listings.router)
     app.include_router(cities.router)
+    app.include_router(geo.router)
     app.include_router(feed.router)
     app.include_router(deals.router)
     app.include_router(chat.router)

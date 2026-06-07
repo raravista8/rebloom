@@ -146,3 +146,11 @@ def test_profile_unknown_user_404(ctx: tuple[FastAPI, FakeDealRepository]) -> No
     app, _deals = ctx
     client, _uid = _login(app, "+79161112233")
     assert client.get("/api/users/00000000-0000-0000-0000-000000009999").status_code == 404
+
+
+def test_public_user_carries_created_at(ctx: tuple[FastAPI, FakeDealRepository]) -> None:
+    """The public profile exposes created_at so the web «N месяцев на площадке» renders."""
+    app, _deals = ctx
+    client, uid = _login(app, "+79161112233")
+    user = client.get(f"/api/users/{uid}").json()["data"]["user"]
+    assert "created_at" in user
