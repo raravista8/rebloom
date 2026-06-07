@@ -1,4 +1,4 @@
-import { Ic, Heart, PdBtn } from './chunk-EQYPIQRM.mjs';
+import { Ic, Heart, PdBtn } from './chunk-VLZGX7EA.mjs';
 import React from 'react';
 import { jsxs, jsx } from 'react/jsx-runtime';
 

@@ -4,9 +4,10 @@ declare function PdFeed({ theme, platform }: {
     theme?: string | undefined;
     platform?: string | undefined;
 }): React.JSX.Element;
-declare function Card({ d, variant }: {
+declare function Card({ d, variant, onLike }: {
     d: any;
     variant: any;
+    onLike: any;
 }): React.JSX.Element;
 declare function Avatar({ seller, size }: {
     seller: any;
@@ -15,10 +16,11 @@ declare function Avatar({ seller, size }: {
 declare function Freshness({ kind }: {
     kind: any;
 }): React.JSX.Element;
-declare function LikeBtn({ liked: init, count: c0, big }: {
+declare function LikeBtn({ liked: init, count: c0, big, onToggle }: {
     liked: any;
     count: any;
     big: any;
+    onToggle: any;
 }): React.JSX.Element;
 declare function SectionHead({ title, sub, action }: {
     title: any;

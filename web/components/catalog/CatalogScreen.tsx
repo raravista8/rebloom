@@ -1,37 +1,93 @@
 'use client';
 // Каталог букетов (/catalog) — PUBLIC, browse-first city catalog (≠ the search-first
-// /search). Grid shown immediately from /api/feed; switches to /api/search when any
-// filter is set (metro/flower/size/freshness/price). Cursor load-more + ALL collection
-// states (INTERACTION_STATES §4): loading-skeleton / loaded / empty / no-results /
-// loading-more / end-of-list / error / offline. «Показать N» uses the live search `total`.
+// /search). canon 0.9.2 made PdCatalog fully consumable (data-driven + `renderCard`
+// slot), so this is now the IMPORTED PdCatalog — no more hand-transcribed `.pdc-*`
+// markup. Web keeps its own card via `renderCard` → <BouquetCard/> (real
+// `photo_thumb_url` + the wired LikeButton → POST /like, guest→/login, metro label),
+// identical to the home feed; canon's default PdCard/`onLike` are unused.
 //
-// Note: canon's PdCatalog is a self-contained DEMO (its own data, no item/handler props),
-// so it can't render live data — we re-compose its `.pdc-*` markup (header, sidebar,
-// chip-bar + panel, sort, grid, load-more) with the live feed/search clients, the same
-// compose-over-canon-CSS pattern the rest of web/ uses (CANON_PACKAGE_TZ §10).
+// Live data: grid from /api/feed (browse-first); switches to /api/search when a real
+// (backend-filterable) filter is set. Cursor load-more + ALL collection states
+// (INTERACTION_STATES §4): loading / loaded / empty / no-results / loading-more / end /
+// error / offline. «Показать N» uses the live search `total`.
+//
+// Filter state is held in PdCatalog's own shape (it owns the filter UI now) and mapped
+// to /api/search here. `rating` has no backend filter (kept inert — never sent, never
+// switches to search); `cheap`/`exp`/`rating` are PdCatalog client-side sorts.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
-import { PdSkelCard, PdBtn } from '@/components/canon';
+import { PdCatalog, type PdCatalogFilters, type PdCatalogState } from '@/components/canon';
 import BouquetCard from '@/components/feed/BouquetCard';
 import WebChrome from '@/components/shell/WebChrome';
-import { FiltersBarMobile, FiltersSidebar, SortControl } from '@/components/catalog/CatalogFilters';
-import { EMPTY_FILTERS, activeCount, sortCards, toSearchParams, type Filters, type SortKey } from '@/components/catalog/filters';
 import useIsDesktop from '@/lib/useIsDesktop';
 import { ApiError } from '@/lib/api';
 import { fetchFeed, fetchSearch } from '@/lib/feed';
+import { useCityStations } from '@/lib/metro';
+import { FLOWERS } from '@/lib/flowers';
 import { getCityClient } from '@/lib/city-client';
 import { cityName, cityPrepositional, DEFAULT_CITY } from '@/lib/cities';
-import type { ListingCard, Paginated } from '@/lib/types';
+import type { ListingCard, Paginated, SearchParams, Freshness, Size } from '@/lib/types';
 
 const LIMIT = 24;
-type Status = 'loading' | 'loaded' | 'empty' | 'no-results' | 'error' | 'offline';
+
+const EMPTY_FILTERS: PdCatalogFilters = {
+  metro: [],
+  flowers: [],
+  size: null,
+  freshness: null,
+  rating: null,
+  priceMin: null,
+  priceMax: null,
+  sort: 'fresh',
+};
+
+// canon price buckets are in RUBLES (priceMin/priceMax) → kopecks for /api/search.
+function priceRangeKopecks(min: number | null, max: number | null): { price_min?: number; price_max?: number } {
+  return {
+    ...(min != null ? { price_min: min * 100 } : {}),
+    ...(max != null ? { price_max: max * 100 - 1 } : {}),
+  };
+}
+
+// Backend-filterable subset of the canon filters (excludes the inert `rating` + the
+// client-side `sort`) → does any of these require switching from /api/feed to /api/search?
+function isBackendFiltered(f: PdCatalogFilters): boolean {
+  return (
+    f.metro.length > 0 ||
+    f.flowers.length > 0 ||
+    f.size != null ||
+    f.freshness != null ||
+    f.priceMin != null ||
+    f.priceMax != null
+  );
+}
+
+function toSearchParams(cityId: string, f: PdCatalogFilters, cursor?: string): SearchParams {
+  return {
+    city_id: cityId,
+    ...(f.size ? { size: f.size as Size } : {}),
+    ...(f.freshness ? { freshness: f.freshness as Freshness } : {}),
+    ...priceRangeKopecks(f.priceMin, f.priceMax),
+    ...(f.metro.length ? { metro: f.metro } : {}),
+    ...(f.flowers.length ? { flower: f.flowers } : {}),
+    ...(cursor ? { cursor } : {}),
+    limit: LIMIT,
+  };
+}
+
+// The item PdCatalog renders: the full ListingCard (BouquetCard consumes it directly via
+// `renderCard`) PLUS `price` (rubles) + `seller.r` so PdCatalog's client-side cheap/exp/
+// rating sort orders correctly.
+type CatalogItem = ListingCard & { price: number; seller: ListingCard['seller'] & { r: number | null } };
+
+function toCatalogItem(l: ListingCard): CatalogItem {
+  return { ...l, price: l.price_kopecks / 100, seller: { ...l.seller, r: l.seller.seller_rating } };
+}
 
 export default function CatalogScreen() {
   const isDesktop = useIsDesktop();
   const [city, setCity] = useState(DEFAULT_CITY);
-  const [f, setF] = useState<Filters>(EMPTY_FILTERS);
-  const [sort, setSort] = useState<SortKey>('fresh');
-  const [status, setStatus] = useState<Status>('loading');
+  const [f, setF] = useState<PdCatalogFilters>(EMPTY_FILTERS);
+  const [status, setStatus] = useState<Exclude<PdCatalogState, 'loading-more' | 'end'>>('loading');
   const [items, setItems] = useState<ListingCard[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
@@ -41,12 +97,13 @@ export default function CatalogScreen() {
 
   useEffect(() => setCity(getCityClient()), []);
 
-  const filtered = activeCount(f) > 0;
+  const stations = useCityStations(city);
+  const filtered = isBackendFiltered(f);
 
   const fetchPage = useCallback(
     (cur?: string): Promise<Paginated<ListingCard>> =>
       filtered
-        ? fetchSearch({ ...toSearchParams(city, '', f, LIMIT), ...(cur ? { cursor: cur } : {}) })
+        ? fetchSearch(toSearchParams(city, f, cur))
         : fetchFeed(city, 'fresh', { cursor: cur, limit: LIMIT }),
     [city, f, filtered],
   );
@@ -89,134 +146,38 @@ export default function CatalogScreen() {
     }
   }, [cursor, loadingMore, fetchPage]);
 
-  // filter mutators
-  const set = useCallback(<K extends keyof Filters>(k: K, v: Filters[K]) => setF((s) => ({ ...s, [k]: v })), []);
-  const toggleMetro = useCallback(
-    (id: string | null) => setF((s) => ({ ...s, metro: id === null ? [] : s.metro.includes(id) ? s.metro.filter((x) => x !== id) : [...s.metro, id] })),
-    [],
-  );
-  const toggleFlower = useCallback(
-    (id: string) => setF((s) => ({ ...s, flowers: s.flowers.includes(id) ? s.flowers.filter((x) => x !== id) : [...s.flowers, id] })),
-    [],
-  );
-  const reset = useCallback(() => setF(EMPTY_FILTERS), []);
+  const onFiltersChange = useCallback((next: PdCatalogFilters) => setF(next), []);
 
-  const sorted = useMemo(() => sortCards(items, sort), [items, sort]);
-  const countLabel = filtered ? `${total} букетов` : `${items.length}${cursor ? '+' : ''} букетов`;
+  // canon-state derivation: load-more spinner / end-of-list overlay the base status.
+  const state: PdCatalogState = loadingMore
+    ? 'loading-more'
+    : status === 'loaded' && !cursor && items.length > 0
+      ? 'end'
+      : status;
 
-  const skeletons = (cls: string) => (
-    <div className={cls}>
-      {Array.from({ length: isDesktop ? 8 : 6 }, (_, i) => (
-        <PdSkelCard key={i} />
-      ))}
-    </div>
-  );
+  const catalogItems = useMemo(() => items.map(toCatalogItem), [items]);
+  // PdCatalog gates «Показать ещё» on `items.length < total`, not on a cursor. The browse
+  // feed has no whole-city total → ensure total > items.length while a cursor remains so
+  // load-more stays visible; the search `total` is the real count but a remaining cursor
+  // still implies more (guard against an equal/stale total).
+  const total_ = Math.max(filtered ? total : items.length, items.length + (cursor ? 1 : 0));
 
-  const empty = (
-    <div className="pdc-empty">
-      <b>{filtered ? 'Ничего не нашлось' : 'Здесь пока пусто'}</b>
-      {filtered
-        ? 'Попробуйте смягчить фильтры — например расширить цену или свежесть.'
-        : `В ${cityPrepositional(city)} ещё нет букетов. Будьте первым — опубликуйте свой.`}
-      <div style={{ marginTop: 14 }}>
-        {filtered ? (
-          <PdBtn variant="secondary" onClick={reset}>Сбросить фильтры</PdBtn>
-        ) : (
-          <Link href="/sell"><PdBtn variant="primary">Опубликовать букет</PdBtn></Link>
-        )}
-      </div>
-    </div>
-  );
-
-  const errorState = (
-    <div className="pdc-empty">
-      <b>{status === 'offline' ? 'Нет соединения' : 'Что-то пошло не так'}</b>
-      {status === 'offline' ? 'Проверьте интернет и попробуйте снова.' : 'Не удалось загрузить каталог.'}
-      <div style={{ marginTop: 14 }}>
-        <PdBtn variant="primary" onClick={load}>Повторить</PdBtn>
-      </div>
-    </div>
-  );
-
-  const gridBody = (gridCls: string) => (
-    <>
-      {status === 'loading' && skeletons(gridCls)}
-      {(status === 'empty' || status === 'no-results') && empty}
-      {(status === 'error' || status === 'offline') && errorState}
-      {status === 'loaded' && (
-        <>
-          <div className={gridCls}>
-            {sorted.map((l) => (
-              <div className="pd-rise" key={l.id}>
-                <BouquetCard listing={l} variant="grid" />
-              </div>
-            ))}
-          </div>
-          {cursor ? (
-            <div className="pdc-loadmore">
-              <button onClick={loadMore} disabled={loadingMore}>
-                {loadingMore ? 'Загружаем…' : 'Показать ещё'}
-              </button>
-            </div>
-          ) : (
-            <div className="pd-feed-end">Вы посмотрели все свежие букеты {cityName(city) === 'Москва' ? 'Москвы' : `в ${cityPrepositional(city)}`}</div>
-          )}
-        </>
-      )}
-    </>
-  );
-
-  const toolbar = (
-    <div className="pdc-toolbar">
-      <span className="pdc-count" style={{ fontSize: 13 }}>
-        <span className="d" />
-        {status === 'loaded' || status === 'no-results' ? countLabel : ''}
-      </span>
-      <SortControl sort={sort} setSort={setSort} />
-    </div>
-  );
-
-  // ─────────── DESKTOP (≥1024px) — .pdl (PdWebNav) wrapping a .pdc body ───────────
-  if (isDesktop) {
-    return (
-      <div className="pd-root pd-web pdl" data-pd-theme="a">
-        <WebChrome cityId={city} />
-        <main className="pd-scroll pdw-scroll">
-          <div className="pdc pdc--desk">
-            <div className="pdc-head">
-              <p className="pdc-crumbs">
-                <Link href="/">Главная</Link> · Каталог · {cityName(city)}
-              </p>
-              <div className="pdc-titlerow">
-                <h1 className="pdc-title">Свежие букеты в {cityPrepositional(city)}</h1>
-              </div>
-            </div>
-            <div className="pdc-body">
-              <FiltersSidebar cityId={city} f={f} set={set} toggleMetro={toggleMetro} toggleFlower={toggleFlower} reset={reset} />
-              <div className="pdc-main">
-                {toolbar}
-                {gridBody('pdc-grid')}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  // ─────────── MOBILE (<1024px) — .pdc container (chip bar + panel + dropdown) ───────────
   return (
-    <div className="pd-root pdc" data-pd-theme="a">
-      <div className="pdc-head">
-        <div className="pdc-titlerow">
-          <h1 className="pdc-title">Свежие букеты в {cityPrepositional(city)}</h1>
-        </div>
-      </div>
-      <div className="pdc-main" style={{ padding: '0 16px 32px' }}>
-        <FiltersBarMobile cityId={city} f={f} set={set} toggleMetro={toggleMetro} toggleFlower={toggleFlower} reset={reset} total={total} />
-        {toolbar}
-        {gridBody('pdc-grid')}
-      </div>
-    </div>
+    <PdCatalog<CatalogItem>
+      platform={isDesktop ? 'desktop' : 'web'}
+      items={catalogItems}
+      state={state}
+      total={total_}
+      filters={f}
+      onFiltersChange={onFiltersChange}
+      stations={stations}
+      flowers={FLOWERS}
+      city={cityName(city)}
+      cityLoc={cityPrepositional(city)}
+      onLoadMore={loadMore}
+      onRetry={load}
+      renderCard={(d) => <BouquetCard listing={d} variant="grid" />}
+      header={<WebChrome cityId={city} />}
+    />
   );
 }

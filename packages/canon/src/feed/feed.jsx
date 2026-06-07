@@ -17,6 +17,9 @@ const Mark = ({ size=22, center='#E8A93B', style, className, title='Переда
 // Exports: PdFeed  +  PD_THEMES (label metadata)
 
 const PD_IMG = (id) => `img/${id}.jpg`;
+// pdPhotoSrc: полный URL (CDN/Object Storage, photo_thumb_url) → как есть; локальный
+// Unsplash-id → через PD_IMG. Так карточка работает и в прототипе, и на проде.
+const pdPhotoSrc = (photo) => (typeof photo === 'string' && /^(https?:)?\/\//.test(photo)) ? photo : PD_IMG(photo);
 
 // ── sample listings (faithful to API_CONTRACT listing_card) ──────────────
 const PD_FRESH = [
@@ -145,14 +148,18 @@ function Freshness({ kind }) {
 }
 
 // ── like button (optimistic toggle + spring pop) ──────────────────────────
-function LikeBtn({ liked: init, count: c0, big }) {
-  const [liked, setLiked] = React.useState(init);
-  const [count, setCount] = React.useState(c0);
+function LikeBtn({ liked: init, count: c0, big, onToggle }) {
+  const controlled = typeof onToggle === 'function';
+  const [likedU, setLiked] = React.useState(init);
+  const [countU, setCount] = React.useState(c0);
   const [pop, setPop] = React.useState(false);
+  const liked = controlled ? init : likedU;
+  const count = controlled ? c0 : countU;
   const toggle = (e) => {
     e.stopPropagation(); e.preventDefault();
     const next = !liked;
-    setLiked(next); setCount((n) => n + (next ? 1 : -1));
+    if (controlled) { onToggle(next); }
+    else { setLiked(next); setCount((n) => n + (next ? 1 : -1)); }
     if (next) { setPop(true); setTimeout(() => setPop(false), 420); }
   };
   return (
@@ -175,15 +182,17 @@ function Avatar({ seller, size = 21 }) {
 }
 
 // ── bouquet card ───────────────────────────────────────────────────────────
-function Card({ d, variant }) {
+function Card({ d, variant, onLike }) {
   const ar = variant === 'rail' ? '3 / 4' : (d.ar || '1 / 1');
+  const seller = d.seller || {};
+  const hasRating = seller.r != null;
   return (
     <article className={'pd-card pd-card--' + variant} tabIndex={0}>
       <div className="pd-photo-wrap" style={{ aspectRatio: ar }}>
-        <img className="pd-photo" src={PD_IMG(d.photo)} alt="Букет" loading="lazy" />
+        <img className="pd-photo" src={d.photoUrl || pdPhotoSrc(d.photo)} alt="Букет" loading="lazy" />
         <div className="pd-photo-top">
           <Freshness kind={d.fresh} />
-          <LikeBtn liked={d.liked} count={d.likes} />
+          <LikeBtn liked={d.liked} count={d.likes} onToggle={onLike ? (next) => onLike(d.id, next) : undefined} />
         </div>
         {d.roseLabel && (
           <span style={{ position: 'absolute', left: 8, bottom: 8, background: 'rgba(35,32,27,.82)', color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '.01em', padding: '4px 9px', borderRadius: 999, backdropFilter: 'blur(4px)' }}>{d.roseLabel}</span>
@@ -200,9 +209,11 @@ function Card({ d, variant }) {
             : <><Ic.pin className="pd-i14" fill="none" stroke="currentColor" /><span className="pd-district">{d.district}</span></>}
         </div>
         <div className="pd-seller">
-          <Avatar seller={d.seller} size={21} />
-          <span className="pd-seller-n">{d.seller.n}</span>
-          <span className="pd-rating"><Ic.star className="pd-i13 pd-star" /> {d.seller.r.toFixed(1)}</span>
+          <Avatar seller={seller} size={21} />
+          <span className="pd-seller-n">{seller.n}</span>
+          {hasRating
+            ? <span className="pd-rating"><Ic.star className="pd-i13 pd-star" /> {seller.r.toFixed(1)}</span>
+            : <span className="pd-rating pd-rating--new">Новый</span>}
         </div>
       </div>
     </article>

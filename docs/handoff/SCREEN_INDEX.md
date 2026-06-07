@@ -3,7 +3,7 @@
 > Map of screens authored in Claude Design and consumed via `@rebloom/canon`. Source of truth for the design handoff. Parent specs: `DESIGN_BRIEF.md`, `CANON_PACKAGE_TZ.md`.
 > Полная логика состояний — `INTERACTION_STATES.md §5`. **Пошаговые ветвящиеся флоу (спор, возврат, отмена, сбой оплаты, апелляция модерации, доставка, удаление аккаунта, жалоба) — `FLOWS.md`.**
 > Status: 🔵 spec only · 🟢 canon-import (live) · 🟡 hand-rolled (temp) · 🔴 missing
-> Canon version: `0.9.1` (vendored in `packages/canon`, rendering live in `web/`; design-pass ported — метро-ориентир, метро+тип-цветов фильтры, единая `PdWebNav` + `cityLoc` грамматика, `PaymentFailed`-фикс в источнике). `/catalog` — **хэндролл** (`CatalogScreen.tsx`, реальные фото + лайки); импорт canon `PdCatalog` ждёт data-driven `PdCard` (`canon-tasks/canon-0.9.2-pdcard.md`)
+> Canon version: `0.9.2` (vendored in `packages/canon`, rendering live in `web/`; data-driven `PdCard` + `PdCatalog` `renderCard`-slot/client-sort). `/catalog` — **canon-import** (`CatalogScreen.tsx` рендерит `PdCatalog`, хэндролл `.pdc-*` снят) с `renderCard`→web `BouquetCard` (реальные фото + лайки)
 
 | # | Screen | Route (web) | Primary action | Key states | Status | Notes |
 |---|---|---|---|---|---|---|
@@ -16,7 +16,7 @@
 | 7 | Профиль продавца | `/u/[id]` | — | loading/empty | 🔵 | рейтинг, отзывы, активные объявления (FR-041) |
 | 8 | Уведомления | `/notifications` | открыть сделку | empty | 🔵 | статусы сделок, лайки |
 | 9 | Город / выбор + поиск/фильтр | `/city`, `/search` | применить | empty/no-results | 🔵 | CitySelector, фильтры |
-| 9a | **Каталог букетов** | `/catalog` | открыть карточку / показать ещё | loading/loaded/empty/no-results/loading-more/end/error/offline | 🟢 | **browse-first** сетка всех букетов города (canon 0.9.0): `/api/feed` для базы + `/api/search` при фильтрах, метро+тип-цветов мультивыбор, cursor load-more, все состояния. `CatalogScreen.tsx` (canon `PdCatalog` — демо без data-пропсов → реюз `.pdc-*` разметки с live-данными). PUBLIC, без auth-гейта |
+| 9a | **Каталог букетов** | `/catalog` | открыть карточку / показать ещё | loading/loaded/empty/no-results/loading-more/end/error/offline | 🟢 | **browse-first** сетка всех букетов города (canon 0.9.2, **импорт `PdCatalog`** — хэндролл снят): `/api/feed` для базы + `/api/search` при фильтрах, метро+тип-цветов мультивыбор, cursor load-more, все состояния. `CatalogScreen.tsx` кормит `PdCatalog` live-данными + `renderCard`→web `BouquetCard` (реальные фото + рабочий лайк). PUBLIC, без auth-гейта |
 | 10 | Пустые состояния / нет сети | (overlay) | повторить | — | 🔵 | EmptyState, offline |
 | 11 | Админ / очередь модерации | `/admin` | approve/reject | empty/loading | 🔵 | desktop; pending_review, held reviews (FR-060), 2FA |
 | 12 | Открыть спор (причина+доказательства) | `/deal/[id]/dispute/new` | отправить спор | reason/error/submitting/success | 🔵 | FLOW-1 шаги 1–2 |

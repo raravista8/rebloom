@@ -1,7 +1,7 @@
 import React from 'react';
 export { P as PdWebNav } from './web-nav-C_qaqoeg.cjs';
 
-declare function PdCatalog({ platform, items, state, total, filters, onFiltersChange, stations, flowers, city, cityLoc, onCityChange, onLoadMore, onCardClick, cardHref, onRetry, header, }: {
+declare function PdCatalog({ platform, items, state, total, filters, onFiltersChange, stations, flowers, city, cityLoc, onCityChange, onLoadMore, onCardClick, cardHref, onLike, renderCard, onRetry, header, }: {
     platform?: string | undefined;
     items?: never[] | undefined;
     state?: string | undefined;
@@ -25,6 +25,8 @@ declare function PdCatalog({ platform, items, state, total, filters, onFiltersCh
     onLoadMore: any;
     onCardClick: any;
     cardHref: any;
+    onLike: any;
+    renderCard: any;
     onRetry: any;
     header: any;
 }): React.JSX.Element;

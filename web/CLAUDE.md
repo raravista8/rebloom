@@ -2,7 +2,7 @@
 
 Area rules for the single web frontend. This web build IS the iOS/Android app (wrapped by Capacitor — see `mobile/`). Root `CLAUDE.md` applies.
 
-> **Vendored canon: `0.9.1`** (design-pass + fixes: метро-ориентир, метро/тип-цветов фильтры, единая `PdWebNav` с `cityLoc` «в Москве», `PaymentFailed`-фикс в источнике). `/catalog` остаётся хэндроллом (`components/catalog/CatalogScreen.tsx`, свой `BouquetCard` с настоящим фото + рабочим лайком) — импорт canon `PdCatalog` ждёт data-driven `PdCard` (флаг: `docs/handoff/canon-tasks/canon-0.9.2-pdcard.md`). Status tracker: `docs/handoff/VISUAL_COVERAGE.md`.
+> **Vendored canon: `0.9.2`** (data-driven `PdCard` — полный URL фото + лайк наружу; `PdCatalog` `renderCard`-slot + клиентская сортировка). `/catalog` теперь **импортит canon `PdCatalog`** (`components/catalog/CatalogScreen.tsx`, хэндролл `.pdc-*` снят): live-данные через пропсы, **`renderCard={(item)=><BouquetCard variant="grid"/>}`** — web сохраняет свою карточку (настоящее фото + рабочий лайк + метро), поэтому canon-`PdCard`/`onLike` не используются. Фильтры держатся в форме `PdCatalogFilters` и маппятся на `/api/search`; `rating`-фильтр inert (бэкенд не поддерживает), `cheap`/`exp`/`rating`-сортировки — клиентские в `PdCatalog`. `CatalogFilters.tsx`/`filters.ts` оставлены (их импортит `/search`). Status tracker: `docs/handoff/VISUAL_COVERAGE.md`.
 
 > **Read root `CLAUDE.md` §0 (Behavioral principles) FIRST — it governs every task:** think before coding, simplicity first, surgical changes, goal-driven (for UI: `npm run test:visual` ≤ 2%).
 

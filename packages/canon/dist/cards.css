@@ -646,6 +646,14 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+.pd-rating--new {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--pd-muted);
+  background: var(--pd-surface-2,#F3EEE6);
+  padding: 1px 8px;
+  border-radius: 999px;
+}
 .pd-star {
   fill: #E8A93B;
   stroke: none;

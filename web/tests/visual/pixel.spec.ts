@@ -60,3 +60,22 @@ test('listing detail', async ({ page }) => {
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveScreenshot('listing-detail.png');
 });
+
+test('catalog', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+  // /catalog = imported canon PdCatalog shell (filters/sort/states) + web's BouquetCard
+  // via renderCard (real photo + wired like). Logged-in header. Browse-first grid.
+  await page.route('**/api/me', (r) =>
+    ok(r, { id: 'u', display_name: 'Аня', phone_masked: 'x', city_id: 'msk', roles: ['buyer'], seller_rating: 5, deals_count: 0 }),
+  );
+  await page.route('**/api/geo/metro**', (r) =>
+    ok(r, { stations: [{ id: 'msk-sokol', name: 'Сокол', lines: [{ name: 'Замоскворецкая', color: '#2DBE2C' }] }] }),
+  );
+  await page.route('**/api/feed**', (r) =>
+    ok(r, { items: [card('1', 69000), card('2', 125000), card('3', 210000), card('4', 89000)], next_cursor: null }),
+  );
+  await page.goto('/catalog');
+  await expect(page.locator('.pdc-grid .pd-card').first()).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveScreenshot('catalog.png');
+});

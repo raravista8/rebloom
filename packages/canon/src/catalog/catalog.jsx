@@ -84,6 +84,8 @@ const PdCatalog = (function () {
     onLoadMore,
     onCardClick,
     cardHref,
+    onLike,
+    renderCard,
     onRetry,
     header,
   }) {
@@ -136,13 +138,24 @@ const PdCatalog = (function () {
       </React.Fragment>
     );
 
-    // ── карточка с переходом ──
-    const renderCard = (d) => {
-      const card = <Card d={d} variant="grid" />;
+    // ── карточка: renderCard-prop (web подставляет свой BouquetCard целиком) или
+    //   дефолтная PdCard (data-driven: полный URL фото + onLike наружу) с переходом.
+    const renderOne = (d) => {
+      if (renderCard) return renderCard(d);
+      const card = <Card d={d} variant="grid" onLike={onLike} />;
       if (cardHref) return <a className="pdc-cardlink" href={cardHref(d)}>{card}</a>;
       if (onCardClick) return <div className="pdc-cardlink" role="link" tabIndex={0} onClick={() => onCardClick(d)}>{card}</div>;
       return card;
     };
+
+    // ── сортировка cheap/exp/rating — клиентски по уже выданным items (бэкенд-лента
+    //   знает только секции fresh/liked). fresh/default — порядок как пришёл сверху.
+    const ordered = React.useMemo(() => {
+      if (f.sort === 'cheap') return items.slice().sort((a, b) => a.price - b.price);
+      if (f.sort === 'exp')   return items.slice().sort((a, b) => b.price - a.price);
+      if (f.sort === 'rating') return items.slice().sort((a, b) => ((b.seller && b.seller.r) || 0) - ((a.seller && a.seller.r) || 0));
+      return items;
+    }, [items, f.sort]);
 
     // ── тело коллекции по state (INTERACTION_STATES §4) ──
     const hasMore = items.length < total;
@@ -165,7 +178,7 @@ const PdCatalog = (function () {
       );
       return (
         <React.Fragment>
-          <div className="pdc-grid">{items.map((d) => <div className="pd-rise" key={d._id || d.id}>{renderCard(d)}</div>)}</div>
+          <div className="pdc-grid">{ordered.map((d) => <div className="pd-rise" key={d._id || d.id}>{renderOne(d)}</div>)}</div>
           {state === 'loading-more' && <div className="pdc-morestate"><span className="pdc-spin" />Загружаем ещё…</div>}
           {state === 'end' && <div className="pdc-end"><span />Показали все букеты по вашему запросу</div>}
           {state === 'loaded' && hasMore && <div className="pdc-loadmore"><button onClick={onLoadMore}>Показать ещё</button></div>}
@@ -270,7 +283,10 @@ const PdCatalogDemo = (function () {
       metro: VAR_METRO[(i + 2) % VAR_METRO.length],
       flowers: [VAR_FLOWER[i % VAR_FLOWER.length]],
       likes: Math.max(3, (d.likes || 20) - 7 + (i % 5) * 4),
-      seller: { ...d.seller, r: Math.min(5, Math.max(4.3, (d.seller.r || 4.7) - 0.2 + (i % 3) * 0.15)) },
+      // каждый 6-й — новый продавец (рейтинга нет → карточка рисует «Новый»)
+      seller: (i % 6 === 5)
+        ? { n: d.seller.n, r: null }
+        : { ...d.seller, r: Math.min(5, Math.max(4.3, (d.seller.r || 4.7) - 0.2 + (i % 3) * 0.15)) },
     }));
     return ALL;
   }
@@ -314,7 +330,7 @@ const PdCatalogDemo = (function () {
       r = r.slice().sort((a, b) => {
         if (f.sort === 'cheap') return a.price - b.price;
         if (f.sort === 'exp') return b.price - a.price;
-        if (f.sort === 'rating') return b.seller.r - a.seller.r;
+        if (f.sort === 'rating') return ((b.seller && b.seller.r) || 0) - ((a.seller && a.seller.r) || 0);
         return (FRESH_RANK[a.fresh] - FRESH_RANK[b.fresh]) || (b.likes - a.likes);
       });
       return r;

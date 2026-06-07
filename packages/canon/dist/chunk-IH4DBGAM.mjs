@@ -1,5 +1,5 @@
-import { PdWebNav } from './chunk-K63HPQL6.mjs';
-import { Ic, PdMetroPicker, Card } from './chunk-EQYPIQRM.mjs';
+import { PdWebNav } from './chunk-LQL6AJYF.mjs';
+import { Ic, PdMetroPicker, Card } from './chunk-VLZGX7EA.mjs';
 import React from 'react';
 import { jsxs, jsx } from 'react/jsx-runtime';
 
@@ -61,6 +61,8 @@ var PdCatalog = /* @__PURE__ */ (function() {
     onLoadMore,
     onCardClick,
     cardHref,
+    onLike,
+    renderCard,
     onRetry,
     header
   }) {
@@ -120,12 +122,19 @@ var PdCatalog = /* @__PURE__ */ (function() {
         /* @__PURE__ */ jsx("div", { className: "pdc-fopts", children: SIZE_OPTS.map(([v, l]) => ssChip("size", v, l)) })
       ] })
     ] });
-    const renderCard = (d) => {
-      const card = /* @__PURE__ */ jsx(Card2, { d, variant: "grid" });
+    const renderOne = (d) => {
+      if (renderCard) return renderCard(d);
+      const card = /* @__PURE__ */ jsx(Card2, { d, variant: "grid", onLike });
       if (cardHref) return /* @__PURE__ */ jsx("a", { className: "pdc-cardlink", href: cardHref(d), children: card });
       if (onCardClick) return /* @__PURE__ */ jsx("div", { className: "pdc-cardlink", role: "link", tabIndex: 0, onClick: () => onCardClick(d), children: card });
       return card;
     };
+    const ordered = React.useMemo(() => {
+      if (f.sort === "cheap") return items.slice().sort((a, b) => a.price - b.price);
+      if (f.sort === "exp") return items.slice().sort((a, b) => b.price - a.price);
+      if (f.sort === "rating") return items.slice().sort((a, b) => (b.seller && b.seller.r || 0) - (a.seller && a.seller.r || 0));
+      return items;
+    }, [items, f.sort]);
     const hasMore = items.length < total;
     const skelN = desk ? 8 : 6;
     const Collection = () => {
@@ -150,7 +159,7 @@ var PdCatalog = /* @__PURE__ */ (function() {
         active ? /* @__PURE__ */ jsx("div", { className: "pdc-empty-act", children: /* @__PURE__ */ jsx("button", { className: "pdc-reset", onClick: reset, children: "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0444\u0438\u043B\u044C\u0442\u0440\u044B" }) }) : null
       ] });
       return /* @__PURE__ */ jsxs(React.Fragment, { children: [
-        /* @__PURE__ */ jsx("div", { className: "pdc-grid", children: items.map((d) => /* @__PURE__ */ jsx("div", { className: "pd-rise", children: renderCard(d) }, d._id || d.id)) }),
+        /* @__PURE__ */ jsx("div", { className: "pdc-grid", children: ordered.map((d) => /* @__PURE__ */ jsx("div", { className: "pd-rise", children: renderOne(d) }, d._id || d.id)) }),
         state === "loading-more" && /* @__PURE__ */ jsxs("div", { className: "pdc-morestate", children: [
           /* @__PURE__ */ jsx("span", { className: "pdc-spin" }),
           "\u0417\u0430\u0433\u0440\u0443\u0436\u0430\u0435\u043C \u0435\u0449\u0451\u2026"

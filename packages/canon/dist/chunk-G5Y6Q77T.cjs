@@ -14,6 +14,7 @@ var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u
   /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
 ] });
 var PD_IMG = (id) => `img/${id}.jpg`;
+var pdPhotoSrc = (photo) => typeof photo === "string" && /^(https?:)?\/\//.test(photo) ? photo : PD_IMG(photo);
 var PD_FRESH = [
   { id: "fr1", photo: "1567418938902-aa650a3eb346", roseLabel: "101 \u0440\u043E\u0437\u0430", size: "XL", fresh: "today", price: 3490, city: "\u041C\u043E\u0441\u043A\u0432\u0430", metro: "\u041C\u0430\u044F\u043A\u043E\u0432\u0441\u043A\u0430\u044F", district: "\u041F\u0430\u0442\u0440\u0438\u043A\u0438", flowers: ["\u0420\u043E\u0437\u044B"], likes: 73, liked: true, seller: { n: "\u042D\u043B\u044C\u0432\u0438\u0440\u0430", r: 4.9, av: "w4" } },
   { id: "fr2", photo: "1563241527-3004b7be0ffd", roseLabel: "51 \u0440\u043E\u0437\u0430", size: "XL", fresh: "today", price: 1990, city: "\u041C\u043E\u0441\u043A\u0432\u0430", metro: "\u0410\u0440\u0431\u0430\u0442\u0441\u043A\u0430\u044F", district: "\u0410\u0440\u0431\u0430\u0442", flowers: ["\u0420\u043E\u0437\u044B"], likes: 58, liked: false, seller: { n: "\u041A\u0430\u0440\u0438\u043D\u0430", r: 4.8, av: "w2" } },
@@ -183,16 +184,23 @@ function Freshness({ kind }) {
     m.label
   ] });
 }
-function LikeBtn({ liked: init, count: c0, big }) {
-  const [liked, setLiked] = React2__default.default.useState(init);
-  const [count, setCount] = React2__default.default.useState(c0);
+function LikeBtn({ liked: init, count: c0, big, onToggle }) {
+  const controlled = typeof onToggle === "function";
+  const [likedU, setLiked] = React2__default.default.useState(init);
+  const [countU, setCount] = React2__default.default.useState(c0);
   const [pop, setPop] = React2__default.default.useState(false);
+  const liked = controlled ? init : likedU;
+  const count = controlled ? c0 : countU;
   const toggle = (e) => {
     e.stopPropagation();
     e.preventDefault();
     const next = !liked;
-    setLiked(next);
-    setCount((n) => n + (next ? 1 : -1));
+    if (controlled) {
+      onToggle(next);
+    } else {
+      setLiked(next);
+      setCount((n) => n + (next ? 1 : -1));
+    }
     if (next) {
       setPop(true);
       setTimeout(() => setPop(false), 420);
@@ -216,14 +224,16 @@ function Avatar({ seller, size = 21 }) {
   const st = { width: size, height: size, fontSize: Math.round(size * 0.5) };
   return /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-ava", style: st, "aria-hidden": "true", children: seller.av ? /* @__PURE__ */ jsxRuntime.jsx("img", { src: "img/av/" + seller.av + ".jpg", alt: "", loading: "lazy" }) : seller.n[0] });
 }
-function Card({ d, variant }) {
+function Card({ d, variant, onLike }) {
   const ar = variant === "rail" ? "3 / 4" : d.ar || "1 / 1";
+  const seller = d.seller || {};
+  const hasRating = seller.r != null;
   return /* @__PURE__ */ jsxRuntime.jsxs("article", { className: "pd-card pd-card--" + variant, tabIndex: 0, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-photo-wrap", style: { aspectRatio: ar }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx("img", { className: "pd-photo", src: PD_IMG(d.photo), alt: "\u0411\u0443\u043A\u0435\u0442", loading: "lazy" }),
+      /* @__PURE__ */ jsxRuntime.jsx("img", { className: "pd-photo", src: d.photoUrl || pdPhotoSrc(d.photo), alt: "\u0411\u0443\u043A\u0435\u0442", loading: "lazy" }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-photo-top", children: [
         /* @__PURE__ */ jsxRuntime.jsx(Freshness, { kind: d.fresh }),
-        /* @__PURE__ */ jsxRuntime.jsx(LikeBtn, { liked: d.liked, count: d.likes })
+        /* @__PURE__ */ jsxRuntime.jsx(LikeBtn, { liked: d.liked, count: d.likes, onToggle: onLike ? (next) => onLike(d.id, next) : void 0 })
       ] }),
       d.roseLabel && /* @__PURE__ */ jsxRuntime.jsx("span", { style: { position: "absolute", left: 8, bottom: 8, background: "rgba(35,32,27,.82)", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: ".01em", padding: "4px 9px", borderRadius: 999, backdropFilter: "blur(4px)" }, children: d.roseLabel })
     ] }),
@@ -240,13 +250,13 @@ function Card({ d, variant }) {
         /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-district", children: d.district })
       ] }) }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-seller", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(Avatar, { seller: d.seller, size: 21 }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-seller-n", children: d.seller.n }),
-        /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pd-rating", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Avatar, { seller, size: 21 }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-seller-n", children: seller.n }),
+        hasRating ? /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pd-rating", children: [
           /* @__PURE__ */ jsxRuntime.jsx(Ic.star, { className: "pd-i13 pd-star" }),
           " ",
-          d.seller.r.toFixed(1)
-        ] })
+          seller.r.toFixed(1)
+        ] }) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-rating pd-rating--new", children: "\u041D\u043E\u0432\u044B\u0439" })
       ] })
     ] })
   ] });
