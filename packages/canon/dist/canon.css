@@ -1,5 +1,5 @@
 /* @rebloom/canon · canon.css — canonical stylesheet (single visual source of truth)
-   Concatenated from design sources: pd.css, pd-auth.css, pd-settings.css, pd-web.css
+   Concatenated from design sources: pd.css, pd-auth.css, pd-settings.css, pd-web.css, pd-land.css, pd-catalog.css, pd-seo.css
    Theme is driven by CSS custom properties — see tokens/theme.css. */
 
 
@@ -34,13 +34,47 @@
 .pd-appbar--plain{border-bottom:none}
 .pd-iconbtn{width:38px;height:38px;border-radius:var(--r-pill);border:none;background:transparent;color:var(--pd-text);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;transition:background .15s}
 .pd-iconbtn--ring{background:var(--pd-surface);border:1px solid var(--pd-border)}
+/* «Поделиться» — тихая icon-кнопка, не тянет внимание */
+.pd-sharebtn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;border:none;background:transparent;color:var(--pd-muted);cursor:pointer;flex:none;transition:color .12s,background .12s}
+.pd-sharebtn:hover{background:var(--pd-surface-2);color:var(--pd-text)}
+.pd-sharebtn svg{flex:none}
+/* состав букета — просто текст, не кнопки и без цветных точек */
+.pd-flowerlist{font-size:14px;line-height:1.5;color:var(--pd-text)}
+/* спецификации/состав букета — справочные, НЕ кликабельные: без рамки, мягкий фон, обычный курсор */
+.pd-specrow{display:flex;flex-wrap:wrap;gap:8px}
+.pd-spec{display:inline-flex;align-items:center;gap:7px;background:var(--pd-surface-2);color:var(--pd-text);font-size:14px;font-weight:600;line-height:1;padding:8px 12px;border-radius:9px;cursor:default;border:none;white-space:nowrap}
+.pd-spec .lf{width:7px;height:7px;border-radius:50%;background:#67994E;flex:none}
+/* метаданные строкой (размер · кол-во) */
+.pd-metaline{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:14px;color:var(--pd-muted)}
+.pd-metaline b{color:var(--pd-text);font-weight:700}
+.pd-metaline .sep{color:var(--pd-faint)}
+/* мета-блок на странице букета: свежесть / размер / локация — единый шрифт и начертание */
+.pd-buy-meta{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:13px 0 16px}
+.pd-buy-spec{font-size:14px;font-weight:500;color:var(--pd-text);white-space:nowrap}
+.pd-buy-spec b{font-weight:500;color:inherit}
+.pd-buy-loc{display:flex;align-items:center;gap:7px 16px;flex-wrap:wrap;font-size:14px;font-weight:500;color:var(--pd-text)}
+.pd-buy-loc .loc-city{display:inline-flex;align-items:center;gap:5px;color:var(--pd-text);white-space:nowrap}
+.pd-buy-loc .loc-city svg{color:var(--pd-faint)}
+.pd-buy-meta .pd-metro-n{font-weight:500}
+/* карточка продавца: имя + рейтинг слева, число сделок — отдельной статой справа */
+.pd-sellercard{width:100%;display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--pd-surface);border:1px solid var(--pd-border);border-radius:14px;cursor:pointer;font:inherit;text-align:left}
+.pd-sellercard:hover{border-color:var(--pd-border-strong)}
+.pd-seller-main{flex:1;min-width:0}
+.pd-seller-name{font-weight:700;font-size:15px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd-seller-rating{display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--pd-muted);font-size:13px;min-width:0}
+.pd-seller-rating b{color:var(--pd-text);font-weight:700;font-variant-numeric:tabular-nums}
+.pd-seller-rating .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd-seller-deals{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2px 13px;border-left:1px solid var(--pd-border);color:var(--pd-muted)}
+.pd-seller-deals b{font-size:17px;font-weight:800;color:var(--pd-text);font-variant-numeric:tabular-nums;line-height:1.1}
+.pd-seller-deals span{font-size:11px}
+.pd-seller-chev{flex:none;color:var(--pd-faint)}
 .pd-appbar-title{flex:1;font-size:17px;font-weight:600;letter-spacing:-.2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pd-appbar-title.center{text-align:center}
 
 /* ── top bar (feed) ─────────────────────────────────────────────────── */
 .pd-topbar{flex:none;background:var(--pd-bg);border-bottom:1px solid var(--pd-border);padding-bottom:10px;z-index:5}
 .pd-topbar-row{display:flex;align-items:center;justify-content:space-between;padding:4px 16px 9px}
-.pd-brand{font-size:21px;font-weight:700;color:var(--pd-primary);letter-spacing:-.3px}
+.pd-brand{display:inline-flex;align-items:center;gap:7px;font-size:21px;font-weight:700;color:var(--pd-primary);letter-spacing:-.3px}
 .pd-city{display:inline-flex;align-items:center;gap:5px;border:none;background:var(--pd-surface-2);color:var(--pd-text);font-family:inherit;font-weight:600;font-size:13px;padding:7px 11px;border-radius:var(--r-pill);cursor:pointer;transition:filter .15s}
 .pd-searchrow{display:flex;gap:8px;padding:0 16px}
 .pd-search{flex:1;display:flex;align-items:center;gap:8px;background:var(--pd-surface);border:1px solid var(--pd-border);border-radius:13px;padding:10px 12px;color:var(--pd-muted)}
@@ -68,7 +102,7 @@
 .pd-photo{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
 .pd-photo-top{position:absolute;inset:0;padding:9px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;pointer-events:none}
 .pd-photo-top>*{pointer-events:auto}
-.pd-fresh{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);color:var(--pd-text);font-size:11px;font-weight:600;padding:5px 9px;border-radius:var(--r-pill);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.pd-fresh{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);color:var(--pd-text);font-size:11px;font-weight:600;padding:5px 9px;border-radius:var(--r-pill);box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .pd-fresh-dot{width:7px;height:7px;border-radius:50%;flex:none}
 .pd-like-btn{display:inline-flex;align-items:center;gap:5px;border:none;cursor:pointer;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);color:var(--pd-text);font-family:inherit;font-size:12px;font-weight:700;padding:5px 9px 5px 7px;border-radius:var(--r-pill);box-shadow:0 1px 4px rgba(0,0,0,.12);transition:transform .12s}
 .pd-like-btn:active{transform:scale(.9)}
@@ -76,16 +110,21 @@
 .pd-card-body{padding:11px 12px 13px;display:flex;flex-direction:column;gap:6px}
 .pd-price-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
 .pd-price{font-size:18px;font-weight:700;color:var(--pd-text);letter-spacing:-.2px;white-space:nowrap}
-.pd-size{flex:none;font-size:11px;font-weight:700;color:var(--pd-muted);background:var(--pd-surface-2);padding:2px 8px;border-radius:var(--r-pill)}
+.pd-size{flex:none;white-space:nowrap;font-size:12px;font-weight:500;color:var(--pd-faint)}
 .pd-meta{display:flex;align-items:center;gap:4px;color:var(--pd-muted);font-size:12.5px}
 .pd-meta svg{flex:none}
 .pd-district{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pd-seller{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--pd-text)}
+.pd-seller{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--pd-text);min-width:0}
 .pd-ava{width:21px;height:21px;border-radius:50%;overflow:hidden;background:var(--pd-primary);color:var(--pd-on-primary);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
 .pd-ava img{width:100%;height:100%;object-fit:cover;display:block}
-.pd-seller-n{font-weight:600}
-.pd-rating{margin-left:auto;display:inline-flex;align-items:center;gap:3px;color:var(--pd-muted);font-weight:700;font-variant-numeric:tabular-nums}
+.pd-seller-n{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd-rating{flex:none;margin-left:6px;display:inline-flex;align-items:center;gap:3px;color:var(--pd-muted);font-weight:700;font-variant-numeric:tabular-nums}
 .pd-star{fill:#E8A93B;stroke:none;width:13px;height:13px}
+/* метро — цветные кружки линий + «м. Станция» */
+.pd-mdots{display:inline-flex;align-items:center;gap:2px;flex:none}
+.pd-mdots i{border-radius:50%;display:block}
+.pd-metro{display:inline-flex;align-items:center;gap:6px;min-width:0}
+.pd-metro-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── bottom nav ─────────────────────────────────────────────────────── */
 .pd-bottomnav{flex:none;display:flex;align-items:flex-start;justify-content:space-around;background:var(--pd-surface);border-top:1px solid var(--pd-border);padding:8px 6px 0;gap:2px}
@@ -112,7 +151,7 @@
 
 /* ── chips / segmented / size selector ──────────────────────────────── */
 .pd-chiprow{display:flex;gap:8px;flex-wrap:wrap}
-.pd-chip{border:1px solid var(--pd-border-strong);background:var(--pd-surface);color:var(--pd-text);font-family:inherit;font-weight:600;font-size:13px;padding:8px 13px;border-radius:var(--r-pill);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.pd-chip{white-space:nowrap;border:1px solid var(--pd-border-strong);background:var(--pd-surface);color:var(--pd-text);font-family:inherit;font-weight:600;font-size:13px;padding:8px 13px;border-radius:var(--r-pill);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
 .pd-chip--on{background:var(--pd-primary-soft);border-color:var(--pd-primary);color:var(--pd-primary)}
 .pd-seg{display:flex;background:var(--pd-surface-2);border-radius:13px;padding:4px;gap:4px}
 .pd-seg button{flex:1;border:none;background:transparent;font-family:inherit;font-weight:600;font-size:14px;color:var(--pd-muted);padding:10px 8px;border-radius:9px;cursor:pointer;transition:all .15s}
@@ -123,6 +162,37 @@
 .pd-sizebtn .l{display:block;font-size:10.5px;color:var(--pd-muted);margin-top:2px}
 .pd-sizebtn.on{background:var(--pd-primary-soft);border-color:var(--pd-primary)}
 .pd-sizebtn.on .s,.pd-sizebtn.on .l{color:var(--pd-primary)}
+
+/* ── выбор станции метро ─────────────────────────────────────────────── */
+.pd-mpick{position:relative}
+.pd-mglyph{flex:none;width:21px;height:21px;border-radius:50%;background:var(--pd-primary);color:#fff;font-weight:800;font-size:13px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--pd-font)}
+.pd-mpick-btn{width:100%;display:flex;align-items:center;gap:9px;min-height:48px;padding:8px 12px;border:1px solid var(--pd-border-strong);background:var(--pd-surface);border-radius:13px;font:inherit;font-size:15px;color:var(--pd-text);cursor:pointer;text-align:left}
+.pd-mpick-btn.open{border-color:var(--pd-primary)}
+.pd-mpick-btn .val{flex:1;display:inline-flex;align-items:center;gap:8px;font-weight:600;min-width:0}
+.pd-mpick-btn .ph{flex:1;color:var(--pd-muted)}
+.pd-mpick-btn .chev{flex:none;color:var(--pd-muted);transition:transform .15s}
+.pd-mpick-btn.open .chev{transform:rotate(180deg)}
+.pd-mpick-panel{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;background:var(--pd-surface);border:1px solid var(--pd-border-strong);border-radius:14px;box-shadow:0 18px 44px rgba(40,30,20,.18);overflow:hidden}
+.pd-mpick-search{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--pd-border);color:var(--pd-muted)}
+.pd-mpick-search input{flex:1;border:none;background:transparent;font:inherit;font-size:14.5px;color:var(--pd-text);outline:none}
+.pd-mpick-list{max-height:232px;overflow-y:auto;padding:6px}
+.pd-mpick-row{width:100%;display:flex;align-items:center;gap:10px;padding:10px 11px;border:none;background:transparent;border-radius:10px;font:inherit;font-size:14.5px;color:var(--pd-text);cursor:pointer;text-align:left}
+.pd-mpick-row .n{flex:1}
+.pd-mpick-row .ck{color:var(--pd-primary)}
+.pd-mpick-row:hover{background:var(--pd-surface-2)}
+.pd-mpick-row.on{background:var(--pd-primary-soft);color:var(--pd-primary);font-weight:600}
+.pd-mpick-empty{padding:18px 12px;text-align:center;color:var(--pd-muted);font-size:13.5px}
+.pd-mpick-cb{flex:none;width:19px;height:19px;border-radius:6px;border:1.5px solid var(--pd-border-strong);display:inline-flex;align-items:center;justify-content:center;color:#fff}
+.pd-mpick-cb.on{background:var(--pd-primary);border-color:var(--pd-primary)}
+.pd-mpick-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border-top:1px solid var(--pd-border)}
+.pd-mpick-foot .clr{background:transparent;border:none;font:inherit;font-size:13px;font-weight:600;color:var(--pd-muted);cursor:pointer;padding:6px}
+.pd-mpick-foot .done{background:var(--pd-primary);color:#fff;border:none;font:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:8px 16px;border-radius:9px}
+
+/* ── выбор типов цветов (теги) ───────────────────────────────────────── */
+.pd-flowerpick{display:flex;flex-wrap:wrap;gap:8px}
+.pd-fbchip{display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--pd-border-strong);background:var(--pd-surface);font:inherit;font-size:13.5px;font-weight:600;color:var(--pd-text);cursor:pointer;transition:all .12s}
+.pd-fbchip:hover{border-color:var(--pd-primary)}
+.pd-fbchip.on{background:var(--pd-primary-soft);border-color:var(--pd-primary);color:var(--pd-primary)}
 
 /* ── inputs ─────────────────────────────────────────────────────────── */
 .pd-field{display:flex;flex-direction:column;gap:7px}
@@ -284,16 +354,17 @@
 .pd-root button:focus-visible{outline:2px solid var(--pd-primary);outline-offset:2px}
 /* ── desktop web (PdFeedDesktop) ────────────────────────────────────── */
 .pd-web{height:100%}
-.pdw-nav{flex:none;background:var(--pd-surface);border-bottom:1px solid var(--pd-border);z-index:5}
-.pdw-nav-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:12px 32px}
-.pdw-brand{font-size:23px}
-.pdw-navmid{flex:1;display:flex;align-items:center;gap:12px;max-width:600px}
-.pdw-city{flex:none}
-.pdw-search{flex:1}
+.pdw-nav{flex:none;position:sticky;top:0;background:rgba(250,248,244,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--pd-border);z-index:20}
+.pdw-nav-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:15px 56px}
+.pdw-brand{font-size:20px;display:flex;align-items:center;gap:9px;letter-spacing:-.3px}
+.pdw-navmid{flex:1;display:flex;align-items:center;gap:12px;min-width:0;margin-left:14px}
+.pdw-city{flex:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:11px;background:#fff;border:1px solid var(--pd-border);font:inherit;font-size:14.5px;font-weight:600;color:var(--pd-text);cursor:pointer}
+.pdw-city:hover{border-color:var(--pd-border-strong)}
+.pdw-search{flex:1;min-width:0;height:40px;border-radius:11px;background:#fff;border:1px solid var(--pd-border)}
 .pdw-navright{display:flex;align-items:center;gap:10px}
-.pdw-iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--pd-border);background:var(--pd-surface);color:var(--pd-text);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
-.pdw-avatar{width:38px;height:38px;border-radius:50%;background:var(--pd-surface-2);color:var(--pd-text);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex:none}
-.pdw-cta{display:inline-flex;align-items:center;gap:7px;border:none;background:var(--pd-primary);color:var(--pd-on-primary);font-family:inherit;font-weight:700;font-size:14px;padding:11px 16px;border-radius:12px;cursor:pointer;transition:filter .15s, transform .12s;white-space:nowrap}
+.pdw-iconbtn{width:40px;height:40px;border-radius:11px;border:1px solid var(--pd-border);background:#fff;color:#5B5249;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s,color .15s}
+.pdw-avatar{width:40px;height:40px;border-radius:50%;background:var(--pd-primary);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex:none}
+.pdw-cta{display:inline-flex;align-items:center;gap:7px;border:none;background:var(--pd-primary);color:var(--pd-on-primary);font-family:inherit;font-weight:700;font-size:14px;height:40px;padding:0 16px;border-radius:11px;cursor:pointer;transition:filter .15s, transform .12s;white-space:nowrap}
 .pdw-cta:active{transform:scale(.97)}
 .pdw-scroll{background:var(--pd-bg)}
 .pdw-wrap{max-width:1180px;margin:0 auto;padding:26px 32px 56px}
@@ -302,7 +373,7 @@
 .pdw-section .pd-sectitle{font-size:25px}
 .pdw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:18px}
 @media (hover:hover){
-  .pdw-iconbtn:hover{background:var(--pd-surface-2)}
+  .pdw-iconbtn:hover{border-color:var(--pd-primary);color:var(--pd-primary)}
   .pdw-cta:hover{filter:brightness(.96)}
 }
 
@@ -310,7 +381,7 @@
 .pda-app{height:100%;display:flex;background:var(--pd-bg);color:var(--pd-text);font-family:var(--pd-font);-webkit-font-smoothing:antialiased;font-size:14px}
 .pda-app *{box-sizing:border-box}
 .pda-side{width:230px;flex:none;background:var(--pd-surface);border-right:1px solid var(--pd-border);display:flex;flex-direction:column;padding:16px 12px;gap:3px}
-.pda-brand{font-weight:700;color:var(--pd-primary);font-size:19px;padding:4px 10px 16px}
+.pda-brand{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--pd-primary);font-size:19px;padding:4px 10px 16px}
 .pda-nav{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;color:var(--pd-muted);font-weight:600;font-size:13.5px;cursor:pointer;border:none;background:none;font-family:inherit;width:100%;text-align:left}
 .pda-nav .ct{margin-left:auto;font-size:11px;font-weight:700;background:var(--pd-primary);color:#fff;border-radius:999px;padding:1px 7px}
 .pda-nav.on{background:var(--pd-primary-soft);color:var(--pd-primary)}
@@ -389,6 +460,17 @@
 }
 
 
+/* ── form interaction states (real :hover / :focus-within) — canon 0.2.0 ─ */
+.pd-input:focus-within{border-color:var(--pd-primary);box-shadow:0 0 0 3px var(--pd-primary-soft)}
+.pd-input--invalid:focus-within{border-color:var(--pd-danger);box-shadow:0 0 0 3px var(--pd-danger-soft)}
+@media (hover:hover){
+  .pd-input:hover:not(:focus-within){border-color:var(--pd-faint)}
+  .pd-check:hover .box{border-color:var(--pd-primary)}
+  .pd-sizebtn:hover:not(.on){border-color:var(--pd-primary)}
+  .pd-seg button:not(.on):hover{color:var(--pd-text)}
+  .pd-switch:hover{filter:brightness(.97)}
+}
+
 /* ════════════ pd-auth.css ════════════ */
 /* pd-auth.css — «Передарим» · Регистрация и вход (OAuth + phone/OTP)
    Builds on pd.css tokens. Adaptive: shared core content + platform-native
@@ -422,13 +504,13 @@
 .pa-oauthbtn .lbl{flex:1;min-width:0}
 .pa-oauthbtn .chev{flex:none;color:var(--pd-faint)}
 .pa-oauthbtn--primary{border-color:var(--pd-text);box-shadow:0 1px 3px rgba(40,30,20,.08)}
+/* official provider SDK widget mount — web/ injects the real branded button/One-Tap here (canon 0.3.0) */
 .pa-oauthbtn--slot{padding:0;border:none;background:none;box-shadow:none;min-height:50px;display:block}
 .pa-oauthbtn--slot:active{transform:none}
 .pa-oauthbtn--slot>*{width:100%}
 .pa-mk-ya{background:#FC3F1D}
 .pa-mk-sber{background:#21A038}
 .pa-mk-vk{background:#0077FF;font-size:11px}
-.pa-mk-tid{background:transparent;color:#222}
 .pa-oauthbtn .mark.pa-mk-tid{background:transparent;width:auto;border-radius:0}
 .pa-mk-tid .mkimg{height:26px;width:auto;display:block}
 .pa-mk-apple{background:#111}
@@ -439,7 +521,7 @@
 .pa-or{display:flex;align-items:center;gap:12px;color:var(--pd-faint);font-size:12.5px;font-weight:600;margin:18px 0}
 .pa-or::before,.pa-or::after{content:'';flex:1;height:1px;background:var(--pd-border)}
 
-.pa-consent,.pa .pa-consent{font-size:12px;color:var(--pd-muted);line-height:1.7;text-align:center;margin-top:30px}
+.pa .pa-consent{font-size:12px;color:var(--pd-muted);line-height:1.7;text-align:center;margin-top:30px}
 .pa-consent a{color:var(--pd-primary);text-decoration:none}
 .pa-switch{text-align:center;font-size:13.5px;color:var(--pd-muted);margin-top:18px}
 .pa-switch button{border:none;background:none;color:var(--pd-primary);font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;padding:2px}
@@ -484,6 +566,9 @@
 .mbw-url svg{color:var(--pd-fresh)}
 .mbw-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#5b5249;flex:none}
 .mbw-view{flex:1;min-height:0;background:var(--pd-bg);overflow:hidden;display:flex;flex-direction:column;position:relative}
+/* в мобильном вебе статус-бар рисует сам браузер — убираем notch-отступ у шапки экрана */
+.mbw-view .pd-appbar{padding-top:10px !important}
+.mbw-view .pd-appbar--pl{padding-top:10px !important}
 .mbw-tabbar{flex:none;height:46px;background:#ebe7e0;border-top:1px solid #d4cfc6;display:flex;align-items:center;justify-content:space-around;color:#8b8378}
 
 /* ── desktop auth ──────────────────────────────────────────────────── */
@@ -537,6 +622,13 @@
   .pa-sheet{animation:none!important}
 }
 
+
+/* ── auth interaction states — canon 0.2.0 ─────────────────────────── */
+@media (hover:hover){
+  .pa-oauthbtn:hover{border-color:var(--pd-text);background:var(--pd-surface-2)}
+  .pa-citysel:hover{border-color:var(--pd-primary)}
+}
+.pa-oauthbtn:focus-visible{outline:2px solid var(--pd-primary);outline-offset:2px}
 
 /* ════════════ pd-settings.css ════════════ */
 /* pd-settings.css — «Передарим» · Настройки аккаунта.
@@ -623,7 +715,6 @@
 .pdss-block .bh{font-size:13px;font-weight:700;color:var(--pd-text);padding:16px 18px 4px}
 .pdss-blocksub{font-size:12px;color:var(--pd-muted);padding:0 18px 12px}
 
-
 /* ════════════ pd-web.css ════════════ */
 /* pd-web.css — «Передарим» десктопные клиентские экраны (контент-лейауты).
    Поверх .pd-web/.pdw-nav из pd.css. Двухколоночные detail-страницы. */
@@ -664,13 +755,7 @@
 /* generic two/three column grids for reviews list under profile */
 .pdw-twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 
-
-
-/* ===== @rebloom/canon 0.2.0 — marketing landing + catalog ===== */
-/* Marketing landing (peredarim.ru) + bouquet catalog, incl. real container-query
-   breakpoints (см. CLAUDE_CODE_HANDOFF.md). Source: pd-land.css + pd-catalog.css. */
-
-/* ---- marketing landing ---- */
+/* ════════════ pd-land.css ════════════ */
 /* pd-land.css — маркетинговый лендинг «Передарим» (peredarim.ru).
    C2C-маркетплейс свежих букетов из вторых рук. Двусторонний рынок:
    продавец — главный CTA, покупатель — сильный второй. Поверх токенов pd.css. */
@@ -846,8 +931,6 @@
   .pdl-drawer-scrim{ transition:none; }
 }
 
-
-
 /* ── HERO ─────────────────────────────────────────────────────────── */
 .pdl-hero{
   position:relative; overflow:hidden;
@@ -920,6 +1003,10 @@
 .pdl--desk .pdl-catnote{ margin-top:48px; }
 
 /* filters + catalog link */
+.pdl-metrobar{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 14px; }
+.pdl-metrobar .pdl-flabel{ flex-basis:auto; margin:0; }
+.pdl-metrowrap{ width:100%; max-width:340px; }
+.pdl--desk .pdl-metrowrap{ width:320px; }
 .pdl-filters{ display:flex; flex-direction:column; align-items:stretch; gap:18px; margin:18px 0 22px; padding:16px 18px; background:#fff; border:1px solid var(--pd-border,#EAE2D7); border-radius:16px; }
 .pdl-sec.alt .pdl-filters{ background:var(--pd-bg,#FAF8F4); }
 .pdl-fgroup{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
@@ -1110,11 +1197,12 @@
 @container pdl (min-width:900px){
   .pdl-in{ padding:0 56px; }
   .pdl-h2{ font-size:38px; }
+  .pdl-sechead{ max-width:840px; }
+  .pdl-sechead.l{ max-width:900px; }
+
   /* filters inline in one row (container-driven, не зависит от .pdl--desk) */
   .pdl-filters{ flex-direction:row; flex-wrap:wrap; align-items:center; gap:16px 24px; }
   .pdl-flabel{ flex-basis:auto; margin:0; }
-  .pdl-sechead{ max-width:840px; }
-  .pdl-sechead.l{ max-width:900px; }
 
   /* nav */
   .pdl-nav-in{ padding:15px 56px; }
@@ -1151,8 +1239,7 @@
   .pdl-foot-legal{ flex-direction:row; align-items:center; justify-content:space-between; }
 }
 
-
-/* ---- bouquet catalog ---- */
+/* ════════════ pd-catalog.css ════════════ */
 /* pd-catalog.css — страница каталога букетов «Передарим». Поверх pd.css/pd-land.css.
    Десктоп: сайдбар фильтров + сетка. Мобайл: чипы фильтров + сетка 2 кол. */
 
@@ -1189,6 +1276,30 @@
 .pdc-reset{ margin-top:14px; width:100%; height:40px; border-radius:11px; background:transparent; border:1px solid var(--pd-border,#EAE2D7); color:#5B5249; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; }
 .pdc-reset:hover{ border-color:var(--pd-primary,#CF5638); color:var(--pd-primary,#CF5638); }
 
+.pdc-metroclear{ margin-top:9px; background:transparent; border:none; padding:0; font:inherit; font-size:12.5px; font-weight:600; color:var(--pd-primary,#CF5638); cursor:pointer; }
+/* выбранные станции метро — теги с крестиком */
+.pdc-metrotags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.pdc-metrotag{ display:inline-flex; align-items:center; gap:5px; max-width:100%; height:30px; padding:0 8px 0 11px; border-radius:999px; background:var(--pd-primary-soft,#FBEDE8); border:1px solid var(--pd-primary,#CF5638); color:var(--pd-primary,#CF5638); font:inherit; font-size:12.5px; font-weight:600; cursor:pointer; overflow:hidden; }
+.pdc-metrotag span,.pdc-metrotag{ white-space:nowrap; }
+.pdc-metrotag svg{ flex:none; width:12px; height:12px; }
+
+/* сортировка-дропдаун (мобайл) */
+.pdc-sortdd{ position:relative; }
+.pdc-sortdd-btn{ display:inline-flex; align-items:center; gap:7px; height:38px; padding:0 12px; border-radius:11px; background:#fff; border:1px solid var(--pd-border,#EAE2D7); font:inherit; cursor:pointer; max-width:100%; }
+.pdc-sortdd-btn .l{ font-size:13px; color:#8B8378; flex:none; }
+.pdc-sortdd-btn .v{ font-size:13.5px; font-weight:600; color:var(--pd-text,#23201B); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pdc-sortdd-btn .chev{ flex:none; color:#A99F92; transition:transform .15s; }
+.pdc-sortdd.open .pdc-sortdd-btn .chev{ transform:rotate(180deg); }
+.pdc-sortdd-menu{ position:absolute; right:0; top:calc(100% + 6px); z-index:30; min-width:200px; background:#fff; border:1px solid var(--pd-border,#EAE2D7); border-radius:12px; box-shadow:0 18px 44px rgba(40,30,20,.16); overflow:hidden; padding:6px; }
+.pdc-sortdd-row{ width:100%; text-align:left; padding:11px 12px; border:none; background:transparent; border-radius:9px; font:inherit; font-size:14px; color:var(--pd-text,#23201B); cursor:pointer; white-space:nowrap; }
+.pdc-sortdd-row:hover{ background:var(--pd-surface-2,#F3EEE6); }
+.pdc-sortdd-row.on{ background:var(--pd-primary-soft,#FBEDE8); color:var(--pd-primary,#CF5638); font-weight:600; }
+.pdc-toolbar .pdc-sort--desk{ display:none; }
+
+/* mobile metro filter (вне сайдбара) */
+.pdc-mmetro{ padding:4px 0 10px; }
+.pdc--desk .pdc-mmetro{ display:none; }
+
 /* mobile filter bar */
 .pdc-mbar{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding:4px 0 12px; }
 .pdc-mbar::-webkit-scrollbar{ display:none; }
@@ -1197,12 +1308,14 @@
 .pdc-mchip.on{ background:var(--pd-text,#23201B); color:#fff; border-color:var(--pd-text,#23201B); }
 .pdc-mchip svg{ width:15px; height:15px; }
 
-/* toolbar (sort) */
-.pdc-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
-.pdc-sort{ display:flex; align-items:center; gap:8px; }
-.pdc-sort .l{ font-size:13px; color:#8B8378; }
-.pdc-sortsel{ display:flex; gap:6px; }
-.pdc-sortbtn{ height:34px; padding:0 13px; border-radius:9px; background:#fff; border:1px solid var(--pd-border,#EAE2D7); font:inherit; font-size:13px; font-weight:600; color:#5B5249; cursor:pointer; }
+/* toolbar (sort) — мобайл: без дублирующего счётчика, сортировка прокручивается */
+.pdc-toolbar{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.pdc-toolbar > .pdc-count{ display:none; }
+.pdc-sort{ display:flex; align-items:center; gap:8px; min-width:0; flex:1; }
+.pdc-sort .l{ flex:none; font-size:13px; color:#8B8378; }
+.pdc-sortsel{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; min-width:0; }
+.pdc-sortsel::-webkit-scrollbar{ display:none; }
+.pdc-sortbtn{ flex:none; height:34px; padding:0 13px; border-radius:9px; background:#fff; border:1px solid var(--pd-border,#EAE2D7); font:inherit; font-size:13px; font-weight:600; color:#5B5249; cursor:pointer; white-space:nowrap; }
 .pdc-sortbtn.on{ background:var(--pd-text,#23201B); color:#fff; border-color:var(--pd-text,#23201B); }
 
 /* grid */
@@ -1213,6 +1326,12 @@
 .pdc-notif{ display:none; }
 .pdc--desk .pdc-notif{ display:flex; }
 .pdc--desk .pdl-nav-mid{ display:flex; }
+/* актуальная шапка (как на лендинге): desktop — полный набор; мобайл — бренд + иконки + бургер с меню */
+.pd-root.pdc{ position:relative; }
+.pdc .pdl-nav-fav{ display:none; }
+.pdc--desk .pdl-nav-fav{ display:flex; }
+.pdc--desk .pdl-nav-cta{ display:inline-flex; }
+.pdc--desk .pdl-nav-burger{ display:none; }
 
 /* ════════════════════════════════════════════════════════════════════
    RESPONSIVE BREAKPOINTS — реальные точки переключения для прода.
@@ -1225,6 +1344,14 @@
   .pdc-body{ max-width:1280px; margin:0 auto; padding:18px 40px 60px; display:grid; grid-template-columns:248px 1fr; gap:34px; align-items:start; }
   .pdc-side{ display:block; position:sticky; top:18px; background:#fff; border:1px solid var(--pd-border,#EAE2D7); border-radius:18px; padding:8px 18px 18px; }
   .pdc-mbar{ display:none; }
+  .pdc-mmetro{ display:none; }
+  .pdc-sortdd{ display:none; }
+  .pdc-toolbar .pdc-sort--desk{ display:flex; }
+  .pdc-sheet-wrap{ display:none; }
+  .pdc-toolbar{ justify-content:space-between; }
+  .pdc-toolbar > .pdc-count{ display:inline-flex; font-size:13px; }
+  .pdc-sort{ flex:none; }
+  .pdc-sortsel{ overflow:visible; }
   .pdc-grid{ grid-template-columns:repeat(3,1fr); gap:20px; }
   .pdl-nav-mid{ display:flex; }
   .pdc-notif{ display:flex; }
@@ -1238,31 +1365,18 @@
 .pdc-loadmore button{ height:48px; padding:0 28px; border-radius:12px; background:#fff; border:1px solid var(--pd-border,#EAE2D7); font:inherit; font-size:15px; font-weight:700; color:var(--pd-text,#23201B); cursor:pointer; }
 .pdc-loadmore button:hover{ border-color:var(--pd-primary,#CF5638); color:var(--pd-primary,#CF5638); }
 
+/* ── мобильная панель фильтров (inline, раскрывается из «Фильтры») ──── */
+.pdc-panel{ background:#fff; border:1px solid var(--pd-border,#EAE2D7); border-radius:16px; padding:4px 16px 16px; margin:0 0 14px; box-shadow:0 8px 28px rgba(40,30,20,.08); }
+.pdc-panel-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 0 4px; font-size:16px; font-weight:700; color:var(--pd-text,#23201B); }
+.pdc-panel-x{ width:34px; height:34px; border-radius:10px; background:var(--pd-surface-2,#F3EEE6); border:none; display:flex; align-items:center; justify-content:center; color:var(--pd-text,#23201B); cursor:pointer; }
+.pdc-panel-grp{ padding:15px 0; border-bottom:1px solid var(--pd-border,#EAE2D7); }
+.pdc-panel-grp h4{ margin:0 0 11px; font-size:12.5px; font-weight:700; color:#8B8378; text-transform:uppercase; letter-spacing:.04em; }
+.pdc-panel-grp .pdc-fopts{ display:flex; flex-wrap:wrap; gap:8px; }
+.pdc-panel-foot{ display:flex; gap:10px; padding-top:16px; }
+.pdc-sheet-reset{ flex:none; height:46px; padding:0 18px; border-radius:12px; background:#fff; border:1px solid var(--pd-border-strong,#D8CDBD); font:inherit; font-size:14px; font-weight:700; color:var(--pd-text,#23201B); cursor:pointer; }
+.pdc-sheet-apply{ flex:1; height:46px; border-radius:12px; background:var(--pd-primary,#CF5638); border:none; color:#fff; font:inherit; font-size:14.5px; font-weight:700; cursor:pointer; }
 
-/* знак «Соцветие» = терракота (бренд-цвет), словесная часть остаётся тёмной */
-.pdl-brand svg{ color:var(--pd-primary,#CF5638); }
-
-
-/* ── form interaction states (real :hover / :focus-within) — canon 0.2.0 ─ */
-.pd-input:focus-within{border-color:var(--pd-primary);box-shadow:0 0 0 3px var(--pd-primary-soft)}
-.pd-input--invalid:focus-within{border-color:var(--pd-danger);box-shadow:0 0 0 3px var(--pd-danger-soft)}
-@media (hover:hover){
-  .pd-input:hover:not(:focus-within){border-color:var(--pd-faint)}
-  .pd-check:hover .box{border-color:var(--pd-primary)}
-  .pd-sizebtn:hover:not(.on){border-color:var(--pd-primary)}
-  .pd-seg button:not(.on):hover{color:var(--pd-text)}
-  .pd-switch:hover{filter:brightness(.97)}
-}
-
-
-/* ── auth interaction states — canon 0.2.0 ─────────────────────────── */
-@media (hover:hover){
-  .pa-oauthbtn:hover{border-color:var(--pd-text);background:var(--pd-surface-2)}
-  .pa-citysel:hover{border-color:var(--pd-primary)}
-}
-.pa-oauthbtn:focus-visible{outline:2px solid var(--pd-primary);outline-offset:2px}
-
-/* ════════════ pd-seo.css (canon 0.4.0 · ./marketing SEO-страницы) ════════════ */
+/* ════════════ pd-seo.css ════════════ */
 /* pd-seo.css — SEO-страницы «Передарим»: гео-лендинг города, «Безопасная сделка», блог.
    Поверх токенов pd.css и классов pdl-* (pd-land.css). */
 

@@ -1,36 +1,78 @@
 'use client';
 // Карточка букета — GET /api/listings/{id}. «Написать продавцу» → POST /api/deals
-// (deal:agreed, opens chat). No-escrow «оплата при встрече» (ADR-0013).
-// Mirrors canon's Listing screen (ListingBody) composed with live data. States:
-// loading / loaded / sold-unavailable / not-found / error (INTERACTION_STATES §5).
+// (deal:agreed, opens chat). No-escrow «оплата при встрече» (ADR-0013). canon 0.9.0:
+// city + metro («Самовывоз у м. …»); «Продавец» block (Продаёт {name} · «рейтинг
+// продавца» · deals as a separate stat); flowers as plain text «·»; quiet share
+// icon-button (.pd-sharebtn); NO price on the CTA; title «Букет M». Mirrors canon's
+// discovery ListingBody + desktop.jsx two-column. States: loading / loaded /
+// sold-unavailable / not-found / error (INTERACTION_STATES §5).
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PdBtn, PdNotice, PdAvatar, PdStars, PdFreshness } from '@/components/canon';
-import { IconShield, IconInfo, IconCart, IconWalk, IconTruck, IconPin, IconSend, IconFlag, IconBack } from '@/components/icons';
+import { IconShield, IconInfo, IconSend, IconFlag, IconBack, IconFwd, IconShare, IconPin } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import PhotoGallery from '@/components/feed/PhotoGallery';
 import LikeButton from '@/components/feed/LikeButton';
+import MetroLabel from '@/components/feed/MetroLabel';
 import { api, ApiError } from '@/lib/api';
 import { reachGoal } from '@/lib/ym';
 import { formatPriceKopecks } from '@/lib/format';
 import { cityName } from '@/lib/cities';
+import { flowerLabels } from '@/lib/flowers';
 import type { ListingDetail as Listing, Deal } from '@/lib/types';
 
 const SIZE_COUNT: Record<string, string> = { S: 'до 7', M: '7–15', L: '15–25', XL: '25+' };
 
 type Status = 'loading' | 'loaded' | 'not_found' | 'error';
 
+// Quiet share icon-button (.pd-sharebtn) + report flag — canon's ListingActions.
 function HeaderActions({ listingId }: { listingId: string }) {
   return (
-    <div style={{ display: 'flex', gap: 4 }}>
-      <button className="pd-iconbtn" aria-label="Поделиться" onClick={() => navigator.share?.({ url: `/l/${listingId}` }).catch(() => {})}>
-        <IconSend className="pd-i20" />
+    <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+      <button
+        className="pd-sharebtn"
+        aria-label="Поделиться"
+        onClick={() => navigator.share?.({ url: `/l/${listingId}` }).catch(() => {})}
+      >
+        <IconShare className="pd-i18" />
       </button>
       <Link href={`/l/${listingId}/report`} className="pd-iconbtn" aria-label="Пожаловаться">
         <IconFlag className="pd-i20" />
       </Link>
     </div>
+  );
+}
+
+// «Продавец» card — «Продаёт {name}», «рейтинг продавца», deals as a separate stat.
+function SellerCard({ listing }: { listing: Listing }) {
+  const s = listing.seller;
+  const name = s.display_name || 'Продавец';
+  return (
+    <Link href={`/u/${s.id}`} className="pd-sellercard" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <PdAvatar seller={{ n: name }} size={46} />
+      <div className="pd-seller-main">
+        <div className="pd-seller-name">Продаёт {name}</div>
+        <div className="pd-seller-rating">
+          {s.seller_rating != null ? (
+            <>
+              <PdStars value={Math.round(s.seller_rating)} />
+              <b>{s.seller_rating.toFixed(1).replace('.', ',')}</b>
+              <span className="lbl">рейтинг продавца</span>
+            </>
+          ) : (
+            <span className="lbl">новый продавец</span>
+          )}
+        </div>
+      </div>
+      {s.deals_count != null && (
+        <div className="pd-seller-deals">
+          <b>{s.deals_count}</b>
+          <span>сделок</span>
+        </div>
+      )}
+      <IconFwd className="pd-i18 pd-seller-chev" />
+    </Link>
   );
 }
 
@@ -123,6 +165,10 @@ export default function ListingDetail({ id }: { id: string }) {
   }
 
   const sold = listing.status === 'sold' || listing.status === 'reserved' || listing.status === 'archived';
+  // metro/flower_types are 0.9.0 fields; guard against responses that omit them.
+  const flowers = flowerLabels(listing.flower_types ?? []);
+  const title = `Букет ${listing.size}`;
+  // «Написать продавцу» — no price on the CTA (canon 0.9.0).
   const footer = sold ? (
     <div className="pd-footerbar">
       <Link href="/">
@@ -132,9 +178,37 @@ export default function ListingDetail({ id }: { id: string }) {
   ) : (
     <div className="pd-footerbar">
       {buyErr && <div style={{ marginBottom: 8 }}><PdNotice kind="danger">{buyErr}</PdNotice></div>}
-      <PdBtn variant="primary" icon={IconCart} block lg loading={buying} disabled={buying} onClick={buy}>
-        Написать продавцу · {formatPriceKopecks(listing.price_kopecks)}
+      <PdBtn variant="primary" icon={IconSend} block lg loading={buying} disabled={buying} onClick={buy}>
+        Написать продавцу
       </PdBtn>
+    </div>
+  );
+
+  // location row: «📍 Город» + metro label («Самовывоз у м. …» appears in the pickup block)
+  const locationRow = (
+    <div className="pd-buy-loc">
+      <span className="loc-city">
+        <IconPin className="pd-i16" />
+        {cityName(listing.city_id)}
+      </span>
+      {listing.metro && <MetroLabel metro={listing.metro} />}
+    </div>
+  );
+
+  const pickupBlock = !sold && (
+    <div style={{ marginTop: 18 }}>
+      <div className="pd-label" style={{ marginBottom: 8 }}>Как забрать</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '13px 14px', border: '1px solid var(--pd-border)', borderRadius: 14 }}>
+        <span className="pd-mglyph" style={{ width: 24, height: 24, fontSize: 14 }}>М</span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 700, fontSize: 14 }}>
+            {listing.metro ? `Самовывоз у м. ${listing.metro.name}` : 'Самовывоз рядом'}
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--pd-muted)', marginTop: 1 }}>
+            {listing.metro ? 'Заберёте букет рядом со станцией' : 'Точное место появится в чате после договорённости'}
+          </div>
+        </div>
+      </div>
     </div>
   );
 
@@ -176,17 +250,15 @@ export default function ListingDetail({ id }: { id: string }) {
 
         <aside>
           <div className="pdw-buy">
+            <h1 className="pdw-h1" style={{ fontSize: 22, marginBottom: 10 }}>{title}</h1>
             <div className="pd-price-row" style={{ marginBottom: 12 }}>
               <span className="price">{formatPriceKopecks(listing.price_kopecks)}</span>
               <LikeButton listingId={listing.id} liked={listing.liked} count={listing.like_count} big />
             </div>
-            <div className="pd-chiprow" style={{ marginBottom: 14 }}>
+            <div className="pd-buy-meta">
               <PdFreshness kind={listing.freshness} />
-              <span className="pd-chip" style={{ pointerEvents: 'none' }}>Размер {listing.size} · {SIZE_COUNT[listing.size]} шт.</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 13.5, marginBottom: 14 }}>
-              <IconPin className="pd-i16" />
-              {cityName(listing.city_id)}
+              <div className="pd-buy-spec"><b>Размер {listing.size}</b> · {SIZE_COUNT[listing.size]} стеблей</div>
+              {locationRow}
             </div>
 
             {sold ? (
@@ -205,38 +277,31 @@ export default function ListingDetail({ id }: { id: string }) {
               <>
                 {buyErr && <div style={{ margin: '12px 0' }}><PdNotice kind="danger">{buyErr}</PdNotice></div>}
                 <div style={{ marginTop: 16 }}>
-                  <PdBtn variant="primary" icon={IconCart} block lg loading={buying} disabled={buying} onClick={buy}>
-                    Написать продавцу · {formatPriceKopecks(listing.price_kopecks)}
+                  <PdBtn variant="primary" icon={IconSend} block lg loading={buying} disabled={buying} onClick={buy}>
+                    Написать продавцу
                   </PdBtn>
                 </div>
-                <p style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 12 }}>
-                  Самовывоз. Точное место появится в чате после договорённости — двор или станцию выбирает продавец.
-                </p>
               </>
             )}
           </div>
 
-          <Link
-            href={`/u/${listing.seller.id}`}
-            className="pdw-card"
-            style={{ display: 'flex', alignItems: 'center', gap: 11, marginTop: 16, textDecoration: 'none', color: 'inherit' }}
-          >
-            <PdAvatar seller={{ n: listing.seller.display_name || 'Продавец' }} size={44} />
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, fontSize: 15 }}>{listing.seller.display_name || 'Продавец'}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 12.5, marginTop: 2 }}>
-                {listing.seller.seller_rating != null ? <><PdStars value={Math.round(listing.seller.seller_rating)} /> {listing.seller.seller_rating.toFixed(1)}</> : <span>Новый продавец</span>}
-                {listing.seller.deals_count != null && ` · ${listing.seller.deals_count} сделок`}
-              </div>
+          <div className="pd-label" style={{ marginTop: 18, marginBottom: 8 }}>Продавец</div>
+          <SellerCard listing={listing} />
+
+          {flowers.length > 0 && (
+            <div style={{ marginTop: 18 }}>
+              <div className="pd-label" style={{ marginBottom: 8 }}>Цветы в букете</div>
+              <div className="pd-flowerlist">{flowers.join(' · ')}</div>
             </div>
-          </Link>
+          )}
+          {pickupBlock}
         </aside>
       </div>
     </div>
   );
 
   return (
-    <ScreenChrome title="Букет" action={<HeaderActions listingId={id} />} footer={footer} desktop={desktop}>
+    <ScreenChrome title={title} action={<HeaderActions listingId={id} />} footer={footer} desktop={desktop}>
       <div style={{ position: 'relative' }}>
         <PhotoGallery photos={listing.photos} />
         {sold && (
@@ -252,16 +317,10 @@ export default function ListingDetail({ id }: { id: string }) {
           <LikeButton listingId={listing.id} liked={listing.liked} count={listing.like_count} big />
         </div>
 
-        <div className="pd-chiprow" style={{ marginBottom: 14 }}>
+        <div className="pd-buy-meta">
           <PdFreshness kind={listing.freshness} />
-          <span className="pd-chip" style={{ pointerEvents: 'none' }}>
-            Размер {listing.size} · {SIZE_COUNT[listing.size]} шт.
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 13.5, marginBottom: 16 }}>
-          <IconPin className="pd-i16" />
-          {cityName(listing.city_id)}
+          <div className="pd-buy-spec"><b>Размер {listing.size}</b> · {SIZE_COUNT[listing.size]} стеблей</div>
+          {locationRow}
         </div>
 
         {sold ? (
@@ -272,38 +331,16 @@ export default function ListingDetail({ id }: { id: string }) {
           </PdNotice>
         )}
 
-        <Link
-          href={`/u/${listing.seller.id}`}
-          style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '14px 0', marginTop: 6, borderTop: '1px solid var(--pd-border)', borderBottom: '1px solid var(--pd-border)', textDecoration: 'none', color: 'inherit' }}
-        >
-          <PdAvatar seller={{ n: listing.seller.display_name || 'Продавец' }} size={44} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 700, fontSize: 15 }}>{listing.seller.display_name || 'Продавец'}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--pd-muted)', fontSize: 12.5, marginTop: 2 }}>
-              {listing.seller.seller_rating != null ? <><PdStars value={Math.round(listing.seller.seller_rating)} /> {listing.seller.seller_rating.toFixed(1)}</> : <span>Новый продавец</span>}
-              {listing.seller.deals_count != null && ` · ${listing.seller.deals_count} сделок`}
-            </div>
-          </div>
-        </Link>
+        <div className="pd-label" style={{ marginTop: 18, marginBottom: 8 }}>Продавец</div>
+        <SellerCard listing={listing} />
 
-        {!sold && (
-          <div style={{ marginTop: 16 }}>
-            <div className="pd-label" style={{ marginBottom: 8 }}>Как забрать</div>
-            <div className="pd-seg" role="group" aria-label="Способ получения">
-              <button className="on" type="button">
-                <IconWalk className="pd-i16" style={{ marginRight: 5, verticalAlign: '-3px' }} />
-                Самовывоз
-              </button>
-              <button type="button" disabled title="Скоро">
-                <IconTruck className="pd-i16" style={{ marginRight: 5, verticalAlign: '-3px' }} />
-                Курьер
-              </button>
-            </div>
-            <p style={{ fontSize: 12.5, color: 'var(--pd-muted)', marginTop: 8 }}>
-              Точное место появится в чате после договорённости. Двор или станцию выбирает продавец.
-            </p>
+        {flowers.length > 0 && (
+          <div style={{ marginTop: 18 }}>
+            <div className="pd-label" style={{ marginBottom: 8 }}>Цветы в букете</div>
+            <div className="pd-flowerlist">{flowers.join(' · ')}</div>
           </div>
         )}
+        {pickupBlock}
       </div>
     </ScreenChrome>
   );

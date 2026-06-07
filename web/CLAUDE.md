@@ -2,6 +2,8 @@
 
 Area rules for the single web frontend. This web build IS the iOS/Android app (wrapped by Capacitor — see `mobile/`). Root `CLAUDE.md` applies.
 
+> **Vendored canon: `0.9.0`** (design-pass: метро-ориентир, метро+тип-цветов фильтры, единая `PdWebNav`, реальный `/catalog`). Status tracker: `docs/handoff/VISUAL_COVERAGE.md`.
+
 > **Read root `CLAUDE.md` §0 (Behavioral principles) FIRST — it governs every task:** think before coding, simplicity first, surgical changes, goal-driven (for UI: `npm run test:visual` ≤ 2%).
 
 ## The one-codebase rule (ADR-0004)

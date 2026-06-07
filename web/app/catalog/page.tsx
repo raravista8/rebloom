@@ -1,8 +1,14 @@
-import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+import CatalogScreen from '@/components/catalog/CatalogScreen';
 
-// Canon marketing pages link «Весь каталог букетов» → /catalog. The public catalog
-// surface is the home landing (live feed). Redirect there so guests stay on a public
-// page (the in-app /search sits behind auth).
+// Browse-first public catalog (canon 0.9.0). Grid shown immediately (not the search-first
+// «введите запрос» idle). Public — no auth gate (the in-app /search sits behind auth).
+export const metadata: Metadata = {
+  title: 'Каталог свежих букетов — Передарим',
+  description: 'Свежие букеты рядом от людей, в 2–3 раза дешевле магазина. Оплата при встрече.',
+  alternates: { canonical: '/catalog' },
+};
+
 export default function CatalogPage() {
-  redirect('/');
+  return <CatalogScreen />;
 }

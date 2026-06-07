@@ -2,10 +2,11 @@
 // Converted from design source pd-kit.jsx (single source of truth — edited ONLY by Claude Design).
 import React from "react";
 import "../styles/canon.css";
+import { PdCard, PdAvatar, PdIc, pdMoney, PdMetroDots, pdMetroLines, PD_METRO, PD_FLOWERS } from "../feed/feed";
 
 // pd-kit.jsx — shared UI kit for «Передарим» screens (theme «Воздух»)
-// Builds on pd-feed.jsx exports (window.PdIc, PdCard, PdAvatar, pdMoney…).
-// Exports: window.PdI (icons) + PdBtn, PdField, PdInput, PdOtp, PdSizeSel,
+// Builds on pd-feed.jsx exports (PdIc, PdCard, PdAvatar, pdMoney…).
+// Exports: PdI (icons) + PdBtn, PdField, PdInput, PdOtp, PdSizeSel,
 //   PdSeg, PdChip, PdStepper, PdBubble, PdStars, PdNotice, PdEmpty, PdSkelCard,
 //   PdScreen, PdGallery, PdToast.
 
@@ -17,6 +18,7 @@ const I = {
   camera:(p)=><svg viewBox="0 0 24 24" {...p}><path d="M3 8h3l1.5-2.5h9L18 8h3v12H3z"/><circle cx="12" cy="13.5" r="3.6"/></svg>,
   image: (p)=><svg viewBox="0 0 24 24" {...p}><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m4 18 5-5 4 4 3-3 4 4"/></svg>,
   send:  (p)=><svg viewBox="0 0 24 24" {...p}><path d="M4 12 20 5l-6 15-3-6-7-2Z"/></svg>,
+  share: (p)=><svg viewBox="0 0 24 24" {...p}><circle cx="6" cy="12" r="2.6"/><circle cx="17.5" cy="6" r="2.6"/><circle cx="17.5" cy="18" r="2.6"/><path d="m8.3 10.8 6.9-3.6M8.3 13.2l6.9 3.6"/></svg>,
   lock:  (p)=><svg viewBox="0 0 24 24" {...p}><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>,
   shield:(p)=><svg viewBox="0 0 24 24" {...p}><path d="M12 3 5 6v6c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>,
   truck: (p)=><svg viewBox="0 0 24 24" {...p}><path d="M2 7h11v8H2zM13 10h4l3 3v2h-7z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/></svg>,
@@ -182,22 +184,84 @@ function PdToast({ kind='ok', children }) {
     {Icon({className:'pd-i18',fill:'none',stroke:'currentColor'})}{children}</div>;
 }
 
+// ── выбор станции метро (поиск + список с цветными линиями) ──────────────
+const Chv = (p)=><svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>;
+const Srch = (p)=><svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>;
+function PdMetroPicker({ cityKey='msk', value, onChange, multi=false, values=[], onToggle, placeholder='Выберите станцию метро' }) {
+  const Dots = PdMetroDots;
+  const [open,setOpen]=React.useState(false);
+  const [q,setQ]=React.useState('');
+  const wrapRef=React.useRef(null);
+  const list=(PD_METRO && PD_METRO[cityKey]) || [];
+  React.useEffect(()=>{
+    if(!open) return;
+    const onDoc=(e)=>{ if(wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown',onDoc);
+    return ()=>document.removeEventListener('mousedown',onDoc);
+  },[open]);
+  const ql=q.trim().toLowerCase();
+  const filtered=ql?list.filter(s=>s.n.toLowerCase().includes(ql)):list;
+  const selLines=value?pdMetroLines(value):[];
+  const sel=(s)=> multi ? values.includes(s) : value===s;
+  const label = multi
+    ? (values.length===0 ? null : values.length===1 ? values[0] : `${values.length} станц.`)
+    : value;
+  const labelLines = multi
+    ? (values.length===1 ? pdMetroLines(values[0]) : [])
+    : selLines;
+  return (
+    <div className={'pd-mpick'+(open?' open':'')} ref={wrapRef}>
+      <button type="button" className={'pd-mpick-btn'+(open?' open':'')+(label?' has':'')} onClick={()=>setOpen(o=>!o)}>
+        <span className="pd-mglyph">М</span>
+        {label
+          ? <span className="val">{(!multi || values.length===1) && <Dots lines={labelLines} size={9}/>}{multi && values.length>1 ? label : 'м.\u00A0'+label}</span>
+          : <span className="ph">{placeholder}</span>}
+        <Chv className="chev pd-i18"/>
+      </button>
+      {open && (
+        <div className="pd-mpick-panel">
+          <div className="pd-mpick-search"><Srch className="pd-i16"/><input autoFocus value={q} placeholder="Поиск станции" onChange={(e)=>setQ(e.target.value)}/></div>
+          <div className="pd-mpick-list">
+            {filtered.length===0
+              ? <div className="pd-mpick-empty">Станция не найдена</div>
+              : filtered.map(s=>(
+                <button type="button" key={s.n} className={'pd-mpick-row'+(sel(s.n)?' on':'')} onClick={()=>{
+                  if(multi){ onToggle&&onToggle(s.n); }
+                  else { onChange&&onChange(s.n); setOpen(false); setQ(''); }
+                }}>
+                  {multi && <span className={'pd-mpick-cb'+(sel(s.n)?' on':'')}>{sel(s.n)&&I.check({className:'pd-i14',fill:'none',stroke:'currentColor'})}</span>}
+                  <Dots lines={s.l} size={9}/><span className="n">{s.n}</span>
+                  {!multi && sel(s.n) && I.check({className:'pd-i16 ck',fill:'none',stroke:'currentColor'})}
+                </button>
+              ))}
+          </div>
+          {multi && values.length>0 && (
+            <div className="pd-mpick-foot"><button type="button" className="clr" onClick={()=>onToggle&&onToggle(null)}>Сбросить ({values.length})</button><button type="button" className="done" onClick={()=>setOpen(false)}>Готово</button></div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── выбор типов цветов (мультивыбор тегами) ──────────────────────────────
+function PdFlowerPicker({ value=[], onChange, options }) {
+  const opts=options || PD_FLOWERS || [];
+  const toggle=(f)=>{ const has=value.includes(f); onChange&&onChange(has?value.filter(x=>x!==f):[...value,f]); };
+  return (
+    <div className="pd-flowerpick">
+      {opts.map(f=>{
+        const on=value.includes(f);
+        return <button type="button" key={f} className={'pd-fbchip'+(on?' on':'')} onClick={()=>toggle(f)} aria-pressed={on}>
+          {on && I.check({className:'pd-i14',fill:'none',stroke:'currentColor'})}{f}
+        </button>;
+      })}
+    </div>
+  );
+}
+
 export {
-  I as PdI,
-  PdBtn,
-  PdField,
-  PdInput,
-  PdOtp,
-  PdSeg,
-  PdSizeSel,
-  PdChip,
-  PdStepper,
-  PdBubble,
-  PdStars,
-  PdNotice,
-  PdEmpty,
-  PdSkelCard,
-  PdGallery,
-  PdScreen,
-  PdToast
+  I as PdI, PdBtn, PdField, PdInput, PdOtp, PdSeg, PdSizeSel, PdChip, PdStepper,
+  PdBubble, PdStars, PdNotice, PdEmpty, PdSkelCard, PdGallery, PdScreen, PdToast,
+  PdMetroPicker, PdFlowerPicker
 };

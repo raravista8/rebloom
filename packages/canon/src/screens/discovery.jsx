@@ -2,11 +2,10 @@
 // Converted from design source pd-scr-1.jsx (single source of truth — edited ONLY by Claude Design).
 import React from "react";
 import "../styles/canon.css";
-import { PD_FRESH, PD_LIKED, PdAvatar, PdBottomNav, PdCard, PdFreshness, PdIc, PdLikeBtn, PdSectionHead, PdTopBar, pdMoney } from "../feed/feed";
-import { PdBtn, PdChip, PdEmpty, PdGallery, PdI, PdNotice, PdScreen, PdSeg, PdSizeSel, PdSkelCard, PdStars } from "../primitives/kit";
+import { PdCard, PdAvatar, PdFreshness, PdLikeBtn, PdSectionHead, PdTopBar, PdBottomNav, PdIc, pdMoney, PD_FRESH, PD_LIKED, PdMetroLabel } from "../feed/feed";
+import { PdI, PdBtn, PdChip, PdStars, PdNotice, PdEmpty, PdSkelCard, PdGallery, PdScreen } from "../primitives/kit";
 
 // pd-scr-1.jsx — discovery screens: витрина states, карточка, поиск, профиль
-
 const IMG = (id)=>`img/${id}.jpg`;
 
 // 1a — витрина: загрузка (skeleton)
@@ -45,14 +44,28 @@ function VitrinaEmpty() {
 // 1c — карточка букета (loaded)
 const LISTING = {
   photos:['1561181286-d3fee7d55364','1567418938902-aa650a3eb346','1581938165093-050aeb5ef218'],
-  price:990, size:'M', fresh:'today', district:'Москва · Патрики', likes:47, liked:true,
+  price:990, size:'M', fresh:'today', city:'Москва', metro:'Курская', district:'Басманный',
+  flowers:['Пионовидные розы','Зелень и эвкалипт'], likes:47, liked:true,
   seller:{ n:'Аня', r:4.9, av:'w1', deals:23 },
 };
 function ListingActions() {
-  return (<div style={{display:'flex',gap:4}}>
-    <button className="pd-iconbtn" aria-label="Поделиться">{PdI.send({className:'pd-i20',fill:'none',stroke:'currentColor'})}</button>
+  return (<div style={{display:'flex',gap:6,alignItems:'center'}}>
+    <button className="pd-sharebtn" aria-label="Поделиться">{PdI.share({className:'pd-i18',fill:'none',stroke:'currentColor'})}</button>
     <button className="pd-iconbtn" aria-label="Пожаловаться">{PdI.flag({className:'pd-i20',fill:'none',stroke:'currentColor'})}</button>
   </div>);
+}
+function SellerCard({ s }) {
+  return (
+    <button className="pd-sellercard">
+      <PdAvatar seller={s} size={46} />
+      <div className="pd-seller-main">
+        <div className="pd-seller-name">Продаёт {s.n}</div>
+        <div className="pd-seller-rating"><PdStars value={5} /><b>{s.r.toFixed(1).replace('.', ',')}</b><span className="lbl">рейтинг продавца</span></div>
+      </div>
+      <div className="pd-seller-deals"><b>{s.deals}</b><span>сделки</span></div>
+      {PdI.fwd({className:'pd-i18 pd-seller-chev',fill:'none',stroke:'currentColor'})}
+    </button>
+  );
 }
 function ListingBody({ sold }) {
   return (<>
@@ -67,41 +80,39 @@ function ListingBody({ sold }) {
         <span className="pd-price" style={{fontSize:26}}>{pdMoney(LISTING.price)}</span>
         <PdLikeBtn liked={LISTING.liked} count={LISTING.likes} />
       </div>
-      <div className="pd-chiprow" style={{marginBottom:14}}>
+      <div className="pd-buy-meta">
         <PdFreshness kind="today" />
-        <span className="pd-chip" style={{pointerEvents:'none'}}>Размер {LISTING.size} · 7–15 шт.</span>
-      </div>
-      <div style={{display:'flex',alignItems:'center',gap:5,color:'var(--pd-muted)',fontSize:13.5,marginBottom:16}}>
-        {PdIc.pin({className:'pd-i16',fill:'none',stroke:'currentColor'})}{LISTING.district}
+        <div className="pd-buy-spec"><b>Размер {LISTING.size}</b> · 7–15 стеблей</div>
+        <div className="pd-buy-loc">
+          <span className="loc-city">{PdIc.pin({className:'pd-i16',fill:'none',stroke:'currentColor'})}{LISTING.city}</span>
+          <PdMetroLabel station={LISTING.metro} />
+        </div>
       </div>
 
       {sold
         ? <PdNotice kind="info" icon={PdI.info}>Этот букет уже купили. Посмотрите другие свежие букеты рядом, их добавляют каждый день.</PdNotice>
         : <PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом. Платите, когда увидели цветы.</PdNotice>}
 
-      {/* seller */}
-      <div style={{display:'flex',alignItems:'center',gap:11,padding:'14px 0',marginTop:6,borderTop:'1px solid var(--pd-border)',borderBottom:'1px solid var(--pd-border)'}}>
-        <PdAvatar seller={LISTING.seller} size={44} />
-        <div style={{flex:1}}>
-          <div style={{fontWeight:700,fontSize:15}}>{LISTING.seller.n}</div>
-          <div style={{display:'flex',alignItems:'center',gap:5,color:'var(--pd-muted)',fontSize:12.5,marginTop:2}}>
-            <PdStars value={5} /> {LISTING.seller.r} · {LISTING.seller.deals} сделки
-          </div>
-        </div>
-        {PdI.fwd({className:'pd-i18',fill:'none',stroke:'var(--pd-faint)'})}
+      {/* продавец — явно подписан */}
+      <div className="pd-label" style={{marginTop:18,marginBottom:8}}>Продавец</div>
+      <SellerCard s={LISTING.seller} />
+
+      {/* состав букета — справочно, просто текст */}
+      <div style={{marginTop:18}}>
+        <div className="pd-label" style={{marginBottom:8}}>Цветы в букете</div>
+        <div className="pd-flowerlist">{LISTING.flowers.join(' · ')}</div>
       </div>
 
-      {/* delivery */}
-      <div style={{marginTop:16}}>
+      {/* как забрать — ориентир по метро */}
+      <div style={{marginTop:18}}>
         <div className="pd-label" style={{marginBottom:8}}>Как забрать</div>
         <div style={{display:'flex',alignItems:'center',gap:11,padding:'13px 14px',border:'1px solid var(--pd-border)',borderRadius:14}}>
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--pd-primary)',flex:'none'}}><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span className="pd-mglyph" style={{width:24,height:24,fontSize:14}}>М</span>
           <div style={{flex:1}}>
-            <div style={{fontWeight:700,fontSize:14}}>Самовывоз рядом</div>
-            <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца, обычно двор или метро поблизости</div>
+            <div style={{fontWeight:700,fontSize:14}}>Самовывоз у м. {LISTING.metro}</div>
+            <div style={{fontSize:13,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет рядом со станцией</div>
           </div>
         </div>
-        <p style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:8}}>Точный адрес появится в чате, когда договоритесь о встрече. Двор или станцию выбирает продавец.</p>
       </div>
 
       <div style={{marginTop:18}}>
@@ -179,7 +190,7 @@ function Profile() {
         <div>
           <h2>{s.n}</h2>
           <div style={{display:'flex',alignItems:'center',gap:6,marginTop:4}}><PdStars value={5}/><b style={{fontSize:14}}>{s.r}</b><span style={{color:'var(--pd-muted)',fontSize:13}}>· 23 сделки</span></div>
-          <div className="stat"><span><b>12</b> объявлений</span><span><b>с 2025</b> на площадке</span></div>
+          <div className="stat"><span><b>12</b> объявлений</span><span><b>10 месяцев</b> на площадке</span></div>
         </div>
       </div>
       <div style={{padding:'0 16px'}}><PdNotice kind="ok" icon={PdI.shield}>Проверенный продавец · 97% сделок без жалоб. Реальные отзывы и рейтинг.</PdNotice></div>
@@ -199,11 +210,4 @@ function Profile() {
   );
 }
 
-export {
-  VitrinaLoading,
-  VitrinaEmpty,
-  Listing,
-  ListingSold,
-  SearchNoResults,
-  Profile
-};
+export { VitrinaLoading, VitrinaEmpty, Listing, ListingSold, SearchNoResults, Profile };

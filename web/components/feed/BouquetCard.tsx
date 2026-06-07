@@ -1,11 +1,13 @@
 // Bouquet card — mirrors canon's .pd-card markup (canon's own Card hardcodes a demo
 // image path PD_IMG(), so we re-compose the same canon-classed DOM with a real
-// photo_thumb_url + live listing data). Reuses canon PdFreshness/PdAvatar + the
-// wired LikeButton. Links to the listing detail.
+// photo_thumb_url + live listing data). Reuses canon PdFreshness/PdAvatar + the wired
+// LikeButton. 0.9.0: «Размер L» (quiet, .pd-size), metro instead of city (falls back to
+// city/район when null), seller rating right next to the name (ellipsis on long names).
 import Link from 'next/link';
 import { PdFreshness, PdAvatar } from '@/components/canon';
 import { IconPin, IconStar } from '@/components/icons';
 import LikeButton from '@/components/feed/LikeButton';
+import MetroLabel from '@/components/feed/MetroLabel';
 import { formatPriceKopecks } from '@/lib/format';
 import { cityName } from '@/lib/cities';
 import type { ListingCard } from '@/lib/types';
@@ -32,11 +34,18 @@ export default function BouquetCard({
         <div className="pd-card-body">
           <div className="pd-price-row">
             <span className="pd-price">{formatPriceKopecks(listing.price_kopecks)}</span>
-            <span className="pd-size">{listing.size}</span>
+            <span className="pd-size">Размер {listing.size}</span>
           </div>
+          {/* metro is the primary cue (city is implied by the header); fall back to город. */}
           <div className="pd-meta">
-            <IconPin className="pd-i14" />
-            <span className="pd-district">{cityName(listing.city_id)}</span>
+            {listing.metro ? (
+              <MetroLabel metro={listing.metro} dotSize={7} />
+            ) : (
+              <>
+                <IconPin className="pd-i14" />
+                <span className="pd-district">{cityName(listing.city_id)}</span>
+              </>
+            )}
           </div>
           <div className="pd-seller">
             <PdAvatar seller={{ n: listing.seller.display_name || 'Продавец' }} size={21} />

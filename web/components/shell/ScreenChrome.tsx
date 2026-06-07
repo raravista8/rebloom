@@ -48,7 +48,8 @@ export default function ScreenChrome({
 
   if (isDesktop) {
     return (
-      <div className="pd-root pd-web" data-pd-theme="a">
+      // `.pdl` gives PdWebNav (in WebChrome) its container-query + drawer containment.
+      <div className="pd-root pd-web pdl" data-pd-theme="a">
         <WebChrome />
         <main className="pd-scroll pdw-scroll">
           {desktop ?? (

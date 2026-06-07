@@ -25,6 +25,14 @@ export interface ListingCardSeller {
   seller_rating: number | null;
 }
 
+// metro (API_CONTRACT §3): one entry per line; transfer hubs carry several (multi-colour
+// dots). `null` for no-metro cities → the card/detail falls back to city/район.
+export interface MetroRef {
+  id: string;
+  name: string;
+  lines: { name: string; color: string }[];
+}
+
 export interface ListingCard {
   id: string;
   photo_thumb_url: string;
@@ -32,6 +40,8 @@ export interface ListingCard {
   freshness: Freshness;
   price_kopecks: number;
   city_id: string;
+  metro: MetroRef | null;
+  flower_types: string[];
   like_count: number;
   liked: boolean;
   seller: ListingCardSeller;
@@ -50,6 +60,8 @@ export interface ListingDetail {
   freshness: Freshness;
   price_kopecks: number;
   city_id: string;
+  metro: MetroRef | null;
+  flower_types: string[];
   status: ListingStatus;
   like_count: number;
   liked: boolean;
@@ -96,6 +108,9 @@ export interface PublicUser {
   city_id?: string;
   seller_rating: number | null;
   deals_count: number;
+  // registration timestamp (ISO) — drives «N месяцев на площадке». Optional: the API
+  // does not expose it yet, so the tenure row is omitted until the backend adds it.
+  created_at?: string;
 }
 export interface ReviewItem {
   id: string;
@@ -155,6 +170,24 @@ export interface ModerationQueueItem {
 export interface Paginated<T> {
   items: T[];
   next_cursor: string | null;
+  // /api/search returns `total` = count of ALL active listings matching the filters in
+  // the city (not just the page) — feeds «Показать N букетов» (API_CONTRACT §3).
+  total?: number;
   applied?: { city_id?: string | null; q?: string | null; filters?: unknown };
   suggestions?: { type: string; label: string; href: string }[];
+}
+
+// /api/search params (API_CONTRACT §3). `metro` and `flower` are repeatable (OR within a
+// group, AND across groups). Passed as one `metro=`/`flower=` per value.
+export interface SearchParams {
+  city_id: string;
+  q?: string;
+  size?: Size;
+  freshness?: Freshness;
+  price_min?: number;
+  price_max?: number;
+  metro?: string[];
+  flower?: string[];
+  cursor?: string;
+  limit?: number;
 }

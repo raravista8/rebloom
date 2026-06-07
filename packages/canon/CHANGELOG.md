@@ -2,6 +2,36 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.9.0] — 2026-06-07 — Design-pass: метро-ориентир, фильтры (метро-мультивыбор + типы цветов), карточки/листинг/форма, единая веб-шапка `PdWebNav` + бургер-драйвер
+
+> Большой визуально-копирайтный апдейт клиентских поверхностей + **новый общий компонент шапки `PdWebNav`** (бар + бургер-драйвер; источник правды для лендинга, каталога и десктоп-экранов). Полная спека — **`CANON_HANDOFF_design-pass.md`** (§0–§12). Прототип-референс в `reference/prototypes/` — единственный источник правды; `src/` сконвертирован из него. JS-бандлы `dist/*.mjs/.cjs` собирает потребитель (`npm run build`).
+
+### ⚠️ Новые data-поля (параллельная backend-задача — `CANON_HANDOFF §0`, для API_CONTRACT)
+- **`metro`** — станция метро у объявления (`listing_card`/`listing`), в `POST /listings`; фильтр **`metro[]`** в `/feed`+`/search` с семантикой **OR** («любая из выбранных»). Справочник станций+цвета линий (msk+spb) — `PD_METRO`, `PD_METRO_LINES`, `PD_CITY_METRO` в `src/feed/feed.jsx`. Города без метро → fallback на район.
+- **`flower_types[]`** — типы цветов у объявления (фиксированный справочник `PD_FLOWERS`); мультивыбор в форме; фильтр `flower_types[]` (**OR**).
+- **«Показать N букетов»** в моб. панели фильтров — счётчик результатов под текущие фильтры до применения (клиентский счёт или count-эндпоинт). [verify]
+
+### Added
+- **`src/primitives/web-nav.jsx` → `PdWebNav`** — единая веб-шапка: бар (бренд · город · поиск · уведомления · избранное · аватар · CTA «Опубликовать букет») + бургер→драйвер на мобайле (профиль, город, ссылки, CTA). `auth-aware`-ready (`authed` prop: гость видит «Войти»). Экспортится в `./catalog` и `./marketing`. Источник правды для всех web-шапок.
+- **`src/primitives/kit.jsx`** — `PdMetroPicker` (поиск + список станций с цветами линий; режим `multi` с чекбоксами/тегами для фильтров) и `PdFlowerPicker` (мультивыбор типов цветов). Экспорт через `./forms`.
+- **`src/feed/feed.jsx`** — справочник метро (`PD_METRO`, `PD_METRO_LINES`, `PD_METRO_INDEX`, `PD_CITY_METRO`, `pdMetroLines`), компоненты `PdMetroLabel`/`PdMetroDots`, списки цветов (`PD_FLOWERS`, `PD_FLOWER_FILTERS`). Экспорт через `./feed`.
+
+### Changed
+- **`src/catalog/catalog.jsx`** — фильтры: + метро (мультивыбор) + тип цветов; моб. панель «Все фильтры» (раскрывается из чипа «Фильтры»); сортировка-дропдаун на мобайле; размеры подписаны (S·до 7 / M·7–15 / L·15–25 / XL·25+). Шапка → `PdWebNav` (была inline). Карточки: «Размер L», станция метро вместо города, рейтинг у имени.
+- **`src/feed/feed.jsx`** — `PD_FRESH_META`: подписи «Свежий / 1–2 дня / 3+ дня» (enum `today|d1_2|d3_plus` не менялся). `PdCard`: «Размер L», метро вместо города, рейтинг вплотную к имени, ellipsis для длинного имени. Сид-данные дополнены `metro`/`flowers`.
+- **`src/screens/discovery.jsx`** (листинг) — город + станция метро; «Самовывоз у м. …»; продавец явно подписан + сделки отдельной статой; состав = текст через «·»; тихая icon-кнопка «Поделиться»; убрана подпись про двор/станцию; цена убрана с кнопок; ровный мета-блок.
+- **`src/screens/sell-login.jsx`** (форма) — `PdMetroPicker` вместо «Района»; `PdFlowerPicker` (необязательно); «Когда букет подарили»; убран хинт про 700–1 300 ₽.
+- **`src/screens/desktop.jsx`** — те же правки листинга/формы на десктопе; шапка приведена к canon; «Букет M» (без района); «10 месяцев на площадке».
+- **`src/screens/deal-notifications.jsx`** — «Букет M» (район не сливается с названием).
+- **`src/feed/feed-desktop.jsx`** + **`src/marketing/landing.jsx`** — шапка: «Избранное» (сердце) + CTA «Опубликовать букет»; живой каталог лендинга: метро-мультивыбор + фильтр типов цветов.
+- **`dist/canon.css`** — пересобран из источников (pd.css, pd-auth.css, pd-settings.css, pd-web.css, pd-land.css, pd-catalog.css, pd-seo.css). Новое: `.pd-metro/.pd-mdots`, `.pd-mpick*` (+ multi: чекбоксы/футер), `.pd-flowerpick/.pd-fbchip`, `.pd-sharebtn`, `.pd-sellercard/.pd-seller-deals`, `.pd-buy-meta/.pd-buy-spec/.pd-buy-loc`, `.pd-flowerlist`, `.pdc-sortdd`, `.pdc-panel*` (моб. панель фильтров), `.pdc-metrotag`, `.pdl-drawer*` (бургер-драйвер); шапка `.pdw-nav*` приведена к canon; `.pd-size` сделан тихим.
+
+### Reference / prototypes
+- Перевендорены из Claude Design: `pd-feed.jsx`, `pd-kit.jsx`, `pd-catalog.jsx`, `pd-webnav.jsx` (новый), `pd-scr-1/2/3.jsx`, `pd-scr-desktop.jsx`, `pd-feed-desktop.jsx`, `pd-land.jsx` + CSS. `src/` байт-в-байт сконвертирован из них (ESM-обёртка: `window`-глобалы → import/export).
+
+### Build / consumer
+- JS-бандлы (`dist/*.mjs/.cjs/.d.ts`) НЕ включены — потребитель собирает `npm run build` (tsup). `src/` + `tsup.config.ts` + `package.json` (`exports.*.require → .cjs`, 0.8.1) + `dist/canon.css` + `tokens/` готовы. `web/`-хэндролл (`WebChrome`, `BouquetCard`, `ListingDetail`, `SellForm`, `LandingHome`) портируется руками после вендоринга (`CANON_HANDOFF §11`); `WebChrome` → портировать `PdWebNav`, сохранив `useMe()`-auth-aware.
+
 ## [0.8.2] — 2026-06-06 — Fact-fix: SafeDeal «Почему так безопаснее» rewritten no-escrow (ADR-0013) — closes a prototype↔canon drift the SEO audit caught
 
 > **Why a release for a copy change.** The SEO-аудит (2026-06) flagged `/bezopasnaya-sdelka`: a search engine can ignore `<meta>` and surface a body paragraph as the snippet — and this body was **factually wrong**. The «Почему так безопаснее» section still carried **эскроу-проза** that describes a flow the MVP does not have (**ADR-0013**: платформа не держит, не проводит и не возвращает деньги — нет автозакрытия с релизом, нет денежного спора/возврата). The kicker: the **prototype was already fixed** in 0.8.1 (`reference/prototypes/pd-seo.jsx` shipped the no-escrow copy), but the **canonical `src/marketing/seo.jsx` — the file `web/` actually vendors — was never updated.** So прод kept serving stale escrow text. 0.8.2 syncs the canon source to the prototype.

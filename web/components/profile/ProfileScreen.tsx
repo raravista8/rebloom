@@ -9,7 +9,7 @@ import { IconShield, IconFlag, IconInfo } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import BouquetCard from '@/components/feed/BouquetCard';
 import { api, ApiError } from '@/lib/api';
-import { formatDate } from '@/lib/format';
+import { formatDate, formatTenure } from '@/lib/format';
 import type { ProfileResponse } from '@/lib/types';
 
 function plural(n: number, one: string, few: string, many: string) {
@@ -82,6 +82,10 @@ export default function ProfileScreen({ id }: { id: string }) {
               · {user.deals_count} {plural(user.deals_count, 'сделка', 'сделки', 'сделок')}
             </span>
           </div>
+          {/* «N месяцев на площадке» — relative tenure; omitted until the API ships created_at. */}
+          {formatTenure(user.created_at) && (
+            <div style={{ color: 'var(--pd-muted)', fontSize: 13, marginTop: 2 }}>{formatTenure(user.created_at)}</div>
+          )}
         </div>
       </div>
 

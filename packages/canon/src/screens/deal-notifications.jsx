@@ -3,17 +3,16 @@
 import React from "react";
 import "../styles/canon.css";
 import { PdAvatar, PdIc, pdMoney } from "../feed/feed";
-import { PdBtn, PdBubble, PdField, PdI, PdInput, PdNotice, PdScreen, PdStars, PdStepper } from "../primitives/kit";
+import { PdI, PdBtn, PdField, PdInput, PdStepper, PdBubble, PdStars, PdNotice, PdScreen } from "../primitives/kit";
 
 // pd-scr-3.jsx — Сделка (agreed/meeting/done/problem), отзыв, уведомления, offline
-
 const IMG3 = (id)=>`img/${id}.jpg`;
 
 const DealMini = ({ status }) => (
   <div style={{display:'flex',alignItems:'center',gap:11,padding:'12px 16px',borderBottom:'1px solid var(--pd-border)',background:'var(--pd-surface)'}}>
     <img src={IMG3('1561181286-d3fee7d55364')} alt="" style={{width:48,height:48,borderRadius:12,objectFit:'cover'}}/>
     <div style={{flex:1,minWidth:0}}>
-      <div style={{fontWeight:700,fontSize:14}}>Букет M · Патрики</div>
+      <div style={{fontWeight:700,fontSize:14}}>Букет M</div>
       <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:2}}>Продавец Аня · 4,9 ★</div>
     </div>
     <div style={{textAlign:'right'}}>
@@ -58,7 +57,7 @@ function DealActive() {
   );
 }
 
-// 3b — Сделка: спор (disputed)
+// 3b — Сделка: проблема / обращение в поддержку
 function DealProblem() {
   const footer = (<div className="pd-footerbar"><div style={{display:'flex',gap:10}}>
     <PdBtn variant="secondary" style={{flex:1}}>Отозвать обращение</PdBtn>
@@ -83,7 +82,7 @@ function DealProblem() {
   );
 }
 
-// 3c — Сделка: завершено (released)
+// 3c — Сделка: завершено
 function DealDone() {
   const footer = (<div className="pd-footerbar"><PdBtn variant="primary" block lg icon={PdIc.star}>Оценить продавца</PdBtn></div>);
   return (
@@ -95,26 +94,6 @@ function DealDone() {
         <div className="glyph" style={{color:'var(--pd-like)'}}>{PdI.heartline({className:'pd-i28',fill:'var(--pd-like)',stroke:'var(--pd-like)'})}</div>
         <h3>Как всё прошло?</h3>
         <p>Оставьте отзыв, это помогает другим покупателям и поднимает продавца в ленте.</p>
-      </div>
-    </PdScreen>
-  );
-}
-
-// 3d — Оплата не прошла (payment_failed)
-function PaymentFailed() {
-  const footer=(<div className="pd-footerbar"><div style={{display:'flex',gap:10}}>
-    <PdBtn variant="secondary" style={{flex:1}}>Сменить способ</PdBtn>
-    <PdBtn variant="primary" icon={PdI.refresh} style={{flex:1}}>Повторить оплату</PdBtn></div></div>);
-  return (
-    <PdScreen title="Оплата" center footer={footer}>
-      <div className="pd-empty" style={{height:'auto',paddingTop:54}}>
-        <div className="glyph" style={{color:'var(--pd-danger)',background:'var(--pd-danger-soft)'}}>{PdI.alert({className:'pd-i28',fill:'none',stroke:'currentColor'})}</div>
-        <h3>Оплата при встрече</h3>
-        <p>Договоритесь с продавцом в чате и заберите букет рядом — оплата при встрече, когда увидели цветы.</p>
-      </div>
-      <div style={{padding:'4px 16px'}}>
-        <PdNotice kind="ok" icon={PdI.shield}>Платите продавцу на месте — наличными или переводом. Площадка деньги не держит.</PdNotice>
-        <div style={{marginTop:12}}><PdInput icon={PdI.wallet} value="Карта •••• 4416" /></div>
       </div>
     </PdScreen>
   );
@@ -195,13 +174,4 @@ function Offline() {
   );
 }
 
-export {
-  DealActive,
-  DealProblem,
-  DealDone,
-  PaymentFailed,
-  ReviewForm,
-  Notifications,
-  NotificationsEmpty,
-  Offline
-};
+export { DealActive, DealProblem, DealDone, ReviewForm, Notifications, NotificationsEmpty, Offline };

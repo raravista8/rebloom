@@ -10,9 +10,12 @@ import { PdField, PdBtn, PdNotice } from '@/components/canon';
 import { IconPin, IconInfo, IconCheck } from '@/components/icons';
 import ScreenChrome from '@/components/shell/ScreenChrome';
 import PhotoUploader from '@/components/sell/PhotoUploader';
+import MetroPicker from '@/components/forms/MetroPicker';
+import FlowerPicker from '@/components/forms/FlowerPicker';
 import { api, ApiError } from '@/lib/api';
 import { reachGoal } from '@/lib/ym';
 import { cityName, DEFAULT_CITY } from '@/lib/cities';
+import { stationsForCity } from '@/lib/metro';
 import type { Size, Freshness, ListingDetail } from '@/lib/types';
 
 const SIZES: [Size, string][] = [['S', 'до 7'], ['M', '7–15'], ['L', '15–25'], ['XL', '25+']];
@@ -27,8 +30,11 @@ export default function SellForm() {
   const [size, setSize] = useState<Size>('M');
   const [freshness, setFreshness] = useState<Freshness>('today');
   const [priceRub, setPriceRub] = useState('');
+  const [metroId, setMetroId] = useState<string | undefined>();
+  const [flowerTypes, setFlowerTypes] = useState<string[]>([]);
   const [geo, setGeo] = useState('');
   const cityId = DEFAULT_CITY;
+  const hasMetro = stationsForCity(cityId).length > 0;
 
   const [photoErr, setPhotoErr] = useState<string | undefined>();
   const [priceErr, setPriceErr] = useState<string | undefined>();
@@ -76,7 +82,9 @@ export default function SellForm() {
         freshness,
         price_kopecks: priceKopecks,
         city_id: cityId,
+        ...(metroId ? { metro_station_id: metroId } : {}),
         ...(geo.trim() ? { geo: geo.trim() } : {}),
+        ...(flowerTypes.length ? { flower_types: flowerTypes } : {}),
         photo_ids: photoIds,
       });
       setCreated(listing);
@@ -91,7 +99,7 @@ export default function SellForm() {
     } finally {
       setSubmitting(false);
     }
-  }, [photoIds, priceKopecks, size, freshness, cityId, geo, router]);
+  }, [photoIds, priceKopecks, size, freshness, cityId, metroId, flowerTypes, geo, router]);
 
   if (phase === 'checking') {
     return (
@@ -163,8 +171,8 @@ export default function SellForm() {
           </div>
         </PdField>
 
-        <PdField label="Свежесть" hint="Когда букет к вам попал. Срок отсчитываем от этого дня.">
-          <div className="pd-seg" role="group" aria-label="Свежесть">
+        <PdField label="Когда букет подарили" hint="Срок свежести отсчитываем от этого дня.">
+          <div className="pd-seg" role="group" aria-label="Когда букет подарили">
             {FRESH.map(([k, l]) => (
               <button key={k} type="button" className={freshness === k ? 'on' : ''} onClick={() => setFreshness(k)}>
                 {l}
@@ -173,7 +181,7 @@ export default function SellForm() {
           </div>
         </PdField>
 
-        <PdField label="Цена" hint="Похожие букеты уходят за 700–1 300 ₽." error={priceErr}>
+        <PdField label="Цена" error={priceErr}>
           <div className={`pd-input${priceErr ? ' pd-input--invalid' : ''}`}>
             <span className="pre">₽</span>
             <input
@@ -189,16 +197,28 @@ export default function SellForm() {
           </div>
         </PdField>
 
-        <PdField label="Район" opt="необязательно" hint="Точное место покупатель увидит только после договорённости.">
-          <div className="pd-input">
-            <IconPin className="pd-i18" style={{ color: 'var(--pd-muted)', flex: 'none' }} />
-            <input
-              placeholder={`${cityName(cityId)} · район`}
-              value={geo}
-              onChange={(e) => setGeo(e.target.value.slice(0, 128))}
-              aria-label="Район"
-            />
-          </div>
+        {/* Metro station (cities with a metro) — primary самовывоз ориентир. No-metro
+            cities keep a район text fallback. Точное место — only after the chat agrees. */}
+        {hasMetro ? (
+          <PdField label="Станция метро" opt="необязательно" hint="Самовывоз будет привязан к станции. Точное место покупатель увидит после договорённости.">
+            <MetroPicker cityId={cityId} value={metroId} onChange={setMetroId} placeholder="Выберите станцию рядом" />
+          </PdField>
+        ) : (
+          <PdField label="Район" opt="необязательно" hint="Точное место покупатель увидит только после договорённости.">
+            <div className="pd-input">
+              <IconPin className="pd-i18" style={{ color: 'var(--pd-muted)', flex: 'none' }} />
+              <input
+                placeholder={`${cityName(cityId)} · район`}
+                value={geo}
+                onChange={(e) => setGeo(e.target.value.slice(0, 128))}
+                aria-label="Район"
+              />
+            </div>
+          </PdField>
+        )}
+
+        <PdField label="Какие цветы" opt="необязательно" hint="Помогает покупателю найти ваш букет по составу.">
+          <FlowerPicker value={flowerTypes} onChange={setFlowerTypes} />
         </PdField>
       </div>
     </ScreenChrome>

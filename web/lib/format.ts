@@ -52,4 +52,28 @@ export function formatDate(iso: string): string {
   }
 }
 
+const MONTHS = ['месяц', 'месяца', 'месяцев'];
+const YEARS = ['год', 'года', 'лет'];
+function plur(n: number, forms: string[]): string {
+  const m10 = n % 10;
+  const m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return forms[0];
+  if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return forms[1];
+  return forms[2];
+}
+
+// «На площадке» tenure, relative to registration (canon desktop «10 месяцев на площадке»).
+// Returns undefined for a missing/invalid/future date so callers can omit the row.
+export function formatTenure(iso?: string): string | undefined {
+  if (!iso) return undefined;
+  const start = new Date(iso).getTime();
+  if (Number.isNaN(start)) return undefined;
+  const months = Math.floor((Date.now() - start) / (1000 * 60 * 60 * 24 * 30.44));
+  if (months < 0) return undefined;
+  if (months < 1) return 'меньше месяца на площадке';
+  if (months < 12) return `${months} ${plur(months, MONTHS)} на площадке`;
+  const years = Math.floor(months / 12);
+  return `${years} ${plur(years, YEARS)} на площадке`;
+}
+
 export const POLICY_VERSION = '1.0';
