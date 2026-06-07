@@ -69,3 +69,57 @@ Android одновременно**, без пересборки приложен
   Chromium-теста, но движки чуть разные → пиксель-парити «по построению» (один DOM/CSS), мелкие
   WebKit-дельты ловит ручной device-QA.
 - **Верификация = та же:** `npm run test:visual` зелёный = парити на всех платформах (один build, один DOM).
+
+## Тестирование (сценарии + безопасность)
+Базовый принцип: **приложение = живой web в WebView**, поэтому ~90% тестов — это уже существующий
+web/бэкенд-сьют, плюс тонкая нативная прослойка сверху.
+
+### Сценарии (functional) — в основном уже автоматизированы
+- **Playwright-спеки** (функциональные + флоу) в Chromium на **mobile-375 = эталон iPhone** — это и есть
+  UI-сценарии приложения (тот же DOM/CSS, что рендерит WebView): логин/продать/купить/чат/каталог/фильтры.
+- **`npm run test:visual`** (пиксель + геометрия) на mobile-375 = рендер приложения.
+- **`pytest`** unit/integration/contract = тот же API, что дёргает приложение.
+- → **CI-гейты web-деплоя = регресс-сьют приложения по построению** (каждый деплой = апдейт приложения).
+
+### Нативная прослойка (web-тесты НЕ покрывают)
+- **Плагины** (камера/гео/пуш/share/haptics) — в Chromium не дёрнуть → **unit на feature-detect/degrade**
+  (ветка «натив» vs web-деградация) + **ручной device-QA / device-farm** для железа.
+- **Конфиг WebView**: `server.url`-allowlist, `cleartext:false`, mixed-content off — ревью + смоук на эмуляторе.
+- **Deep links / пуш→экран / offline-фоллбэк** — эмулятор/девайс.
+
+### Безопасность — слоями
+**Унаследовано (в CI + `SECURITY.md`):** тесты угроз T-01..18 (OTP-брутфорс, IDOR/authz, contact-leak,
+PII-маскирование, модерация), `make security-check` (bandit/pip-audit/npm audit/gitleaks), auth-aware
+(`useMe`/гость-хедер), middleware-гейтинг — защищает и приложение (бэкенд+web те же).
+
+**Нативный чек-лист (новая поверхность):**
+- Сессия: кука HttpOnly+Secure в WebView; токены (если добавим) → `@capacitor/preferences` (Keychain/
+  Keystore); нет токена в plaintext/логах.
+- **Navigation-allowlist:** WebView не уходит никуда кроме `peredarim.ru`; внешнее (ЮKassa dormant, legal) →
+  системный браузер (анти-фишинг).
+- Транспорт только HTTPS (ATS iOS / network-security-config Android); опц. **cert-pinning** vs MITM `[decision]`.
+- **Least-privilege permissions** (только камера/гео/пуш + usage-строки; никаких лишних — стор+ФЗ-152).
+- Пуш без PII в теле (NOTIFICATIONS.md).
+- Supply-chain: плагины = npm-деп → `npm audit` + пины + ADR на рантайм-деп.
+- **MobSF** по собранному APK/IPA (права/секреты/конфиг — мобильный аналог bandit) — если есть сборка.
+- DAST: OWASP ZAP по `peredarim.ru` покрывает API-поверхность.
+- Опц. хардненинг (блок скриншотов на чувствительных экранах, root/jailbreak-детект) — post-MVP `[decision]`.
+
+### Конкретный прогон (когда соберём приложения)
+1. **Pre-build (автомат):** весь CI — Playwright mobile-375, visual-regression, pytest + тесты угроз, `security-check`.
+2. **Нативная проводка (код):** unit на degrade/«натив» + **ревью конфига** (allowlist, cleartext-off, least-priv, нет секретов в `capacitor.config`/бандле).
+3. **Бинарь:** MobSF по APK/IPA + `npm audit` плагинов.
+4. **Эмулятор (без Mac):** Android-эмулятор — смоук сценариев + пути плагинов + navigation-allowlist + offline.
+5. **Ручной device-чек-лист** (только железо): камера→загрузка, гео→самовывоз, пуш→deep-link, share,
+   внешняя ссылка→системный браузер, сессия persist / logout-revoke.
+6. **Device-farm (опц.):** Firebase Test Lab (Android) / BrowserStack — кросс-девайс + парити WebKit/Blink.
+
+### Что НЕ могу сам (честные границы)
+- **Реальный iPhone / Mac** → iOS-натив, WKWebView-квирки, TestFlight = владелец / облачный Mac-CI / ручной QA.
+- **Железо сенсоров** (камера/GPS/пуш по-настоящему) — девайс или device-farm.
+- **Ревью сторов** + пентест подписанного бинаря на jailbroken-девайсе — внешнее/специалист.
+
+**Итог:** автоматизирую п.1–3 + Android-эмулятор (4) + готовлю ручной чек-лист (5); реальный-iPhone/Mac/
+сторы/сенсоры — вне меня. Сценарии ≈ существующий web/e2e на mobile-375 + device-смоук плагинов;
+безопасность = полный backend/web threat-model + CI **плюс** нативный чек-лист (allowlist, cleartext-off,
+secure-storage, least-priv, no-PII-push, MobSF).
