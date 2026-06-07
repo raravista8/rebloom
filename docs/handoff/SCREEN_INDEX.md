@@ -16,6 +16,7 @@
 | 7 | Профиль продавца | `/u/[id]` | — | loading/empty | 🔵 | рейтинг, отзывы, активные объявления (FR-041) |
 | 8 | Уведомления | `/notifications` | открыть сделку | empty | 🔵 | статусы сделок, лайки |
 | 9 | Город / выбор + поиск/фильтр | `/city`, `/search` | применить | empty/no-results | 🔵 | CitySelector, фильтры |
+| 9a | **Каталог букетов** | `/catalog` | открыть карточку / показать ещё | loading/loaded/empty/no-results/loading-more/end/error/offline | 🔴 | **browse-first** сетка всех букетов города (load-more + фильтры), ≠ поиск-first `/search`. Нужен canon-экран — ТЗ: `canon-tasks/catalog-page.md`. Сейчас `/catalog` = заглушка→`/` |
 | 10 | Пустые состояния / нет сети | (overlay) | повторить | — | 🔵 | EmptyState, offline |
 | 11 | Админ / очередь модерации | `/admin` | approve/reject | empty/loading | 🔵 | desktop; pending_review, held reviews (FR-060), 2FA |
 | 12 | Открыть спор (причина+доказательства) | `/deal/[id]/dispute/new` | отправить спор | reason/error/submitting/success | 🔵 | FLOW-1 шаги 1–2 |
