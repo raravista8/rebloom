@@ -2,11 +2,9 @@
 // Converted from design source pd-scr-2.jsx (single source of truth — edited ONLY by Claude Design).
 import React from "react";
 import "../styles/canon.css";
-import { PdIc } from "../feed/feed";
-import { PdBtn, PdField, PdI, PdInput, PdNotice, PdOtp, PdScreen, PdSeg, PdSizeSel } from "../primitives/kit";
+import { PdI, PdBtn, PdField, PdInput, PdOtp, PdSeg, PdSizeSel, PdNotice, PdScreen, PdMetroPicker, PdFlowerPicker } from "../primitives/kit";
 
 // pd-scr-2.jsx — Продать (форма + модерация) · Вход (phone + OTP + locked)
-
 const IMG2 = (id)=>`img/${id}.jpg`;
 
 // 2a — Продать (форма)
@@ -21,6 +19,8 @@ function Uploader() {
   );
 }
 function SellForm() {
+  const [metro,setMetro]=React.useState('Маяковская');
+  const [flowers,setFlowers]=React.useState(['Пионовидные розы','Зелень и эвкалипт']);
   const footer = (<div className="pd-footerbar"><PdBtn variant="primary" block lg>Опубликовать букет</PdBtn></div>);
   return (
     <PdScreen title="Продать букет" footer={footer}>
@@ -28,15 +28,18 @@ function SellForm() {
         <PdField label="Фото букета" hint="1–5 фото. Уберём метаданные и геоданные перед загрузкой.">
           <Uploader/>
         </PdField>
-        <PdField label="Размер"><PdSizeSel value="M"/></PdField>
-        <PdField label="Свежесть" hint="Когда букет к вам попал. Срок отсчитываем от этого дня.">
+        <PdField label="Размер" hint="Считаем по числу стеблей — как принято во флористике."><PdSizeSel value="M"/></PdField>
+        <PdField label="Когда букет подарили" hint="От этого дня считаем свежесть — её увидят в теге букета.">
           <PdSeg value="today" options={[{k:'today',label:'Сегодня'},{k:'d1_2',label:'1–2 дня'},{k:'d3_plus',label:'3+ дня'}]}/>
         </PdField>
-        <PdField label="Цена" hint="Похожие букеты в Москве уходят за 700–1 300 ₽.">
+        <PdField label="Цена">
           <PdInput prefix="₽" value="990" />
         </PdField>
-        <PdField label="Район" hint="Точный адрес покупатель увидит после договорённости.">
-          <PdInput icon={PdIc.pin} value="Москва · Патрики" />
+        <PdField label="Станция метро" hint="Главный ориентир для покупателя. Точный адрес — в чате после договорённости.">
+          <PdMetroPicker cityKey="msk" value={metro} onChange={setMetro} />
+        </PdField>
+        <PdField label="Какие цветы" opt="необязательно" hint="Помогает покупателю найти букет в фильтрах по типу цветов.">
+          <PdFlowerPicker value={flowers} onChange={setFlowers} />
         </PdField>
         <PdField label="Описание" opt="необязательно" counter="84 / 600">
           <PdInput textarea rows={3} value="Подарили утром, пионовидные розы и эвкалипт. Очень свежие, стоят в воде." />
@@ -169,12 +172,4 @@ function OtpLocked() {
   );
 }
 
-export {
-  SellForm,
-  SellBlocked,
-  SellPublished,
-  SellRemoved,
-  LoginPhone,
-  OtpVerify,
-  OtpLocked
-};
+export { SellForm, SellBlocked, SellPublished, SellRemoved, LoginPhone, OtpVerify, OtpLocked };

@@ -3,7 +3,7 @@
 import React from "react";
 import "../styles/canon.css";
 import { PdCard, PdIc, PD_FRESH, PD_LIKED } from "../feed/feed";
-import { PdBtn } from "../primitives/kit";
+import { PdBtn, PdMetroPicker } from "../primitives/kit";
 
 // ── brand mark «Соцветие» — лепестки = currentColor (подхватывают тему), центр янтарный
 const PETAL = 'M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z';
@@ -149,7 +149,7 @@ const PdLanding = (function () {
     { icon: Gear, label: 'Настройки', href: '#' },
   ];
 
-  function MobileMenu({ open, auth = false, city: cityProp = 'Москва', onClose, links: linksProp }) {
+  function MobileMenu({ open, auth = false, city: cityProp = 'Москва', onClose }) {
     const [city, setCity] = React.useState(cityProp);
     const [cityOpen, setCityOpen] = React.useState(false);
     const closeRef = React.useRef(null);
@@ -161,7 +161,7 @@ const PdLanding = (function () {
       return () => { document.removeEventListener('keydown', onKey); clearTimeout(t); };
     }, [open]);
     const cityCount = (CITY_LIST.find((c) => c.name === city) || {}).count;
-    const links = linksProp || (auth ? AUTH_LINKS : GUEST_LINKS);
+    const links = auth ? AUTH_LINKS : GUEST_LINKS;
     return (
       <div className={'pdl-drawer' + (open ? ' open' : '')} aria-hidden={!open}>
         <div className="pdl-drawer-scrim" onClick={onClose} />
@@ -274,21 +274,28 @@ const PdLanding = (function () {
   const C_POOL = [...FRESH, ...LIKED];
   const C_PRICE = { any: () => true, lt1k: (p) => p < 1000, '1k2k': (p) => p >= 1000 && p <= 2000, gt2k: (p) => p > 2000 };
   const C_RATING = { any: () => true, '45': (r) => r >= 4.5, '48': (r) => r >= 4.8, '5': (r) => r >= 5 };
+  const C_FLOWERS = ['Розы', 'Пионовидные розы', 'Пионы', 'Тюльпаны', 'Гортензия', 'Хризантемы'];
   const FILTERS = {
     price: { label: 'Цена', opts: [['lt1k', 'до 1 000 ₽'], ['1k2k', '1 000–2 000 ₽'], ['gt2k', '2 000 ₽+']] },
-    fresh: { label: 'Свежесть', opts: [['today', 'Сегодня'], ['d1_2', '1–2 дня']] },
+    fresh: { label: 'Свежесть', opts: [['today', 'Свежий'], ['d1_2', '1–2 дня'], ['d3_plus', '3+ дня']] },
+    flower: { label: 'Тип цветов', opts: C_FLOWERS.map((f) => [f, f]) },
     rating: { label: 'Рейтинг продавца', opts: [['45', '4,5+'], ['48', '4,8+'], ['5', '5,0']] },
   };
   function Catalog({ desk }) {
-    const [sel, setSel] = React.useState({ price: 'any', fresh: 'any', rating: 'any' });
+    const MetroPicker = PdMetroPicker;
+    const [sel, setSel] = React.useState({ price: 'any', fresh: 'any', flower: 'any', rating: 'any' });
+    const [metros, setMetros] = React.useState([]);
     const toggle = (k, v) => setSel((s) => ({ ...s, [k]: s[k] === v ? 'any' : v }));
-    const reset = () => setSel({ price: 'any', fresh: 'any', rating: 'any' });
-    const activeN = Object.values(sel).filter((v) => v !== 'any').length;
+    const toggleMetro = (s) => setMetros((m) => s === null ? [] : (m.includes(s) ? m.filter((x) => x !== s) : [...m, s]));
+    const reset = () => { setSel({ price: 'any', fresh: 'any', flower: 'any', rating: 'any' }); setMetros([]); };
+    const activeN = Object.values(sel).filter((v) => v !== 'any').length + metros.length;
     const filtered = React.useMemo(() => C_POOL.filter((d) =>
       C_PRICE[sel.price](d.price) &&
       (sel.fresh === 'any' || d.fresh === sel.fresh) &&
-      C_RATING[sel.rating](d.seller.r)
-    ), [sel]);
+      (sel.flower === 'any' || (d.flowers || []).includes(sel.flower)) &&
+      C_RATING[sel.rating](d.seller.r) &&
+      (metros.length === 0 || metros.includes(d.metro))
+    ), [sel, metros]);
     const shown = filtered.slice(0, 8);
     return (
       <section className="pdl-sec alt" id="catalog">
@@ -296,11 +303,18 @@ const PdLanding = (function () {
           <div className="pdl-sechead l">
             <p className="pdl-kicker"><Leaf className="lf" />Живой каталог</p>
             <h2 className="pdl-h2">Свежие букеты рядом, прямо сейчас</h2>
-            <p className="pdl-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
+            <p className="pdl-sub">Метка «Свежий» значит, что букет подарили сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
           </div>
           <div className="pdl-catbar">
             <CityChips cls="pdl-cities" />
             <span className="pdl-catcount"><span className="d" />{filtered.length} свежих букетов в Москве</span>
+          </div>
+          <div className="pdl-metrobar">
+            <span className="pdl-flabel">Метро</span>
+            <div className="pdl-metrowrap">
+              <MetroPicker cityKey="msk" multi values={metros} onToggle={toggleMetro} placeholder="Любые станции метро" />
+            </div>
+            {metros.length > 0 && <button className="pdl-freset" onClick={() => setMetros([])}>Сбросить{metros.length > 1 ? ` (${metros.length})` : ' станцию'}</button>}
           </div>
           <div className="pdl-filters">
             {Object.entries(FILTERS).map(([k, g]) => (

@@ -1,12 +1,12 @@
-import { I, Ic, PdBtn, PdScreen, PdStepper, PdNotice, PdBubble, PdInput, Avatar, PdStars, PdField, pdMoney, LikeBtn, Freshness, PD_FRESH, Card, PdSizeSel, PdSeg, PD_LIKED } from './chunk-SNT6I4NE.mjs';
-import 'react';
+import { I, Ic, PdBtn, PdScreen, PdStepper, PdNotice, PdBubble, Avatar, PdStars, PdField, PdInput, pdMoney, LikeBtn, Freshness, MetroLabel, PD_FRESH, Card, PdSizeSel, PdSeg, PdMetroPicker, PdFlowerPicker, PD_LIKED, Heart } from './chunk-EKGKIXGF.mjs';
+import React2 from 'react';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 var IMG3 = (id) => `img/${id}.jpg`;
 var DealMini = ({ status }) => /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 11, padding: "12px 16px", borderBottom: "1px solid var(--pd-border)", background: "var(--pd-surface)" }, children: [
   /* @__PURE__ */ jsx("img", { src: IMG3("1561181286-d3fee7d55364"), alt: "", style: { width: 48, height: 48, borderRadius: 12, objectFit: "cover" } }),
   /* @__PURE__ */ jsxs("div", { style: { flex: 1, minWidth: 0 }, children: [
-    /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 14 }, children: "\u0411\u0443\u043A\u0435\u0442 M \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438" }),
+    /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 14 }, children: "\u0411\u0443\u043A\u0435\u0442 M" }),
     /* @__PURE__ */ jsx("div", { style: { fontSize: 12.5, color: "var(--pd-muted)", marginTop: 2 }, children: "\u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u0410\u043D\u044F \xB7 4,9 \u2605" })
   ] }),
   /* @__PURE__ */ jsxs("div", { style: { textAlign: "right" }, children: [
@@ -92,23 +92,6 @@ function DealDone() {
     ] })
   ] });
 }
-function PaymentFailed() {
-  const footer = /* @__PURE__ */ jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 10 }, children: [
-    /* @__PURE__ */ jsx(PdBtn, { variant: "secondary", style: { flex: 1 }, children: "\u0421\u043C\u0435\u043D\u0438\u0442\u044C \u0441\u043F\u043E\u0441\u043E\u0431" }),
-    /* @__PURE__ */ jsx(PdBtn, { variant: "primary", icon: I.refresh, style: { flex: 1 }, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u043E\u043F\u043B\u0430\u0442\u0443" })
-  ] }) });
-  return /* @__PURE__ */ jsxs(PdScreen, { title: "\u041E\u043F\u043B\u0430\u0442\u0430", center: true, footer, children: [
-    /* @__PURE__ */ jsxs("div", { className: "pd-empty", style: { height: "auto", paddingTop: 54 }, children: [
-      /* @__PURE__ */ jsx("div", { className: "glyph", style: { color: "var(--pd-danger)", background: "var(--pd-danger-soft)" }, children: I.alert({ className: "pd-i28", fill: "none", stroke: "currentColor" }) }),
-      /* @__PURE__ */ jsx("h3", { children: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435" }),
-      /* @__PURE__ */ jsx("p", { children: "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0435\u0441\u044C \u0441 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u043E\u043C \u0432 \u0447\u0430\u0442\u0435 \u0438 \u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0440\u044F\u0434\u043E\u043C \u2014 \u043E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u043A\u043E\u0433\u0434\u0430 \u0443\u0432\u0438\u0434\u0435\u043B\u0438 \u0446\u0432\u0435\u0442\u044B." })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { style: { padding: "4px 16px" }, children: [
-      /* @__PURE__ */ jsx(PdNotice, { kind: "ok", icon: I.shield, children: "\u041F\u043B\u0430\u0442\u0438\u0442\u0435 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443 \u043D\u0430 \u043C\u0435\u0441\u0442\u0435 \u2014 \u043D\u0430\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u043C. \u041F\u043B\u043E\u0449\u0430\u0434\u043A\u0430 \u0434\u0435\u043D\u044C\u0433\u0438 \u043D\u0435 \u0434\u0435\u0440\u0436\u0438\u0442." }),
-      /* @__PURE__ */ jsx("div", { style: { marginTop: 12 }, children: /* @__PURE__ */ jsx(PdInput, { icon: I.wallet, value: "\u041A\u0430\u0440\u0442\u0430 \u2022\u2022\u2022\u2022 4416" }) })
-    ] })
-  ] });
-}
 function ReviewForm() {
   const footer = /* @__PURE__ */ jsx("div", { className: "pd-footerbar", children: /* @__PURE__ */ jsx(PdBtn, { variant: "primary", block: true, lg: true, children: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043E\u0442\u0437\u044B\u0432" }) });
   return /* @__PURE__ */ jsxs(PdScreen, { title: "\u041E\u0442\u0437\u044B\u0432", center: true, footer, children: [
@@ -167,15 +150,24 @@ function Offline() {
     ] }) })
   ] });
 }
+var PETAL = "M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z";
+var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }) => /* @__PURE__ */ jsxs("svg", { className, width: size, height: size, viewBox: "0 0 100 100", role: "img", "aria-label": title, style: { display: "block", flex: "none", ...style }, children: [
+  [0, 72, 144, 216, 288].map((a) => /* @__PURE__ */ jsx("path", { d: PETAL, fill: "currentColor", transform: `rotate(${a} 50 50)` }, a)),
+  /* @__PURE__ */ jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
+] });
 var wic = (Fn, cls = "pd-i18") => Fn({ className: cls, fill: "none", stroke: "currentColor" });
 function WebShell({ active, children }) {
   const Bell = (p) => /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
     /* @__PURE__ */ jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" }),
     /* @__PURE__ */ jsx("path", { d: "M10 19a2 2 0 0 0 4 0" })
   ] });
+  const Heart2 = (p) => Heart({ className: p.className });
   return /* @__PURE__ */ jsxs("div", { className: "pd-root pd-web", "data-pd-theme": "a", children: [
     /* @__PURE__ */ jsx("header", { className: "pdw-nav", children: /* @__PURE__ */ jsxs("div", { className: "pdw-nav-in", children: [
-      /* @__PURE__ */ jsx("span", { className: "pd-brand pdw-brand", children: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }),
+      /* @__PURE__ */ jsxs("span", { className: "pd-brand pdw-brand", children: [
+        /* @__PURE__ */ jsx(Mark, { size: 24 }),
+        "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
+      ] }),
       /* @__PURE__ */ jsxs("div", { className: "pdw-navmid", children: [
         /* @__PURE__ */ jsxs("button", { className: "pd-city pdw-city", children: [
           wic(Ic.pin, "pd-i16"),
@@ -188,12 +180,12 @@ function WebShell({ active, children }) {
         ] })
       ] }),
       /* @__PURE__ */ jsxs("nav", { className: "pdw-navright", children: [
-        /* @__PURE__ */ jsx("button", { className: "pdw-iconbtn", children: wic(Bell, "pd-i20") }),
-        /* @__PURE__ */ jsx("button", { className: "pdw-iconbtn", children: wic(Ic.deals, "pd-i20") }),
+        /* @__PURE__ */ jsx("button", { className: "pdw-iconbtn", "aria-label": "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: wic(Bell, "pd-i20") }),
+        /* @__PURE__ */ jsx("button", { className: "pdw-iconbtn", "aria-label": "\u0418\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435", children: wic(Heart2, "pd-i20") }),
         /* @__PURE__ */ jsx("span", { className: "pdw-avatar", children: "\u041C" }),
         /* @__PURE__ */ jsxs("button", { className: "pdw-cta", children: [
           wic(Ic.plus, "pd-i18"),
-          "\u041F\u0440\u043E\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442"
+          "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442"
         ] })
       ] })
     ] }) }),
@@ -218,38 +210,52 @@ function ListingDesktop() {
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "pdw-buy", children: [
-        /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between" }, children: [
+        /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }, children: [
           /* @__PURE__ */ jsx("span", { className: "price", children: pdMoney(990) }),
-          /* @__PURE__ */ jsx(LikeBtn, { liked: true, count: 47 })
+          /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
+            /* @__PURE__ */ jsx("button", { className: "pd-sharebtn", "aria-label": "\u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F", children: I.share({ className: "pd-i18", fill: "none", stroke: "currentColor" }) }),
+            /* @__PURE__ */ jsx(LikeBtn, { liked: true, count: 47 })
+          ] })
         ] }),
-        /* @__PURE__ */ jsxs("div", { className: "pd-chiprow", style: { margin: "14px 0" }, children: [
+        /* @__PURE__ */ jsxs("div", { className: "pd-buy-meta", children: [
           /* @__PURE__ */ jsx(Freshness, { kind: "today" }),
-          /* @__PURE__ */ jsx("span", { className: "pd-chip", style: { pointerEvents: "none" }, children: "\u0420\u0430\u0437\u043C\u0435\u0440 M \xB7 7\u201315 \u0448\u0442." })
+          /* @__PURE__ */ jsxs("div", { className: "pd-buy-spec", children: [
+            /* @__PURE__ */ jsx("b", { children: "\u0420\u0430\u0437\u043C\u0435\u0440 M" }),
+            " \xB7 7\u201315 \u0441\u0442\u0435\u0431\u043B\u0435\u0439"
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "pd-buy-loc", children: [
+            /* @__PURE__ */ jsxs("span", { className: "loc-city", children: [
+              wic(Ic.pin, "pd-i16"),
+              "\u041C\u043E\u0441\u043A\u0432\u0430"
+            ] }),
+            /* @__PURE__ */ jsx(MetroLabel, { station: "\u041A\u0443\u0440\u0441\u043A\u0430\u044F" })
+          ] })
         ] }),
-        /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 5, color: "var(--pd-muted)", fontSize: 13.5 }, children: [
-          wic(Ic.pin, "pd-i16"),
-          "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438"
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "pdw-sellerrow", children: [
-          /* @__PURE__ */ jsx(Avatar, { seller: { n: "\u0410\u043D\u044F", av: "w1" }, size: 44 }),
-          /* @__PURE__ */ jsxs("div", { style: { flex: 1 }, children: [
-            /* @__PURE__ */ jsx("div", { style: { fontWeight: 700 }, children: "\u0410\u043D\u044F" }),
-            /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 5, color: "var(--pd-muted)", fontSize: 12.5, marginTop: 2 }, children: [
+        /* @__PURE__ */ jsx("div", { className: "pd-label", style: { margin: "18px 0 8px" }, children: "\u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446" }),
+        /* @__PURE__ */ jsxs("button", { className: "pd-sellercard", children: [
+          /* @__PURE__ */ jsx(Avatar, { seller: { n: "\u0410\u043D\u044F", av: "w1" }, size: 46 }),
+          /* @__PURE__ */ jsxs("div", { className: "pd-seller-main", children: [
+            /* @__PURE__ */ jsx("div", { className: "pd-seller-name", children: "\u041F\u0440\u043E\u0434\u0430\u0451\u0442 \u0410\u043D\u044F" }),
+            /* @__PURE__ */ jsxs("div", { className: "pd-seller-rating", children: [
               /* @__PURE__ */ jsx(PdStars, { value: 5 }),
-              "4,9 \xB7 23 \u0441\u0434\u0435\u043B\u043A\u0438"
+              /* @__PURE__ */ jsx("b", { children: "4,9" }),
+              /* @__PURE__ */ jsx("span", { className: "lbl", children: "\u0440\u0435\u0439\u0442\u0438\u043D\u0433 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430" })
             ] })
           ] }),
-          wic(I.fwd, "pd-i18")
-        ] }),
-        /* @__PURE__ */ jsx("div", { className: "pd-label", style: { marginBottom: 8 }, children: "\u041A\u0430\u043A \u0437\u0430\u0431\u0440\u0430\u0442\u044C" }),
-        /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 11, padding: "13px 14px", border: "1px solid var(--pd-border)", borderRadius: 14 }, children: [
-          /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", width: "20", height: "20", fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", style: { color: "var(--pd-primary)", flex: "none" }, children: [
-            /* @__PURE__ */ jsx("path", { d: "M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z" }),
-            /* @__PURE__ */ jsx("circle", { cx: "12", cy: "10", r: "2.5" })
+          /* @__PURE__ */ jsxs("div", { className: "pd-seller-deals", children: [
+            /* @__PURE__ */ jsx("b", { children: "23" }),
+            /* @__PURE__ */ jsx("span", { children: "\u0441\u0434\u0435\u043B\u043A\u0438" })
           ] }),
+          wic(I.fwd, "pd-i18 pd-seller-chev")
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "pd-label", style: { margin: "18px 0 8px" }, children: "\u0426\u0432\u0435\u0442\u044B \u0432 \u0431\u0443\u043A\u0435\u0442\u0435" }),
+        /* @__PURE__ */ jsx("div", { className: "pd-flowerlist", children: ["\u041F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B", "\u0417\u0435\u043B\u0435\u043D\u044C \u0438 \u044D\u0432\u043A\u0430\u043B\u0438\u043F\u0442"].join(" \xB7 ") }),
+        /* @__PURE__ */ jsx("div", { className: "pd-label", style: { margin: "18px 0 8px" }, children: "\u041A\u0430\u043A \u0437\u0430\u0431\u0440\u0430\u0442\u044C" }),
+        /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 11, padding: "13px 14px", border: "1px solid var(--pd-border)", borderRadius: 14 }, children: [
+          /* @__PURE__ */ jsx("span", { className: "pd-mglyph", style: { width: 24, height: 24, fontSize: 14 }, children: "\u041C" }),
           /* @__PURE__ */ jsxs("div", { style: { flex: 1 }, children: [
-            /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 14 }, children: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0440\u044F\u0434\u043E\u043C" }),
-            /* @__PURE__ */ jsx("div", { style: { fontSize: 12.5, color: "var(--pd-muted)", marginTop: 1 }, children: "\u0417\u0430\u0431\u0435\u0440\u0451\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0443 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430, \u043E\u0431\u044B\u0447\u043D\u043E \u0434\u0432\u043E\u0440 \u0438\u043B\u0438 \u043C\u0435\u0442\u0440\u043E \u043F\u043E\u0431\u043B\u0438\u0437\u043E\u0441\u0442\u0438" })
+            /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 14 }, children: "\u0421\u0430\u043C\u043E\u0432\u044B\u0432\u043E\u0437 \u0443 \u043C. \u041A\u0443\u0440\u0441\u043A\u0430\u044F" }),
+            /* @__PURE__ */ jsx("div", { style: { fontSize: 13, color: "var(--pd-muted)", marginTop: 1 }, children: "\u0417\u0430\u0431\u0435\u0440\u0451\u0442\u0435 \u0431\u0443\u043A\u0435\u0442 \u0440\u044F\u0434\u043E\u043C \u0441\u043E \u0441\u0442\u0430\u043D\u0446\u0438\u0435\u0439" })
           ] })
         ] }),
         /* @__PURE__ */ jsx("div", { style: { margin: "16px 0" }, children: /* @__PURE__ */ jsxs(PdNotice, { kind: "ok", icon: I.shield, children: [
@@ -286,7 +292,7 @@ function ProfileDesktop() {
             " \u043E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u0439"
           ] }),
           /* @__PURE__ */ jsxs("span", { children: [
-            /* @__PURE__ */ jsx("b", { children: "\u0441 2025" }),
+            /* @__PURE__ */ jsx("b", { children: "10 \u043C\u0435\u0441\u044F\u0446\u0435\u0432" }),
             " \u043D\u0430 \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0435"
           ] }),
           /* @__PURE__ */ jsxs("span", { children: [
@@ -322,7 +328,7 @@ function DealDesktop() {
         /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: 12, alignItems: "center", marginBottom: 16 }, children: [
           /* @__PURE__ */ jsx("img", { src: "img/1561181286-d3fee7d55364.jpg", alt: "", style: { width: 64, height: 64, borderRadius: 14, objectFit: "cover" } }),
           /* @__PURE__ */ jsxs("div", { style: { flex: 1 }, children: [
-            /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 16 }, children: "\u0411\u0443\u043A\u0435\u0442 M \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438" }),
+            /* @__PURE__ */ jsx("div", { style: { fontWeight: 700, fontSize: 16 }, children: "\u0411\u0443\u043A\u0435\u0442 M" }),
             /* @__PURE__ */ jsx("div", { style: { fontSize: 13, color: "var(--pd-muted)", marginTop: 2 }, children: "\u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u0410\u043D\u044F \xB7 4,9 \u2605" })
           ] }),
           /* @__PURE__ */ jsxs("div", { style: { textAlign: "right" }, children: [
@@ -364,6 +370,8 @@ function DealDesktop() {
   ] }) });
 }
 function SellDesktop() {
+  const [metro, setMetro] = React2.useState("\u041C\u0430\u044F\u043A\u043E\u0432\u0441\u043A\u0430\u044F");
+  const [flowers, setFlowers] = React2.useState(["\u041F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B", "\u0417\u0435\u043B\u0435\u043D\u044C \u0438 \u044D\u0432\u043A\u0430\u043B\u0438\u043F\u0442"]);
   return /* @__PURE__ */ jsx(WebShell, { children: /* @__PURE__ */ jsxs("div", { className: "pdw-narrow", children: [
     /* @__PURE__ */ jsx(Back, { children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
     /* @__PURE__ */ jsx("div", { className: "pdw-h1", children: "\u041F\u0440\u043E\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }),
@@ -386,10 +394,11 @@ function SellDesktop() {
       ] }) }),
       /* @__PURE__ */ jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }, children: [
         /* @__PURE__ */ jsx(PdField, { label: "\u0420\u0430\u0437\u043C\u0435\u0440", children: /* @__PURE__ */ jsx(PdSizeSel, { value: "M" }) }),
-        /* @__PURE__ */ jsx(PdField, { label: "\u0426\u0435\u043D\u0430", hint: "\u041F\u043E\u0445\u043E\u0436\u0438\u0435: 700\u20131 300 \u20BD.", children: /* @__PURE__ */ jsx(PdInput, { prefix: "\u20BD", value: "990" }) })
+        /* @__PURE__ */ jsx(PdField, { label: "\u0426\u0435\u043D\u0430", children: /* @__PURE__ */ jsx(PdInput, { prefix: "\u20BD", value: "990" }) })
       ] }),
-      /* @__PURE__ */ jsx(PdField, { label: "\u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C", children: /* @__PURE__ */ jsx(PdSeg, { value: "today", options: [{ k: "today", label: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F" }, { k: "d1_2", label: "1\u20132 \u0434\u043D\u044F" }, { k: "d3_plus", label: "3+ \u0434\u043D\u044F" }] }) }),
-      /* @__PURE__ */ jsx(PdField, { label: "\u0420\u0430\u0439\u043E\u043D", hint: "\u0422\u043E\u0447\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u0432\u0438\u0434\u0435\u043D \u043F\u043E\u0441\u043B\u0435 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0451\u043D\u043D\u043E\u0441\u0442\u0438.", children: /* @__PURE__ */ jsx(PdInput, { icon: Ic.pin, value: "\u041C\u043E\u0441\u043A\u0432\u0430 \xB7 \u041F\u0430\u0442\u0440\u0438\u043A\u0438" }) }),
+      /* @__PURE__ */ jsx(PdField, { label: "\u041A\u043E\u0433\u0434\u0430 \u0431\u0443\u043A\u0435\u0442 \u043F\u043E\u0434\u0430\u0440\u0438\u043B\u0438", hint: "\u041E\u0442 \u044D\u0442\u043E\u0433\u043E \u0434\u043D\u044F \u0441\u0447\u0438\u0442\u0430\u0435\u043C \u0441\u0432\u0435\u0436\u0435\u0441\u0442\u044C \u2014 \u0435\u0451 \u0443\u0432\u0438\u0434\u044F\u0442 \u0432 \u0442\u0435\u0433\u0435 \u0431\u0443\u043A\u0435\u0442\u0430.", children: /* @__PURE__ */ jsx(PdSeg, { value: "today", options: [{ k: "today", label: "\u0421\u0435\u0433\u043E\u0434\u043D\u044F" }, { k: "d1_2", label: "1\u20132 \u0434\u043D\u044F" }, { k: "d3_plus", label: "3+ \u0434\u043D\u044F" }] }) }),
+      /* @__PURE__ */ jsx(PdField, { label: "\u0421\u0442\u0430\u043D\u0446\u0438\u044F \u043C\u0435\u0442\u0440\u043E", hint: "\u0413\u043B\u0430\u0432\u043D\u044B\u0439 \u043E\u0440\u0438\u0435\u043D\u0442\u0438\u0440 \u0434\u043B\u044F \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F \u0432 \u041C\u043E\u0441\u043A\u0432\u0435. \u0422\u043E\u0447\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u2014 \u0432 \u0447\u0430\u0442\u0435 \u043F\u043E\u0441\u043B\u0435 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0451\u043D\u043D\u043E\u0441\u0442\u0438.", children: /* @__PURE__ */ jsx(PdMetroPicker, { cityKey: "msk", value: metro, onChange: setMetro }) }),
+      /* @__PURE__ */ jsx(PdField, { label: "\u041A\u0430\u043A\u0438\u0435 \u0446\u0432\u0435\u0442\u044B", opt: "\u043D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E", hint: "\u041F\u043E\u043C\u043E\u0433\u0430\u0435\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044E \u043D\u0430\u0439\u0442\u0438 \u0431\u0443\u043A\u0435\u0442 \u0432 \u0444\u0438\u043B\u044C\u0442\u0440\u0430\u0445 \u043F\u043E \u0442\u0438\u043F\u0443 \u0446\u0432\u0435\u0442\u043E\u0432.", children: /* @__PURE__ */ jsx(PdFlowerPicker, { value: flowers, onChange: setFlowers }) }),
       /* @__PURE__ */ jsx(PdField, { label: "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435", opt: "\u043D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E", counter: "84 / 600", children: /* @__PURE__ */ jsx(PdInput, { textarea: true, rows: 3, value: "\u041F\u043E\u0434\u0430\u0440\u0438\u043B\u0438 \u0443\u0442\u0440\u043E\u043C, \u043F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B \u0438 \u044D\u0432\u043A\u0430\u043B\u0438\u043F\u0442. \u041E\u0447\u0435\u043D\u044C \u0441\u0432\u0435\u0436\u0438\u0435, \u0441\u0442\u043E\u044F\u0442 \u0432 \u0432\u043E\u0434\u0435." }) }),
       /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(PdBtn, { variant: "primary", lg: true, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" }) })
     ] })
@@ -442,4 +451,4 @@ function SearchDesktop() {
   ] }) });
 }
 
-export { DealActive, DealDesktop, DealDone, DealProblem, ListingDesktop, Notifications, NotificationsDesktop, NotificationsEmpty, Offline, PaymentFailed, ProfileDesktop, ReviewForm, SearchDesktop, SellDesktop };
+export { DealActive, DealDesktop, DealDone, DealProblem, ListingDesktop, Notifications, NotificationsDesktop, NotificationsEmpty, Offline, ProfileDesktop, ReviewForm, SearchDesktop, SellDesktop };

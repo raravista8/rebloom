@@ -1,6 +1,6 @@
 {
   "name": "@rebloom/canon",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "description": "Передарим client + operator-admin UI canon — tokens, motion, primitives, feed, marketing landing (C2C-forward hero) + SEO pages (geo ×10 cities, safe-deal, blog), catalog, listing, deal, auth (OAuth ID + official T‑ID mark + phone/OTP with system-keyboard SMS AutoFill, mobile + desktop split), settings (payments & self-employment removed — no money flows through the platform), admin. Pickup-only; pay-on-meeting.",
   "license": "UNLICENSED",
   "private": true,
@@ -20,7 +20,8 @@
     "SEO_MARKETING_CANON_TZ.md",
     "AUTH_HANDOFF.md",
     "OTP_KEYBOARD_AUTOFILL.md",
-    "VISUAL_TEXT_CHANGES_0.8.0.md"
+    "VISUAL_TEXT_CHANGES_0.8.0.md",
+    "CANON_HANDOFF_design-pass.md"
   ],
   "exports": {
     ".": {

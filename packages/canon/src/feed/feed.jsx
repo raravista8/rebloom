@@ -3,34 +3,112 @@
 import React from "react";
 import "../styles/canon.css";
 
+// ── brand mark «Соцветие» — лепестки = currentColor (подхватывают тему), центр янтарный
+const PETAL = 'M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z';
+const Mark = ({ size=22, center='#E8A93B', style, className, title='Передарим' }) => (
+  <svg className={className} width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={title} style={{ display:'block', flex:'none', ...style }}>
+    {[0,72,144,216,288].map((a)=><path key={a} d={PETAL} fill="currentColor" transform={`rotate(${a} 50 50)`}/>)}
+    <circle cx="50" cy="50" r="8" fill={center}/>
+  </svg>
+);
+
 // pd-feed.jsx — «Передарим» главная / витрина (home feed)
 // One screen, themed via CSS vars on a .pd-root[data-pd-theme] wrapper.
-// Exports: window.PdFeed  +  window.PD_THEMES (label metadata)
+// Exports: PdFeed  +  PD_THEMES (label metadata)
 
 const PD_IMG = (id) => `img/${id}.jpg`;
 
 // ── sample listings (faithful to API_CONTRACT listing_card) ──────────────
 const PD_FRESH = [
-  { id: 'f1', photo: '1561181286-d3fee7d55364', size: 'M', fresh: 'today', price: 990,  district: 'Патрики',       likes: 47,  liked: true,  seller: { n: 'Аня',    r: 4.9, av: 'w1' } },
-  { id: 'f2', photo: '1563241527-3004b7be0ffd', size: 'L', fresh: 'today', price: 1290, district: 'Хамовники',     likes: 23,  liked: false, seller: { n: 'Марина', r: 4.8, av: 'w2' } },
-  { id: 'f3', photo: '1567418938902-aa650a3eb346', size: 'S', fresh: 'today', price: 690,  district: 'Сокол',         likes: 12,  liked: false, seller: { n: 'Ольга',  r: 5.0 } },
-  { id: 'f4', photo: '1572454591674-2739f30d8c40', size: 'M', fresh: 'today', price: 1100, district: 'Чистые пруды',  likes: 56,  liked: false, seller: { n: 'Соня',   r: 5.0, av: 'w3' } },
-  { id: 'f5', photo: '1581938165093-050aeb5ef218', size: 'L', fresh: 'today', price: 1450, district: 'Арбат',         likes: 19,  liked: false, seller: { n: 'Вера',   r: 4.6 } },
+  { id: 'fr1', photo: '1567418938902-aa650a3eb346', roseLabel: '101 роза', size: 'XL', fresh: 'today', price: 3490, city: 'Москва', metro: 'Маяковская',  district: 'Патрики', flowers: ['Розы'], likes: 73, liked: true, seller: { n: 'Эльвира', r: 4.9, av: 'w4' } },
+  { id: 'fr2', photo: '1563241527-3004b7be0ffd', roseLabel: '51 роза', size: 'XL', fresh: 'today', price: 1990, city: 'Москва', metro: 'Арбатская', district: 'Арбат', flowers: ['Розы'], likes: 58, liked: false, seller: { n: 'Карина', r: 4.8, av: 'w2' } },
+  { id: 'f1', photo: '1561181286-d3fee7d55364', size: 'M', fresh: 'today', price: 990,  city: 'Москва', metro: 'Маяковская',    district: 'Патрики',       flowers: ['Пионовидные розы', 'Зелень и эвкалипт'], likes: 47,  liked: true,  seller: { n: 'Аня',    r: 4.9, av: 'w1' } },
+  { id: 'f2', photo: '1563241527-3004b7be0ffd', size: 'L', fresh: 'today', price: 1290, city: 'Москва', metro: 'Парк культуры',  district: 'Хамовники',     flowers: ['Розы', 'Гортензия'], likes: 23,  liked: false, seller: { n: 'Марина', r: 4.8, av: 'w2' } },
+  { id: 'f3', photo: '1567418938902-aa650a3eb346', size: 'S', fresh: 'today', price: 690,  city: 'Москва', metro: 'Сокол',         district: 'Сокол',         flowers: ['Тюльпаны'], likes: 12,  liked: false, seller: { n: 'Ольга',  r: 5.0 } },
+  { id: 'f4', photo: '1572454591674-2739f30d8c40', size: 'M', fresh: 'today', price: 1100, city: 'Москва', metro: 'Чистые пруды',  district: 'Чистые пруды',  flowers: ['Пионы'], likes: 56,  liked: false, seller: { n: 'Соня',   r: 5.0, av: 'w3' } },
+  { id: 'f5', photo: '1581938165093-050aeb5ef218', size: 'L', fresh: 'today', price: 1450, city: 'Москва', metro: 'Смоленская',     district: 'Арбат',         flowers: ['Гортензия', 'Эустома'], likes: 19,  liked: false, seller: { n: 'Вера',   r: 4.6 } },
+  { id: 'f6', photo: '1565695951564-007d8f297e48', size: 'M', fresh: 'today', price: 880,  city: 'Москва', metro: 'Полянка',       district: 'Якиманка',      flowers: ['Ранункулюсы'], likes: 34,  liked: false, seller: { n: 'Ника',   r: 4.8 } },
 ];
 const PD_LIKED = [
-  { id: 'l1', photo: '1565695951564-007d8f297e48', size: 'XL', fresh: 'd1_2',   price: 1190, district: 'Тверской',     likes: 134, liked: true,  seller: { n: 'Катя',   r: 4.7, av: 'w4' }, ar: '4 / 5' },
-  { id: 'l2', photo: '1582794543139-8ac9cb0f7b11', size: 'M',  fresh: 'today',  price: 850,  district: 'Замоскворечье', likes: 88,  liked: false, seller: { n: 'Лена',   r: 4.9, av: 'w5' }, ar: '1 / 1' },
-  { id: 'l3', photo: '1531120364508-a6b656c3e78d', size: 'L',  fresh: 'd1_2',   price: 920,  district: 'Пресня',       likes: 71,  liked: true,  seller: { n: 'Юля',    r: 4.8, av: 'w6' }, ar: '1 / 1' },
-  { id: 'l4', photo: '1583228858294-6745cb25969e', size: 'S',  fresh: 'd3_plus',price: 590,  district: 'Сокол',        likes: 56,  liked: false, seller: { n: 'Ольга',  r: 5.0 }, ar: '4 / 5' },
-  { id: 'l5', photo: '1533616688419-b7a585564566', size: 'M',  fresh: 'today',  price: 1290, district: 'Патрики',      likes: 51,  liked: false, seller: { n: 'Аня',    r: 4.9, av: 'w1' }, ar: '1 / 1' },
-  { id: 'l6', photo: '1604323990536-e5452c0507c1', size: 'L',  fresh: 'd1_2',   price: 760,  district: 'Хамовники',    likes: 39,  liked: false, seller: { n: 'Марина', r: 4.8, av: 'w2' }, ar: '4 / 5' },
+  { id: 'lr1', photo: '1567418938902-aa650a3eb346', roseLabel: '201 роза', size: 'XL', fresh: 'today', price: 6900, city: 'Москва', metro: 'Кропоткинская', district: 'Остоженка', flowers: ['Розы'], likes: 96, liked: true, seller: { n: 'Вероника', r: 5.0, av: 'w1' }, ar: '1 / 1' },
+  { id: 'l1', photo: '1565695951564-007d8f297e48', size: 'XL', fresh: 'd1_2',   price: 1190, city: 'Москва', metro: 'Тверская',        district: 'Тверской',     flowers: ['Хризантемы'], likes: 134, liked: true,  seller: { n: 'Катя',   r: 4.7, av: 'w4' }, ar: '4 / 5' },
+  { id: 'l2', photo: '1582794543139-8ac9cb0f7b11', size: 'M',  fresh: 'today',  price: 850,  city: 'Москва', metro: 'Новокузнецкая',   district: 'Замоскворечье', flowers: ['Тюльпаны'], likes: 88,  liked: false, seller: { n: 'Лена',   r: 4.9, av: 'w5' }, ar: '1 / 1' },
+  { id: 'l3', photo: '1531120364508-a6b656c3e78d', size: 'L',  fresh: 'd1_2',   price: 920,  city: 'Москва', metro: 'Улица 1905 года', district: 'Пресня',       flowers: ['Альстромерия'], likes: 71,  liked: true,  seller: { n: 'Юля',    r: 4.8, av: 'w6' }, ar: '1 / 1' },
+  { id: 'l4', photo: '1583228858294-6745cb25969e', size: 'S',  fresh: 'd3_plus',price: 590,  city: 'Москва', metro: 'Сокол',           district: 'Сокол',        flowers: ['Розы', 'Гортензия'], likes: 56,  liked: false, seller: { n: 'Ольга',  r: 5.0 }, ar: '4 / 5' },
+  { id: 'l5', photo: '1533616688419-b7a585564566', size: 'M',  fresh: 'today',  price: 1290, city: 'Москва', metro: 'Маяковская',      district: 'Патрики',      flowers: ['Пионы'], likes: 51,  liked: false, seller: { n: 'Аня',    r: 4.9, av: 'w1' }, ar: '1 / 1' },
+  { id: 'l6', photo: '1604323990536-e5452c0507c1', size: 'L',  fresh: 'd1_2',   price: 760,  city: 'Москва', metro: 'Фрунзенская',     district: 'Хамовники',    flowers: ['Герберы'], likes: 39,  liked: false, seller: { n: 'Марина', r: 4.8, av: 'w2' }, ar: '4 / 5' },
+  { id: 'l7', photo: '1561181286-d3fee7d55364', size: 'M',  fresh: 'd1_2',   price: 690,  city: 'Москва', metro: 'Арбатская',       district: 'Арбат',        flowers: ['Полевые'], likes: 63,  liked: true,  seller: { n: 'Вера',   r: 4.6 }, ar: '1 / 1' },
 ];
 
+// бейджи свежести = «когда букет подарили» (тег читается явно)
 const PD_FRESH_META = {
-  today:   { label: 'Сегодня', dot: 'var(--pd-fresh)' },
-  d1_2:    { label: '1–2 дня', dot: 'var(--pd-aging)' },
-  d3_plus: { label: '3+ дня',  dot: 'var(--pd-old)'   },
+  today:   { label: 'Свежий',                short: 'Свежий', dot: 'var(--pd-fresh)' },
+  d1_2:    { label: '1–2 дня', short: '1–2 дня', dot: 'var(--pd-aging)' },
+  d3_plus: { label: '3+ дня',  short: '3+ дня',  dot: 'var(--pd-old)'   },
 };
+
+// ── метро: официальные цвета линий + станции по городам ──────────────────
+const PD_METRO_LINES = {
+  '1':'#D9232E','2':'#48B85C','3':'#0078BF','4':'#19C1F3','5':'#894E35',
+  '6':'#F58220','7':'#943D9F','8':'#FFCB31','9':'#A1A2A3','10':'#B3D445',
+  '11':'#79CDCD','sp1':'#D6083B','sp2':'#0072BC','sp3':'#239B56','sp4':'#F08300','sp5':'#7E3F98',
+};
+const PD_METRO = {
+  msk: [
+    { n:'Охотный Ряд', l:['1'] }, { n:'Лубянка', l:['1'] }, { n:'Чистые пруды', l:['1'] },
+    { n:'Кропоткинская', l:['1'] }, { n:'Комсомольская', l:['1','5'] }, { n:'Фрунзенская', l:['1'] },
+    { n:'Парк культуры', l:['1','5'] },
+    { n:'Тверская', l:['2'] }, { n:'Маяковская', l:['2'] }, { n:'Театральная', l:['2'] },
+    { n:'Новокузнецкая', l:['2'] }, { n:'Белорусская', l:['2','5'] }, { n:'Сокол', l:['2'] }, { n:'Аэропорт', l:['2'] },
+    { n:'Арбатская', l:['3'] }, { n:'Смоленская', l:['3'] }, { n:'Площадь Революции', l:['3'] }, { n:'Курская', l:['3','5'] },
+    { n:'Киевская', l:['3','4','5'] },
+    { n:'Краснопресненская', l:['5'] }, { n:'Добрынинская', l:['5'] }, { n:'Октябрьская', l:['5','6'] },
+    { n:'Проспект Мира', l:['5','6'] },
+    { n:'Третьяковская', l:['6','8'] }, { n:'Китай-город', l:['6','7'] }, { n:'Тургеневская', l:['6'] },
+    { n:'Пушкинская', l:['7'] }, { n:'Кузнецкий мост', l:['7'] }, { n:'Баррикадная', l:['7'] }, { n:'Улица 1905 года', l:['7'] }, { n:'Таганская', l:['5','7'] },
+    { n:'Марксистская', l:['8'] },
+    { n:'Чеховская', l:['9'] }, { n:'Цветной бульвар', l:['9'] }, { n:'Полянка', l:['9'] },
+    { n:'Трубная', l:['10'] }, { n:'Сретенский бульвар', l:['10'] }, { n:'Чкаловская', l:['10'] },
+  ],
+  spb: [
+    { n:'Невский проспект', l:['sp2'] }, { n:'Гостиный двор', l:['sp3'] }, { n:'Площадь Восстания', l:['sp1'] },
+    { n:'Маяковская', l:['sp3'] }, { n:'Сенная площадь', l:['sp2'] }, { n:'Адмиралтейская', l:['sp5'] },
+    { n:'Василеостровская', l:['sp3'] }, { n:'Петроградская', l:['sp2'] }, { n:'Чернышевская', l:['sp1'] },
+    { n:'Технологический институт', l:['sp1','sp2'] }, { n:'Спортивная', l:['sp5'] },
+  ],
+};
+// города, где есть метро (для них показываем станцию вместо города)
+const PD_CITY_METRO = { 'Москва':'msk', 'Санкт-Петербург':'spb', 'Казань':'kzn', 'Екатеринбург':'ekb', 'Новосибирск':'nsk', 'Нижний Новгород':'nn', 'Самара':'sam' };
+// быстрый индекс «станция → линии» (по всем городам)
+const PD_METRO_INDEX = {};
+Object.values(PD_METRO).forEach((arr) => arr.forEach((s) => { if (!PD_METRO_INDEX[s.n]) PD_METRO_INDEX[s.n] = s.l; }));
+const pdMetroLines = (station) => PD_METRO_INDEX[station] || [];
+
+// типы цветов (как «по типу/составу» на цветочных сайтах)
+const PD_FLOWERS = ['Розы','Пионовидные розы','Пионы','Тюльпаны','Гортензия','Хризантемы','Эустома','Ранункулюсы','Альстромерия','Лилии','Герберы','Ирисы','Орхидеи','Гвоздики','Полевые','Зелень и эвкалипт'];
+// набор для фильтров — самые частые типы
+const PD_FLOWER_FILTERS = ['Розы','Пионовидные розы','Пионы','Тюльпаны','Гортензия','Хризантемы','Эустома','Ранункулюсы','Альстромерия','Лилии','Полевые'];
+
+// маркер линий метро (цветные кружки)
+function MetroDots({ lines, size = 8 }) {
+  const ls = (lines && lines.length ? lines : ['9']);
+  return (
+    <span className="pd-mdots" aria-hidden="true">
+      {ls.slice(0, 3).map((l, i) => (
+        <i key={i} style={{ background: PD_METRO_LINES[l] || '#A1A2A3', width: size, height: size }} />
+      ))}
+    </span>
+  );
+}
+// метка станции метро: цветные кружки линий + «м. Станция»
+function MetroLabel({ station, lines, className, dotSize }) {
+  return (
+    <span className={'pd-metro' + (className ? ' ' + className : '')}>
+      <MetroDots lines={lines || pdMetroLines(station)} size={dotSize || 8} />
+      <span className="pd-metro-n">м.&nbsp;{station}</span>
+    </span>
+  );
+}
 
 const pdMoney = (rub) => rub.toLocaleString('ru-RU').replace(/,/g, ' ') + ' ₽';
 
@@ -105,15 +183,19 @@ function Card({ d, variant }) {
           <Freshness kind={d.fresh} />
           <LikeBtn liked={d.liked} count={d.likes} />
         </div>
+        {d.roseLabel && (
+          <span style={{ position: 'absolute', left: 8, bottom: 8, background: 'rgba(35,32,27,.82)', color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '.01em', padding: '4px 9px', borderRadius: 999, backdropFilter: 'blur(4px)' }}>{d.roseLabel}</span>
+        )}
       </div>
       <div className="pd-card-body">
         <div className="pd-price-row">
           <span className="pd-price">{pdMoney(d.price)}</span>
-          <span className="pd-size">{d.size}</span>
+          <span className="pd-size">Размер {d.size}</span>
         </div>
         <div className="pd-meta">
-          <Ic.pin className="pd-i14" fill="none" stroke="currentColor" />
-          <span className="pd-district">{d.district}</span>
+          {d.metro
+            ? <MetroLabel station={d.metro} dotSize={7} />
+            : <><Ic.pin className="pd-i14" fill="none" stroke="currentColor" /><span className="pd-district">{d.district}</span></>}
         </div>
         <div className="pd-seller">
           <Avatar seller={d.seller} size={21} />
@@ -143,7 +225,7 @@ function TopBar({ safeTop }) {
   return (
     <header className="pd-topbar" style={{ paddingTop: safeTop }}>
       <div className="pd-topbar-row">
-        <span className="pd-brand">Передарим</span>
+        <span className="pd-brand"><Mark size={21} />Передарим</span>
         <button className="pd-city">
           <Ic.pin className="pd-i16" fill="none" stroke="currentColor" />
           Москва
@@ -229,8 +311,7 @@ function PdFeed({ theme = 'a', platform = 'ios' }) {
   );
 }
 
-
-export const PD_THEMES = [
+const PD_THEMES = [
   { id: 'a', name: 'A · «Воздух»', sub: 'светлый минимал · Golos Text · терракота' },
   { id: 'b', name: 'B · «Тёплый»', sub: 'уютный · Lora + Nunito Sans · карамель' },
   { id: 'c', name: 'C · «Сад»',    sub: 'свежий tech · Manrope · ботаническая зелень' },
@@ -238,16 +319,10 @@ export const PD_THEMES = [
 
 export {
   PdFeed,
-  Card as PdCard,
-  Avatar as PdAvatar,
-  Freshness as PdFreshness,
-  LikeBtn as PdLikeBtn,
-  SectionHead as PdSectionHead,
-  TopBar as PdTopBar,
-  BottomNav as PdBottomNav,
-  Ic as PdIc,
-  Heart as PdHeart,
-  pdMoney,
-  PD_FRESH,
-  PD_LIKED
+  Card as PdCard, Avatar as PdAvatar, Freshness as PdFreshness, LikeBtn as PdLikeBtn,
+  SectionHead as PdSectionHead, TopBar as PdTopBar, BottomNav as PdBottomNav,
+  Ic as PdIc, Heart as PdHeart, pdMoney, PD_FRESH, PD_LIKED,
+  MetroDots as PdMetroDots, MetroLabel as PdMetroLabel, pdMetroLines,
+  PD_METRO, PD_METRO_LINES, PD_METRO_INDEX, PD_CITY_METRO,
+  PD_FLOWERS, PD_FLOWER_FILTERS, PD_FRESH_META, PD_THEMES
 };

@@ -1,4 +1,4 @@
-import { PD_FRESH, PD_LIKED, PdBtn, Ic, Card } from './chunk-SNT6I4NE.mjs';
+import { PD_FRESH, PD_LIKED, PdBtn, Ic, PdMetroPicker, Card } from './chunk-EKGKIXGF.mjs';
 import React from 'react';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 
@@ -169,7 +169,7 @@ var PdLanding = (function() {
     { icon: Bell, label: "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", dot: true, href: "#" },
     { icon: Gear, label: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438", href: "#" }
   ];
-  function MobileMenu({ open, auth = false, city: cityProp = "\u041C\u043E\u0441\u043A\u0432\u0430", onClose, links: linksProp }) {
+  function MobileMenu({ open, auth = false, city: cityProp = "\u041C\u043E\u0441\u043A\u0432\u0430", onClose }) {
     const [city, setCity] = React.useState(cityProp);
     const [cityOpen, setCityOpen] = React.useState(false);
     const closeRef = React.useRef(null);
@@ -194,7 +194,7 @@ var PdLanding = (function() {
       };
     }, [open]);
     const cityCount = (CITY_LIST.find((c) => c.name === city) || {}).count;
-    const links = linksProp || (auth ? AUTH_LINKS : GUEST_LINKS);
+    const links = auth ? AUTH_LINKS : GUEST_LINKS;
     return /* @__PURE__ */ jsxs("div", { className: "pdl-drawer" + (open ? " open" : ""), "aria-hidden": !open, children: [
       /* @__PURE__ */ jsx("div", { className: "pdl-drawer-scrim", onClick: onClose }),
       /* @__PURE__ */ jsxs("aside", { className: "pdl-drawer-panel", role: "dialog", "aria-modal": "true", "aria-label": "\u041C\u0435\u043D\u044E", children: [
@@ -328,19 +328,27 @@ var PdLanding = (function() {
   const C_POOL = [...FRESH2, ...LIKED2];
   const C_PRICE = { any: () => true, lt1k: (p) => p < 1e3, "1k2k": (p) => p >= 1e3 && p <= 2e3, gt2k: (p) => p > 2e3 };
   const C_RATING = { any: () => true, "45": (r) => r >= 4.5, "48": (r) => r >= 4.8, "5": (r) => r >= 5 };
+  const C_FLOWERS = ["\u0420\u043E\u0437\u044B", "\u041F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B", "\u041F\u0438\u043E\u043D\u044B", "\u0422\u044E\u043B\u044C\u043F\u0430\u043D\u044B", "\u0413\u043E\u0440\u0442\u0435\u043D\u0437\u0438\u044F", "\u0425\u0440\u0438\u0437\u0430\u043D\u0442\u0435\u043C\u044B"];
   const FILTERS = {
     price: { label: "\u0426\u0435\u043D\u0430", opts: [["lt1k", "\u0434\u043E 1 000 \u20BD"], ["1k2k", "1 000\u20132 000 \u20BD"], ["gt2k", "2 000 \u20BD+"]] },
-    fresh: { label: "\u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C", opts: [["today", "\u0421\u0435\u0433\u043E\u0434\u043D\u044F"], ["d1_2", "1\u20132 \u0434\u043D\u044F"]] },
+    fresh: { label: "\u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C", opts: [["today", "\u0421\u0432\u0435\u0436\u0438\u0439"], ["d1_2", "1\u20132 \u0434\u043D\u044F"], ["d3_plus", "3+ \u0434\u043D\u044F"]] },
+    flower: { label: "\u0422\u0438\u043F \u0446\u0432\u0435\u0442\u043E\u0432", opts: C_FLOWERS.map((f) => [f, f]) },
     rating: { label: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430", opts: [["45", "4,5+"], ["48", "4,8+"], ["5", "5,0"]] }
   };
   function Catalog({ desk }) {
-    const [sel, setSel] = React.useState({ price: "any", fresh: "any", rating: "any" });
+    const MetroPicker = PdMetroPicker;
+    const [sel, setSel] = React.useState({ price: "any", fresh: "any", flower: "any", rating: "any" });
+    const [metros, setMetros] = React.useState([]);
     const toggle = (k, v) => setSel((s) => ({ ...s, [k]: s[k] === v ? "any" : v }));
-    const reset = () => setSel({ price: "any", fresh: "any", rating: "any" });
-    const activeN = Object.values(sel).filter((v) => v !== "any").length;
+    const toggleMetro = (s) => setMetros((m) => s === null ? [] : m.includes(s) ? m.filter((x) => x !== s) : [...m, s]);
+    const reset = () => {
+      setSel({ price: "any", fresh: "any", flower: "any", rating: "any" });
+      setMetros([]);
+    };
+    const activeN = Object.values(sel).filter((v) => v !== "any").length + metros.length;
     const filtered = React.useMemo(() => C_POOL.filter(
-      (d) => C_PRICE[sel.price](d.price) && (sel.fresh === "any" || d.fresh === sel.fresh) && C_RATING[sel.rating](d.seller.r)
-    ), [sel]);
+      (d) => C_PRICE[sel.price](d.price) && (sel.fresh === "any" || d.fresh === sel.fresh) && (sel.flower === "any" || (d.flowers || []).includes(sel.flower)) && C_RATING[sel.rating](d.seller.r) && (metros.length === 0 || metros.includes(d.metro))
+    ), [sel, metros]);
     const shown = filtered.slice(0, 8);
     return /* @__PURE__ */ jsx("section", { className: "pdl-sec alt", id: "catalog", children: /* @__PURE__ */ jsxs("div", { className: "pdl-in", children: [
       /* @__PURE__ */ jsxs("div", { className: "pdl-sechead l", children: [
@@ -349,7 +357,7 @@ var PdLanding = (function() {
           "\u0416\u0438\u0432\u043E\u0439 \u043A\u0430\u0442\u0430\u043B\u043E\u0433"
         ] }),
         /* @__PURE__ */ jsx("h2", { className: "pdl-h2", children: "\u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u0440\u044F\u0434\u043E\u043C, \u043F\u0440\u044F\u043C\u043E \u0441\u0435\u0439\u0447\u0430\u0441" }),
-        /* @__PURE__ */ jsx("p", { className: "pdl-sub", children: "\u041C\u0435\u0442\u043A\u0430 \xAB\u0421\u0435\u0433\u043E\u0434\u043D\u044F\xBB \u0437\u043D\u0430\u0447\u0438\u0442, \u0447\u0442\u043E \u0431\u0443\u043A\u0435\u0442 \u043A\u0443\u043F\u043B\u0435\u043D \u0441\u0435\u0433\u043E\u0434\u043D\u044F. \u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C \u0442\u0430\u0435\u0442, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043B\u0443\u0447\u0448\u0438\u0435 \u0440\u0430\u0437\u0431\u0438\u0440\u0430\u044E\u0442 \u0437\u0430 \u0447\u0430\u0441\u044B" })
+        /* @__PURE__ */ jsx("p", { className: "pdl-sub", children: "\u041C\u0435\u0442\u043A\u0430 \xAB\u0421\u0432\u0435\u0436\u0438\u0439\xBB \u0437\u043D\u0430\u0447\u0438\u0442, \u0447\u0442\u043E \u0431\u0443\u043A\u0435\u0442 \u043F\u043E\u0434\u0430\u0440\u0438\u043B\u0438 \u0441\u0435\u0433\u043E\u0434\u043D\u044F. \u0421\u0432\u0435\u0436\u0435\u0441\u0442\u044C \u0442\u0430\u0435\u0442, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043B\u0443\u0447\u0448\u0438\u0435 \u0440\u0430\u0437\u0431\u0438\u0440\u0430\u044E\u0442 \u0437\u0430 \u0447\u0430\u0441\u044B" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "pdl-catbar", children: [
         /* @__PURE__ */ jsx(CityChips, { cls: "pdl-cities" }),
@@ -357,6 +365,14 @@ var PdLanding = (function() {
           /* @__PURE__ */ jsx("span", { className: "d" }),
           filtered.length,
           " \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 \u041C\u043E\u0441\u043A\u0432\u0435"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "pdl-metrobar", children: [
+        /* @__PURE__ */ jsx("span", { className: "pdl-flabel", children: "\u041C\u0435\u0442\u0440\u043E" }),
+        /* @__PURE__ */ jsx("div", { className: "pdl-metrowrap", children: /* @__PURE__ */ jsx(MetroPicker, { cityKey: "msk", multi: true, values: metros, onToggle: toggleMetro, placeholder: "\u041B\u044E\u0431\u044B\u0435 \u0441\u0442\u0430\u043D\u0446\u0438\u0438 \u043C\u0435\u0442\u0440\u043E" }) }),
+        metros.length > 0 && /* @__PURE__ */ jsxs("button", { className: "pdl-freset", onClick: () => setMetros([]), children: [
+          "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C",
+          metros.length > 1 ? ` (${metros.length})` : " \u0441\u0442\u0430\u043D\u0446\u0438\u044E"
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "pdl-filters", children: [
@@ -1244,4 +1260,4 @@ function PdBlogArticle({ platform = "desktop", article = ARTICLES[0], menuLinks 
   ] });
 }
 
-export { CITIES_FULL, PdBlogArticle, PdBlogIndex, PdGeoPage, PdLanding, PdLandingFooter, PdLandingNav, PdSafeDeal, PdSeoMeta, nbsp };
+export { CITIES_FULL, PdBlogArticle, PdBlogIndex, PdGeoPage, PdLanding, PdLandingFooter, PdLandingNav, PdMobileMenu, PdSafeDeal, PdSeoMeta, nbsp };

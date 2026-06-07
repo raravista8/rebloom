@@ -2,30 +2,39 @@
 // Converted from design source pd-scr-desktop.jsx (single source of truth — edited ONLY by Claude Design).
 import React from "react";
 import "../styles/canon.css";
-import { PD_FRESH, PD_LIKED, PdAvatar, PdCard, PdFreshness, PdIc, PdLikeBtn, pdMoney } from "../feed/feed";
-import { PdBtn, PdBubble, PdField, PdGallery, PdI, PdInput, PdNotice, PdSeg, PdSizeSel, PdStars, PdStepper } from "../primitives/kit";
+import { PdCard, PdAvatar, PdFreshness, PdLikeBtn, PdIc, PdHeart, pdMoney, PD_FRESH, PD_LIKED, PdMetroLabel } from "../feed/feed";
+import { PdI, PdBtn, PdField, PdInput, PdSeg, PdSizeSel, PdStepper, PdBubble, PdStars, PdNotice, PdMetroPicker, PdFlowerPicker } from "../primitives/kit";
+
+// ── brand mark «Соцветие» — лепестки = currentColor (подхватывают тему), центр янтарный
+const PETAL = 'M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z';
+const Mark = ({ size=22, center='#E8A93B', style, className, title='Передарим' }) => (
+  <svg className={className} width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={title} style={{ display:'block', flex:'none', ...style }}>
+    {[0,72,144,216,288].map((a)=><path key={a} d={PETAL} fill="currentColor" transform={`rotate(${a} 50 50)`}/>)}
+    <circle cx="50" cy="50" r="8" fill={center}/>
+  </svg>
+);
 
 // pd-scr-desktop.jsx — «Передарим» десктопные клиентские экраны (адаптив web).
 // Reuse shared kit. Exports Listing/Profile/Deal/Sell/Notifications/Search desktop.
-
 const wic = (Fn,cls='pd-i18')=>Fn({className:cls,fill:'none',stroke:'currentColor'});
 
 function WebShell({ active, children }) {
   const Bell=(p)=><svg viewBox="0 0 24 24" {...p}><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>;
+  const Heart=(p)=>PdHeart({className:p.className});
   return (
     <div className="pd-root pd-web" data-pd-theme="a">
       <header className="pdw-nav">
         <div className="pdw-nav-in">
-          <span className="pd-brand pdw-brand">Передарим</span>
+          <span className="pd-brand pdw-brand"><Mark size={24} />Передарим</span>
           <div className="pdw-navmid">
             <button className="pd-city pdw-city">{wic(PdIc.pin,'pd-i16')}Москва{wic(PdIc.chev,'pd-i14')}</button>
             <div className="pd-search pdw-search">{wic(PdIc.search,'pd-i18')}<span className="pd-search-ph">Поиск свежих букетов в Москве</span></div>
           </div>
           <nav className="pdw-navright">
-            <button className="pdw-iconbtn">{wic(Bell,'pd-i20')}</button>
-            <button className="pdw-iconbtn">{wic(PdIc.deals,'pd-i20')}</button>
+            <button className="pdw-iconbtn" aria-label="Уведомления">{wic(Bell,'pd-i20')}</button>
+            <button className="pdw-iconbtn" aria-label="Избранное">{wic(Heart,'pd-i20')}</button>
             <span className="pdw-avatar">М</span>
-            <button className="pdw-cta">{wic(PdIc.plus,'pd-i18')}Продать букет</button>
+            <button className="pdw-cta">{wic(PdIc.plus,'pd-i18')}Опубликовать букет</button>
           </nav>
         </div>
       </header>
@@ -52,22 +61,39 @@ function ListingDesktop() {
             </div>
           </div>
           <div className="pdw-buy">
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-              <span className="price">{pdMoney(990)}</span><PdLikeBtn liked count={47}/>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
+              <span className="price">{pdMoney(990)}</span>
+              <div style={{display:'flex',alignItems:'center',gap:8}}>
+                <button className="pd-sharebtn" aria-label="Поделиться">{PdI.share({className:'pd-i18',fill:'none',stroke:'currentColor'})}</button>
+                <PdLikeBtn liked count={47}/>
+              </div>
             </div>
-            <div className="pd-chiprow" style={{margin:'14px 0'}}><PdFreshness kind="today"/><span className="pd-chip" style={{pointerEvents:'none'}}>Размер M · 7–15 шт.</span></div>
-            <div style={{display:'flex',alignItems:'center',gap:5,color:'var(--pd-muted)',fontSize:13.5}}>{wic(PdIc.pin,'pd-i16')}Москва · Патрики</div>
-            <div className="pdw-sellerrow">
-              <PdAvatar seller={{n:'Аня',av:'w1'}} size={44}/>
-              <div style={{flex:1}}><div style={{fontWeight:700}}>Аня</div><div style={{display:'flex',alignItems:'center',gap:5,color:'var(--pd-muted)',fontSize:12.5,marginTop:2}}><PdStars value={5}/>4,9 · 23 сделки</div></div>
-              {wic(PdI.fwd,'pd-i18')}
+            <div className="pd-buy-meta">
+              <PdFreshness kind="today"/>
+              <div className="pd-buy-spec"><b>Размер M</b> · 7–15 стеблей</div>
+              <div className="pd-buy-loc">
+                <span className="loc-city">{wic(PdIc.pin,'pd-i16')}Москва</span>
+                <PdMetroLabel station="Курская"/>
+              </div>
             </div>
-            <div className="pd-label" style={{marginBottom:8}}>Как забрать</div>
+            <div className="pd-label" style={{margin:'18px 0 8px'}}>Продавец</div>
+            <button className="pd-sellercard">
+              <PdAvatar seller={{n:'Аня',av:'w1'}} size={46}/>
+              <div className="pd-seller-main">
+                <div className="pd-seller-name">Продаёт Аня</div>
+                <div className="pd-seller-rating"><PdStars value={5}/><b>4,9</b><span className="lbl">рейтинг продавца</span></div>
+              </div>
+              <div className="pd-seller-deals"><b>23</b><span>сделки</span></div>
+              {wic(PdI.fwd,'pd-i18 pd-seller-chev')}
+            </button>
+            <div className="pd-label" style={{margin:'18px 0 8px'}}>Цветы в букете</div>
+            <div className="pd-flowerlist">{['Пионовидные розы','Зелень и эвкалипт'].join(' · ')}</div>
+            <div className="pd-label" style={{margin:'18px 0 8px'}}>Как забрать</div>
             <div style={{display:'flex',alignItems:'center',gap:11,padding:'13px 14px',border:'1px solid var(--pd-border)',borderRadius:14}}>
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--pd-primary)',flex:'none'}}><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <span className="pd-mglyph" style={{width:24,height:24,fontSize:14}}>М</span>
               <div style={{flex:1}}>
-                <div style={{fontWeight:700,fontSize:14}}>Самовывоз рядом</div>
-                <div style={{fontSize:12.5,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет у продавца, обычно двор или метро поблизости</div>
+                <div style={{fontWeight:700,fontSize:14}}>Самовывоз у м. Курская</div>
+                <div style={{fontSize:13,color:'var(--pd-muted)',marginTop:1}}>Заберёте букет рядом со станцией</div>
               </div>
             </div>
             <div style={{margin:'16px 0'}}><PdNotice kind="ok" icon={PdI.shield}><b>Оплата при встрече.</b> Договоритесь в чате и заберите букет рядом. Платите, когда увидели цветы.</PdNotice></div>
@@ -97,7 +123,7 @@ function ProfileDesktop() {
           <div style={{flex:1}}>
             <h2>Аня</h2>
             <div style={{display:'flex',alignItems:'center',gap:6,marginTop:5}}><PdStars value={5}/><b>4,9</b><span style={{color:'var(--pd-muted)',fontSize:13}}>· 23 сделки</span></div>
-            <div className="pdw-statrow"><span><b>12</b> объявлений</span><span><b>с 2025</b> на площадке</span><span><b>97%</b> сделок без жалоб</span></div>
+            <div className="pdw-statrow"><span><b>12</b> объявлений</span><span><b>10 месяцев</b> на площадке</span><span><b>97%</b> сделок без жалоб</span></div>
           </div>
           <PdBtn variant="secondary">Пожаловаться</PdBtn>
         </div>
@@ -126,7 +152,7 @@ function DealDesktop() {
             <div className="pdw-card">
               <div style={{display:'flex',gap:12,alignItems:'center',marginBottom:16}}>
                 <img src="img/1561181286-d3fee7d55364.jpg" alt="" style={{width:64,height:64,borderRadius:14,objectFit:'cover'}}/>
-                <div style={{flex:1}}><div style={{fontWeight:700,fontSize:16}}>Букет M · Патрики</div><div style={{fontSize:13,color:'var(--pd-muted)',marginTop:2}}>Продавец Аня · 4,9 ★</div></div>
+                <div style={{flex:1}}><div style={{fontWeight:700,fontSize:16}}>Букет M</div><div style={{fontSize:13,color:'var(--pd-muted)',marginTop:2}}>Продавец Аня · 4,9 ★</div></div>
                 <div style={{textAlign:'right'}}><div className="pd-price" style={{fontSize:20}}>{pdMoney(990)}</div><div style={{fontSize:12,color:'var(--pd-muted)'}}>договорились</div></div>
               </div>
               <PdStepper status="meeting"/>
@@ -158,6 +184,8 @@ function DealDesktop() {
 
 // ── Продать (desktop) ───────────────────────────────────────────────────────
 function SellDesktop() {
+  const [metro,setMetro]=React.useState('Маяковская');
+  const [flowers,setFlowers]=React.useState(['Пионовидные розы','Зелень и эвкалипт']);
   return (
     <WebShell>
       <div className="pdw-narrow">
@@ -172,10 +200,15 @@ function SellDesktop() {
           </div></PdField>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:18}}>
             <PdField label="Размер"><PdSizeSel value="M"/></PdField>
-            <PdField label="Цена" hint="Похожие: 700–1 300 ₽."><PdInput prefix="₽" value="990"/></PdField>
+            <PdField label="Цена"><PdInput prefix="₽" value="990"/></PdField>
           </div>
-          <PdField label="Свежесть"><PdSeg value="today" options={[{k:'today',label:'Сегодня'},{k:'d1_2',label:'1–2 дня'},{k:'d3_plus',label:'3+ дня'}]}/></PdField>
-          <PdField label="Район" hint="Точный адрес виден после договорённости."><PdInput icon={PdIc.pin} value="Москва · Патрики"/></PdField>
+          <PdField label="Когда букет подарили" hint="От этого дня считаем свежесть — её увидят в теге букета."><PdSeg value="today" options={[{k:'today',label:'Сегодня'},{k:'d1_2',label:'1–2 дня'},{k:'d3_plus',label:'3+ дня'}]}/></PdField>
+          <PdField label="Станция метро" hint="Главный ориентир для покупателя в Москве. Точный адрес — в чате после договорённости.">
+            <PdMetroPicker cityKey="msk" value={metro} onChange={setMetro}/>
+          </PdField>
+          <PdField label="Какие цветы" opt="необязательно" hint="Помогает покупателю найти букет в фильтрах по типу цветов.">
+            <PdFlowerPicker value={flowers} onChange={setFlowers}/>
+          </PdField>
           <PdField label="Описание" opt="необязательно" counter="84 / 600"><PdInput textarea rows={3} value="Подарили утром, пионовидные розы и эвкалипт. Очень свежие, стоят в воде."/></PdField>
           <div><PdBtn variant="primary" lg>Опубликовать букет</PdBtn></div>
         </div>
@@ -230,11 +263,4 @@ function SearchDesktop() {
   );
 }
 
-export {
-  ListingDesktop,
-  ProfileDesktop,
-  DealDesktop,
-  SellDesktop,
-  NotificationsDesktop,
-  SearchDesktop
-};
+export { ListingDesktop, ProfileDesktop, DealDesktop, SellDesktop, NotificationsDesktop, SearchDesktop };

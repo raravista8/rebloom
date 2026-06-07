@@ -1,3 +1,4 @@
+export { P as PdWebNav } from './web-nav-BfYXI_sK.js';
 import React from 'react';
 
 declare function PdLanding({ platform, auth }: {
@@ -16,6 +17,13 @@ declare function PdLandingNav({ auth, desk }: {
 declare function PdLandingFooter({ desk }: {
     desk: any;
 }): React.JSX.Element;
+declare function PdMobileMenu({ open, auth, city: cityProp, onClose }: {
+    open: any;
+    auth?: boolean | undefined;
+    city?: string | undefined;
+    onClose: any;
+}): React.JSX.Element;
+
 declare function LandingNav({ auth, desk }: {
     auth?: boolean | undefined;
     desk?: boolean | undefined;
@@ -23,12 +31,11 @@ declare function LandingNav({ auth, desk }: {
 declare function Footer({ desk }: {
     desk: any;
 }): React.JSX.Element;
-declare function MobileMenu({ open, auth, city: cityProp, onClose, links: linksProp }: {
+declare function MobileMenu({ open, auth, city: cityProp, onClose }: {
     open: any;
     auth?: boolean | undefined;
     city?: string | undefined;
     onClose: any;
-    links: any;
 }): React.JSX.Element;
 
 declare function nbsp(s: any): any;
@@ -83,4 +90,4 @@ declare const CITIES_FULL: {
     districts: (string | number)[][];
 }[];
 
-export { CITIES_FULL as PD_GEO_CITIES, PdBlogArticle, PdBlogIndex, PdGeoPage, PdLanding, PdLandingFooter, PdLandingNav, PdSafeDeal, PdSeoMeta, nbsp };
+export { CITIES_FULL as PD_GEO_CITIES, PdBlogArticle, PdBlogIndex, PdGeoPage, PdLanding, PdLandingFooter, PdLandingNav, PdMobileMenu, PdSafeDeal, PdSeoMeta, nbsp };

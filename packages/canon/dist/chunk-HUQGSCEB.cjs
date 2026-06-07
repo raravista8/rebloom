@@ -1,19 +1,28 @@
 'use strict';
 
-var chunkGT5S3QFQ_cjs = require('./chunk-GT5S3QFQ.cjs');
+var chunk42CQIEPX_cjs = require('./chunk-42CQIEPX.cjs');
 require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
+var PETAL = "M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z";
+var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { className, width: size, height: size, viewBox: "0 0 100 100", role: "img", "aria-label": title, style: { display: "block", flex: "none", ...style }, children: [
+  [0, 72, 144, 216, 288].map((a) => /* @__PURE__ */ jsxRuntime.jsx("path", { d: PETAL, fill: "currentColor", transform: `rotate(${a} 50 50)` }, a)),
+  /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
+] });
 function PdFeedDesktop({ theme = "a" }) {
-  const Card2 = chunkGT5S3QFQ_cjs.Card, SectionHead2 = chunkGT5S3QFQ_cjs.SectionHead, Ic2 = chunkGT5S3QFQ_cjs.Ic;
-  const FRESH = chunkGT5S3QFQ_cjs.PD_FRESH, LIKED = chunkGT5S3QFQ_cjs.PD_LIKED;
+  const Card2 = chunk42CQIEPX_cjs.Card, SectionHead2 = chunk42CQIEPX_cjs.SectionHead, Ic2 = chunk42CQIEPX_cjs.Ic;
+  const FRESH = chunk42CQIEPX_cjs.PD_FRESH, LIKED = chunk42CQIEPX_cjs.PD_LIKED;
   const Bell = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" }),
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M10 19a2 2 0 0 0 4 0" })
   ] });
+  const Heart2 = (p) => chunk42CQIEPX_cjs.Heart({ className: p.className });
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-root pd-web", "data-pd-theme": theme, children: [
     /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdw-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdw-nav-in", children: [
-      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-brand pdw-brand", children: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C" }),
+      /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pd-brand pdw-brand", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Mark, { size: 24 }),
+        "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C"
+      ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdw-navmid", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pd-city pdw-city", children: [
           /* @__PURE__ */ jsxRuntime.jsx(Ic2.pin, { className: "pd-i16", fill: "none", stroke: "currentColor" }),
@@ -27,11 +36,11 @@ function PdFeedDesktop({ theme = "a" }) {
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("nav", { className: "pdw-navright", children: [
         /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdw-iconbtn", "aria-label": "\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F", children: /* @__PURE__ */ jsxRuntime.jsx(Bell, { className: "pd-i20", fill: "none", stroke: "currentColor" }) }),
-        /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdw-iconbtn", "aria-label": "\u0421\u0434\u0435\u043B\u043A\u0438", children: /* @__PURE__ */ jsxRuntime.jsx(Ic2.deals, { className: "pd-i20", fill: "none", stroke: "currentColor" }) }),
+        /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdw-iconbtn", "aria-label": "\u0418\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435", children: /* @__PURE__ */ jsxRuntime.jsx(Heart2, { className: "pd-i20", fill: "none", stroke: "currentColor" }) }),
         /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pdw-avatar", "aria-hidden": "true", children: "\u041C" }),
         /* @__PURE__ */ jsxRuntime.jsxs("button", { className: "pdw-cta", children: [
           /* @__PURE__ */ jsxRuntime.jsx(Ic2.plus, { className: "pd-i18", fill: "none", stroke: "currentColor" }),
-          "\u041F\u0440\u043E\u0434\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442"
+          "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442"
         ] })
       ] })
     ] }) }),

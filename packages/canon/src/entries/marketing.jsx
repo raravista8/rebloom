@@ -1,5 +1,6 @@
 // @rebloom/canon entry · ./marketing
-export { PdLanding, PdLandingNav, PdLandingFooter } from "../marketing/landing";
+export { PdLanding, PdLandingNav, PdLandingFooter, PdMobileMenu } from "../marketing/landing";
+export { PdWebNav } from "../primitives/web-nav";
 export {
   PdGeoPage,
   PdSafeDeal,
