@@ -151,6 +151,18 @@ export function IconSend({ className = 'pd-i20', ...p }: IconProps) {
 export function IconFlag({ className = 'pd-i20', ...p }: IconProps) {
   return svg(className, <path d="M5 21V4m0 1h12l-2.5 4L17 13H5" />, p);
 }
+export function IconShare({ className = 'pd-i18', ...p }: IconProps) {
+  return svg(
+    className,
+    <>
+      <circle cx="6" cy="12" r="2.6" />
+      <circle cx="17.5" cy="6" r="2.6" />
+      <circle cx="17.5" cy="18" r="2.6" />
+      <path d="m8.3 10.8 6.9-3.6M8.3 13.2l6.9 3.6" />
+    </>,
+    p,
+  );
+}
 export function IconShield({ className = 'pd-i18', ...p }: IconProps) {
   return svg(
     className,
