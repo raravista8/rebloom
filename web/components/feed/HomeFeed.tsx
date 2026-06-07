@@ -105,7 +105,7 @@ export default function HomeFeed({ cityId }: { cityId: string }) {
     <>
       {/* ─────────── DESKTOP (≥1024px) ─────────── */}
       {isDesktop && (
-      <div className="pd-root pd-web" data-pd-theme="a">
+      <div className="pd-root pd-web pdl" data-pd-theme="a">
         <WebChrome cityId={cityId} />
 
         <main className="pd-scroll pdw-scroll">

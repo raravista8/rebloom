@@ -22,6 +22,10 @@ import {
   PdStars as PdStarsRaw,
   PdStepper as PdStepperRaw,
   PdBubble as PdBubbleRaw,
+  PdMetroPicker as PdMetroPickerRaw,
+  PdFlowerPicker as PdFlowerPickerRaw,
+  PdWebNav as PdWebNavRaw,
+  PdCatalog as PdCatalogRaw,
 } from '@rebloom/canon';
 import type { Freshness } from '@/lib/types';
 
@@ -70,3 +74,25 @@ export type PdStepperProps = { status: string };
 export const PdStepper = PdStepperRaw as unknown as FC<PdStepperProps>;
 export type PdBubbleProps = { kind?: 'in' | 'out' | 'sys'; time?: string; children?: ReactNode };
 export const PdBubble = PdBubbleRaw as unknown as FC<PdBubbleProps>;
+
+// ── canon 0.9.0: pickers (./forms) + the unified web header / catalog (./catalog) ──
+export type PdMetroPickerProps =
+  | { cityKey?: string; value?: string; onChange?: (station: string) => void; placeholder?: string; multi?: false }
+  | { cityKey?: string; multi: true; values: string[]; onToggle: (station: string | null) => void; placeholder?: string };
+export const PdMetroPicker = PdMetroPickerRaw as unknown as FC<PdMetroPickerProps>;
+
+export type PdFlowerPickerProps = { value?: string[]; onChange?: (next: string[]) => void; options?: string[] };
+export const PdFlowerPicker = PdFlowerPickerRaw as unknown as FC<PdFlowerPickerProps>;
+
+export type PdWebNavProps = {
+  active?: string;
+  authed?: boolean;
+  city?: string;
+  user?: { n: string; r?: number };
+  links?: { label: string; sub?: string; href: string; Icon: IconFn }[];
+  onPublish?: () => void;
+};
+export const PdWebNav = PdWebNavRaw as unknown as FC<PdWebNavProps>;
+
+export type PdCatalogProps = { platform?: 'desktop' | 'web' };
+export const PdCatalog = PdCatalogRaw as unknown as FC<PdCatalogProps>;

@@ -132,7 +132,7 @@ export default function SearchScreen() {
 
   if (isDesktop) {
     return (
-      <div className="pd-root pd-web" data-pd-theme="a">
+      <div className="pd-root pd-web pdl" data-pd-theme="a">
         <WebChrome cityId={city} />
         <main className="pd-scroll pdw-scroll">
           <div className="pdw-detailwrap">
