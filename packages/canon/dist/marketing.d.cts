@@ -1,4 +1,4 @@
-export { P as PdWebNav } from './web-nav-BfYXI_sK.cjs';
+export { P as PdWebNav } from './web-nav-C_qaqoeg.cjs';
 import React from 'react';
 
 declare function PdLanding({ platform, auth }: {

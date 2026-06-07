@@ -122,7 +122,7 @@ var PD_FLOWERS = ["\u0420\u043E\u0437\u044B", "\u041F\u0438\u043E\u043D\u043E\u0
 var PD_FLOWER_FILTERS = ["\u0420\u043E\u0437\u044B", "\u041F\u0438\u043E\u043D\u043E\u0432\u0438\u0434\u043D\u044B\u0435 \u0440\u043E\u0437\u044B", "\u041F\u0438\u043E\u043D\u044B", "\u0422\u044E\u043B\u044C\u043F\u0430\u043D\u044B", "\u0413\u043E\u0440\u0442\u0435\u043D\u0437\u0438\u044F", "\u0425\u0440\u0438\u0437\u0430\u043D\u0442\u0435\u043C\u044B", "\u042D\u0443\u0441\u0442\u043E\u043C\u0430", "\u0420\u0430\u043D\u0443\u043D\u043A\u0443\u043B\u044E\u0441\u044B", "\u0410\u043B\u044C\u0441\u0442\u0440\u043E\u043C\u0435\u0440\u0438\u044F", "\u041B\u0438\u043B\u0438\u0438", "\u041F\u043E\u043B\u0435\u0432\u044B\u0435"];
 function MetroDots({ lines, size = 8 }) {
   const ls = lines && lines.length ? lines : ["9"];
-  return /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-mdots", "aria-hidden": "true", children: ls.slice(0, 3).map((l, i) => /* @__PURE__ */ jsxRuntime.jsx("i", { style: { background: PD_METRO_LINES[l] || "#A1A2A3", width: size, height: size } }, i)) });
+  return /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-mdots", "aria-hidden": "true", children: ls.slice(0, 3).map((l, i) => /* @__PURE__ */ jsxRuntime.jsx("i", { style: { background: typeof l === "string" && l[0] === "#" ? l : PD_METRO_LINES[l] || "#A1A2A3", width: size, height: size } }, i)) });
 }
 function MetroLabel({ station, lines, className, dotSize }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pd-metro" + (className ? " " + className : ""), children: [
@@ -558,12 +558,21 @@ var Srch = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24",
   /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "11", cy: "11", r: "7" }),
   /* @__PURE__ */ jsxRuntime.jsx("path", { d: "m20 20-3.2-3.2" })
 ] });
-function PdMetroPicker({ cityKey = "msk", value, onChange, multi = false, values = [], onToggle, placeholder = "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0442\u0430\u043D\u0446\u0438\u044E \u043C\u0435\u0442\u0440\u043E" }) {
+function PdMetroPicker({ cityKey = "msk", value, onChange, multi = false, values = [], onToggle, placeholder = "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0442\u0430\u043D\u0446\u0438\u044E \u043C\u0435\u0442\u0440\u043E", options, idMode = false }) {
   const Dots = MetroDots;
   const [open, setOpen] = React2__default.default.useState(false);
   const [q, setQ] = React2__default.default.useState("");
   const wrapRef = React2__default.default.useRef(null);
-  const list = PD_METRO && PD_METRO[cityKey] || [];
+  const raw = options || PD_METRO && PD_METRO[cityKey] || [];
+  const list = React2__default.default.useMemo(() => raw.map((s) => {
+    if (s && s.lines) return { key: idMode ? s.id : s.name, name: s.name, dots: s.lines.map((l) => l.color || l) };
+    return { key: s.n, name: s.n, dots: s.l };
+  }), [raw, idMode]);
+  const byKey = React2__default.default.useMemo(() => {
+    const m = {};
+    list.forEach((s) => m[s.key] = s);
+    return m;
+  }, [list]);
   React2__default.default.useEffect(() => {
     if (!open) return;
     const onDoc = (e) => {
@@ -573,16 +582,17 @@ function PdMetroPicker({ cityKey = "msk", value, onChange, multi = false, values
     return () => document.removeEventListener("mousedown", onDoc);
   }, [open]);
   const ql = q.trim().toLowerCase();
-  const filtered = ql ? list.filter((s) => s.n.toLowerCase().includes(ql)) : list;
-  const selLines = value ? pdMetroLines(value) : [];
-  const sel = (s) => multi ? values.includes(s) : value === s;
-  const label = multi ? values.length === 0 ? null : values.length === 1 ? values[0] : `${values.length} \u0441\u0442\u0430\u043D\u0446.` : value;
-  const labelLines = multi ? values.length === 1 ? pdMetroLines(values[0]) : [] : selLines;
+  const filtered = ql ? list.filter((s) => s.name.toLowerCase().includes(ql)) : list;
+  const sel = (k) => multi ? values.includes(k) : value === k;
+  const nameOf = (k) => byKey[k] && byKey[k].name || k;
+  const dotsOf = (k) => byKey[k] && byKey[k].dots || pdMetroLines(k);
+  const label = multi ? values.length === 0 ? null : values.length === 1 ? nameOf(values[0]) : `${values.length} \u0441\u0442\u0430\u043D\u0446.` : value ? nameOf(value) : null;
+  const labelDots = multi ? values.length === 1 ? dotsOf(values[0]) : [] : value ? dotsOf(value) : [];
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-mpick" + (open ? " open" : ""), ref: wrapRef, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("button", { type: "button", className: "pd-mpick-btn" + (open ? " open" : "") + (label ? " has" : ""), onClick: () => setOpen((o) => !o), children: [
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-mglyph", children: "\u041C" }),
       label ? /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "val", children: [
-        (!multi || values.length === 1) && /* @__PURE__ */ jsxRuntime.jsx(Dots, { lines: labelLines, size: 9 }),
+        (!multi || values.length === 1) && /* @__PURE__ */ jsxRuntime.jsx(Dots, { lines: labelDots, size: 9 }),
         multi && values.length > 1 ? label : "\u043C.\xA0" + label
       ] }) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ph", children: placeholder }),
       /* @__PURE__ */ jsxRuntime.jsx(Chv, { className: "chev pd-i18" })
@@ -592,20 +602,20 @@ function PdMetroPicker({ cityKey = "msk", value, onChange, multi = false, values
         /* @__PURE__ */ jsxRuntime.jsx(Srch, { className: "pd-i16" }),
         /* @__PURE__ */ jsxRuntime.jsx("input", { autoFocus: true, value: q, placeholder: "\u041F\u043E\u0438\u0441\u043A \u0441\u0442\u0430\u043D\u0446\u0438\u0438", onChange: (e) => setQ(e.target.value) })
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-mpick-list", children: filtered.length === 0 ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-mpick-empty", children: "\u0421\u0442\u0430\u043D\u0446\u0438\u044F \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430" }) : filtered.map((s) => /* @__PURE__ */ jsxRuntime.jsxs("button", { type: "button", className: "pd-mpick-row" + (sel(s.n) ? " on" : ""), onClick: () => {
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-mpick-list", children: filtered.length === 0 ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-mpick-empty", children: "\u0421\u0442\u0430\u043D\u0446\u0438\u044F \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430" }) : filtered.map((s) => /* @__PURE__ */ jsxRuntime.jsxs("button", { type: "button", className: "pd-mpick-row" + (sel(s.key) ? " on" : ""), onClick: () => {
         if (multi) {
-          onToggle && onToggle(s.n);
+          onToggle && onToggle(s.key);
         } else {
-          onChange && onChange(s.n);
+          onChange && onChange(s.key);
           setOpen(false);
           setQ("");
         }
       }, children: [
-        multi && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-mpick-cb" + (sel(s.n) ? " on" : ""), children: sel(s.n) && I.check({ className: "pd-i14", fill: "none", stroke: "currentColor" }) }),
-        /* @__PURE__ */ jsxRuntime.jsx(Dots, { lines: s.l, size: 9 }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "n", children: s.n }),
-        !multi && sel(s.n) && I.check({ className: "pd-i16 ck", fill: "none", stroke: "currentColor" })
-      ] }, s.n)) }),
+        multi && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-mpick-cb" + (sel(s.key) ? " on" : ""), children: sel(s.key) && I.check({ className: "pd-i14", fill: "none", stroke: "currentColor" }) }),
+        /* @__PURE__ */ jsxRuntime.jsx(Dots, { lines: s.dots, size: 9 }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "n", children: s.name }),
+        !multi && sel(s.key) && I.check({ className: "pd-i16 ck", fill: "none", stroke: "currentColor" })
+      ] }, s.key)) }),
       multi && values.length > 0 && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-mpick-foot", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("button", { type: "button", className: "clr", onClick: () => onToggle && onToggle(null), children: [
           "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C (",

@@ -18,7 +18,7 @@ import { useEffect, useState, type MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { PdWebNav } from '@/components/canon';
 import { getCityClient } from '@/lib/city-client';
-import { cityName, DEFAULT_CITY } from '@/lib/cities';
+import { cityName, cityPrepositional, DEFAULT_CITY } from '@/lib/cities';
 import useMe from '@/lib/useMe';
 
 // canon-static hrefs PdWebNav renders → real routes (kept in sync with web-nav.jsx).
@@ -96,6 +96,7 @@ export default function WebChrome({ cityId }: { cityId?: string }) {
       <PdWebNav
         authed={authed === true}
         city={cityName(city)}
+        cityLoc={cityPrepositional(city)}
         links={links}
         onPublish={() => router.push('/sell')}
       />

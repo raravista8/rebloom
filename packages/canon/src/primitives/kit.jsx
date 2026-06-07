@@ -187,12 +187,24 @@ function PdToast({ kind='ok', children }) {
 // ── выбор станции метро (поиск + список с цветными линиями) ──────────────
 const Chv = (p)=><svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>;
 const Srch = (p)=><svg viewBox="0 0 24 24" {...p} fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>;
-function PdMetroPicker({ cityKey='msk', value, onChange, multi=false, values=[], onToggle, placeholder='Выберите станцию метро' }) {
+// Пикер станций метро.
+//   Источник списка (по приоритету): проп `options` (data-driven, web подаёт живой
+//   список из /api/geo/metro) → иначе PD_METRO[cityKey] (демо-справочник).
+//   `options` принимает обе формы: внутреннюю {n, l:[lineId]} и каноническую
+//   {id, name, lines:[{name,color}]}. При idMode наружу (value/values/onToggle/onChange)
+//   идут СТАБИЛЬНЫЕ id станций, а не RU-имена; пикер показывает имя.
+function PdMetroPicker({ cityKey='msk', value, onChange, multi=false, values=[], onToggle, placeholder='Выберите станцию метро', options, idMode=false }) {
   const Dots = PdMetroDots;
   const [open,setOpen]=React.useState(false);
   const [q,setQ]=React.useState('');
   const wrapRef=React.useRef(null);
-  const list=(PD_METRO && PD_METRO[cityKey]) || [];
+  const raw = options || (PD_METRO && PD_METRO[cityKey]) || [];
+  // нормализуем к { key, name, dots } — key уходит наружу, name/dots рисуем
+  const list = React.useMemo(()=>raw.map(s=>{
+    if (s && s.lines) return { key: idMode ? s.id : s.name, name: s.name, dots: s.lines.map(l=>l.color || l) };
+    return { key: s.n, name: s.n, dots: s.l };
+  }),[raw,idMode]);
+  const byKey = React.useMemo(()=>{ const m={}; list.forEach(s=>m[s.key]=s); return m; },[list]);
   React.useEffect(()=>{
     if(!open) return;
     const onDoc=(e)=>{ if(wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
@@ -200,21 +212,22 @@ function PdMetroPicker({ cityKey='msk', value, onChange, multi=false, values=[],
     return ()=>document.removeEventListener('mousedown',onDoc);
   },[open]);
   const ql=q.trim().toLowerCase();
-  const filtered=ql?list.filter(s=>s.n.toLowerCase().includes(ql)):list;
-  const selLines=value?pdMetroLines(value):[];
-  const sel=(s)=> multi ? values.includes(s) : value===s;
+  const filtered=ql?list.filter(s=>s.name.toLowerCase().includes(ql)):list;
+  const sel=(k)=> multi ? values.includes(k) : value===k;
+  const nameOf=(k)=> (byKey[k] && byKey[k].name) || k;
+  const dotsOf=(k)=> (byKey[k] && byKey[k].dots) || pdMetroLines(k);
   const label = multi
-    ? (values.length===0 ? null : values.length===1 ? values[0] : `${values.length} станц.`)
-    : value;
-  const labelLines = multi
-    ? (values.length===1 ? pdMetroLines(values[0]) : [])
-    : selLines;
+    ? (values.length===0 ? null : values.length===1 ? nameOf(values[0]) : `${values.length} станц.`)
+    : (value ? nameOf(value) : null);
+  const labelDots = multi
+    ? (values.length===1 ? dotsOf(values[0]) : [])
+    : (value ? dotsOf(value) : []);
   return (
     <div className={'pd-mpick'+(open?' open':'')} ref={wrapRef}>
       <button type="button" className={'pd-mpick-btn'+(open?' open':'')+(label?' has':'')} onClick={()=>setOpen(o=>!o)}>
         <span className="pd-mglyph">М</span>
         {label
-          ? <span className="val">{(!multi || values.length===1) && <Dots lines={labelLines} size={9}/>}{multi && values.length>1 ? label : 'м.\u00A0'+label}</span>
+          ? <span className="val">{(!multi || values.length===1) && <Dots lines={labelDots} size={9}/>}{multi && values.length>1 ? label : 'м.\u00A0'+label}</span>
           : <span className="ph">{placeholder}</span>}
         <Chv className="chev pd-i18"/>
       </button>
@@ -225,13 +238,13 @@ function PdMetroPicker({ cityKey='msk', value, onChange, multi=false, values=[],
             {filtered.length===0
               ? <div className="pd-mpick-empty">Станция не найдена</div>
               : filtered.map(s=>(
-                <button type="button" key={s.n} className={'pd-mpick-row'+(sel(s.n)?' on':'')} onClick={()=>{
-                  if(multi){ onToggle&&onToggle(s.n); }
-                  else { onChange&&onChange(s.n); setOpen(false); setQ(''); }
+                <button type="button" key={s.key} className={'pd-mpick-row'+(sel(s.key)?' on':'')} onClick={()=>{
+                  if(multi){ onToggle&&onToggle(s.key); }
+                  else { onChange&&onChange(s.key); setOpen(false); setQ(''); }
                 }}>
-                  {multi && <span className={'pd-mpick-cb'+(sel(s.n)?' on':'')}>{sel(s.n)&&I.check({className:'pd-i14',fill:'none',stroke:'currentColor'})}</span>}
-                  <Dots lines={s.l} size={9}/><span className="n">{s.n}</span>
-                  {!multi && sel(s.n) && I.check({className:'pd-i16 ck',fill:'none',stroke:'currentColor'})}
+                  {multi && <span className={'pd-mpick-cb'+(sel(s.key)?' on':'')}>{sel(s.key)&&I.check({className:'pd-i14',fill:'none',stroke:'currentColor'})}</span>}
+                  <Dots lines={s.dots} size={9}/><span className="n">{s.name}</span>
+                  {!multi && sel(s.key) && I.check({className:'pd-i16 ck',fill:'none',stroke:'currentColor'})}
                 </button>
               ))}
           </div>

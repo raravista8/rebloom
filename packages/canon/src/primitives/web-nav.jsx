@@ -21,7 +21,9 @@ const Mark = ({ size=22, center='#E8A93B', style, className, title='Переда
 //   город, ссылки, CTA внизу). auth-aware: гость (authed=false) видит «Войти»
 //   вместо избранного/аватара/драйвер-профиля.
 // Exports: PdWebNav
-// Props: { active, authed=true, city='Москва', user={n,r}, links, onPublish }
+// Props: { active, authed=true, city='Москва', cityLoc='Москве', user={n,r}, links, onPublish }
+//   city — именительный (кнопка-город); cityLoc — предложный (плейсхолдер поиска «в Москве»).
+//   web прокидывает cityPrepositional(city); по умолчанию — «Москве».
 
 const PdWebNav = (function () {
   const Ic = PdIc, Btn = PdBtn, Heart = PdHeart;
@@ -44,7 +46,7 @@ const PdWebNav = (function () {
     { label: 'Приложение',       sub: 'iOS и Android',             href: LANDING + '#app',  Icon: Phone },
   ];
 
-  return function PdWebNav({ active, authed = true, city = 'Москва', user = { n: 'Мария', r: 4.9 }, links = DEFAULT_LINKS, onPublish }) {
+  return function PdWebNav({ active, authed = true, city = 'Москва', cityLoc = 'Москве', user = { n: 'Мария', r: 4.9 }, links = DEFAULT_LINKS, onPublish }) {
     const [menu, setMenu] = React.useState(false);
     const close = () => setMenu(false);
     const initial = (user && user.n ? user.n[0] : 'М');
@@ -55,7 +57,7 @@ const PdWebNav = (function () {
             <a href={LANDING} className="pdl-brand" style={{ textDecoration: 'none' }}><Mark size={24} />Передарим</a>
             <div className="pdl-nav-mid">
               <button className="pdl-nav-city">{ico(Ic.pin, 'pd-i16')}{city}{ico(Ic.chev, 'pd-i14')}</button>
-              <div className="pdl-nav-search">{ico(Ic.search, 'pd-i18')}<span>Поиск свежих букетов в {city}</span></div>
+              <div className="pdl-nav-search">{ico(Ic.search, 'pd-i18')}<span>Поиск свежих букетов в {cityLoc}</span></div>
             </div>
             <div className="pdl-navright">
               <button className="pdl-nav-icon" aria-label="Уведомления"><Bell /></button>

@@ -2,6 +2,32 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.9.1] — 2026-06-07 — `PdCatalog` data-driven (презентационный) + 8 состояний коллекции + два build/copy-фикса
+
+> **Зачем релиз.** `web/` не мог импортить `PdCatalog` напрямую: компонент сам генерил демо-данные и держал фильтры внутри, поэтому прод транскрибировал `.pdc-*`-разметку поверх своих данных (дрифт). 0.9.1 делает `PdCatalog` **чисто презентационным** (всё через пропсы) — `web/` рендерит его на живом `/catalog` и удаляет хэндролл `CatalogScreen`/`CatalogFilters`. Плюс два мелких фикса, ломавших сборку и грамматику. Loaded-вид байт-в-байт к 0.9.0. Полная спека — **`CANON_HANDOFF_0.9.1.md`**.
+
+### ⚠️ Backend / API (для CatalogRoute в web/)
+- `PdCatalog` ждёт **стабильные id** в `filters.metro[]` / `filters.flowers[]` (не RU-имена). `stations` приходит как `{id,name,lines:[{name,color}]}[]` (web: `/api/geo/metro`), `flowers` — `{id,label}[]`. `state` — производная реальной коллекции (`loading`/`loaded`/`empty`/`no-results`/`loading-more`/`end`/`error`/`offline`).
+
+### Changed
+- **`src/catalog/catalog.jsx` → `PdCatalog` теперь презентационный.** Пропсы: `items`, `state`, `total`, `filters`+`onFiltersChange`, `stations`, `flowers`, `city`/`cityLoc`+`onCityChange`, `onLoadMore`, `onCardClick`/`cardHref`, `onRetry`, `header`-slot. Компонент НЕ фетчит и НЕ держит истину фильтров. Все **8 состояний коллекции** (INTERACTION_STATES §4) рисуются из `state` одной разметкой: skeleton-сетка, «город пуст», «смягчите фильтры» (+сброс), спиннер догрузки, стоп-маркер, ретрай-заглушка. Карточки кликабельны (`cardHref`→`<a>` / `onCardClick`).
+- **`src/primitives/kit.jsx` → `PdMetroPicker`** дополнен пропом `options` (форма `stations` `{id,name,lines:[{name,color}]}`) + флаг `idMode` (наружу id, в UI имя). Старый путь (`cityKey`→`PD_METRO`, toggle по имени) сохранён байт-в-байт для лендинга/десктоп-форм.
+- **`src/feed/feed.jsx` → `MetroDots`** теперь принимает и lineId, и готовый цвет (`#RRGGBB`).
+
+### Added
+- **`src/catalog/catalog.jsx` → `PdCatalogDemo`** (export) — НЕканоническая демо-обёртка: генерит данные, держит фильтры/пагинацию/`state`, кормит ими `PdCatalog`. Ею пользуются reference-витрины; в web/ роль играет реальный `CatalogRoute`. **Не вендорить в прод** как источник данных.
+- **`dist/canon.css` + `src/styles/canon.css`** — стили состояний: `.pdc-skel` (shimmer), `.pdc-state`/`.pdc-state-ico/-sub/-btn`, `.pdc-morestate`/`.pdc-spin`, `.pdc-end`, `.pdc-cardlink`; `prefers-reduced-motion` учтён.
+
+### Fixed
+- **`src/entries/deal.jsx`** — убран висячий ре-экспорт `PaymentFailed` (экран удалён ещё в no-escrow-пассе, ADR-0013; `screens/deal-notifications.jsx` его не экспортит). Снимает `tsup: No matching export … PaymentFailed` и consumer-side build-fix.
+- **`src/primitives/web-nav.jsx` → `PdWebNav`** — добавлен проп `cityLoc` (предложный, дефолт «Москве»); плейсхолдер поиска «Поиск свежих букетов в **{cityLoc}**» вместо именительного `{city}`. `city` (имен.) остался для кнопки-города. web прокидывает `cityPrepositional(city)`.
+
+### Reference / prototypes
+- Перевендорены из Claude Design: `pd-catalog.jsx` (презентационный + `PdCatalogDemo`), `pd-catalog.css` (состояния), `pd-kit.jsx`, `pd-feed.jsx`, `pd-webnav.jsx` + витрина `Передарим · Каталог букетов.html` (галерея состояний). `src/` сконвертирован из них (ESM: `window`-глобалы → import/export).
+
+### Build / consumer
+- JS-бандлы (`dist/*.mjs/.cjs/.d.ts`) НЕ включены — потребитель собирает `npm run build` (tsup). После вендоринга: удалить `web/` `components/catalog/CatalogScreen.tsx` + `CatalogFilters.tsx`, рендерить `<PdCatalog items state total filters onFiltersChange stations flowers onLoadMore onRetry/>` напрямую, снять старый consumer build-fix для `PaymentFailed`.
+
 ## [0.9.0] — 2026-06-07 — Design-pass: метро-ориентир, фильтры (метро-мультивыбор + типы цветов), карточки/листинг/форма, единая веб-шапка `PdWebNav` + бургер-драйвер
 
 > Большой визуально-копирайтный апдейт клиентских поверхностей + **новый общий компонент шапки `PdWebNav`** (бар + бургер-драйвер; источник правды для лендинга, каталога и десктоп-экранов). Полная спека — **`CANON_HANDOFF_design-pass.md`** (§0–§12). Прототип-референс в `reference/prototypes/` — единственный источник правды; `src/` сконвертирован из него. JS-бандлы `dist/*.mjs/.cjs` собирает потребитель (`npm run build`).

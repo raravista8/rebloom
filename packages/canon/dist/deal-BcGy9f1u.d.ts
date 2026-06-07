@@ -1,5 +1,5 @@
 import React from 'react';
-import './kit-3skVi13V.js';
+import './kit-BH_JPymm.js';
 
 declare function ListingDesktop(): React.JSX.Element;
 declare function ProfileDesktop(): React.JSX.Element;
