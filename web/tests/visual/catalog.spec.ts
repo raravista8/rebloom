@@ -1,8 +1,10 @@
 import { test, expect, type Route } from '@playwright/test';
 
-// Каталог (/catalog) — PUBLIC, browse-first city catalog (canon 0.9.0). Grid shown
-// immediately from /api/feed; /api/search when a filter is set. Collection states +
-// cursor load-more (INTERACTION_STATES §4). Runs in mobile-375 (functional project).
+// Каталог (/catalog) — PUBLIC, browse-first city catalog. canon 0.9.1 made PdCatalog
+// presentational, so /catalog now renders the IMPORTED <PdCatalog/> (not the old
+// hand-rolled `.pdc-*` markup) fed live data; assertions target canon's DOM + copy.
+// Grid shown immediately from /api/feed; /api/search when a filter is set. Collection
+// states + cursor load-more (INTERACTION_STATES §4). Runs in mobile-375 (functional).
 
 const PHOTO =
   'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221%22%20height%3D%221%22/%3E';
@@ -58,7 +60,8 @@ test('empty: no listings in city → empty state (not no-results)', async ({ pag
     r.fulfill({ status: 200, contentType: 'application/json', body: feedBody([]) }),
   );
   await page.goto('/catalog');
-  await expect(page.getByText('Здесь пока пусто')).toBeVisible();
+  // canon's empty state (no filter, 0 items) — distinct from no-results.
+  await expect(page.getByText('Пока нет букетов')).toBeVisible();
 });
 
 test('load-more: cursor fetches the next page', async ({ page }) => {
@@ -72,7 +75,8 @@ test('load-more: cursor fetches the next page', async ({ page }) => {
   await expect(page.locator('.pdc-grid .pd-card')).toHaveCount(1);
   await page.getByRole('button', { name: 'Показать ещё' }).click();
   await expect(page.locator('.pdc-grid .pd-card')).toHaveCount(2);
-  await expect(page.getByText(/Вы посмотрели все свежие букеты/)).toBeVisible();
+  // canon's end-of-list stop-marker (`.pdc-end`) once the last page is reached.
+  await expect(page.locator('.pdc-end')).toContainText('Показали все букеты');
 });
 
 test('no-results: a filter with 0 hits is distinct from empty', async ({ page }) => {

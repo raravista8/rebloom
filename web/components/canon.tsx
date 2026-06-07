@@ -87,12 +87,65 @@ export const PdFlowerPicker = PdFlowerPickerRaw as unknown as FC<PdFlowerPickerP
 export type PdWebNavProps = {
   active?: string;
   authed?: boolean;
-  city?: string;
+  city?: string; // nominative — the city button
+  cityLoc?: string; // prepositional (0.9.1) — search placeholder «в Москве»
   user?: { n: string; r?: number };
   links?: { label: string; sub?: string; href: string; Icon: IconFn }[];
   onPublish?: () => void;
 };
 export const PdWebNav = PdWebNavRaw as unknown as FC<PdWebNavProps>;
 
-export type PdCatalogProps = { platform?: 'desktop' | 'web' };
+// canon 0.9.1: PdCatalog is presentational (data-driven). `items` are canon PdCard `d`
+// objects; `filters` carry stable backend ids in metro[]/flowers[]. `header` is a slot
+// for web's auth-aware PdWebNav. `rating` exists in the filter shape but has no backend
+// filter (kept inert by the consumer).
+export type PdCatalogCard = {
+  id: string;
+  photo: string;
+  size: string;
+  fresh: string;
+  price: number;
+  metro?: string;
+  district?: string;
+  likes: number;
+  liked: boolean;
+  seller: { n: string; r: number; av?: string };
+};
+export type PdCatalogFilters = {
+  metro: string[];
+  flowers: string[];
+  size: string | null;
+  freshness: string | null;
+  rating: string | null;
+  priceMin: number | null;
+  priceMax: number | null;
+  sort: string;
+};
+export type PdCatalogState =
+  | 'loading'
+  | 'loaded'
+  | 'empty'
+  | 'no-results'
+  | 'loading-more'
+  | 'end'
+  | 'error'
+  | 'offline';
+export type PdCatalogProps = {
+  platform?: 'desktop' | 'web';
+  items?: PdCatalogCard[];
+  state?: PdCatalogState;
+  total?: number;
+  filters?: PdCatalogFilters;
+  onFiltersChange?: (next: PdCatalogFilters) => void;
+  stations?: { id: string; name: string; lines: { name: string; color: string }[] }[];
+  flowers?: { id: string; label: string }[];
+  city?: string;
+  cityLoc?: string;
+  onCityChange?: (id: string) => void;
+  onLoadMore?: () => void;
+  onCardClick?: (d: PdCatalogCard) => void;
+  cardHref?: (d: PdCatalogCard) => string;
+  onRetry?: () => void;
+  header?: ReactNode;
+};
 export const PdCatalog = PdCatalogRaw as unknown as FC<PdCatalogProps>;
