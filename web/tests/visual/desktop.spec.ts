@@ -11,6 +11,15 @@ const PHOTO =
 const ok = (r: Route, data: unknown) =>
   r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data }) });
 
+// Metro catalog mock — the picker/filters now fetch GET /api/geo/metro (lib/metro.ts).
+// Keep it hermetic with a tiny fixed list (a single + a transfer station).
+const METRO_STATIONS = [
+  { id: 'msk-kurskaya', name: 'Курская', lines: [{ name: 'Кольцевая', color: '#894E35' }, { name: 'Калининская', color: '#FFCB31' }] },
+  { id: 'msk-sokolniki', name: 'Сокольники', lines: [{ name: 'Сокольническая', color: '#D41317' }] },
+];
+const mockMetro = (page: Page) =>
+  page.route('**/api/geo/metro**', (r) => ok(r, { stations: METRO_STATIONS }));
+
 /** Every matched element must not be clipping its own text (overflow hidden). */
 async function expectNoClip(loc: Locator): Promise<void> {
   const n = await loc.count();
@@ -40,6 +49,7 @@ test('login: full-width canon split, brand + headline not clipped', async ({ pag
 
 test('home: desktop landing chrome (not the mobile tree)', async ({ page }) => {
   await page.route('**/api/feed**', (r) => ok(r, { items: [], next_cursor: null }));
+  await mockMetro(page);
   await page.goto('/');
   await expect(page.locator('.pdl')).toBeVisible();
   await expect(page.locator('.pdl-nav')).toBeVisible(); // desktop nav, not the mobile TopBar/BottomNav
@@ -94,6 +104,7 @@ test('catalog: desktop browse — PdWebNav + sidebar + grid, no overflow', async
       next_cursor: null,
     }),
   );
+  await mockMetro(page);
   await page.goto('/catalog');
   await expect(page.locator('.pdl-nav')).toBeVisible(); // unified header
   await expect(page.locator('.pdc-side')).toBeVisible(); // desktop sidebar (container-query reveal)
@@ -147,6 +158,7 @@ test('safe-deal page: desktop renders, no overflow', async ({ page }) => {
 // `href="#"` (canon's PdLandingFooter ships them; we replace it with SiteFooter).
 test('home footer: real links only, no dead href="#"', async ({ page }) => {
   await page.route('**/api/feed**', (r) => ok(r, { items: [], next_cursor: null }));
+  await mockMetro(page);
   await page.goto('/');
   const foot = page.locator('.pdl-foot');
   await expect(foot).toBeVisible();

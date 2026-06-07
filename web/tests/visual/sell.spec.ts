@@ -10,6 +10,14 @@ function json(route: Route, data: unknown, ok = true, status = 200) {
 
 const me = { id: 'u1', display_name: 'Аня', phone_masked: '+7 999 •••', city_id: 'msk', roles: ['seller'], seller_rating: 5, deals_count: 0 };
 
+// The metro picker (msk → metro section) now fetches GET /api/geo/metro on mount —
+// mock it so the publish form is hermetic.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/api/geo/metro**', (r) =>
+    json(r, { stations: [{ id: 'msk-kurskaya', name: 'Курская', lines: [{ name: 'Кольцевая', color: '#894E35' }] }] }),
+  );
+});
+
 test('auth gate: unauthenticated → redirected to login', async ({ page }) => {
   await page.route('**/api/me', (r) => json(r, 'unauthorized', false, 401));
   await page.goto('/sell');

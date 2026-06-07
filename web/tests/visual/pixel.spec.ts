@@ -30,6 +30,10 @@ test('home landing', async ({ page }) => {
   await page.route('**/api/feed**', (r) =>
     ok(r, { items: [card('1', 69000), card('2', 125000), card('3', 210000), card('4', 89000)], next_cursor: null }),
   );
+  // The landing metro bar fetches GET /api/geo/metro — mock it so networkidle settles.
+  await page.route('**/api/geo/metro**', (r) =>
+    ok(r, { stations: [{ id: 'msk-kurskaya', name: 'Курская', lines: [{ name: 'Кольцевая', color: '#894E35' }] }] }),
+  );
   await page.goto('/');
   await expect(page.locator('.pdl-nav')).toBeVisible();
   await expect(page.locator('.pdl-catgrid .pd-card').first()).toBeVisible();

@@ -30,6 +30,7 @@ def _to_view(user: User) -> UserView:
         roles=tuple(user.roles),
         seller_rating=float(user.seller_rating) if user.seller_rating is not None else None,
         status=user.status,
+        created_at=user.created_at,
     )
 
 

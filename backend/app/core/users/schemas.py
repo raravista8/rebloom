@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any
 
 from app.core.auth.schemas import mask_phone
@@ -19,6 +20,7 @@ class UserView:
     roles: tuple[str, ...]
     seller_rating: float | None
     status: str
+    created_at: datetime | None = None  # registration time; drives «N месяцев на площадке»
 
     def to_public(self, deals_count: int = 0) -> dict[str, Any]:
         return {
@@ -29,4 +31,6 @@ class UserView:
             "roles": list(self.roles),
             "seller_rating": self.seller_rating,
             "deals_count": deals_count,
+            # ISO-8601 UTC; non-sensitive (registration month) → public profile tenure row
+            "created_at": self.created_at.isoformat() if self.created_at is not None else None,
         }

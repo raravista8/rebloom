@@ -8,6 +8,13 @@ function card(id: string, price: number) {
   return { id, photo_thumb_url: PHOTO, size: 'M', freshness: 'today', price_kopecks: price, city_id: 'msk', like_count: 1, liked: false, seller: { id: 's', display_name: 'Аня', seller_rating: 5 } };
 }
 
+// The metro filter now fetches GET /api/geo/metro (lib/metro.ts) — mock it for hermeticity.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/api/geo/metro**', (r) =>
+    json(r, { stations: [{ id: 'msk-kurskaya', name: 'Курская', lines: [{ name: 'Кольцевая', color: '#894E35' }] }] }),
+  );
+});
+
 test('search: idle → results', async ({ page }) => {
   await page.route('**/api/search**', (r) => json(r, { items: [card('l1', 90000)], next_cursor: null, applied: { q: 'розы', city_id: 'msk' } }));
   await page.goto('/search');

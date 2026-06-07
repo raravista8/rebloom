@@ -34,6 +34,17 @@ async function stubFeed(route: Route, freshItems: unknown[], likedItems: unknown
   });
 }
 
+// The landing metro bar fetches GET /api/geo/metro (lib/metro.ts) — mock it for hermeticity.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/api/geo/metro**', (r) =>
+    r.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: { stations: [{ id: 'msk-kurskaya', name: 'Курская', lines: [{ name: 'Кольцевая', color: '#894E35' }] }] } }),
+    }),
+  );
+});
+
 test('loaded: live catalog renders cards', async ({ page }) => {
   await page.route('**/api/feed**', (r) => stubFeed(r, [card('f1', 180000)], [card('l1', 250000)]));
   await page.goto('/');

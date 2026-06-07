@@ -7,7 +7,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { IconChev, IconPin, IconSliders, IconX } from '@/components/icons';
 import MetroPicker from '@/components/forms/MetroPicker';
-import { stationById, stationsForCity } from '@/lib/metro';
+import { stationById, cityHasMetro } from '@/lib/metro';
 import { flowerLabel } from '@/lib/flowers';
 import { FLOWERS } from '@/lib/flowers';
 import {
@@ -87,7 +87,7 @@ function Groups({
   toggleMetro: (id: string | null) => void;
   toggleFlower: (id: string) => void;
 }) {
-  const hasMetro = stationsForCity(cityId).length > 0;
+  const hasMetro = cityHasMetro(cityId);
   return (
     <>
       {hasMetro && (
