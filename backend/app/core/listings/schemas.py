@@ -6,7 +6,13 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from app.core.geo.metro import is_valid as metro_is_valid
+from app.core.geo.metro import resolve as resolve_metro
+from app.core.listings.flowers import FLOWER_IDS
+
+MAX_FLOWER_TYPES = 6
 
 Size = Literal["S", "M", "L", "XL"]
 Freshness = Literal["today", "d1_2", "d3_plus"]
@@ -21,9 +27,30 @@ class ListingCreateIn(BaseModel):
     freshness: Freshness
     price_kopecks: int = Field(gt=0, le=100_000_000)  # int kopecks, never float
     city_id: str = Field(min_length=2, max_length=8)
-    geo: str | None = Field(default=None, max_length=128)
+    geo: str | None = Field(default=None, max_length=128)  # район — fallback for no-metro cities
+    metro_station_id: str | None = Field(default=None, max_length=48)
+    flower_types: list[str] = Field(default_factory=list)
     photo_ids: list[str] = Field(min_length=1, max_length=5)
     expires_in_h: int = Field(default=72, ge=1, le=168)
+
+    @field_validator("metro_station_id")
+    @classmethod
+    def _check_metro(cls, value: str | None) -> str | None:
+        if value is not None and not metro_is_valid(value):
+            raise ValueError("unknown metro station")
+        return value
+
+    @field_validator("flower_types")
+    @classmethod
+    def _check_flowers(cls, value: list[str]) -> list[str]:
+        # Dedupe while preserving order, then validate + cap.
+        deduped: list[str] = list(dict.fromkeys(value))
+        unknown = [f for f in deduped if f not in FLOWER_IDS]
+        if unknown:
+            raise ValueError(f"unknown flower types: {unknown}")
+        if len(deduped) > MAX_FLOWER_TYPES:
+            raise ValueError(f"at most {MAX_FLOWER_TYPES} flower types")
+        return deduped
 
 
 class PhotoCreateIn(BaseModel):
@@ -51,6 +78,8 @@ class ListingView:
     price_kopecks: int
     city_id: str
     geo_coarse: str | None
+    metro_station_id: str | None
+    flower_types: tuple[str, ...]
     status: str
     like_count: int
     freshness_score: float
@@ -73,6 +102,8 @@ class ListingView:
             "freshness": self.freshness,
             "price_kopecks": self.price_kopecks,
             "city_id": self.city_id,
+            "metro": resolve_metro(self.metro_station_id),  # station is the card landmark
+            "flower_types": list(self.flower_types),
             "like_count": self.like_count,
             "liked": liked,
             "seller": self._seller(),

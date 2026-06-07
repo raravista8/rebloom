@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from app.api.envelope import ok
 from app.core.feed.schemas import FeedSection, SearchFilters
@@ -13,6 +13,17 @@ from app.core.listings.schemas import Freshness, Size
 from app.infrastructure.postgres.feed_repo import PostgresFeedRepository
 
 router = APIRouter(tags=["feed"])
+
+
+def _multi(values: list[str] | None) -> tuple[str, ...]:
+    """Flatten a repeatable query param (``?metro=a&metro=b``) and also accept
+    comma-joined values (``?metro=a,b``); de-blank, preserving order."""
+    if not values:
+        return ()
+    out: list[str] = []
+    for raw in values:
+        out.extend(part.strip() for part in raw.split(",") if part.strip())
+    return tuple(out)
 
 
 def get_feed_service() -> FeedService:
@@ -42,10 +53,17 @@ def search(
     freshness: Freshness | None = None,
     price_min: int | None = None,
     price_max: int | None = None,
+    metro: Annotated[list[str] | None, Query()] = None,
+    flower: Annotated[list[str] | None, Query()] = None,
     cursor: str | None = None,
     limit: int = 20,
 ) -> dict[str, Any]:
     filters = SearchFilters(
-        size=size, freshness=freshness, price_min=price_min, price_max=price_max
+        size=size,
+        freshness=freshness,
+        price_min=price_min,
+        price_max=price_max,
+        metro=_multi(metro),
+        flowers=_multi(flower),
     )
     return ok(service.search(city_id, q, filters, cursor, limit))

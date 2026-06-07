@@ -49,3 +49,26 @@ def test_empty_vs_no_results_via_applied_echo() -> None:
     assert no_results["items"] == []
     assert no_results["applied"]["q"] == "розы"
     assert no_results["applied"]["filters"] == {"size": "L"}
+
+
+def test_search_echoes_metro_and_flowers_filters() -> None:
+    service = FeedService(FakeFeedRepository([]))
+    out = service.search(
+        "msk",
+        None,
+        SearchFilters(metro=("msk-kievskaya", "msk-kurskaya"), flowers=("roses",)),
+        None,
+        20,
+    )
+    assert out["applied"]["filters"] == {
+        "metro": ["msk-kievskaya", "msk-kurskaya"],
+        "flowers": ["roses"],
+    }
+
+
+def test_search_includes_total() -> None:
+    items = [make_listing_view(f"l{i}") for i in range(7)]
+    out = FeedService(FakeFeedRepository(items)).search("msk", None, SearchFilters(), None, 3)
+    assert len(out["items"]) == 3  # one page
+    assert out["total"] == 7  # all matches under the filters, not the page size
+    assert out["next_cursor"] == "3"

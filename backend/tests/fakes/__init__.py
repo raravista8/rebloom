@@ -369,6 +369,8 @@ class FakeListingRepository:
             price_kopecks=data.price_kopecks,  # type: ignore[attr-defined]
             city_id=data.city_id,  # type: ignore[attr-defined]
             geo_coarse=data.geo,  # type: ignore[attr-defined]
+            metro_station_id=data.metro_station_id,  # type: ignore[attr-defined]
+            flower_types=tuple(data.flower_types),  # type: ignore[attr-defined]
             status=status,
             like_count=0,
             freshness_score=freshness_score,
@@ -428,7 +430,12 @@ class FakeLikeRepository:
         return len(self._likes[listing_id])
 
 
-def make_listing_view(listing_id: str = "l1", city_id: str = "msk") -> object:
+def make_listing_view(
+    listing_id: str = "l1",
+    city_id: str = "msk",
+    metro_station_id: str | None = None,
+    flower_types: tuple[str, ...] = (),
+) -> object:
     """Build a minimal ListingView for feed/search tests."""
     from datetime import UTC, datetime
 
@@ -444,6 +451,8 @@ def make_listing_view(listing_id: str = "l1", city_id: str = "msk") -> object:
         price_kopecks=100000,
         city_id=city_id,
         geo_coarse=None,
+        metro_station_id=metro_station_id,
+        flower_types=flower_types,
         status="active",
         like_count=0,
         freshness_score=1.0,
@@ -466,9 +475,9 @@ class FakeFeedRepository:
 
     def search(
         self, city_id: str, filters: object, offset: int, limit: int
-    ) -> tuple[list[object], bool]:
+    ) -> tuple[list[object], bool, int]:
         page = self._items[offset : offset + limit]
-        return page, (offset + limit) < len(self._items)
+        return page, (offset + limit) < len(self._items), len(self._items)
 
 
 class FakeListingReader:
