@@ -85,6 +85,22 @@ test('listing as guest: PdWebNav shows «Войти», not the logged-in toolbar
   await expect(nav.locator('.pdl-nav-cta')).toHaveCount(1); // «Опубликовать букет» CTA stays
 });
 
+test('catalog: desktop browse — PdWebNav + sidebar + grid, no overflow', async ({ page }) => {
+  await page.route('**/api/feed**', (r) =>
+    ok(r, {
+      items: [
+        { id: 'c1', photo_thumb_url: PHOTO, size: 'M', freshness: 'today', price_kopecks: 99000, city_id: 'msk', metro: null, flower_types: [], like_count: 2, liked: false, seller: { id: 's1', display_name: 'Аня', seller_rating: 4.8 } },
+      ],
+      next_cursor: null,
+    }),
+  );
+  await page.goto('/catalog');
+  await expect(page.locator('.pdl-nav')).toBeVisible(); // unified header
+  await expect(page.locator('.pdc-side')).toBeVisible(); // desktop sidebar (container-query reveal)
+  await expect(page.locator('.pdc-grid .pd-card')).toHaveCount(1);
+  await expectNoHorizontalOverflow(page);
+});
+
 test('deal: desktop chrome renders, no overflow', async ({ page }) => {
   await page.route('**/api/deals/d1', (r) =>
     ok(r, { deal: { id: 'd1', status: 'meeting', listing: { id: 'l1', photo_thumb_url: PHOTO, price_kopecks: 99000 }, role: 'buyer', counterparty: { id: 's1', display_name: 'Аня', seller_rating: 4.9 }, delivery_method: 'self_pickup', created_at: '2026-06-04T15:00:00Z' } }),
