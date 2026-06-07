@@ -8,11 +8,14 @@ import Link from 'next/link';
 import { PdBtn } from '@/components/canon';
 import { IconPlus } from '@/components/icons';
 import BouquetCard from '@/components/feed/BouquetCard';
+import MetroPicker from '@/components/forms/MetroPicker';
 import SiteFooter from '@/components/marketing/SiteFooter';
 import NavCity from '@/components/marketing/NavCity';
 import MobileMenu from '@/components/marketing/MobileMenu';
 import { api, ApiError } from '@/lib/api';
 import { cityPrepositional } from '@/lib/cities';
+import { stationsForCity } from '@/lib/metro';
+import { FLOWERS } from '@/lib/flowers';
 import type { ListingCard, Paginated } from '@/lib/types';
 
 /* ── «Соцветие» mark + line icons (presentation SVG, copied from canon source) ── */
@@ -112,13 +115,15 @@ function Hero() {
   );
 }
 
-/* ── CATALOG — LIVE data + working filters ── */
-type Sel = { price: 'any' | 'lt1k' | '1k2k' | 'gt2k'; fresh: 'any' | 'today' | 'd1_2'; rating: 'any' | '45' | '48' | '5' };
+/* ── CATALOG — LIVE data + working filters (canon 0.9.0: + metro multiselect + тип цветов) ── */
+type Sel = { price: 'any' | 'lt1k' | '1k2k' | 'gt2k'; fresh: 'any' | 'today' | 'd1_2' | 'd3_plus'; flower: 'any' | string; rating: 'any' | '45' | '48' | '5' };
 const FILTERS = {
   price: { label: 'Цена', opts: [['lt1k', 'до 1 000 ₽'], ['1k2k', '1 000–2 000 ₽'], ['gt2k', '2 000 ₽+']] },
-  fresh: { label: 'Свежесть', opts: [['today', 'Сегодня'], ['d1_2', '1–2 дня']] },
+  fresh: { label: 'Свежесть', opts: [['today', 'Свежий'], ['d1_2', '1–2 дня'], ['d3_plus', '3+ дня']] },
   rating: { label: 'Рейтинг продавца', opts: [['45', '4,5+'], ['48', '4,8+'], ['5', '5,0']] },
 } as const;
+// Тип цветов — single-select chip group (canon landing.jsx), the most common types.
+const FLOWER_CHIPS = FLOWERS.slice(0, 6);
 const priceOk = (k: Sel['price'], kop: number) => {
   const r = kop / 100;
   return k === 'any' || (k === 'lt1k' ? r < 1000 : k === '1k2k' ? r >= 1000 && r <= 2000 : r > 2000);
@@ -126,13 +131,28 @@ const priceOk = (k: Sel['price'], kop: number) => {
 const ratingOk = (k: Sel['rating'], v: number | null) => k === 'any' || (v != null && (k === '45' ? v >= 4.5 : k === '48' ? v >= 4.8 : v >= 5));
 
 function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status: 'loading' | 'ready' | 'error'; cityId: string; reload: () => void }) {
-  const [sel, setSel] = useState<Sel>({ price: 'any', fresh: 'any', rating: 'any' });
+  const [sel, setSel] = useState<Sel>({ price: 'any', fresh: 'any', flower: 'any', rating: 'any' });
+  const [metros, setMetros] = useState<string[]>([]);
   const toggle = (k: keyof Sel, v: string) => setSel((s) => ({ ...s, [k]: s[k] === v ? 'any' : (v as never) }));
-  const reset = () => setSel({ price: 'any', fresh: 'any', rating: 'any' });
-  const activeN = Object.values(sel).filter((v) => v !== 'any').length;
+  const toggleMetro = (id: string | null) =>
+    setMetros((m) => (id === null ? [] : m.includes(id) ? m.filter((x) => x !== id) : [...m, id]));
+  const reset = () => {
+    setSel({ price: 'any', fresh: 'any', flower: 'any', rating: 'any' });
+    setMetros([]);
+  };
+  const activeN = Object.values(sel).filter((v) => v !== 'any').length + metros.length;
+  const hasMetro = stationsForCity(cityId).length > 0;
   const filtered = useMemo(
-    () => pool.filter((d) => priceOk(sel.price, d.price_kopecks) && (sel.fresh === 'any' || d.freshness === sel.fresh) && ratingOk(sel.rating, d.seller.seller_rating)),
-    [pool, sel],
+    () =>
+      pool.filter(
+        (d) =>
+          priceOk(sel.price, d.price_kopecks) &&
+          (sel.fresh === 'any' || d.freshness === sel.fresh) &&
+          (sel.flower === 'any' || (d.flower_types ?? []).includes(sel.flower)) &&
+          ratingOk(sel.rating, d.seller.seller_rating) &&
+          (metros.length === 0 || (d.metro != null && metros.includes(d.metro.id))),
+      ),
+    [pool, sel, metros],
   );
   const shown = filtered.slice(0, 8);
   return (
@@ -141,22 +161,49 @@ function Catalog({ pool, status, cityId, reload }: { pool: ListingCard[]; status
         <div className="pdl-sechead l">
           <p className="pdl-kicker"><Leaf className="lf" />Живой каталог</p>
           <h2 className="pdl-h2">Свежие букеты рядом, прямо сейчас</h2>
-          <p className="pdl-sub">Метка «Сегодня» значит, что букет куплен сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
+          <p className="pdl-sub">Метка «Свежий» значит, что букет подарили сегодня. Свежесть тает, поэтому лучшие разбирают за часы</p>
         </div>
         <div className="pdl-catbar">
           <span className="pdl-catcount"><span className="d" />{filtered.length} свежих букетов в {cityPrepositional(cityId)}</span>
         </div>
-        <div className="pdl-filters">
-          {Object.entries(FILTERS).map(([k, g]) => (
-            <div className="pdl-fgroup" key={k}>
-              <span className="pdl-flabel">{g.label}</span>
-              {g.opts.map(([val, lab]) => (
-                <button key={val} className={'pdl-fchip' + (sel[k as keyof Sel] === val ? ' on' : '')} onClick={() => toggle(k as keyof Sel, val)}>
-                  {k === 'rating' && <span className="st">★</span>}{lab}
-                </button>
-              ))}
+        {hasMetro && (
+          <div className="pdl-metrobar">
+            <span className="pdl-flabel">Метро</span>
+            <div className="pdl-metrowrap">
+              <MetroPicker cityId={cityId} multi values={metros} onToggle={toggleMetro} placeholder="Любые станции метро" />
             </div>
-          ))}
+            {metros.length > 0 && (
+              <button className="pdl-freset" onClick={() => setMetros([])}>
+                Сбросить{metros.length > 1 ? ` (${metros.length})` : ' станцию'}
+              </button>
+            )}
+          </div>
+        )}
+        <div className="pdl-filters">
+          <div className="pdl-fgroup">
+            <span className="pdl-flabel">{FILTERS.price.label}</span>
+            {FILTERS.price.opts.map(([val, lab]) => (
+              <button key={val} className={'pdl-fchip' + (sel.price === val ? ' on' : '')} onClick={() => toggle('price', val)}>{lab}</button>
+            ))}
+          </div>
+          <div className="pdl-fgroup">
+            <span className="pdl-flabel">{FILTERS.fresh.label}</span>
+            {FILTERS.fresh.opts.map(([val, lab]) => (
+              <button key={val} className={'pdl-fchip' + (sel.fresh === val ? ' on' : '')} onClick={() => toggle('fresh', val)}>{lab}</button>
+            ))}
+          </div>
+          <div className="pdl-fgroup">
+            <span className="pdl-flabel">Тип цветов</span>
+            {FLOWER_CHIPS.map((f) => (
+              <button key={f.id} className={'pdl-fchip' + (sel.flower === f.id ? ' on' : '')} onClick={() => toggle('flower', f.id)}>{f.label}</button>
+            ))}
+          </div>
+          <div className="pdl-fgroup">
+            <span className="pdl-flabel">{FILTERS.rating.label}</span>
+            {FILTERS.rating.opts.map(([val, lab]) => (
+              <button key={val} className={'pdl-fchip' + (sel.rating === val ? ' on' : '')} onClick={() => toggle('rating', val)}><span className="st">★</span>{lab}</button>
+            ))}
+          </div>
           {activeN > 0 && <button className="pdl-freset" onClick={reset}>Сбросить{activeN > 1 ? ` (${activeN})` : ''}</button>}
         </div>
         {status === 'loading' ? (
