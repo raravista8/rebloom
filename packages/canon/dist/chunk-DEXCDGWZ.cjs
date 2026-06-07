@@ -1,6 +1,6 @@
 'use strict';
 
-var chunk42CQIEPX_cjs = require('./chunk-42CQIEPX.cjs');
+var chunkCMKDVS6C_cjs = require('./chunk-CMKDVS6C.cjs');
 require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -10,13 +10,13 @@ var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u
   /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
 ] });
 function PdFeedDesktop({ theme = "a" }) {
-  const Card2 = chunk42CQIEPX_cjs.Card, SectionHead2 = chunk42CQIEPX_cjs.SectionHead, Ic2 = chunk42CQIEPX_cjs.Ic;
-  const FRESH = chunk42CQIEPX_cjs.PD_FRESH, LIKED = chunk42CQIEPX_cjs.PD_LIKED;
+  const Card2 = chunkCMKDVS6C_cjs.Card, SectionHead2 = chunkCMKDVS6C_cjs.SectionHead, Ic2 = chunkCMKDVS6C_cjs.Ic;
+  const FRESH = chunkCMKDVS6C_cjs.PD_FRESH, LIKED = chunkCMKDVS6C_cjs.PD_LIKED;
   const Bell = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, children: [
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" }),
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M10 19a2 2 0 0 0 4 0" })
   ] });
-  const Heart2 = (p) => chunk42CQIEPX_cjs.Heart({ className: p.className });
+  const Heart2 = (p) => chunkCMKDVS6C_cjs.Heart({ className: p.className });
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-root pd-web", "data-pd-theme": theme, children: [
     /* @__PURE__ */ jsxRuntime.jsx("header", { className: "pdw-nav", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdw-nav-in", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pd-brand pdw-brand", children: [

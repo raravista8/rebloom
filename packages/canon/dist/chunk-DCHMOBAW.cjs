@@ -1,6 +1,6 @@
 'use strict';
 
-var chunk42CQIEPX_cjs = require('./chunk-42CQIEPX.cjs');
+var chunkCMKDVS6C_cjs = require('./chunk-CMKDVS6C.cjs');
 var React = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -14,7 +14,7 @@ var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u
   /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
 ] });
 var PdWebNav = (function() {
-  const Ic2 = chunk42CQIEPX_cjs.Ic, Btn = chunk42CQIEPX_cjs.PdBtn, Heart2 = chunk42CQIEPX_cjs.Heart;
+  const Ic2 = chunkCMKDVS6C_cjs.Ic, Btn = chunkCMKDVS6C_cjs.PdBtn, Heart2 = chunkCMKDVS6C_cjs.Heart;
   const ico = (Fn, cls) => Fn ? Fn({ className: cls, fill: "none", stroke: "currentColor" }) : null;
   const Bell = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: [
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" }),
@@ -40,7 +40,7 @@ var PdWebNav = (function() {
     { label: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430", sub: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435", href: LANDING + "#safe", Icon: (p) => ico(Ic2.deals, "pd-i20") },
     { label: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", sub: "iOS \u0438 Android", href: LANDING + "#app", Icon: Phone }
   ];
-  return function PdWebNav2({ active, authed = true, city = "\u041C\u043E\u0441\u043A\u0432\u0430", user = { n: "\u041C\u0430\u0440\u0438\u044F", r: 4.9 }, links = DEFAULT_LINKS, onPublish }) {
+  return function PdWebNav2({ active, authed = true, city = "\u041C\u043E\u0441\u043A\u0432\u0430", cityLoc = "\u041C\u043E\u0441\u043A\u0432\u0435", user = { n: "\u041C\u0430\u0440\u0438\u044F", r: 4.9 }, links = DEFAULT_LINKS, onPublish }) {
     const [menu, setMenu] = React__default.default.useState(false);
     const close = () => setMenu(false);
     const initial = user && user.n ? user.n[0] : "\u041C";
@@ -60,7 +60,7 @@ var PdWebNav = (function() {
             ico(Ic2.search, "pd-i18"),
             /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
               "\u041F\u043E\u0438\u0441\u043A \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 ",
-              city
+              cityLoc
             ] })
           ] })
         ] }),

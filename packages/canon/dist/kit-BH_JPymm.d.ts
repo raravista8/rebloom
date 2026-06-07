@@ -88,7 +88,7 @@ declare function PdToast({ kind, children }: {
     kind?: string | undefined;
     children: any;
 }): React.JSX.Element;
-declare function PdMetroPicker({ cityKey, value, onChange, multi, values, onToggle, placeholder }: {
+declare function PdMetroPicker({ cityKey, value, onChange, multi, values, onToggle, placeholder, options, idMode }: {
     cityKey?: string | undefined;
     value: any;
     onChange: any;
@@ -96,6 +96,8 @@ declare function PdMetroPicker({ cityKey, value, onChange, multi, values, onTogg
     values?: never[] | undefined;
     onToggle: any;
     placeholder?: string | undefined;
+    options: any;
+    idMode?: boolean | undefined;
 }): React.JSX.Element;
 declare function PdFlowerPicker({ value, onChange, options }: {
     value?: never[] | undefined;

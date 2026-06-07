@@ -1,4 +1,4 @@
-import { Ic, Heart, PdBtn } from './chunk-EKGKIXGF.mjs';
+import { Ic, Heart, PdBtn } from './chunk-EQYPIQRM.mjs';
 import React from 'react';
 import { jsxs, jsx } from 'react/jsx-runtime';
 
@@ -34,7 +34,7 @@ var PdWebNav = (function() {
     { label: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u0430\u044F \u0441\u0434\u0435\u043B\u043A\u0430", sub: "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435", href: LANDING + "#safe", Icon: (p) => ico(Ic2.deals, "pd-i20") },
     { label: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435", sub: "iOS \u0438 Android", href: LANDING + "#app", Icon: Phone }
   ];
-  return function PdWebNav2({ active, authed = true, city = "\u041C\u043E\u0441\u043A\u0432\u0430", user = { n: "\u041C\u0430\u0440\u0438\u044F", r: 4.9 }, links = DEFAULT_LINKS, onPublish }) {
+  return function PdWebNav2({ active, authed = true, city = "\u041C\u043E\u0441\u043A\u0432\u0430", cityLoc = "\u041C\u043E\u0441\u043A\u0432\u0435", user = { n: "\u041C\u0430\u0440\u0438\u044F", r: 4.9 }, links = DEFAULT_LINKS, onPublish }) {
     const [menu, setMenu] = React.useState(false);
     const close = () => setMenu(false);
     const initial = user && user.n ? user.n[0] : "\u041C";
@@ -54,7 +54,7 @@ var PdWebNav = (function() {
             ico(Ic2.search, "pd-i18"),
             /* @__PURE__ */ jsxs("span", { children: [
               "\u041F\u043E\u0438\u0441\u043A \u0441\u0432\u0435\u0436\u0438\u0445 \u0431\u0443\u043A\u0435\u0442\u043E\u0432 \u0432 ",
-              city
+              cityLoc
             ] })
           ] })
         ] }),

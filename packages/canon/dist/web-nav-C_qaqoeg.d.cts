@@ -1,9 +1,10 @@
 import React from 'react';
 
-declare function PdWebNav({ active, authed, city, user, links, onPublish }: {
+declare function PdWebNav({ active, authed, city, cityLoc, user, links, onPublish }: {
     active: any;
     authed?: boolean | undefined;
     city?: string | undefined;
+    cityLoc?: string | undefined;
     user?: {
         n: string;
         r: number;
