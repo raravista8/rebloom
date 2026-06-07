@@ -95,21 +95,21 @@ export type PdWebNavProps = {
 };
 export const PdWebNav = PdWebNavRaw as unknown as FC<PdWebNavProps>;
 
-// canon 0.9.1: PdCatalog is presentational (data-driven). `items` are canon PdCard `d`
-// objects; `filters` carry stable backend ids in metro[]/flowers[]. `header` is a slot
-// for web's auth-aware PdWebNav. `rating` exists in the filter shape but has no backend
-// filter (kept inert by the consumer).
-export type PdCatalogCard = {
+// canon 0.9.2: PdCatalog is presentational (data-driven) + has a `renderCard` slot and a
+// data-driven `onLike`. `filters` carry stable backend ids in metro[]/flowers[]. `header`
+// is a slot for web's auth-aware PdWebNav. `rating` exists in the filter shape but has no
+// backend filter (kept inert by the consumer). web/ passes `renderCard` → its own
+// BouquetCard (real photo + wired LikeButton), so canon's default PdCard / `onLike` are
+// unused; the `item` only needs `id`/`_id` + `price` (rubles) + `seller.r` for the
+// client-side cheap/exp/rating sort.
+// The minimal shape PdCatalog reads off an item for its client-side sort + keying
+// (cheap/exp by `price` rubles, rating by `seller.r`, key by `_id || id`). Consumers
+// pass richer items (web passes the full ListingCard) — hence the open `I extends`.
+export type PdCatalogItem = {
   id: string;
-  photo: string;
-  size: string;
-  fresh: string;
-  price: number;
-  metro?: string;
-  district?: string;
-  likes: number;
-  liked: boolean;
-  seller: { n: string; r: number; av?: string };
+  _id?: string;
+  price?: number;
+  seller?: { r?: number | null };
 };
 export type PdCatalogFilters = {
   metro: string[];
@@ -130,22 +130,26 @@ export type PdCatalogState =
   | 'end'
   | 'error'
   | 'offline';
-export type PdCatalogProps = {
+export type PdCatalogProps<I extends PdCatalogItem = PdCatalogItem> = {
   platform?: 'desktop' | 'web';
-  items?: PdCatalogCard[];
+  items?: I[];
   state?: PdCatalogState;
   total?: number;
   filters?: PdCatalogFilters;
   onFiltersChange?: (next: PdCatalogFilters) => void;
   stations?: { id: string; name: string; lines: { name: string; color: string }[] }[];
-  flowers?: { id: string; label: string }[];
+  flowers?: readonly { id: string; label: string }[];
   city?: string;
   cityLoc?: string;
   onCityChange?: (id: string) => void;
   onLoadMore?: () => void;
-  onCardClick?: (d: PdCatalogCard) => void;
-  cardHref?: (d: PdCatalogCard) => string;
+  onCardClick?: (d: I) => void;
+  cardHref?: (d: I) => string;
+  onLike?: (id: string, next: boolean) => void;
+  renderCard?: (d: I) => ReactNode;
   onRetry?: () => void;
   header?: ReactNode;
 };
-export const PdCatalog = PdCatalogRaw as unknown as FC<PdCatalogProps>;
+export const PdCatalog = PdCatalogRaw as unknown as <I extends PdCatalogItem = PdCatalogItem>(
+  props: PdCatalogProps<I>,
+) => ReturnType<FC>;
