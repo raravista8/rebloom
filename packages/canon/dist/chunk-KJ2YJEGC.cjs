@@ -1,6 +1,6 @@
 'use strict';
 
-var chunkCMKDVS6C_cjs = require('./chunk-CMKDVS6C.cjs');
+var chunkG5Y6Q77T_cjs = require('./chunk-G5Y6Q77T.cjs');
 var React = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -14,7 +14,7 @@ var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u
   /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
 ] });
 var PdWebNav = (function() {
-  const Ic2 = chunkCMKDVS6C_cjs.Ic, Btn = chunkCMKDVS6C_cjs.PdBtn, Heart2 = chunkCMKDVS6C_cjs.Heart;
+  const Ic2 = chunkG5Y6Q77T_cjs.Ic, Btn = chunkG5Y6Q77T_cjs.PdBtn, Heart2 = chunkG5Y6Q77T_cjs.Heart;
   const ico = (Fn, cls) => Fn ? Fn({ className: cls, fill: "none", stroke: "currentColor" }) : null;
   const Bell = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24", ...p, fill: "none", stroke: "currentColor", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round", children: [
     /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" }),

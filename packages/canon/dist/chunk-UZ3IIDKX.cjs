@@ -1,20 +1,20 @@
 'use strict';
 
-var chunkCMKDVS6C_cjs = require('./chunk-CMKDVS6C.cjs');
+var chunkG5Y6Q77T_cjs = require('./chunk-G5Y6Q77T.cjs');
 require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
 var aic = (Fn, cls = "pd-i18") => Fn({ className: cls, fill: "none", stroke: "currentColor" });
 function Side({ active }) {
   const items = [
-    ["dash", "\u041E\u0431\u0437\u043E\u0440", chunkCMKDVS6C_cjs.Ic.home, null],
-    ["users", "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438", chunkCMKDVS6C_cjs.Ic.user, null],
-    ["list", "\u041E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F", chunkCMKDVS6C_cjs.Ic.search, null],
-    ["deals", "\u0421\u0434\u0435\u043B\u043A\u0438", chunkCMKDVS6C_cjs.Ic.deals, null],
-    ["fin", "\u0424\u0438\u043D\u0430\u043D\u0441\u044B", chunkCMKDVS6C_cjs.I.wallet, null],
-    ["fraud", "\u0410\u043D\u0442\u0438\u0444\u0440\u043E\u0434", chunkCMKDVS6C_cjs.I.shield, "7"],
-    ["mod", "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", chunkCMKDVS6C_cjs.I.alert, "12"],
-    ["reports", "\u0416\u0430\u043B\u043E\u0431\u044B", chunkCMKDVS6C_cjs.I.flag, "3"]
+    ["dash", "\u041E\u0431\u0437\u043E\u0440", chunkG5Y6Q77T_cjs.Ic.home, null],
+    ["users", "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438", chunkG5Y6Q77T_cjs.Ic.user, null],
+    ["list", "\u041E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F", chunkG5Y6Q77T_cjs.Ic.search, null],
+    ["deals", "\u0421\u0434\u0435\u043B\u043A\u0438", chunkG5Y6Q77T_cjs.Ic.deals, null],
+    ["fin", "\u0424\u0438\u043D\u0430\u043D\u0441\u044B", chunkG5Y6Q77T_cjs.I.wallet, null],
+    ["fraud", "\u0410\u043D\u0442\u0438\u0444\u0440\u043E\u0434", chunkG5Y6Q77T_cjs.I.shield, "7"],
+    ["mod", "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", chunkG5Y6Q77T_cjs.I.alert, "12"],
+    ["reports", "\u0416\u0430\u043B\u043E\u0431\u044B", chunkG5Y6Q77T_cjs.I.flag, "3"]
   ];
   return /* @__PURE__ */ jsxRuntime.jsxs("aside", { className: "pda-side", children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pda-brand", children: "\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C \xB7 admin" }),
@@ -41,7 +41,7 @@ function AdminShell({ active, title, top, overlay, children }) {
         /* @__PURE__ */ jsxRuntime.jsx("h1", { children: title }),
         top,
         /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-2fa", style: top ? void 0 : { marginLeft: "auto" }, children: [
-          aic(chunkCMKDVS6C_cjs.I.lock, "pd-i13"),
+          aic(chunkG5Y6Q77T_cjs.I.lock, "pd-i13"),
           "2FA \xB7 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u0432 audit-log"
         ] })
       ] }),
@@ -52,7 +52,7 @@ function AdminShell({ active, title, top, overlay, children }) {
 }
 function AdminToast({ kind = "ok", children }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-toast", style: { position: "absolute", right: 24, bottom: 24, zIndex: 80 }, children: [
-    aic(kind === "ok" ? chunkCMKDVS6C_cjs.I.check : chunkCMKDVS6C_cjs.I.alert, "pd-i18"),
+    aic(kind === "ok" ? chunkG5Y6Q77T_cjs.I.check : chunkG5Y6Q77T_cjs.I.alert, "pd-i18"),
     children
   ] });
 }
@@ -87,7 +87,7 @@ function AdminDashboard() {
           /* @__PURE__ */ jsxRuntime.jsx("button", { children: "\u041F\u0435\u0440\u0438\u043E\u0434" })
         ] }),
         /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-2fa", children: [
-          chunkCMKDVS6C_cjs.I.lock({ className: "pd-i13", fill: "none", stroke: "currentColor" }),
+          chunkG5Y6Q77T_cjs.I.lock({ className: "pd-i13", fill: "none", stroke: "currentColor" }),
           "2FA \xB7 \u0434\u043E\u0441\u0442\u0443\u043F \u043B\u043E\u0433\u0438\u0440\u0443\u0435\u0442\u0441\u044F"
         ] })
       ] }),
@@ -157,7 +157,7 @@ function AdminDashboard() {
             /* @__PURE__ */ jsxRuntime.jsx("tbody", { children: deals.map((d, i) => /* @__PURE__ */ jsxRuntime.jsxs("tr", { children: [
               /* @__PURE__ */ jsxRuntime.jsx("td", { children: d[0] }),
               /* @__PURE__ */ jsxRuntime.jsx("td", { children: d[1] }),
-              /* @__PURE__ */ jsxRuntime.jsx("td", { style: { fontWeight: 700 }, children: chunkCMKDVS6C_cjs.pdMoney(d[2]) }),
+              /* @__PURE__ */ jsxRuntime.jsx("td", { style: { fontWeight: 700 }, children: chunkG5Y6Q77T_cjs.pdMoney(d[2]) }),
               /* @__PURE__ */ jsxRuntime.jsx("td", { children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: `pda-badge ${d[4]}`, children: DEAL_LBL[d[4]] }) })
             ] }, i)) })
           ] })
@@ -178,14 +178,14 @@ function AdminModeration() {
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-top", children: [
         /* @__PURE__ */ jsxRuntime.jsx("h1", { children: "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F" }),
         /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-2fa", style: { marginLeft: "auto" }, children: [
-          chunkCMKDVS6C_cjs.I.lock({ className: "pd-i13", fill: "none", stroke: "currentColor" }),
+          chunkG5Y6Q77T_cjs.I.lock({ className: "pd-i13", fill: "none", stroke: "currentColor" }),
           "2FA \xB7 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u0432 audit-log"
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-body", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-filter", children: [
           /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-srch", children: [
-            chunkCMKDVS6C_cjs.Ic.search({ className: "pd-i16", fill: "none", stroke: "currentColor" }),
+            chunkG5Y6Q77T_cjs.Ic.search({ className: "pd-i16", fill: "none", stroke: "currentColor" }),
             "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u043E\u0447\u0435\u0440\u0435\u0434\u0438"
           ] }),
           /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-chip pd-chip--on", children: "ML-\u0440\u0438\u0441\u043A \xB7 5" }),
@@ -196,7 +196,7 @@ function AdminModeration() {
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pda-modgrid", children: cards.map((c, i) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-modcard", children: [
           /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "ph", children: [
-            c.photo ? /* @__PURE__ */ jsxRuntime.jsx("img", { src: `img/${c.photo}.jpg`, alt: "" }) : /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--pd-faint)" }, children: chunkCMKDVS6C_cjs.I.alert({ className: "pd-i28", fill: "none", stroke: "currentColor" }) }),
+            c.photo ? /* @__PURE__ */ jsxRuntime.jsx("img", { src: `img/${c.photo}.jpg`, alt: "" }) : /* @__PURE__ */ jsxRuntime.jsx("div", { style: { height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--pd-faint)" }, children: chunkG5Y6Q77T_cjs.I.alert({ className: "pd-i28", fill: "none", stroke: "currentColor" }) }),
             /* @__PURE__ */ jsxRuntime.jsx("span", { className: "tag", children: "\u043D\u0430 \u0440\u0435\u0432\u044C\u044E \xB7 \u0436\u0438\u0432\u043E\u0435" })
           ] }),
           /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bd", children: [
@@ -207,7 +207,7 @@ function AdminModeration() {
                 c.seller
               ] }),
               /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-flag", children: [
-                chunkCMKDVS6C_cjs.I.alert({ className: "pd-i13", fill: "none", stroke: "currentColor" }),
+                chunkG5Y6Q77T_cjs.I.alert({ className: "pd-i13", fill: "none", stroke: "currentColor" }),
                 c.reason
               ] })
             ] }),
@@ -236,7 +236,7 @@ var Sel = ({ k, v, on }) => /* @__PURE__ */ jsxRuntime.jsxs("button", { classNam
     ":"
   ] }),
   v,
-  vic(chunkCMKDVS6C_cjs.Ic.chev, "pd-i14")
+  vic(chunkG5Y6Q77T_cjs.Ic.chev, "pd-i14")
 ] });
 var Th = ({ children, sort, num }) => /* @__PURE__ */ jsxRuntime.jsx("th", { className: (sort ? "sortable " : "") + (num ? "num" : ""), children: sort ? /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "so", children: [
   children,
@@ -266,16 +266,16 @@ function SkRows({ cols = 6, rows = 7 }) {
 function TableState({ kind }) {
   const map = {
     empty: { ic: usersGl, h: "\u041F\u043E\u043A\u0430 \u043D\u0435\u0442 \u0434\u0430\u043D\u043D\u044B\u0445", p: "\u0417\u0434\u0435\u0441\u044C \u043F\u043E\u044F\u0432\u044F\u0442\u0441\u044F \u0437\u0430\u043F\u0438\u0441\u0438, \u043A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u043E\u043D\u0438 \u0432\u043E\u0437\u043D\u0438\u043A\u043D\u0443\u0442 \u0432 \u0441\u0438\u0441\u0442\u0435\u043C\u0435." },
-    noresults: { ic: chunkCMKDVS6C_cjs.Ic.search, h: "\u041D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043E", p: "\u041F\u043E\u0434 \u0442\u0435\u043A\u0443\u0449\u0438\u0435 \u0444\u0438\u043B\u044C\u0442\u0440\u044B \u0438 \u043F\u043E\u0438\u0441\u043A \u043D\u0435\u0442 \u0441\u043E\u0432\u043F\u0430\u0434\u0435\u043D\u0438\u0439. \u0421\u0431\u0440\u043E\u0441\u044C\u0442\u0435 \u0444\u0438\u043B\u044C\u0442\u0440\u044B \u0438\u043B\u0438 \u0438\u0437\u043C\u0435\u043D\u0438\u0442\u0435 \u0437\u0430\u043F\u0440\u043E\u0441." },
-    error: { ic: chunkCMKDVS6C_cjs.I.alert, h: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C", p: "\u0421\u0435\u0440\u0432\u0438\u0441 \u0434\u0430\u043D\u043D\u044B\u0445 \u043D\u0435 \u043E\u0442\u0432\u0435\u0442\u0438\u043B. \u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u0437\u0430\u043F\u0440\u043E\u0441. \u0415\u0441\u043B\u0438 \u043E\u0448\u0438\u0431\u043A\u0430 \u043F\u043E\u0432\u0442\u043E\u0440\u044F\u0435\u0442\u0441\u044F, \u043F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0441\u0442\u0430\u0442\u0443\u0441 API.", err: true },
-    offline: { ic: chunkCMKDVS6C_cjs.I.refresh, h: "\u041D\u0435\u0442 \u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u044F", p: "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442. \u0414\u0430\u043D\u043D\u044B\u0435 \u043E\u0431\u043D\u043E\u0432\u044F\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u043F\u0440\u0438 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0438 \u0441\u0432\u044F\u0437\u0438." }
+    noresults: { ic: chunkG5Y6Q77T_cjs.Ic.search, h: "\u041D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043E", p: "\u041F\u043E\u0434 \u0442\u0435\u043A\u0443\u0449\u0438\u0435 \u0444\u0438\u043B\u044C\u0442\u0440\u044B \u0438 \u043F\u043E\u0438\u0441\u043A \u043D\u0435\u0442 \u0441\u043E\u0432\u043F\u0430\u0434\u0435\u043D\u0438\u0439. \u0421\u0431\u0440\u043E\u0441\u044C\u0442\u0435 \u0444\u0438\u043B\u044C\u0442\u0440\u044B \u0438\u043B\u0438 \u0438\u0437\u043C\u0435\u043D\u0438\u0442\u0435 \u0437\u0430\u043F\u0440\u043E\u0441." },
+    error: { ic: chunkG5Y6Q77T_cjs.I.alert, h: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C", p: "\u0421\u0435\u0440\u0432\u0438\u0441 \u0434\u0430\u043D\u043D\u044B\u0445 \u043D\u0435 \u043E\u0442\u0432\u0435\u0442\u0438\u043B. \u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u0437\u0430\u043F\u0440\u043E\u0441. \u0415\u0441\u043B\u0438 \u043E\u0448\u0438\u0431\u043A\u0430 \u043F\u043E\u0432\u0442\u043E\u0440\u044F\u0435\u0442\u0441\u044F, \u043F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0441\u0442\u0430\u0442\u0443\u0441 API.", err: true },
+    offline: { ic: chunkG5Y6Q77T_cjs.I.refresh, h: "\u041D\u0435\u0442 \u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u044F", p: "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442. \u0414\u0430\u043D\u043D\u044B\u0435 \u043E\u0431\u043D\u043E\u0432\u044F\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u043F\u0440\u0438 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0438 \u0441\u0432\u044F\u0437\u0438." }
   }[kind];
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `pda-state${map.err ? " error" : ""}`, children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "gl", children: vic(map.ic, "pd-i28") }),
     /* @__PURE__ */ jsxRuntime.jsx("h3", { children: map.h }),
     /* @__PURE__ */ jsxRuntime.jsx("p", { children: map.p }),
-    (kind === "error" || kind === "offline") && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 16 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", icon: chunkCMKDVS6C_cjs.I.refresh, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C" }) }),
-    kind === "noresults" && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 16 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", children: "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0444\u0438\u043B\u044C\u0442\u0440\u044B" }) })
+    (kind === "error" || kind === "offline") && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 16 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", icon: chunkG5Y6Q77T_cjs.I.refresh, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C" }) }),
+    kind === "noresults" && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 16 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", children: "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0444\u0438\u043B\u044C\u0442\u0440\u044B" }) })
   ] });
 }
 var USERS = [
@@ -288,7 +288,7 @@ var USERS = [
 ];
 function AdminUsers({ state = "loaded", bulk = false, overlay }) {
   const top = /* @__PURE__ */ jsxRuntime.jsx(jsxRuntime.Fragment, { children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-srch", style: { marginLeft: 0 }, children: [
-    vic(chunkCMKDVS6C_cjs.Ic.search, "pd-i16"),
+    vic(chunkG5Y6Q77T_cjs.Ic.search, "pd-i16"),
     "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0438\u043C\u0435\u043D\u0438, \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443 \u0438\u043B\u0438 ID"
   ] }) });
   return /* @__PURE__ */ jsxRuntime.jsxs(AdminShell, { active: "users", title: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438", top, overlay, children: [
@@ -340,7 +340,7 @@ function AdminUsers({ state = "loaded", bulk = false, overlay }) {
             /* @__PURE__ */ jsxRuntime.jsxs("td", { children: [
               /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pda-ip", children: u[7] }),
               u[8] === "multi" && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-flag", style: { marginTop: 3 }, children: [
-                vic(chunkCMKDVS6C_cjs.I.alert, "pd-i12"),
+                vic(chunkG5Y6Q77T_cjs.I.alert, "pd-i12"),
                 "\u043C\u0443\u043B\u044C\u0442\u0438-IP"
               ] })
             ] }),
@@ -359,7 +359,7 @@ function AdminUserDrill() {
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-drill-top", children: [
       /* @__PURE__ */ jsxRuntime.jsx("b", { style: { fontSize: 15 }, children: "\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F" }),
       /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-logged", children: [
-        vic(chunkCMKDVS6C_cjs.I.lock, "pd-i12"),
+        vic(chunkG5Y6Q77T_cjs.I.lock, "pd-i12"),
         "\u0434\u043E\u0441\u0442\u0443\u043F \u043A \u041F\u0414\u043D \u043B\u043E\u0433\u0438\u0440\u0443\u0435\u0442\u0441\u044F"
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("button", { className: "x", children: cross({ className: "pd-i18" }) })
@@ -385,7 +385,7 @@ function AdminUserDrill() {
         /* @__PURE__ */ jsxRuntime.jsxs("h4", { children: [
           "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B ",
           /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-logged", style: { marginLeft: 6 }, children: [
-            vic(chunkCMKDVS6C_cjs.I.lock, "pd-i12"),
+            vic(chunkG5Y6Q77T_cjs.I.lock, "pd-i12"),
             "\u041F\u0414\u043D"
           ] })
         ] }),
@@ -485,7 +485,7 @@ var LISTINGS = [
 function AdminListings({ state = "loaded" }) {
   const fresh = { today: ["\u0421\u0435\u0433\u043E\u0434\u043D\u044F", "var(--pd-fresh)"], d1_2: ["1\u20132 \u0434\u043D\u044F", "var(--pd-aging)"], d3_plus: ["3+ \u0434\u043D\u044F", "var(--pd-old)"] };
   const top = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-srch", style: { marginLeft: 0 }, children: [
-    vic(chunkCMKDVS6C_cjs.Ic.search, "pd-i16"),
+    vic(chunkG5Y6Q77T_cjs.Ic.search, "pd-i16"),
     "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u043E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F\u043C"
   ] });
   return /* @__PURE__ */ jsxRuntime.jsxs(AdminShell, { active: "list", title: "\u041E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F", top, children: [
@@ -516,7 +516,7 @@ function AdminListings({ state = "loaded" }) {
             ] }) }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { children: l[2] }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { children: l[3] }),
-            /* @__PURE__ */ jsxRuntime.jsx("td", { className: "num", style: { fontWeight: 700 }, children: chunkCMKDVS6C_cjs.pdMoney(l[4]) }),
+            /* @__PURE__ */ jsxRuntime.jsx("td", { className: "num", style: { fontWeight: 700 }, children: chunkG5Y6Q77T_cjs.pdMoney(l[4]) }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { children: /* @__PURE__ */ jsxRuntime.jsxs("span", { style: { display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5 }, children: [
               /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pda-dot", style: { background: fresh[l[5]][1] } }),
               fresh[l[5]][0]
@@ -545,7 +545,7 @@ var DEALS = [
 var DEAL_ST = { agreed: "\u043D\u043E\u0432\u0430\u044F", meeting: "\u0438\u0434\u0451\u0442", done: "\u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0430", problem: "\u0436\u0430\u043B\u043E\u0431\u0430", cancelled: "\u043E\u0442\u043C\u0435\u043D\u0435\u043D\u0430" };
 function AdminDeals({ state = "loaded", overlay }) {
   const top = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-srch", style: { marginLeft: 0 }, children: [
-    vic(chunkCMKDVS6C_cjs.Ic.search, "pd-i16"),
+    vic(chunkG5Y6Q77T_cjs.Ic.search, "pd-i16"),
     "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0441\u0434\u0435\u043B\u043A\u0435, \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A\u0443 \u0438\u043B\u0438 ID"
   ] });
   return /* @__PURE__ */ jsxRuntime.jsxs(AdminShell, { active: "deals", title: "\u0421\u0434\u0435\u043B\u043A\u0438", top, overlay, children: [
@@ -570,7 +570,7 @@ function AdminDeals({ state = "loaded", overlay }) {
             /* @__PURE__ */ jsxRuntime.jsx("td", { style: { fontWeight: 700 }, children: d[0] }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { children: d[1] }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { children: d[2] }),
-            /* @__PURE__ */ jsxRuntime.jsx("td", { className: "num", style: { fontWeight: 700 }, children: chunkCMKDVS6C_cjs.pdMoney(d[3]) }),
+            /* @__PURE__ */ jsxRuntime.jsx("td", { className: "num", style: { fontWeight: 700 }, children: chunkG5Y6Q77T_cjs.pdMoney(d[3]) }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: `pda-badge ${d[5]}`, children: DEAL_ST[d[5]] }) }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { style: { color: "var(--pd-muted)" }, children: d[6] }),
             /* @__PURE__ */ jsxRuntime.jsx("td", { children: ["meeting", "agreed", "problem"].includes(d[5]) ? /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pda-mini-act danger", children: "\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C\u2026" }) : /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pda-mini-act", children: "\u0414\u0435\u0442\u0430\u043B\u0438" }) })
@@ -587,17 +587,17 @@ function AdminDealConfirm({ phase = "confirm" }) {
   if (phase === "success") {
     modal = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pda-modal-scrim", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-modal success", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-modal-ok", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "gl", children: vic(chunkCMKDVS6C_cjs.I.check, "pd-i28") }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "gl", children: vic(chunkG5Y6Q77T_cjs.I.check, "pd-i28") }),
         /* @__PURE__ */ jsxRuntime.jsx("h3", { style: { marginBottom: 6 }, children: "\u0421\u0434\u0435\u043B\u043A\u0430 \u043E\u0442\u043C\u0435\u043D\u0435\u043D\u0430" }),
         /* @__PURE__ */ jsxRuntime.jsx("p", { style: { color: "var(--pd-muted)", fontSize: 13.5, lineHeight: 1.5 }, children: "\u0421\u0434\u0435\u043B\u043A\u0430 \u0441\u043D\u044F\u0442\u0430, \u043E\u0431\u0435 \u0441\u0442\u043E\u0440\u043E\u043D\u044B \u043F\u043E\u043B\u0443\u0447\u0430\u0442 \u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u0435. \u0417\u0430\u043F\u0438\u0441\u044C \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0430 \u0432 audit-log." })
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "mf", style: { paddingTop: 0 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0417\u0430\u043A\u0440\u044B\u0442\u044C" }) })
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "mf", style: { paddingTop: 0 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0417\u0430\u043A\u0440\u044B\u0442\u044C" }) })
     ] }) });
   } else {
     const inflight = phase === "inflight";
     modal = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pda-modal-scrim", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-modal", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mh", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "gl danger", children: vic(chunkCMKDVS6C_cjs.I.alert, "pd-i24") }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "gl danger", children: vic(chunkG5Y6Q77T_cjs.I.alert, "pd-i24") }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
           /* @__PURE__ */ jsxRuntime.jsx("h3", { children: "\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C \u0441\u0434\u0435\u043B\u043A\u0443 #10482?" }),
           /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u041C\u0430\u0440\u0438\u043D\u0430 \u2192 \u0410\u043D\u044F \xB7 990 \u20BD. \u041E\u0442\u043C\u0435\u043D\u0430 \u0441\u043D\u0438\u043C\u0435\u0442 \u0441\u0434\u0435\u043B\u043A\u0443, \u043E\u0431\u0435 \u0441\u0442\u043E\u0440\u043E\u043D\u044B \u043F\u043E\u043B\u0443\u0447\u0430\u0442 \u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u0435. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043D\u0435\u043E\u0431\u0440\u0430\u0442\u0438\u043C\u043E." })
@@ -611,13 +611,13 @@ function AdminDealConfirm({ phase = "confirm" }) {
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("textarea", { rows: 3, defaultValue: "\u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u043D\u0435\u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D 48 \u0447, \u0431\u0443\u043A\u0435\u0442 \u043D\u0435\u0430\u043A\u0442\u0443\u0430\u043B\u0435\u043D. \u041E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u044F #1902." }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-4eyes", children: [
-          vic(chunkCMKDVS6C_cjs.I.shield, "pd-i16"),
+          vic(chunkG5Y6Q77T_cjs.I.shield, "pd-i16"),
           "\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u0444\u0438\u043A\u0441\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u0432 audit-log."
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mf", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, disabled: inflight, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "danger", block: true, loading: inflight, disabled: inflight, children: inflight ? "\u041E\u0442\u043C\u0435\u043D\u044F\u0435\u043C\u2026" : "\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C \u0441\u0434\u0435\u043B\u043A\u0443" })
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, disabled: inflight, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "danger", block: true, loading: inflight, disabled: inflight, children: inflight ? "\u041E\u0442\u043C\u0435\u043D\u044F\u0435\u043C\u2026" : "\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C \u0441\u0434\u0435\u043B\u043A\u0443" })
       ] })
     ] }) });
   }
@@ -661,7 +661,7 @@ function AdminFinance({ state = "loaded" }) {
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-panel", style: { display: "flex", alignItems: "flex-start", gap: 12, background: "var(--pd-warn-soft)", border: "none" }, children: [
-      vic(chunkCMKDVS6C_cjs.I.info, "pd-i20"),
+      vic(chunkG5Y6Q77T_cjs.I.info, "pd-i20"),
       /* @__PURE__ */ jsxRuntime.jsx("div", { style: { fontSize: 13.5, color: "#7a5a16", lineHeight: 1.5 }, children: "\u041F\u043B\u0430\u0442\u0435\u0436\u0438 \u0438\u0434\u0443\u0442 \u043C\u0435\u0436\u0434\u0443 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F\u043C\u0438 \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E, \u043F\u043B\u043E\u0449\u0430\u0434\u043A\u0430 \u0438\u0445 \u043D\u0435 \u043E\u0431\u0440\u0430\u0431\u0430\u0442\u044B\u0432\u0430\u0435\u0442 \u0438 \u043D\u0435 \u0445\u0440\u0430\u043D\u0438\u0442. \u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F, \u0432\u044B\u043F\u043B\u0430\u0442\u044B \u0438 \u0441\u0432\u0435\u0440\u043A\u0430 \u043F\u043E\u044F\u0432\u044F\u0442\u0441\u044F \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u043C\u043E\u043D\u0435\u0442\u0438\u0437\u0430\u0446\u0438\u0438." })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-row2", children: [
@@ -695,15 +695,15 @@ function AdminFinance({ state = "loaded" }) {
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "psub", style: { margin: 0 }, children: "CSV / XLSX \xB7 \u0441\u0434\u0435\u043B\u043A\u0438, \u0441\u0442\u0430\u0442\u0443\u0441\u044B, \u0433\u043E\u0440\u043E\u0434\u0430, \u0441\u0443\u043C\u043C\u044B" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { marginLeft: "auto", display: "flex", gap: 9 }, children: [
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", children: "\u042D\u043A\u0441\u043F\u043E\u0440\u0442 CSV" }),
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", children: "\u042D\u043A\u0441\u043F\u043E\u0440\u0442 XLSX" })
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", children: "\u042D\u043A\u0441\u043F\u043E\u0440\u0442 CSV" }),
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", children: "\u042D\u043A\u0441\u043F\u043E\u0440\u0442 XLSX" })
       ] })
     ] })
   ] }) });
 }
 function AdminFraud({ state = "loaded" }) {
   const top = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-srch", style: { marginLeft: 0 }, children: [
-    vic(chunkCMKDVS6C_cjs.Ic.search, "pd-i16"),
+    vic(chunkG5Y6Q77T_cjs.Ic.search, "pd-i16"),
     "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0441\u0438\u0433\u043D\u0430\u043B\u0430\u043C \u0438 \u043A\u043B\u0430\u0441\u0442\u0435\u0440\u0430\u043C"
   ] });
   const signals = [
@@ -748,7 +748,7 @@ function AdminFraud({ state = "loaded" }) {
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "psub", children: "\u0421\u0432\u044F\u0437\u043A\u0430 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u043E\u0432 \xB7 2.18.\xB7\xB7.41" }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-cluster", children: [
           /* @__PURE__ */ jsxRuntime.jsx("div", { className: "hub", children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "ipnode", children: [
-            vic(chunkCMKDVS6C_cjs.I.shield, "pd-i14"),
+            vic(chunkG5Y6Q77T_cjs.I.shield, "pd-i14"),
             "2.18.\xB7\xB7.41"
           ] }) }),
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pda-clines" }),
@@ -768,7 +768,7 @@ function AdminFraud({ state = "loaded" }) {
           ] }),
           /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 14, fontSize: 12, color: "var(--pd-muted)", lineHeight: 1.5 }, children: "\u0412\u0437\u0430\u0438\u043C\u043D\u044B\u0435 \u043E\u0442\u0437\u044B\u0432\u044B: 6 \xB7 \u043E\u0431\u0449\u0438\u0445 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432: 2 \xB7 \u0441\u043E\u0432\u043F\u0430\u0434\u0435\u043D\u0438\u0435 \u043F\u043E\u0432\u0435\u0434\u0435\u043D\u0438\u044F: \u0432\u044B\u0441\u043E\u043A\u043E\u0435." })
         ] }),
-        /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 12 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "danger", block: true, icon: chunkCMKDVS6C_cjs.I.shield, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043A\u043B\u0430\u0441\u0442\u0435\u0440\u2026" }) })
+        /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 12 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "danger", block: true, icon: chunkG5Y6Q77T_cjs.I.shield, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043A\u043B\u0430\u0441\u0442\u0435\u0440\u2026" }) })
       ] })
     ] })
   ] });
@@ -782,7 +782,7 @@ function AdminReports({ state = "loaded" }) {
   ];
   const st = { new: ["\u043D\u043E\u0432\u0430\u044F", "problem"], review: ["\u0432 \u0440\u0430\u0431\u043E\u0442\u0435", "held"], resolved: ["\u0440\u0435\u0448\u0435\u043D\u0430", "done"] };
   const top = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pda-srch", style: { marginLeft: 0 }, children: [
-    vic(chunkCMKDVS6C_cjs.Ic.search, "pd-i16"),
+    vic(chunkG5Y6Q77T_cjs.Ic.search, "pd-i16"),
     "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0436\u0430\u043B\u043E\u0431\u0430\u043C"
   ] });
   return /* @__PURE__ */ jsxRuntime.jsxs(AdminShell, { active: "reports", title: "\u0416\u0430\u043B\u043E\u0431\u044B \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0435\u0439", top, children: [
@@ -839,7 +839,7 @@ var gift = (p) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { viewBox: "0 0 24 24",
   /* @__PURE__ */ jsxRuntime.jsx("rect", { x: "3", y: "9", width: "18", height: "11", rx: "1.5" }),
   /* @__PURE__ */ jsxRuntime.jsx("path", { d: "M3 13h18M12 9v11M8.5 9C6 9 6 5 8.5 5S12 9 12 9s-.5-4 2-4 2.5 4 0 4" })
 ] });
-var NAV = [["dash", "\u041E\u0431\u0437\u043E\u0440", chunkCMKDVS6C_cjs.Ic.home, null], ["mod", "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", chunkCMKDVS6C_cjs.I.alert, "12"], ["deals", "\u0421\u0434\u0435\u043B\u043A\u0438", chunkCMKDVS6C_cjs.Ic.deals, "1"], ["fraud", "\u0410\u043D\u0442\u0438\u0444\u0440\u043E\u0434", chunkCMKDVS6C_cjs.I.shield, "7"], ["more", "\u0415\u0449\u0451", dots, "3"]];
+var NAV = [["dash", "\u041E\u0431\u0437\u043E\u0440", chunkG5Y6Q77T_cjs.Ic.home, null], ["mod", "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", chunkG5Y6Q77T_cjs.I.alert, "12"], ["deals", "\u0421\u0434\u0435\u043B\u043A\u0438", chunkG5Y6Q77T_cjs.Ic.deals, "1"], ["fraud", "\u0410\u043D\u0442\u0438\u0444\u0440\u043E\u0434", chunkG5Y6Q77T_cjs.I.shield, "7"], ["more", "\u0415\u0449\u0451", dots, "3"]];
 function MTab({ active }) {
   return /* @__PURE__ */ jsxRuntime.jsx("nav", { className: "pdam-tab", children: NAV.map(([k, l, Ic2, ct]) => /* @__PURE__ */ jsxRuntime.jsxs("button", { className: active === k ? "on" : "", children: [
     ct && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ct", children: ct }),
@@ -853,7 +853,7 @@ function MShell({ active, title, back: bk, action, children, overlay, noTab }) {
       bk && /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", style: { marginRight: 2, marginLeft: -6 }, children: mic(back, "pd-i22") }),
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "h", children: title }),
       action || /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "badge", children: [
-        mic(chunkCMKDVS6C_cjs.I.lock, "pd-i12"),
+        mic(chunkG5Y6Q77T_cjs.I.lock, "pd-i12"),
         "2FA"
       ] })
     ] }),
@@ -882,16 +882,16 @@ function AdminMobileLogin({ step = "login" }) {
           /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-input", children: /* @__PURE__ */ jsxRuntime.jsx("input", { type: "password", defaultValue: "\xB7\xB7\xB7\xB7\xB7\xB7\xB7\xB7" }) })
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438" }) }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438" }) }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-rolepill", children: [
-        mic(chunkCMKDVS6C_cjs.I.shield, "pd-i12"),
+        mic(chunkG5Y6Q77T_cjs.I.shield, "pd-i12"),
         "\u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F 2FA (TOTP)"
       ] })
     ] }) : /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
       /* @__PURE__ */ jsxRuntime.jsx("h2", { children: "\u041A\u043E\u0434 \u0434\u0432\u0443\u0445\u0444\u0430\u043A\u0442\u043E\u0440\u043D\u043E\u0439" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 6-\u0437\u043D\u0430\u0447\u043D\u044B\u0439 \u043A\u043E\u0434 \u0438\u0437 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F-\u0430\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440\u0430." }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdOtp, { value: "6041", cur: 4 }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 22 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u0432\u0445\u043E\u0434" }) }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdOtp, { value: "6041", cur: 4 }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 22 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044C \u0432\u0445\u043E\u0434" }) }),
       /* @__PURE__ */ jsxRuntime.jsxs("p", { style: { marginTop: 14, fontSize: 12 }, children: [
         "\u0414\u043E\u0441\u0442\u0443\u043F \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440\u0430 ",
         /* @__PURE__ */ jsxRuntime.jsx("b", { children: "moderator" }),
@@ -903,10 +903,10 @@ function AdminMobileLogin({ step = "login" }) {
 function AdminMobileDash() {
   const k = [["\u041E\u043D\u043B\u0430\u0439\u043D", "342", "+5%"], ["DAU", "4 870", "+8%"], ["\u041E\u0431\u043E\u0440\u043E\u0442 / \u043C\u0435\u0441", "3,24 \u043C\u043B\u043D \u20BD", "+14%"], ["\u0421\u0434\u0435\u043B\u043E\u043A", "1 142", "+12%"]];
   const att = [
-    [chunkCMKDVS6C_cjs.I.alert, "var(--pd-warn)", "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", "12 \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438 \xB7 1 \u043E\u0441\u043F\u043E\u0440\u0435\u043D\u043E"],
-    [chunkCMKDVS6C_cjs.I.shield, "var(--pd-danger)", "\u0410\u043D\u0442\u0438\u0444\u0440\u043E\u0434", "7 \u0441\u0438\u0433\u043D\u0430\u043B\u043E\u0432 \xB7 2 \u0432\u044B\u0441\u043E\u043A\u043E\u0433\u043E \u0440\u0438\u0441\u043A\u0430"],
-    [chunkCMKDVS6C_cjs.Ic.deals, "var(--pd-danger)", "\u0416\u0430\u043B\u043E\u0431\u044B \u043D\u0430 \u0441\u0434\u0435\u043B\u043A\u0438", "1 \u0430\u043A\u0442\u0438\u0432\u043D\u0430\u044F \xB7 SLA 24 \u0447"],
-    [chunkCMKDVS6C_cjs.I.flag, "var(--pd-warn)", "\u0416\u0430\u043B\u043E\u0431\u044B", "3 \u043D\u043E\u0432\u044B\u0445"]
+    [chunkG5Y6Q77T_cjs.I.alert, "var(--pd-warn)", "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", "12 \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438 \xB7 1 \u043E\u0441\u043F\u043E\u0440\u0435\u043D\u043E"],
+    [chunkG5Y6Q77T_cjs.I.shield, "var(--pd-danger)", "\u0410\u043D\u0442\u0438\u0444\u0440\u043E\u0434", "7 \u0441\u0438\u0433\u043D\u0430\u043B\u043E\u0432 \xB7 2 \u0432\u044B\u0441\u043E\u043A\u043E\u0433\u043E \u0440\u0438\u0441\u043A\u0430"],
+    [chunkG5Y6Q77T_cjs.Ic.deals, "var(--pd-danger)", "\u0416\u0430\u043B\u043E\u0431\u044B \u043D\u0430 \u0441\u0434\u0435\u043B\u043A\u0438", "1 \u0430\u043A\u0442\u0438\u0432\u043D\u0430\u044F \xB7 SLA 24 \u0447"],
+    [chunkG5Y6Q77T_cjs.I.flag, "var(--pd-warn)", "\u0416\u0430\u043B\u043E\u0431\u044B", "3 \u043D\u043E\u0432\u044B\u0445"]
   ];
   return /* @__PURE__ */ jsxRuntime.jsxs(MShell, { active: "dash", title: "\u041E\u0431\u0437\u043E\u0440", children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-kpis", children: k.map((x, i) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-kpi", children: [
@@ -964,19 +964,19 @@ function ModQueue() {
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "rw", children: [
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "who", children: c[1] }),
           /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-flag", style: { fontSize: 11 }, children: [
-            mic(chunkCMKDVS6C_cjs.I.alert, "pd-i12"),
+            mic(chunkG5Y6Q77T_cjs.I.alert, "pd-i12"),
             "\u0444\u043B\u0430\u0433"
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "rsn", children: [
-          mic(chunkCMKDVS6C_cjs.I.alert, "pd-i12"),
+          mic(chunkG5Y6Q77T_cjs.I.alert, "pd-i12"),
           c[2]
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("p", { className: "txt", children: c[3] })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "acts", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0421\u043D\u044F\u0442\u044C\u2026" }),
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, children: "\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0432 \u043B\u0435\u043D\u0442\u0435" })
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0421\u043D\u044F\u0442\u044C\u2026" }),
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, children: "\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0432 \u043B\u0435\u043D\u0442\u0435" })
       ] })
     ] }, i))
   ] });
@@ -1008,8 +1008,8 @@ function AdminMobileModReject() {
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx("textarea", { rows: 2, placeholder: "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0443 (\u043D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E)" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "sf", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "danger", block: true, children: "\u0421\u043D\u044F\u0442\u044C" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "danger", block: true, children: "\u0421\u043D\u044F\u0442\u044C" })
     ] })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsx(MShell, { active: "mod", title: "\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", overlay: sheet, children: /* @__PURE__ */ jsxRuntime.jsx(ModQueue, {}) });
@@ -1034,22 +1034,22 @@ function DealsList() {
         /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ct", children: "1" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-item", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", style: { background: "var(--pd-danger-soft)", color: "var(--pd-danger)" }, children: mic(chunkCMKDVS6C_cjs.I.alert, "pd-i18") }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", style: { background: "var(--pd-danger-soft)", color: "var(--pd-danger)" }, children: mic(chunkG5Y6Q77T_cjs.I.alert, "pd-i18") }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mid", children: [
           /* @__PURE__ */ jsxRuntime.jsx("div", { className: "t1", children: "#10478 \xB7 \u0421\u043E\u043D\u044F \u2192 \u042E\u043B\u044F" }),
           /* @__PURE__ */ jsxRuntime.jsx("div", { className: "t2", children: "\u0411\u0443\u043A\u0435\u0442 \u043D\u0435 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u0444\u043E\u0442\u043E \xB7 SLA 24 \u0447" })
         ] }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "amt", children: chunkCMKDVS6C_cjs.pdMoney(850) })
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "amt", children: chunkG5Y6Q77T_cjs.pdMoney(850) })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-modact", style: { display: "flex", gap: 8, padding: "11px 15px", borderTop: "1px solid var(--pd-border)" }, children: [
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0414\u0435\u0442\u0430\u043B\u0438 \u0436\u0430\u043B\u043E\u0431\u044B" }),
-        /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, children: "\u0420\u0430\u0437\u043E\u0431\u0440\u0430\u0442\u044C" })
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0414\u0435\u0442\u0430\u043B\u0438 \u0436\u0430\u043B\u043E\u0431\u044B" }),
+        /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, children: "\u0420\u0430\u0437\u043E\u0431\u0440\u0430\u0442\u044C" })
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-sec", children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "sh", children: "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0435 \u0441\u0434\u0435\u043B\u043A\u0438" }),
       MDEALS.map((d, i) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-item", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", style: { background: STC[d[3]][0], color: STC[d[3]][1] }, children: mic(chunkCMKDVS6C_cjs.Ic.deals, "pd-i18") }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", style: { background: STC[d[3]][0], color: STC[d[3]][1] }, children: mic(chunkG5Y6Q77T_cjs.Ic.deals, "pd-i18") }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mid", children: [
           /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "t1", children: [
             d[0],
@@ -1058,7 +1058,7 @@ function DealsList() {
           ] }),
           /* @__PURE__ */ jsxRuntime.jsx("div", { className: "t2", children: d[4] })
         ] }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "amt", children: chunkCMKDVS6C_cjs.pdMoney(d[2]) })
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "amt", children: chunkG5Y6Q77T_cjs.pdMoney(d[2]) })
       ] }, i))
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-readonly", children: "\u041E\u0442\u043C\u0435\u043D\u0430 \u0441\u0434\u0435\u043B\u043A\u0438 \u0444\u0438\u043A\u0441\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u0432 audit-log." })
@@ -1074,12 +1074,12 @@ function AdminMobileDealCancel() {
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-field", style: { textAlign: "left" }, children: /* @__PURE__ */ jsxRuntime.jsx("label", { className: "pd-label", children: "\u041F\u0440\u0438\u0447\u0438\u043D\u0430 \u043E\u0442\u043C\u0435\u043D\u044B *" }) }),
     /* @__PURE__ */ jsxRuntime.jsx("textarea", { rows: 3, defaultValue: "\u041F\u0440\u043E\u0434\u0430\u0432\u0435\u0446 \u043D\u0435\u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D 48 \u0447, \u0431\u0443\u043A\u0435\u0442 \u043D\u0435\u0430\u043A\u0442\u0443\u0430\u043B\u0435\u043D. \u041E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435 #1902." }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-4eyes", children: [
-      mic(chunkCMKDVS6C_cjs.I.shield, "pd-i16"),
+      mic(chunkG5Y6Q77T_cjs.I.shield, "pd-i16"),
       "\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u0444\u0438\u043A\u0441\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u0432 audit-log."
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "sf", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "danger", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C \u0441\u0434\u0435\u043B\u043A\u0443" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "danger", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C \u0441\u0434\u0435\u043B\u043A\u0443" })
     ] })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsx(MShell, { active: "deals", title: "\u0421\u0434\u0435\u043B\u043A\u0438", overlay: sheet, children: /* @__PURE__ */ jsxRuntime.jsx(DealsList, {}) });
@@ -1092,7 +1092,7 @@ function AdminMobileDispute() {
         /* @__PURE__ */ jsxRuntime.jsx("span", { style: { fontSize: 12, color: "var(--pd-danger)", fontWeight: 700 }, children: "SLA 24 \u0447 \xB7 \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C 18:42" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { fontSize: 20, fontWeight: 700, marginTop: 10 }, children: [
-        chunkCMKDVS6C_cjs.pdMoney(850),
+        chunkG5Y6Q77T_cjs.pdMoney(850),
         " ",
         /* @__PURE__ */ jsxRuntime.jsx("span", { style: { fontSize: 13, color: "var(--pd-muted)", fontWeight: 600 }, children: "\u0441\u0443\u043C\u043C\u0430 \u0441\u0434\u0435\u043B\u043A\u0438" })
       ] })
@@ -1123,9 +1123,9 @@ function AdminMobileDispute() {
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-actbar", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u0440\u0435\u0434\u0443\u043F\u0440\u0435\u0434\u0438\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, lg: true, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430\u2026" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C \u0436\u0430\u043B\u043E\u0431\u0443" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u0440\u0435\u0434\u0443\u043F\u0440\u0435\u0434\u0438\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, lg: true, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430\u2026" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C \u0436\u0430\u043B\u043E\u0431\u0443" })
     ] })
   ] });
 }
@@ -1179,7 +1179,7 @@ function AdminMobileFraudDrill() {
           /* @__PURE__ */ jsxRuntime.jsx("div", { className: "t2", children: u[2] ? "\u043F\u043E\u043C\u0435\u0447\u0435\u043D \xB7 \u0432\u044B\u0441\u043E\u043A\u0438\u0439 \u0440\u0438\u0441\u043A" : "\u0432 \u043D\u0430\u0431\u043B\u044E\u0434\u0435\u043D\u0438\u0438" })
         ] }),
         u[2] && /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pda-flag", style: { fontSize: 11 }, children: [
-          mic(chunkCMKDVS6C_cjs.I.alert, "pd-i12"),
+          mic(chunkG5Y6Q77T_cjs.I.alert, "pd-i12"),
           "\u0444\u043B\u0430\u0433"
         ] })
       ] }, i)),
@@ -1193,13 +1193,13 @@ function AdminMobileFraudDrill() {
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-actbar", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "danger", block: true, lg: true, icon: chunkCMKDVS6C_cjs.I.shield, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043A\u043B\u0430\u0441\u0442\u0435\u0440\u2026" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, children: "\u041E\u0433\u0440\u0430\u043D\u0438\u0447\u0438\u0442\u044C \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u044B" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "danger", block: true, lg: true, icon: chunkG5Y6Q77T_cjs.I.shield, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043A\u043B\u0430\u0441\u0442\u0435\u0440\u2026" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, children: "\u041E\u0433\u0440\u0430\u043D\u0438\u0447\u0438\u0442\u044C \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u044B" })
     ] })
   ] });
 }
 function AdminMobileMore() {
-  const rows = [["\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438", chunkCMKDVS6C_cjs.Ic.user, null], ["\u041E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F", chunkCMKDVS6C_cjs.Ic.search, null], ["\u0424\u0438\u043D\u0430\u043D\u0441\u044B", chunkCMKDVS6C_cjs.I.wallet, null], ["\u0416\u0430\u043B\u043E\u0431\u044B", chunkCMKDVS6C_cjs.I.flag, "3"], ["\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", chunkCMKDVS6C_cjs.I.alert, "12"]];
+  const rows = [["\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438", chunkG5Y6Q77T_cjs.Ic.user, null], ["\u041E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F", chunkG5Y6Q77T_cjs.Ic.search, null], ["\u0424\u0438\u043D\u0430\u043D\u0441\u044B", chunkG5Y6Q77T_cjs.I.wallet, null], ["\u0416\u0430\u043B\u043E\u0431\u044B", chunkG5Y6Q77T_cjs.I.flag, "3"], ["\u041C\u043E\u0434\u0435\u0440\u0430\u0446\u0438\u044F", chunkG5Y6Q77T_cjs.I.alert, "12"]];
   return /* @__PURE__ */ jsxRuntime.jsxs(MShell, { active: "more", title: "\u0415\u0449\u0451", children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-sec", style: { padding: "4px 16px" }, children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-more", children: rows.map((r, i) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-morerow", children: [
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: mic(r[1], "pd-i18") }),
@@ -1209,12 +1209,12 @@ function AdminMobileMore() {
     ] }, i)) }) }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-sec", style: { padding: "4px 16px" }, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-more", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-morerow", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: mic(chunkCMKDVS6C_cjs.I.shield, "pd-i18") }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: mic(chunkG5Y6Q77T_cjs.I.shield, "pd-i18") }),
         "\u0420\u043E\u043B\u044C \u0438 \u0434\u043E\u0441\u0442\u0443\u043F",
         /* @__PURE__ */ jsxRuntime.jsx("span", { style: { marginLeft: "auto", fontSize: 12.5, color: "var(--pd-muted)" }, children: "moderator" })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-morerow danger", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: mic(chunkCMKDVS6C_cjs.I.lock, "pd-i18") }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: mic(chunkG5Y6Q77T_cjs.I.lock, "pd-i18") }),
         "\u0412\u044B\u0439\u0442\u0438"
       ] })
     ] }) }),
@@ -1226,7 +1226,7 @@ function UsersList() {
   const stb = { active: ["active", "\u0430\u043A\u0442\u0438\u0432\u0435\u043D"], review: ["held", "\u043D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0435"], blocked: ["blocked", "\u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D"] };
   return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-search", children: [
-      mic(chunkCMKDVS6C_cjs.Ic.search, "pd-i16"),
+      mic(chunkG5Y6Q77T_cjs.Ic.search, "pd-i16"),
       "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0438\u043C\u0435\u043D\u0438, \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0443, ID"
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-chips", children: [
@@ -1250,7 +1250,7 @@ function AdminMobileUsers() {
 }
 function AdminMobileUserDrill() {
   return /* @__PURE__ */ jsxRuntime.jsxs(MShell, { active: "more", title: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C", back: true, action: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "pdam-logged", children: [
-    mic(chunkCMKDVS6C_cjs.I.lock, "pd-i12"),
+    mic(chunkG5Y6Q77T_cjs.I.lock, "pd-i12"),
     "\u041F\u0414\u043D"
   ] }), children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-sec", style: { padding: "14px 15px" }, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-drillhead", children: [
@@ -1291,8 +1291,8 @@ function AdminMobileUserDrill() {
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-actbar", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0441\u0435\u0441\u0441\u0438\u0438" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "danger", block: true, icon: chunkCMKDVS6C_cjs.I.shield, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u2026" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, children: "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0441\u0435\u0441\u0441\u0438\u0438" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "danger", block: true, icon: chunkG5Y6Q77T_cjs.I.shield, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u2026" })
     ] })
   ] });
 }
@@ -1320,8 +1320,8 @@ function AdminMobileBlock() {
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx("textarea", { rows: 2, placeholder: "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 (\u0432\u0438\u0434\u0435\u043D \u0432 audit-log)" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "sf", children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "danger", block: true, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041E\u0442\u043C\u0435\u043D\u0430" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "danger", block: true, children: "\u0417\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C" })
     ] })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsx(MShell, { active: "more", title: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C", back: true, overlay: sheet, children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-sec", style: { padding: "14px 15px" }, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-drillhead", children: [
@@ -1337,7 +1337,7 @@ function AdminMobileListings() {
   const stb = { active: ["active", "\u0430\u043A\u0442\u0438\u0432\u043D\u043E"], flagged: ["held", "\u0436\u0438\u0432\u043E\u0435 \xB7 \u0444\u043B\u0430\u0433"], sold: ["sold", "\u043F\u0440\u043E\u0434\u0430\u043D\u043E"] };
   return /* @__PURE__ */ jsxRuntime.jsxs(MShell, { active: "more", title: "\u041E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F", back: true, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-search", children: [
-      mic(chunkCMKDVS6C_cjs.Ic.search, "pd-i16"),
+      mic(chunkG5Y6Q77T_cjs.Ic.search, "pd-i16"),
       "\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u043E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F\u043C"
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-chips", children: [
@@ -1355,7 +1355,7 @@ function AdminMobileListings() {
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "t2", children: [
           l[2],
           " \xB7 ",
-          chunkCMKDVS6C_cjs.pdMoney(l[3])
+          chunkG5Y6Q77T_cjs.pdMoney(l[3])
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: `pda-badge ${stb[l[4]][0]}`, style: { fontSize: 11 }, children: stb[l[4]][1] })
@@ -1411,7 +1411,7 @@ function AdminMobileReports() {
       /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pdam-chip", children: "\u0412\u0441\u0435" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pdam-sec", children: reps.map((r, i) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pdam-item", children: [
-      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", style: { background: "var(--pd-warn-soft)", color: "var(--pd-warn)" }, children: mic(chunkCMKDVS6C_cjs.I.flag, "pd-i18") }),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", style: { background: "var(--pd-warn-soft)", color: "var(--pd-warn)" }, children: mic(chunkG5Y6Q77T_cjs.I.flag, "pd-i18") }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mid", children: [
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "t1", children: [
           r[0],

@@ -1,6 +1,6 @@
 'use strict';
 
-var chunkCMKDVS6C_cjs = require('./chunk-CMKDVS6C.cjs');
+var chunkG5Y6Q77T_cjs = require('./chunk-G5Y6Q77T.cjs');
 require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -80,7 +80,7 @@ var TrustStrip = () => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-t
 ] });
 function AuthShell({ plat = "ios", back = true, children, foot, overlay }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `pd-root pa pa--${plat}`, "data-pd-theme": "a", style: { position: "relative" }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-top", style: { paddingTop: plat === "android" ? 6 : 0 }, children: back && /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", children: ic(chunkCMKDVS6C_cjs.I.back, "pd-i22") }) }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-top", style: { paddingTop: plat === "android" ? 6 : 0 }, children: back && /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", children: ic(chunkG5Y6Q77T_cjs.I.back, "pd-i22") }) }),
     /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-body", children }),
     foot,
     overlay
@@ -112,7 +112,7 @@ function ProvHead({ k }) {
     /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
       /* @__PURE__ */ jsxRuntime.jsx("div", { className: "ttl", children: p.lbl.replace("\u0412\u043E\u0439\u0442\u0438 \u0441 ", "").replace("\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 ", "").replace("\u0412\u043E\u0439\u0442\u0438 \u0441\u043E ", "") }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "url", children: [
-        ic(chunkCMKDVS6C_cjs.I.lock, "pd-i12"),
+        ic(chunkG5Y6Q77T_cjs.I.lock, "pd-i12"),
         " ",
         PROV_HOST[k] || `id.${k}.ru`
       ] })
@@ -133,28 +133,28 @@ function ConsentBody({ k }) {
     /* @__PURE__ */ jsxRuntime.jsx("div", { style: { fontSize: 13, color: "var(--pd-muted)", marginBottom: 8 }, children: "\xAB\u041F\u0435\u0440\u0435\u0434\u0430\u0440\u0438\u043C\xBB \u0437\u0430\u043F\u0440\u043E\u0441\u0438\u0442:" }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-scopes", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-scope", children: [
-        ic(chunkCMKDVS6C_cjs.I.check, "pd-i16"),
+        ic(chunkG5Y6Q77T_cjs.I.check, "pd-i16"),
         /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
           "\u0418\u043C\u044F \u0438 \u0444\u043E\u0442\u043E \u043F\u0440\u043E\u0444\u0438\u043B\u044F",
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "muted", children: "\u0447\u0442\u043E\u0431\u044B \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438 \u0432\u0430\u0441 \u0443\u0437\u043D\u0430\u0432\u0430\u043B\u0438" })
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-scope", children: [
-        ic(chunkCMKDVS6C_cjs.I.check, "pd-i16"),
+        ic(chunkG5Y6Q77T_cjs.I.check, "pd-i16"),
         /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
           "\u041D\u043E\u043C\u0435\u0440 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430",
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "muted", children: "\u0434\u043B\u044F \u0432\u0445\u043E\u0434\u0430 \u0438 \u0441\u0432\u044F\u0437\u0438 \u043F\u043E \u0441\u0434\u0435\u043B\u043A\u0435" })
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-scope", children: [
-        ic(chunkCMKDVS6C_cjs.I.check, "pd-i16"),
+        ic(chunkG5Y6Q77T_cjs.I.check, "pd-i16"),
         /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
           "Email",
           /* @__PURE__ */ jsxRuntime.jsx("span", { className: "muted", children: "\u0434\u043B\u044F \u0447\u0435\u043A\u043E\u0432 \u0438 \u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u0439" })
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044C \u0438 \u0432\u043E\u0439\u0442\u0438" }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044C \u0438 \u0432\u043E\u0439\u0442\u0438" }),
     /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-link", style: { display: "block", margin: "12px auto 0" }, children: "\u041E\u0442\u043C\u0435\u043D\u0430" })
   ] });
 }
@@ -180,16 +180,16 @@ function PhoneBody({ state = "rest", plat }) {
       /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u041F\u0440\u0438\u0448\u043B\u0451\u043C \u043A\u043E\u0434 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u043E SMS" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx(
-      chunkCMKDVS6C_cjs.PdField,
+      chunkG5Y6Q77T_cjs.PdField,
       {
         label: "\u041D\u043E\u043C\u0435\u0440 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430",
         hint: invalid ? void 0 : "\u041D\u0430\u043F\u0440\u0438\u043C\u0435\u0440, +7 999 124-58-03",
         error: invalid ? "\u041F\u043E\u0445\u043E\u0436\u0435, \u0432 \u043D\u043E\u043C\u0435\u0440\u0435 \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442 \u0446\u0438\u0444\u0440" : void 0,
-        children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdInput, { prefix: "+7", value: invalid ? "999 124-58" : "999 124-58-03", state: invalid ? "invalid" : "focus" })
+        children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdInput, { prefix: "+7", value: invalid ? "999 124-58" : "999 124-58-03", state: invalid ? "invalid" : "focus" })
       }
     ),
     /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 16 }, children: /* @__PURE__ */ jsxRuntime.jsxs("label", { className: "pd-check on", children: [
-      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "box", children: ic(chunkCMKDVS6C_cjs.I.check, "pd-i16") }),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "box", children: ic(chunkG5Y6Q77T_cjs.I.check, "pd-i16") }),
       /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "t", children: [
         "\u0421\u043E\u0433\u043B\u0430\u0448\u0430\u044E\u0441\u044C \u0441 ",
         /* @__PURE__ */ jsxRuntime.jsx("a", { children: "\u0443\u0441\u043B\u043E\u0432\u0438\u044F\u043C\u0438" }),
@@ -201,7 +201,7 @@ function PhoneBody({ state = "rest", plat }) {
   ] });
 }
 function AuthPhone({ plat = "ios", state = "rest" }) {
-  const foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: `pd-footerbar pa-foot${plat === "android" ? "" : ""}`, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434" }) });
+  const foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: `pd-footerbar pa-foot${plat === "android" ? "" : ""}`, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434" }) });
   return /* @__PURE__ */ jsxRuntime.jsx(AuthShell, { plat, foot, children: /* @__PURE__ */ jsxRuntime.jsx(PhoneBody, { state, plat }) });
 }
 function OtpBody({ state = "typing" }) {
@@ -217,14 +217,14 @@ function OtpBody({ state = "typing" }) {
       /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u043B\u0438 \u043D\u0430 +7 999 124-58-03" })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdOtp, { value: c.value, cur: c.cur, state: c.st }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdOtp, { value: c.value, cur: c.cur, state: c.st }),
     state === "verifying" && /* @__PURE__ */ jsxRuntime.jsxs("p", { style: { textAlign: "center", color: "var(--pd-muted)", fontSize: 13, marginTop: 20, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }, children: [
       null,
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "pd-spin", style: { width: 16, height: 16, border: "2px solid var(--pd-border)", borderTopColor: "var(--pd-primary)", borderRadius: "50%", display: "inline-block" } }),
       "\u041F\u0440\u043E\u0432\u0435\u0440\u044F\u0435\u043C \u043A\u043E\u0434\u2026"
     ] }),
-    state === "invalid" && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdNotice, { kind: "danger", children: "\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 \u043A\u043E\u0434. \u041E\u0441\u0442\u0430\u043B\u043E\u0441\u044C \u043F\u043E\u043F\u044B\u0442\u043E\u043A: 2. \u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 SMS \u0438\u043B\u0438 \u0437\u0430\u043F\u0440\u043E\u0441\u0438\u0442\u0435 \u043A\u043E\u0434 \u0437\u0430\u043D\u043E\u0432\u043E." }) }),
-    state === "locked" && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsxs(chunkCMKDVS6C_cjs.PdNotice, { kind: "danger", icon: chunkCMKDVS6C_cjs.I.lock, children: [
+    state === "invalid" && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdNotice, { kind: "danger", children: "\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 \u043A\u043E\u0434. \u041E\u0441\u0442\u0430\u043B\u043E\u0441\u044C \u043F\u043E\u043F\u044B\u0442\u043E\u043A: 2. \u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 SMS \u0438\u043B\u0438 \u0437\u0430\u043F\u0440\u043E\u0441\u0438\u0442\u0435 \u043A\u043E\u0434 \u0437\u0430\u043D\u043E\u0432\u043E." }) }),
+    state === "locked" && /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginTop: 18 }, children: /* @__PURE__ */ jsxRuntime.jsxs(chunkG5Y6Q77T_cjs.PdNotice, { kind: "danger", icon: chunkG5Y6Q77T_cjs.I.lock, children: [
       /* @__PURE__ */ jsxRuntime.jsx("b", { children: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E \u043F\u043E\u043F\u044B\u0442\u043E\u043A." }),
       " \u041F\u043E\u0432\u0442\u043E\u0440\u043D\u0430\u044F \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0430 \u0431\u0443\u0434\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u0430 \u0447\u0435\u0440\u0435\u0437 58:00."
     ] }) }),
@@ -236,20 +236,20 @@ function OtpBody({ state = "typing" }) {
 }
 function AuthOtp({ plat = "ios", state = "typing" }) {
   let foot;
-  if (state === "locked") foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, lg: true, disabled: true, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 58:00" }) });
-  else if (state === "verifying") foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: true, disabled: true, children: "\u0412\u0445\u043E\u0434\u0438\u043C\u2026" }) });
-  else foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438" }) });
+  if (state === "locked") foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, lg: true, disabled: true, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 58:00" }) });
+  else if (state === "verifying") foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: true, disabled: true, children: "\u0412\u0445\u043E\u0434\u0438\u043C\u2026" }) });
+  else foot = /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438" }) });
   return /* @__PURE__ */ jsxRuntime.jsx(AuthShell, { plat, foot, children: /* @__PURE__ */ jsxRuntime.jsx(OtpBody, { state }) });
 }
 function AuthOtpFill({ plat = "ios", code = "4127" }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `pd-root pa pa--${plat}`, "data-pd-theme": "a", style: { position: "relative" }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-top", children: /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", children: ic(chunkCMKDVS6C_cjs.I.back, "pd-i22") }) }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-top", children: /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-iconbtn", children: ic(chunkG5Y6Q77T_cjs.I.back, "pd-i22") }) }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-body", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { textAlign: "center", margin: "10px 0 24px" }, children: [
         /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434" }),
         /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pa-sub", children: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u043B\u0438 \u043D\u0430 +7 999 124-58-03" })
       ] }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdOtp, { value: code, cur: code.length }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdOtp, { value: code, cur: code.length }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { style: { textAlign: "center", color: "var(--pd-muted)", fontSize: 13, marginTop: 20 }, children: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u0434 \u0441\u043D\u043E\u0432\u0430 \u0447\u0435\u0440\u0435\u0437 0:42" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { style: { textAlign: "center", marginTop: 8 }, children: /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-link", children: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043D\u043E\u043C\u0435\u0440" }) })
     ] })
@@ -269,33 +269,33 @@ function RegisterBody({ state = "rest", plat }) {
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-avadd", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "ring", children: [
-        ic(chunkCMKDVS6C_cjs.I.camera, "pd-i24"),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "cam", children: ic(chunkCMKDVS6C_cjs.I.camera, "pd-i14") })
+        ic(chunkG5Y6Q77T_cjs.I.camera, "pd-i24"),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "cam", children: ic(chunkG5Y6Q77T_cjs.I.camera, "pd-i14") })
       ] }),
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "lab", children: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0444\u043E\u0442\u043E \xB7 \u043F\u043E \u0436\u0435\u043B\u0430\u043D\u0438\u044E" })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 16 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdField, { label: "\u041A\u0430\u043A \u0432\u0430\u0441 \u0437\u043E\u0432\u0443\u0442", error: invalid ? "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u0438\u043C\u044F, \u0435\u0433\u043E \u0443\u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438" : void 0, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdInput, { value: invalid ? "" : "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430", placeholder: "\u0418\u043C\u044F", state: invalid ? "invalid" : "focus" }) }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdField, { label: "\u0413\u043E\u0440\u043E\u0434", hint: "\u041F\u043E\u043A\u0430\u0436\u0435\u043C \u0431\u0443\u043A\u0435\u0442\u044B \u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0435\u0439 \u0440\u044F\u0434\u043E\u043C", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-citysel", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdField, { label: "\u041A\u0430\u043A \u0432\u0430\u0441 \u0437\u043E\u0432\u0443\u0442", error: invalid ? "\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u0438\u043C\u044F, \u0435\u0433\u043E \u0443\u0432\u0438\u0434\u044F\u0442 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0438" : void 0, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdInput, { value: invalid ? "" : "\u0415\u043A\u0430\u0442\u0435\u0440\u0438\u043D\u0430", placeholder: "\u0418\u043C\u044F", state: invalid ? "invalid" : "focus" }) }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdField, { label: "\u0413\u043E\u0440\u043E\u0434", hint: "\u041F\u043E\u043A\u0430\u0436\u0435\u043C \u0431\u0443\u043A\u0435\u0442\u044B \u0438 \u043F\u043E\u043A\u0443\u043F\u0430\u0442\u0435\u043B\u0435\u0439 \u0440\u044F\u0434\u043E\u043C", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pa-citysel", children: [
         /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u041C\u043E\u0441\u043A\u0432\u0430" }),
-        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: ic(chunkCMKDVS6C_cjs.Ic.chev, "pd-i18") })
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "chev", children: ic(chunkG5Y6Q77T_cjs.Ic.chev, "pd-i18") })
       ] }) })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsx("p", { style: { fontSize: 12, color: "var(--pd-faint)", marginTop: 14, lineHeight: 1.5 }, children: "\u0418\u043C\u044F \u043C\u043E\u0436\u043D\u043E \u0438\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043F\u043E\u0437\u0436\u0435 \u0432 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\u0445 \u043F\u0440\u043E\u0444\u0438\u043B\u044F." })
   ] });
 }
 function AuthRegister({ plat = "ios", state = "rest" }) {
-  const foot = state === "submitting" ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: true, disabled: true, children: "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u043C\u2026" }) }) : /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C" }) });
+  const foot = state === "submitting" ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: true, disabled: true, children: "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u043C\u2026" }) }) : /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pd-footerbar pa-foot", children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C" }) });
   return /* @__PURE__ */ jsxRuntime.jsx(AuthShell, { plat, foot, children: /* @__PURE__ */ jsxRuntime.jsx(RegisterBody, { state, plat }) });
 }
 function AuthLink({ plat = "ios" }) {
   const foot = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-footerbar pa-foot", style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 \u042F\u043D\u0434\u0435\u043A\u0441 ID" }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u043F\u043E SMS-\u043A\u043E\u0434\u0443" })
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 \u042F\u043D\u0434\u0435\u043A\u0441 ID" }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u043F\u043E SMS-\u043A\u043E\u0434\u0443" })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsxs(AuthShell, { plat, foot, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { textAlign: "center", margin: "18px 0 22px" }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-logo", style: { background: "var(--pd-warn-soft)", color: "var(--pd-warn)" }, children: ic(chunkCMKDVS6C_cjs.I.shield, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-logo", style: { background: "var(--pd-warn-soft)", color: "var(--pd-warn)" }, children: ic(chunkG5Y6Q77T_cjs.I.shield, "pd-i28") }),
       /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u042D\u0442\u043E\u0442 \u043D\u043E\u043C\u0435\u0440 \u0443\u0436\u0435 \u0437\u043D\u0430\u043A\u043E\u043C" }),
       /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pa-sub", children: [
         "\u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0441 \u043D\u043E\u043C\u0435\u0440\u043E\u043C +7 999 \u2022\u2022\u2022-58-03 \u0443\u0436\u0435 \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D \u043A ",
@@ -318,8 +318,8 @@ function WelcomeBody() {
     /* @__PURE__ */ jsxRuntime.jsx("h2", { children: "\u0421 \u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0435\u043D\u0438\u0435\u043C, \u041A\u0430\u0442\u044F!" }),
     /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0413\u043E\u0442\u043E\u0432\u043E. \u0421\u0432\u0435\u0436\u0438\u0435 \u0431\u0443\u043A\u0435\u0442\u044B \u041C\u043E\u0441\u043A\u0432\u044B \u0443\u0436\u0435 \u0436\u0434\u0443\u0442. \u0418\u043B\u0438 \u043F\u043E\u0434\u0430\u0440\u0438\u0442\u0435 \u0432\u0442\u043E\u0440\u0443\u044E \u0436\u0438\u0437\u043D\u044C \u0441\u0432\u043E\u0435\u043C\u0443." }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 300, marginTop: 6 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkCMKDVS6C_cjs.Ic.search, children: "\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C \u0431\u0443\u043A\u0435\u0442\u044B" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, lg: true, icon: chunkCMKDVS6C_cjs.Ic.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkG5Y6Q77T_cjs.Ic.search, children: "\u0421\u043C\u043E\u0442\u0440\u0435\u0442\u044C \u0431\u0443\u043A\u0435\u0442\u044B" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, lg: true, icon: chunkG5Y6Q77T_cjs.Ic.plus, children: "\u041E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u0442\u044C \u0431\u0443\u043A\u0435\u0442" })
     ] })
   ] });
 }
@@ -328,27 +328,27 @@ function AuthWelcome({ plat = "ios" }) {
 }
 function AuthError({ plat = "ios", offline = false }) {
   const foot = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-footerbar pa-foot", style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkCMKDVS6C_cjs.I.refresh, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0432\u0445\u043E\u0434" }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0434\u0440\u0443\u0433\u0438\u043C \u0441\u043F\u043E\u0441\u043E\u0431\u043E\u043C" })
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkG5Y6Q77T_cjs.I.refresh, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0432\u0445\u043E\u0434" }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0434\u0440\u0443\u0433\u0438\u043C \u0441\u043F\u043E\u0441\u043E\u0431\u043E\u043C" })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsx(AuthShell, { plat, foot, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-empty", style: { height: "auto", paddingTop: 60 }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", style: { color: offline ? "var(--pd-muted)" : "var(--pd-danger)" }, children: ic(offline ? A.wifi : chunkCMKDVS6C_cjs.I.alert, "pd-i28") }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", style: { color: offline ? "var(--pd-muted)" : "var(--pd-danger)" }, children: ic(offline ? A.wifi : chunkG5Y6Q77T_cjs.I.alert, "pd-i28") }),
     /* @__PURE__ */ jsxRuntime.jsx("h3", { children: offline ? "\u041D\u0435\u0442 \u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u044F" : "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0432\u043E\u0439\u0442\u0438" }),
     /* @__PURE__ */ jsxRuntime.jsx("p", { children: offline ? "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442. \u041A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u0441\u0432\u044F\u0437\u044C \u0432\u0435\u0440\u043D\u0451\u0442\u0441\u044F, \u043C\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043C \u0432\u0445\u043E\u0434. \u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0438 \u0434\u0430\u043D\u043D\u044B\u0435 \u0432 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438." : "\u0421\u0435\u0440\u0432\u0438\u0441 \u0432\u0445\u043E\u0434\u0430 \u043D\u0435 \u043E\u0442\u0432\u0435\u0442\u0438\u043B. \u042D\u0442\u043E \u0431\u044B\u0432\u0430\u0435\u0442 \u0440\u0435\u0434\u043A\u043E, \u043F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0441\u043D\u043E\u0432\u0430 \u0438\u043B\u0438 \u0432\u043E\u0439\u0434\u0438\u0442\u0435 \u0438\u043D\u0430\u0447\u0435." })
   ] }) });
 }
 function AuthBlocked({ plat = "ios" }) {
   const foot = /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-footerbar pa-foot", style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkCMKDVS6C_cjs.I.flag, children: "\u041E\u0431\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C" }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u044B\u0439\u0442\u0438" })
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkG5Y6Q77T_cjs.I.flag, children: "\u041E\u0431\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C" }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u044B\u0439\u0442\u0438" })
   ] });
   return /* @__PURE__ */ jsxRuntime.jsxs(AuthShell, { plat, back: false, foot, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-empty pa-blocked", style: { height: "auto", paddingTop: 56 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", children: ic(chunkCMKDVS6C_cjs.I.lock, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", children: ic(chunkG5Y6Q77T_cjs.I.lock, "pd-i28") }),
       /* @__PURE__ */ jsxRuntime.jsx("h3", { children: "\u0414\u043E\u0441\u0442\u0443\u043F \u043E\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D \u043F\u043E\u0441\u043B\u0435 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438. \u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438 \u0438 \u0434\u0430\u043D\u043D\u044B\u0435 \u0437\u0430\u0449\u0438\u0449\u0435\u043D\u044B. \u0415\u0441\u043B\u0438 \u044D\u0442\u043E \u043E\u0448\u0438\u0431\u043A\u0430, \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435, \u0438 \u043C\u044B \u0440\u0430\u0437\u0431\u0435\u0440\u0451\u043C\u0441\u044F \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 24 \u0447\u0430\u0441\u043E\u0432." })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "0 6px" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdNotice, { kind: "info", children: "\u041F\u0440\u0438\u0447\u0438\u043D\u0443 \u0441\u043E\u043E\u0431\u0449\u0438\u043C \u0432 \u043E\u0442\u0432\u0435\u0442\u0435 \u043D\u0430 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435. \u0412 \u0446\u0435\u043B\u044F\u0445 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438 \u043D\u0435 \u0440\u0430\u0441\u043A\u0440\u044B\u0432\u0430\u0435\u043C \u0434\u0435\u0442\u0430\u043B\u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0437\u0434\u0435\u0441\u044C." }) })
+    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { padding: "0 6px" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdNotice, { kind: "info", children: "\u041F\u0440\u0438\u0447\u0438\u043D\u0443 \u0441\u043E\u043E\u0431\u0449\u0438\u043C \u0432 \u043E\u0442\u0432\u0435\u0442\u0435 \u043D\u0430 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435. \u0412 \u0446\u0435\u043B\u044F\u0445 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438 \u043D\u0435 \u0440\u0430\u0441\u043A\u0440\u044B\u0432\u0430\u0435\u043C \u0434\u0435\u0442\u0430\u043B\u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0437\u0434\u0435\u0441\u044C." }) })
   ] });
 }
 function DeskShell({ children, popup }) {
@@ -367,7 +367,7 @@ function DeskShell({ children, popup }) {
           "\u041F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F \u0431\u0443\u043A\u0435\u0442\u0430 \u0437\u0430 2 \u043C\u0438\u043D\u0443\u0442\u044B"
         ] }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pad-pt", children: [
-          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: ic(chunkCMKDVS6C_cjs.I.shield, "pd-i16") }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ic", children: ic(chunkG5Y6Q77T_cjs.I.shield, "pd-i16") }),
           "\u041E\u043F\u043B\u0430\u0442\u0430 \u043F\u0440\u0438 \u0432\u0441\u0442\u0440\u0435\u0447\u0435, \u0431\u0435\u0437 \u043F\u0440\u0435\u0434\u043E\u043F\u043B\u0430\u0442\u044B"
         ] }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pad-pt", children: [
@@ -405,7 +405,7 @@ function AuthDesktopOAuth({ prov = "ya", slots }) {
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "dot" }),
       /* @__PURE__ */ jsxRuntime.jsx("span", { className: "dot" }),
       /* @__PURE__ */ jsxRuntime.jsxs("span", { style: { marginLeft: 8 }, children: [
-        ic(chunkCMKDVS6C_cjs.I.lock, "pd-i12"),
+        ic(chunkG5Y6Q77T_cjs.I.lock, "pd-i12"),
         " ",
         PROV_HOST[prov] || "oauth.yandex.ru"
       ] })
@@ -423,21 +423,21 @@ function AuthDesktopOAuth({ prov = "ya", slots }) {
 function AuthDesktopPhone({ state = "rest" }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginBottom: 16, marginTop: 8 }, children: /* @__PURE__ */ jsxRuntime.jsx(PhoneBody, { state }) }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434" }),
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434" }),
     /* @__PURE__ */ jsxRuntime.jsx("button", { className: "pd-link", style: { display: "block", margin: "14px auto 0" }, children: "\u2190 \u0414\u0440\u0443\u0433\u0438\u0435 \u0441\u043F\u043E\u0441\u043E\u0431\u044B \u0432\u0445\u043E\u0434\u0430" })
   ] });
 }
 function AuthDesktopOtp({ state = "typing" }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginBottom: 20 }, children: /* @__PURE__ */ jsxRuntime.jsx(OtpBody, { state }) }),
-    state !== "locked" && /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: state === "verifying", disabled: state === "verifying", children: state === "verifying" ? "\u0412\u0445\u043E\u0434\u0438\u043C\u2026" : "\u0412\u043E\u0439\u0442\u0438" }),
-    state === "locked" && /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "secondary", block: true, lg: true, disabled: true, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 58:00" })
+    state !== "locked" && /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: state === "verifying", disabled: state === "verifying", children: state === "verifying" ? "\u0412\u0445\u043E\u0434\u0438\u043C\u2026" : "\u0412\u043E\u0439\u0442\u0438" }),
+    state === "locked" && /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "secondary", block: true, lg: true, disabled: true, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 58:00" })
   ] });
 }
 function AuthDesktopRegister({ state = "rest" }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsx("div", { style: { marginBottom: 18 }, children: /* @__PURE__ */ jsxRuntime.jsx(RegisterBody, { state }) }),
-    /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: state === "submitting", disabled: state === "submitting", children: state === "submitting" ? "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u043C\u2026" : "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C" })
+    /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, loading: state === "submitting", disabled: state === "submitting", children: state === "submitting" ? "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u043C\u2026" : "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C" })
   ] });
 }
 function AuthDesktopWelcome() {
@@ -446,7 +446,7 @@ function AuthDesktopWelcome() {
 function AuthDesktopLink() {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { textAlign: "center", margin: "4px 0 20px" }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-logo", style: { background: "var(--pd-warn-soft)", color: "var(--pd-warn)" }, children: ic(chunkCMKDVS6C_cjs.I.shield, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "pa-logo", style: { background: "var(--pd-warn-soft)", color: "var(--pd-warn)" }, children: ic(chunkG5Y6Q77T_cjs.I.shield, "pd-i28") }),
       /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "pa-h2", children: "\u042D\u0442\u043E\u0442 \u043D\u043E\u043C\u0435\u0440 \u0443\u0436\u0435 \u0437\u043D\u0430\u043A\u043E\u043C" }),
       /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "pa-sub", children: [
         "\u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0441 \u043D\u043E\u043C\u0435\u0440\u043E\u043C +7 999 \u2022\u2022\u2022-58-03 \u0443\u0436\u0435 \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D \u043A ",
@@ -462,35 +462,35 @@ function AuthDesktopLink() {
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 \u042F\u043D\u0434\u0435\u043A\u0441 ID" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u043F\u043E SMS-\u043A\u043E\u0434\u0443" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 \u042F\u043D\u0434\u0435\u043A\u0441 ID" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u043F\u043E SMS-\u043A\u043E\u0434\u0443" })
     ] })
   ] });
 }
 function AuthDesktopError({ offline = false }) {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-empty", style: { height: "auto", paddingTop: 24 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", style: { color: offline ? "var(--pd-muted)" : "var(--pd-danger)" }, children: ic(offline ? A.wifi : chunkCMKDVS6C_cjs.I.alert, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", style: { color: offline ? "var(--pd-muted)" : "var(--pd-danger)" }, children: ic(offline ? A.wifi : chunkG5Y6Q77T_cjs.I.alert, "pd-i28") }),
       /* @__PURE__ */ jsxRuntime.jsx("h3", { children: offline ? "\u041D\u0435\u0442 \u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u044F" : "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0432\u043E\u0439\u0442\u0438" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { children: offline ? "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442. \u041A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u0441\u0432\u044F\u0437\u044C \u0432\u0435\u0440\u043D\u0451\u0442\u0441\u044F, \u043C\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043C \u0432\u0445\u043E\u0434. \u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0438 \u0434\u0430\u043D\u043D\u044B\u0435 \u0432 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438." : "\u0421\u0435\u0440\u0432\u0438\u0441 \u0432\u0445\u043E\u0434\u0430 \u043D\u0435 \u043E\u0442\u0432\u0435\u0442\u0438\u043B. \u042D\u0442\u043E \u0431\u044B\u0432\u0430\u0435\u0442 \u0440\u0435\u0434\u043A\u043E, \u043F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0441\u043D\u043E\u0432\u0430 \u0438\u043B\u0438 \u0432\u043E\u0439\u0434\u0438\u0442\u0435 \u0438\u043D\u0430\u0447\u0435." })
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 9, marginTop: 14 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkCMKDVS6C_cjs.I.refresh, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0432\u0445\u043E\u0434" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0434\u0440\u0443\u0433\u0438\u043C \u0441\u043F\u043E\u0441\u043E\u0431\u043E\u043C" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkG5Y6Q77T_cjs.I.refresh, children: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u0432\u0445\u043E\u0434" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u043E\u0439\u0442\u0438 \u0434\u0440\u0443\u0433\u0438\u043C \u0441\u043F\u043E\u0441\u043E\u0431\u043E\u043C" })
     ] })
   ] });
 }
 function AuthDesktopBlocked() {
   return /* @__PURE__ */ jsxRuntime.jsxs(DeskShell, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "pd-empty pa-blocked", style: { height: "auto", paddingTop: 20 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", children: ic(chunkCMKDVS6C_cjs.I.lock, "pd-i28") }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "glyph", children: ic(chunkG5Y6Q77T_cjs.I.lock, "pd-i28") }),
       /* @__PURE__ */ jsxRuntime.jsx("h3", { children: "\u0414\u043E\u0441\u0442\u0443\u043F \u043E\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D" }),
       /* @__PURE__ */ jsxRuntime.jsx("p", { children: "\u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D \u043F\u043E\u0441\u043B\u0435 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438. \u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0441\u0434\u0435\u043B\u043A\u0438 \u0438 \u0434\u0430\u043D\u043D\u044B\u0435 \u0437\u0430\u0449\u0438\u0449\u0435\u043D\u044B. \u0415\u0441\u043B\u0438 \u044D\u0442\u043E \u043E\u0448\u0438\u0431\u043A\u0430, \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435, \u0438 \u043C\u044B \u0440\u0430\u0437\u0431\u0435\u0440\u0451\u043C\u0441\u044F \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 24 \u0447\u0430\u0441\u043E\u0432." })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { margin: "4px 0 16px" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdNotice, { kind: "info", children: "\u041F\u0440\u0438\u0447\u0438\u043D\u0443 \u0441\u043E\u043E\u0431\u0449\u0438\u043C \u0432 \u043E\u0442\u0432\u0435\u0442\u0435 \u043D\u0430 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435. \u0412 \u0446\u0435\u043B\u044F\u0445 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438 \u043D\u0435 \u0440\u0430\u0441\u043A\u0440\u044B\u0432\u0430\u0435\u043C \u0434\u0435\u0442\u0430\u043B\u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0437\u0434\u0435\u0441\u044C." }) }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { style: { margin: "4px 0 16px" }, children: /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdNotice, { kind: "info", children: "\u041F\u0440\u0438\u0447\u0438\u043D\u0443 \u0441\u043E\u043E\u0431\u0449\u0438\u043C \u0432 \u043E\u0442\u0432\u0435\u0442\u0435 \u043D\u0430 \u043E\u0431\u0440\u0430\u0449\u0435\u043D\u0438\u0435. \u0412 \u0446\u0435\u043B\u044F\u0445 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438 \u043D\u0435 \u0440\u0430\u0441\u043A\u0440\u044B\u0432\u0430\u0435\u043C \u0434\u0435\u0442\u0430\u043B\u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0437\u0434\u0435\u0441\u044C." }) }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 9 }, children: [
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkCMKDVS6C_cjs.I.flag, children: "\u041E\u0431\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C" }),
-      /* @__PURE__ */ jsxRuntime.jsx(chunkCMKDVS6C_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u044B\u0439\u0442\u0438" })
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "primary", block: true, lg: true, icon: chunkG5Y6Q77T_cjs.I.flag, children: "\u041E\u0431\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C" }),
+      /* @__PURE__ */ jsxRuntime.jsx(chunkG5Y6Q77T_cjs.PdBtn, { variant: "ghost", block: true, children: "\u0412\u044B\u0439\u0442\u0438" })
     ] })
   ] });
 }

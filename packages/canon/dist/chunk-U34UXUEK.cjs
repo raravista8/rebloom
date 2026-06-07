@@ -1,6 +1,6 @@
 'use strict';
 
-var chunkCMKDVS6C_cjs = require('./chunk-CMKDVS6C.cjs');
+var chunkG5Y6Q77T_cjs = require('./chunk-G5Y6Q77T.cjs');
 var React = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -14,8 +14,8 @@ var Mark = ({ size = 22, center = "#E8A93B", style, className, title = "\u041F\u
   /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "50", cy: "50", r: "8", fill: center })
 ] });
 var PdLanding = (function() {
-  const Ic2 = chunkCMKDVS6C_cjs.Ic, Btn2 = chunkCMKDVS6C_cjs.PdBtn, Card3 = chunkCMKDVS6C_cjs.Card;
-  const FRESH2 = chunkCMKDVS6C_cjs.PD_FRESH || [], LIKED2 = chunkCMKDVS6C_cjs.PD_LIKED || [];
+  const Ic2 = chunkG5Y6Q77T_cjs.Ic, Btn2 = chunkG5Y6Q77T_cjs.PdBtn, Card3 = chunkG5Y6Q77T_cjs.Card;
+  const FRESH2 = chunkG5Y6Q77T_cjs.PD_FRESH || [], LIKED2 = chunkG5Y6Q77T_cjs.PD_LIKED || [];
   const HERO_IMG = "img/hero-lacybird.png";
   const CITIES = [
     { id: "msk", name: "\u041C\u043E\u0441\u043A\u0432\u0430", count: 128 },
@@ -342,7 +342,7 @@ var PdLanding = (function() {
     rating: { label: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u043F\u0440\u043E\u0434\u0430\u0432\u0446\u0430", opts: [["45", "4,5+"], ["48", "4,8+"], ["5", "5,0"]] }
   };
   function Catalog({ desk }) {
-    const MetroPicker = chunkCMKDVS6C_cjs.PdMetroPicker;
+    const MetroPicker = chunkG5Y6Q77T_cjs.PdMetroPicker;
     const [sel, setSel] = React__default.default.useState({ price: "any", fresh: "any", flower: "any", rating: "any" });
     const [metros, setMetros] = React__default.default.useState([]);
     const toggle = (k, v) => setSel((s) => ({ ...s, [k]: s[k] === v ? "any" : v }));
@@ -704,11 +704,11 @@ var PdLanding = (function() {
 var PdLandingNav = PdLanding._navComp;
 var PdLandingFooter = PdLanding._footComp;
 var PdMobileMenu = PdLanding._menuComp;
-var Btn = chunkCMKDVS6C_cjs.PdBtn;
-var Card2 = chunkCMKDVS6C_cjs.Card;
+var Btn = chunkG5Y6Q77T_cjs.PdBtn;
+var Card2 = chunkG5Y6Q77T_cjs.Card;
 var Footer = PdLandingFooter;
-var FRESH = chunkCMKDVS6C_cjs.PD_FRESH || [];
-var LIKED = chunkCMKDVS6C_cjs.PD_LIKED || [];
+var FRESH = chunkG5Y6Q77T_cjs.PD_FRESH || [];
+var LIKED = chunkG5Y6Q77T_cjs.PD_LIKED || [];
 var LAND = "/";
 var CAT = "/catalog";
 var PETAL2 = "M50 50C38 41 36 21 50 10C64 21 62 41 50 50Z";

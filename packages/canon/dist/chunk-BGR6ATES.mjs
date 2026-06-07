@@ -1,4 +1,4 @@
-import { Ic, SectionHead, PD_FRESH, Card, PD_LIKED, Heart } from './chunk-EQYPIQRM.mjs';
+import { Ic, SectionHead, PD_FRESH, Card, PD_LIKED, Heart } from './chunk-VLZGX7EA.mjs';
 import 'react';
 import { jsxs, jsx } from 'react/jsx-runtime';
 

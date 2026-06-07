@@ -2,6 +2,30 @@
 
 All notable changes per export. Newest first. SemVer. (`CANON_PACKAGE_TZ.md §7`)
 
+## [0.9.2] — 2026-06-07 — `PdCard` data-driven: полный URL фото + лайк наружу (`onLike`) + «Новый» продавец; `renderCard`-slot + клиентская сортировка в `PdCatalog`
+
+> **Зачем релиз.** 0.9.1 сделал `PdCatalog` презентационным, но импортить его на живой `/catalog` всё ещё было нельзя: карточка `PdCard` (`src/feed/feed.jsx`) жёстко строила фото из локального Unsplash-id (`PD_IMG`) и держала лайк во внутреннем `useState` — поэтому `web/` был вынужден держать хэндролл `CatalogScreen` со своим `BouquetCard`. 0.9.2 чинит карточку: фото из полного URL, лайк поднят наружу, «Новый» вместо «0.0». Плюс `renderCard`-slot как escape-hatch и клиентская сортировка. Loaded-вид ≤2% к 0.9.1. Полная спека — **`CANON_HANDOFF_0.9.2.md`**.
+
+### Changed — `src/feed/feed.jsx` → `PdCard` / `LikeBtn`
+- **Фото — полный URL.** Карточка рисует `d.photoUrl || pdPhotoSrc(d.photo)`. Новый хелпер `pdPhotoSrc(photo)`: `^(https?:)?//` → URL как есть (CDN/Object Storage, `photo_thumb_url`), иначе локальный id → `PD_IMG`. Прод-фото больше не битые.
+- **Лайк — наружу.** `LikeBtn` теперь **controlled-aware**: при `onToggle` — `liked`/`count` из пропов, клик зовёт `onToggle(next)` (web: `POST /api/listings/{id}/like`, гость→`/login`); без `onToggle` — прежний оптимистичный локальный стейт (демо/главная). `PdCard` принимает `onLike(id, next)` и прокидывает в `LikeBtn`.
+- **«Новый» продавец.** При `seller.r == null` карточка рисует чип «Новый» (`.pd-rating--new`) вместо `seller.r.toFixed(1)` → «0.0». Аватар/имя берутся из `seller` безопасно (`d.seller || {}`).
+
+### Changed — `src/catalog/catalog.jsx` → `PdCatalog`
+- **`renderCard`-slot** (проп): `renderCard={(item)=>…}` подставляет карточку web целиком (свой `BouquetCard` с фото+лайком) — escape-hatch, решает фото/лайк разом. Без него — дефолтная `PdCard` с `onLike`-проп.
+- **`onLike`-проп** прокидывается в дефолтную `PdCard`.
+- **Клиентская сортировка** `cheap`/`exp`/`rating` по уже выданным `items` (бэкенд-лента знает только секции `fresh`/`liked`); `fresh`/default — порядок как пришёл сверху. Опции сортировки больше не «мертвы» при бэкенде без price-sort.
+
+### Added — стили
+- **`dist/canon.css` + `src/styles/canon.css`** — `.pd-rating--new` (тихий чип «Новый»: surface-2 фон, muted текст, pill).
+
+### Notes / out of scope
+- **Рейтинг-фильтр** (сайдбар/панель) бэкендом не поддерживается — пока inert (оставлен в UI). Рабочим станет при бэкенд-фильтре по рейтингу продавца (отдельная задача).
+- `PdCatalogDemo` (демо-обёртка) теперь сеет ~каждый 6-й товар как нового продавца (`seller.r=null`) — проверка пути «Новый» в reference-витрине.
+
+### Приёмка
+- `web/` удаляет `components/catalog/CatalogScreen.tsx` + `CatalogFilters.tsx`, рендерит `<PdCatalog items state total filters onFiltersChange stations flowers onLoadMore onLike renderCard? onRetry/>`. Фото и лайки на `/catalog` работают как на главной. Дифф `src/`: `feed.jsx` (карточка) + `catalog.jsx` (`renderCard`/`onLike`/sort) + `styles/canon.css`.
+
 ## [0.9.1] — 2026-06-07 — `PdCatalog` data-driven (презентационный) + 8 состояний коллекции + два build/copy-фикса
 
 > **Зачем релиз.** `web/` не мог импортить `PdCatalog` напрямую: компонент сам генерил демо-данные и держал фильтры внутри, поэтому прод транскрибировал `.pdc-*`-разметку поверх своих данных (дрифт). 0.9.1 делает `PdCatalog` **чисто презентационным** (всё через пропсы) — `web/` рендерит его на живом `/catalog` и удаляет хэндролл `CatalogScreen`/`CatalogFilters`. Плюс два мелких фикса, ломавших сборку и грамматику. Loaded-вид байт-в-байт к 0.9.0. Полная спека — **`CANON_HANDOFF_0.9.1.md`**.
