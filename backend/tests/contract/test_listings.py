@@ -135,6 +135,46 @@ def test_create_then_get(ctx: tuple[FastAPI, FakePhotoRepository]) -> None:
     assert got.json()["data"]["price_kopecks"] == 150000
 
 
+def test_create_with_metro_and_flowers_round_trips(
+    ctx: tuple[FastAPI, FakePhotoRepository],
+) -> None:
+    app, photos = ctx
+    client, uid = _login(app)
+    photos.seed("p1", uid, "approved")
+    body = _payload(["p1"]) | {
+        "metro_station_id": "msk-kievskaya",
+        "flower_types": ["roses", "peonies"],
+    }
+    created = client.post("/api/listings", json=body)
+    assert created.status_code == 200
+    data = created.json()["data"]
+    assert data["metro"]["name"] == "Киевская"
+    assert len(data["metro"]["lines"]) == 3  # transfer hub → multi-colour
+    assert data["flower_types"] == ["roses", "peonies"]
+
+    got = client.get(f"/api/listings/{data['id']}").json()["data"]
+    assert got["metro"]["id"] == "msk-kievskaya"
+    assert got["flower_types"] == ["roses", "peonies"]
+
+
+def test_create_rejects_invalid_metro(ctx: tuple[FastAPI, FakePhotoRepository]) -> None:
+    app, photos = ctx
+    client, uid = _login(app)
+    photos.seed("p1", uid, "approved")
+    body = _payload(["p1"]) | {"metro_station_id": "msk-not-a-station"}
+    resp = client.post("/api/listings", json=body)
+    assert resp.status_code == 422
+
+
+def test_create_rejects_unknown_flower(ctx: tuple[FastAPI, FakePhotoRepository]) -> None:
+    app, photos = ctx
+    client, uid = _login(app)
+    photos.seed("p1", uid, "approved")
+    body = _payload(["p1"]) | {"flower_types": ["cactus"]}
+    resp = client.post("/api/listings", json=body)
+    assert resp.status_code == 422
+
+
 def test_get_missing_is_404(ctx: tuple[FastAPI, FakePhotoRepository]) -> None:
     app, _photos = ctx
     client, _uid = _login(app)

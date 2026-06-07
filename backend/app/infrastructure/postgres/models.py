@@ -130,6 +130,13 @@ class Listing(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     price_kopecks: Mapped[int] = mapped_column(BigInteger, nullable=False)
     city_id: Mapped[str] = mapped_column(String(8), nullable=False, index=True)
     geo_coarse: Mapped[str | None] = mapped_column(String(128))  # 🔒 coarse until paid
+    # Pickup landmark in metro cities (msk/spb) — id from core/geo/metro.py
+    # (e.g. "msk-kievskaya"); NULL for no-metro cities (район fallback).
+    metro_station_id: Mapped[str | None] = mapped_column(String(48), index=True)
+    # Flower types (ids from core/listings/flowers.py); JSON list, default [].
+    flower_types: Mapped[list[str]] = mapped_column(
+        JSON, nullable=False, server_default=text("'[]'")
+    )
     status: Mapped[str] = mapped_column(
         String(16), nullable=False, server_default=text("'draft'"), index=True
     )

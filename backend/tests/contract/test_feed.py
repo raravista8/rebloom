@@ -41,3 +41,29 @@ def test_search_rejects_bad_enum() -> None:
     app.dependency_overrides[get_feed_service] = lambda: FeedService(FakeFeedRepository([]))
     resp = TestClient(app).get("/api/search?city_id=msk&size=ZZ")
     assert resp.status_code == 422
+
+
+def test_search_parses_repeatable_metro_and_flower_and_returns_total() -> None:
+    app = create_app()
+    app.dependency_overrides[get_feed_service] = lambda: FeedService(
+        FakeFeedRepository([make_listing_view("l1"), make_listing_view("l2")])
+    )
+    resp = TestClient(app).get(
+        "/api/search?city_id=msk&metro=msk-kievskaya&metro=msk-kurskaya&flower=roses"
+    )
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    assert data["applied"]["filters"]["metro"] == ["msk-kievskaya", "msk-kurskaya"]
+    assert data["applied"]["filters"]["flowers"] == ["roses"]
+    assert data["total"] == 2  # «Показать N букетов» — full filtered count
+
+
+def test_search_accepts_comma_joined_metro() -> None:
+    app = create_app()
+    app.dependency_overrides[get_feed_service] = lambda: FeedService(FakeFeedRepository([]))
+    resp = TestClient(app).get("/api/search?city_id=msk&metro=msk-kievskaya,msk-kurskaya")
+    assert resp.status_code == 200
+    assert resp.json()["data"]["applied"]["filters"]["metro"] == [
+        "msk-kievskaya",
+        "msk-kurskaya",
+    ]

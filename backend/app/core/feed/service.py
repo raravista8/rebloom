@@ -53,9 +53,10 @@ class FeedService:
         limit: int,
     ) -> dict[str, Any]:
         offset, capped = _parse_cursor(cursor), _clamp_limit(limit)
-        views, has_more = self._repo.search(city_id, filters, offset, capped)
+        views, has_more, total = self._repo.search(city_id, filters, offset, capped)
         return {
             "items": [v.to_card() for v in views],
             "next_cursor": str(offset + capped) if has_more else None,
+            "total": total,  # all matches under the filters («Показать N букетов»)
             "applied": {"q": query, "city_id": city_id, "filters": filters.as_applied()},
         }

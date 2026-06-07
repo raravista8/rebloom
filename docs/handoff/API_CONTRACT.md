@@ -15,6 +15,8 @@
 - `delivery_method`: `self_pickup | courier`
 - `listing.status`: `draft | pending_review | active | reserved | sold | archived`
 - `feed.section`: `fresh | liked`
+- `flower_types[]` (fixed list, stable ids; order preserved for the form/filter): `roses` (Розы) · `peony_roses` (Пионовидные розы) · `peonies` (Пионы) · `tulips` (Тюльпаны) · `hydrangea` (Гортензия) · `chrysanthemums` (Хризантемы) · `eustoma` (Эустома) · `ranunculus` (Ранункулюсы) · `alstroemeria` (Альстромерия) · `lilies` (Лилии) · `wildflowers` (Полевые). Max 6 per listing, deduped.
+- `metro_station_id`: a city-scoped reference id from the metro catalog (msk/spb have a metro; e.g. `msk-kievskaya`, `spb-sennaya-ploshchad`). The backend owns the catalog (станция → линия(и) → цвет); transfer hubs map to several lines. No-metro cities fall back to `geo` (район).
 
 ## 2. Auth & identity
 | Method | Path | Auth | Request | Response `data` | FR |
@@ -35,18 +37,20 @@ Errors: `validation_error`, `otp_locked` (FR-003), `rate_limited`, `oauth_failed
 | Method | Path | Auth | Request | Response `data` | FR |
 |---|---|---|---|---|---|
 | POST | `/api/photos` | session | `{content_type}` | `{photo_id, upload_url}` (direct-to-storage) | FR-011 |
-| POST | `/api/listings` | session(seller) | `{size, freshness, price_kopecks, city_id, geo?, photo_ids[1..5], expires_in_h?}` | `listing` | FR-010 |
+| POST | `/api/listings` | session(seller) | `{size, freshness, price_kopecks, city_id, geo?, metro_station_id?, flower_types?[], photo_ids[1..5], expires_in_h?}` | `listing` | FR-010 |
 | GET | `/api/listings/{id}` | optional | — | `listing` (detail) | — |
 | GET | `/api/feed` | optional | `?city_id&section=fresh\|liked&cursor&limit` | `{items: listing_card[], next_cursor, applied:{city_id, filters}}` | FR-016 |
-| GET | `/api/search` | optional | `?city_id&q&size?&freshness?&price_min?&price_max?&cursor&limit` | `{items: listing_card[], next_cursor, applied:{q, city_id, filters}, suggestions?:[{type,label,href}]}` | FR-016 |
+| GET | `/api/search` | optional | `?city_id&q&size?&freshness?&price_min?&price_max?&metro&flower&cursor&limit` | `{items: listing_card[], next_cursor, total, applied:{q, city_id, filters}, suggestions?:[{type,label,href}]}` | FR-016 |
 | POST | `/api/listings/{id}/like` | session | — | `{like_count, liked:true}` | FR-015 |
 | DELETE | `/api/listings/{id}/like` | session | — | `{like_count, liked:false}` | FR-015 |
 | GET | `/api/listings/{id}/messages` | session | `?buyer_id&cursor` | `{messages[], next_cursor}` — pre-purchase thread (seller passes `buyer_id`; buyer omits it) | FR-030 |
 | POST | `/api/listings/{id}/messages` | session | `{body, buyer_id?}` | `message` (or held if contacts) — rate-limited (T-08) | FR-030/ T-05 |
 
-`listing_card`: `{id, photo_thumb_url, size, freshness, price_kopecks, city_id, like_count, liked, seller:{id,display_name,seller_rating}}`
+`listing_card`: `{id, photo_thumb_url, size, freshness, price_kopecks, city_id, metro, flower_types[], like_count, liked, seller:{id,display_name,seller_rating}}`
 `listing` (detail) adds: `{photos:[{card_url,full_url}], status, freshness_score, expires_at, geo_coarse}`
-Errors: `validation_error`, `moderation_pending` (FR-012), `forbidden` (not your listing).
+`metro` (resolved, `null` for no-metro cities): `{id, name, lines:[{name, color}]}` — one entry per line; **transfer hubs carry several** (multi-colour dots). The card shows the station (city is implied by the header/feed scope); the detail keeps both `city_id` and `metro`.
+**Filter semantics (`/api/search`):** `metro` and `flower` are repeatable (`?metro=a&metro=b`) or comma-joined (`?metro=a,b`); within a group the match is **OR** (any of the selected), across groups it is **AND** (and with size/freshness/price). `total` is the count of ALL active listings matching the filters in the city (not just the page) — feeds «Показать N букетов». `next_cursor:null` = end-of-list.
+Errors: `validation_error` (incl. unknown `metro_station_id` or `flower_types` id), `moderation_pending` (FR-012), `forbidden` (not your listing).
 
 ## 4. Deals, chat & payment
 | Method | Path | Auth | Request | Response `data` | FR |
