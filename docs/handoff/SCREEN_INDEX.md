@@ -3,7 +3,7 @@
 > Map of screens authored in Claude Design and consumed via `@rebloom/canon`. Source of truth for the design handoff. Parent specs: `DESIGN_BRIEF.md`, `CANON_PACKAGE_TZ.md`.
 > Полная логика состояний — `INTERACTION_STATES.md §5`. **Пошаговые ветвящиеся флоу (спор, возврат, отмена, сбой оплаты, апелляция модерации, доставка, удаление аккаунта, жалоба) — `FLOWS.md`.**
 > Status: 🔵 spec only · 🟢 canon-import (live) · 🟡 hand-rolled (temp) · 🔴 missing
-> Canon version: `0.9.0` (vendored in `packages/canon`, rendering live in `web/`; design-pass ported — метро-ориентир, метро+тип-цветов фильтры, единая `PdWebNav`, реальный `/catalog`)
+> Canon version: `0.9.1` (vendored in `packages/canon`, rendering live in `web/`; design-pass ported — метро-ориентир, метро+тип-цветов фильтры, единая `PdWebNav` + `cityLoc` грамматика, `PaymentFailed`-фикс в источнике). `/catalog` — **хэндролл** (`CatalogScreen.tsx`, реальные фото + лайки); импорт canon `PdCatalog` ждёт data-driven `PdCard` (`canon-tasks/canon-0.9.2-pdcard.md`)
 
 | # | Screen | Route (web) | Primary action | Key states | Status | Notes |
 |---|---|---|---|---|---|---|

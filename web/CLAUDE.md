@@ -2,7 +2,7 @@
 
 Area rules for the single web frontend. This web build IS the iOS/Android app (wrapped by Capacitor — see `mobile/`). Root `CLAUDE.md` applies.
 
-> **Vendored canon: `0.9.0`** (design-pass: метро-ориентир, метро+тип-цветов фильтры, единая `PdWebNav`, реальный `/catalog`). Status tracker: `docs/handoff/VISUAL_COVERAGE.md`.
+> **Vendored canon: `0.9.1`** (design-pass + fixes: метро-ориентир, метро/тип-цветов фильтры, единая `PdWebNav` с `cityLoc` «в Москве», `PaymentFailed`-фикс в источнике). `/catalog` остаётся хэндроллом (`components/catalog/CatalogScreen.tsx`, свой `BouquetCard` с настоящим фото + рабочим лайком) — импорт canon `PdCatalog` ждёт data-driven `PdCard` (флаг: `docs/handoff/canon-tasks/canon-0.9.2-pdcard.md`). Status tracker: `docs/handoff/VISUAL_COVERAGE.md`.
 
 > **Read root `CLAUDE.md` §0 (Behavioral principles) FIRST — it governs every task:** think before coding, simplicity first, surgical changes, goal-driven (for UI: `npm run test:visual` ≤ 2%).
 
