@@ -31,8 +31,9 @@ test('loaded: price, pay-at-meeting notice, write-seller CTA', async ({ page }) 
   await page.route('**/api/listings/l1', (r) => stub(r, detail()));
   await page.goto('/l/l1');
   await expect(page.getByText('Оплата при встрече.')).toBeVisible();
-  await expect(page.getByText('Размер M · 7–15 шт.')).toBeVisible();
-  await expect(page.getByRole('button', { name: /Написать продавцу · 1 900 ₽/ })).toBeEnabled();
+  // canon 0.9.0: «Размер M · 7–15 стеблей» (.pd-buy-spec); no price on the CTA.
+  await expect(page.getByText('Размер M · 7–15 стеблей')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Написать продавцу$/ })).toBeEnabled();
 });
 
 test('sold: overlay + "смотреть свежие"', async ({ page }) => {

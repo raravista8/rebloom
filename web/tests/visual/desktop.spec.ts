@@ -62,10 +62,11 @@ test('listing: two-column detail, price/title not clipped', async ({ page }) => 
   await expectNoHorizontalOverflow(page);
 });
 
-// Regression: WebChrome must reflect auth state. A guest (no session → /api/me 401)
-// must NOT see the logged-in toolbar (notifications/deals/profile-avatar) — it showed
-// the авторизованный chrome unconditionally before, so a guest looked "logged in".
-test('listing as guest: WebChrome shows «Войти», not the logged-in toolbar', async ({ page }) => {
+// Regression: WebChrome (now canon PdWebNav) must reflect auth state. A guest (no
+// session → /api/me 401) must NOT see the logged-in toolbar (избранное/profile-avatar) —
+// it showed the авторизованный chrome unconditionally before, so a guest looked "logged
+// in". canon 0.9.0 header: guest → `.pdl-nav-login` («Войти»), no `.pdl-nav-ava`/`-fav`.
+test('listing as guest: PdWebNav shows «Войти», not the logged-in toolbar', async ({ page }) => {
   await page.route('**/api/me', (r) =>
     r.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ ok: false, error: 'unauthorized' }) }),
   );
@@ -77,11 +78,11 @@ test('listing as guest: WebChrome shows «Войти», not the logged-in toolba
     }),
   );
   await page.goto('/l/l1');
-  const nav = page.locator('.pdw-nav');
+  const nav = page.locator('.pdl-nav');
   await expect(nav.getByRole('link', { name: 'Войти' })).toBeVisible();
-  await expect(nav.locator('.pdw-avatar')).toHaveCount(0); // no profile avatar for a guest
-  await expect(nav.locator('a[href="/notifications"]')).toHaveCount(0); // no bell/deals
-  await expect(nav.locator('.pdw-cta')).toHaveCount(1); // «Продать букет» stays (bounces to /login)
+  await expect(nav.locator('.pdl-nav-ava')).toHaveCount(0); // no profile avatar for a guest
+  await expect(nav.locator('.pdl-nav-fav')).toHaveCount(0); // no избранное for a guest
+  await expect(nav.locator('.pdl-nav-cta')).toHaveCount(1); // «Опубликовать букет» CTA stays
 });
 
 test('deal: desktop chrome renders, no overflow', async ({ page }) => {
