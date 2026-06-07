@@ -108,6 +108,9 @@ export interface PublicUser {
   city_id?: string;
   seller_rating: number | null;
   deals_count: number;
+  // registration timestamp (ISO) — drives «N месяцев на площадке». Optional: the API
+  // does not expose it yet, so the tenure row is omitted until the backend adds it.
+  created_at?: string;
 }
 export interface ReviewItem {
   id: string;
